@@ -8,3 +8,15 @@ export const LoginSchema = z.object({
     message: "A password is required",
   }),
 });
+
+export const SignUpSchema = z.object({
+  email: z.string().email({
+    message: "An email is required",
+  }),
+  password: z.string().min(8, {
+    message: "Minimum 8 characters required",
+  }),
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+});
