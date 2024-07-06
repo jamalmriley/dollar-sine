@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
+import { LoginButton } from "./auth/login-button";
 
 export default function Navbar() {
   const navLinks = [
@@ -54,12 +55,11 @@ export default function Navbar() {
         {/* Button Links */}
         <div className="flex items-center gap-3">
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="outline" size="default">
-              Teacher Login
-            </Button>
-            <Button variant="outline" size="default">
-              Student Login
-            </Button>
+            <LoginButton>
+              <Button variant="outline" size="default">
+                Log in
+              </Button>
+            </LoginButton>
           </div>
           <ModeToggle />
           {/* <LanguageToggle /> */}

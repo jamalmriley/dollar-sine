@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#f5f5f5] dark:bg-[#121212] ${inter.className} flex min-h-screen`}
+        className={`bg-[#f5f5f5] dark:bg-[#121212] ${inter.className} flex`}
       >
         <ThemeProvider
           attribute="class"
