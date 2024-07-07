@@ -93,6 +93,7 @@ export default async function Dashboard() {
 
   return (
     <div className="page-container">
+      {/* {JSON.stringify(session)} */}
       <div className="flex flex-col lg:flex-row justify-between">
         <Greeting name={session?.user?.name?.split(" ")[0]} />
         <div className="flex gap-3">
