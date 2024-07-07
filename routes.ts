@@ -4,7 +4,12 @@
  * @type {string[]}
  */
 
-export const publicRoutes: String[] = ["/", "/about", "/support","/new-verification"];
+export const publicRoutes: String[] = [
+  "/",
+  "/about",
+  "/support",
+  "/new-verification",
+];
 
 /**
  * An array of routes that are used for authentication.
@@ -12,7 +17,13 @@ export const publicRoutes: String[] = ["/", "/about", "/support","/new-verificat
  * @type {string[]}
  */
 
-export const authRoutes: String[] = ["/login", "/sign-up", "/login-error"];
+export const authRoutes: String[] = [
+  "/login",
+  "/sign-up",
+  "/login-error",
+  "/reset-password",
+  "/new-password",
+];
 
 /**
  * The prefix for API authentication routes.
