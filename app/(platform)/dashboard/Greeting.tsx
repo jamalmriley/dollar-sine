@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-export default function Greeting() {
+export default function Greeting({
+  name,
+}: {
+  name: String | null | undefined;
+}) {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -25,7 +29,7 @@ export default function Greeting() {
   return (
     <div>
       <h1 className="text-3xl md:text-5xl font-extrabold mb-5 select-none">
-        {greeting}, student! {emoji}
+        {greeting}, {name}! {emoji}
       </h1>
     </div>
   );

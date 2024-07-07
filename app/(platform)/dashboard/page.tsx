@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 import Greeting from "./Greeting";
@@ -15,7 +16,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = setTitle("Dashboard");
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await auth();
   const modules = [
     {
       id: 1,
@@ -92,7 +94,7 @@ export default function Dashboard() {
   return (
     <div className="page-container">
       <div className="flex flex-col lg:flex-row justify-between">
-        <Greeting />
+        <Greeting name={session?.user?.name?.split(" ")[0]} />
         <div className="flex gap-3">
           <Button variant="outline" className="rounded-lg h-10 w-10">
             <IoGrid />

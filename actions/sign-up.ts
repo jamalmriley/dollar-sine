@@ -3,7 +3,7 @@
 import { getUserByEmail } from "@/data/user";
 import { db } from "@/lib/db";
 import { SignUpSchema } from "@/schemas";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import * as z from "zod";
 
 export const signUp = async (values: z.infer<typeof SignUpSchema>) => {
