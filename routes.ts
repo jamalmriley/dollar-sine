@@ -12,7 +12,7 @@ export const publicRoutes: String[] = ["/", "/about", "/support"];
  * @type {string[]}
  */
 
-export const authRoutes: String[] = ["/login", "/sign-up"];
+export const authRoutes: String[] = ["/login", "/sign-up", "/login-error"];
 
 /**
  * The prefix for API authentication routes.
@@ -27,4 +27,4 @@ export const apiAuthPrefix = "/api/auth";
  * @type {string}
  */
 
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard"
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
