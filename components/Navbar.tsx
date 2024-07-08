@@ -8,6 +8,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
 import { LoginButton } from "./auth/login-button";
+import LightLogo from "@/assets/images/ds_logo_light.png";
+import DarkLogo from "@/assets/images/ds_logo_dark.png";
 
 export default function Navbar() {
   const navLinks = [
@@ -21,26 +23,21 @@ export default function Navbar() {
       <div className="flex border-b border-black/10 dark:border-white/10 justify-between px-10 py-2">
         {/* Logo and Text Links */}
         <div className="flex gap-7 items-center">
-          {/* Logo */}
-          <Link href="/">
-            <div className="block dark:hidden" />
-            <div className="hidden dark:block" />
+          <div className="h-10 flex">
+            <Link href="/">
+              <Image
+                src={LightLogo}
+                alt="Logo"
+                className="object-contain h-10 w-10 block dark:hidden"
+              />
 
-            {/* <Image
-              className="block dark:hidden"
-              src={FullLogoLight}
-              alt="Journi Logo"
-              height={31}
-              quality={100}
-            /> */}
-            {/* <Image
-              className="hidden dark:block"
-              src={FullLogoDark}
-              alt="Journi Logo"
-              height={31}
-              quality={100}
-            /> */}
-          </Link>
+              <Image
+                src={DarkLogo}
+                alt="Logo"
+                className="object-contain h-10 w-10 hidden dark:block"
+              />
+            </Link>
+          </div>
 
           {/* Text Links */}
           <div className="hidden md:flex gap-7 items-center">

@@ -23,3 +23,12 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     html: `<p><a href="${confirmationLink}">Click here</a> to confirm your email.</p>`,
   });
 };
+
+export const send2FAEmail = async (email: string, token: string) => {
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: `${token} is your one-time passcode`,
+    html: `<p>${token} is your one-time passcode. This code expires in 15 minutes or if a new code is requested, whichever comes first.</p>`,
+  });
+};
