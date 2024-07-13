@@ -53,7 +53,7 @@ export const generateVerificationToken = async (email: string) => {
 
 export const generate2FAToken = async (email: string) => {
   const token = crypto.randomInt(100_000, 1_000_000).toString();
-  const expires_at = new Date(new Date().getTime() + 6000 * 15); // 15 minutes
+  const expires_at = new Date(new Date().getTime() + 6000 * 10); // 10 minutes
   const existingToken = await get2FATokenByEmail(email);
 
   if (existingToken) {

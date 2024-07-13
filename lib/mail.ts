@@ -28,7 +28,7 @@ export const send2FAEmail = async (email: string, token: string) => {
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,
-    subject: `${token} is your one-time passcode`,
-    html: `<p>${token} is your one-time passcode. This code expires in 15 minutes or if a new code is requested, whichever comes first.</p>`,
+    subject: `${token} is your verification code`,
+    html: `<p>Hi there,</p><br/><p>${token} is your verification code. This code expires in 10 minutes or if a new code is requested, whichever comes first.</p>`,
   });
 };

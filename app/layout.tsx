@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { inter } from "./fonts";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Dollar Sine",
@@ -24,27 +26,30 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
-    <html lang="en">
-      <body
-        className={`bg-[#f5f5f5] dark:bg-[#121212] ${inter.className} flex`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body
+          className={`bg-[#f5f5f5] dark:bg-[#121212] ${inter.className} flex`}
         >
-          <div className="flex flex-col">
-            <div className="grow w-dvw">{children}</div>
-          </div>
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex flex-col">
+              <div className="grow w-dvw">{children}</div>
+            </div>
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

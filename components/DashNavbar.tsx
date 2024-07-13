@@ -1,11 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ModeToggle } from "@/components/ModeToggle";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import SearchBar from "./SearchBar";
 import LightLogo from "@/assets/images/ds_logo_light.png";
 import DarkLogo from "@/assets/images/ds_logo_dark.png";
-import { signOut } from "@/auth";
+import { UserButton } from "./auth/user-button";
 
 export default function DashNavbar() {
   return (
@@ -32,23 +33,7 @@ export default function DashNavbar() {
 
         {/* Right Side */}
         <div className="flex w-40 justify-end items-center gap-3">
-          <form
-            action={async () => {
-              "use server";
-              await signOut();
-            }}
-          >
-            <button type="submit" className="text-sm">
-              Log out
-            </button>
-          </form>
-          <Avatar className="w-10 h-10">
-            <AvatarImage
-              src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-              alt="@username"
-            />
-            <AvatarFallback>JR</AvatarFallback>
-          </Avatar>
+          <UserButton />
 
           <ModeToggle />
           {/* <LanguageToggle /> */}

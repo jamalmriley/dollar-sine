@@ -1,7 +1,9 @@
+import { UserRole } from "@prisma/client";
 import NextAuth, { type DefaultSession } from "next-auth";
 
 export type ExtendedUser = DefaultSession["user"] & {
-  role: "SUPER_ADMIN" | "ADMIN" | "TEACHER" | "PARENT" | "STUDENT";
+  role: UserRole;
+  is2FAEnabled: boolean;
 };
 
 declare module "next-auth" {
@@ -16,6 +18,6 @@ declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
     /** OpenID ID Token */
-    role?: "SUPER_ADMIN" | "ADMIN" | "TEACHER" | "PARENT" | "STUDENT";
+    role?: UserRole;
   }
 }

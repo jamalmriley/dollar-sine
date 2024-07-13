@@ -41,9 +41,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     if (_2FACode) {
       const twoFactorToken = await get2FATokenByEmail(existingUser.email);
 
-      if (!twoFactorToken) return { error: "Invalid one-time passcode" };
+      if (!twoFactorToken) return { error: "Invalid code" };
       if (twoFactorToken.token !== _2FACode)
-        return { error: "Invalid one-time passcode" };
+        return { error: "This isn't the right code. Please try again." };
 
       const hasExpiredToken = new Date(twoFactorToken.expires_at) < new Date();
 
@@ -64,8 +64,8 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       }
 
       await db.twoFactorConfirmation.create({
-        data: {userId: existingUser.id}
-      })
+        data: { userId: existingUser.id },
+      });
     } else {
       const twoFactorToken = await generate2FAToken(existingUser.email);
       await send2FAEmail(twoFactorToken.email, twoFactorToken.token);
