@@ -25,12 +25,13 @@ import Link from "next/link";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
+  // InputOTPSeparator,
   InputOTPSlot,
 } from "../ui/input-otp";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Please log in with your email and password."
@@ -54,7 +55,7 @@ export const LoginForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();
@@ -91,16 +92,15 @@ export const LoginForm = () => {
                 name="_2FACode"
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-center">
-                    <FormLabel className="text-start">One-Time Passcode</FormLabel>
+                    <FormLabel className="text-start">
+                      One-Time Passcode
+                    </FormLabel>
                     <FormControl>
                       <InputOTP maxLength={6} {...field} disabled={isPending}>
                         <InputOTPGroup>
                           <InputOTPSlot index={0} />
                           <InputOTPSlot index={1} />
                           <InputOTPSlot index={2} />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
                           <InputOTPSlot index={3} />
                           <InputOTPSlot index={4} />
                           <InputOTPSlot index={5} />
