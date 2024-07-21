@@ -39,7 +39,7 @@ export default function Footer() {
   ];
 
   return (
-    <div className="flex flex-col items-center p-10 gap-5 sm:items-start">
+    <div className="flex flex-col justify-center items-center px-10 py-5 gap-3 sm:items-start bg-slate-700 dark:bg-gray-800 text-white">
       {/* Copyright and Social Media */}
       <div className="flex flex-col items-center gap-3 w-full sm:flex-row-reverse sm:justify-between">
         {/* Social Media Icons */}

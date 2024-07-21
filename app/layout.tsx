@@ -37,7 +37,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body
-          className={`bg-[#f5f5f5] dark:bg-[#121212] ${inter.className} flex`}
+          className={`bg-[#f5f5f5] dark:bg-[#121212] ${inter.className} flex flex-col h-dvh`}
         >
           <ThemeProvider
             attribute="class"
@@ -46,9 +46,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <Toaster />
-            <div className="flex flex-col">
-              <div className="grow w-dvw">{children}</div>
-            </div>
+            <div className="flex-1">{children}</div>
           </ThemeProvider>
         </body>
       </html>
