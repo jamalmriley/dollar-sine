@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import React from "react";
 import { CardBody, CardContainer, CardItem } from "../ui/3d-card";
 import Link from "next/link";
 import { lora, loraItalic } from "@/app/fonts";
 import { Button } from "../ui/button";
+import { IoVolumeMedium } from "react-icons/io5";
 
 export default function ThreeDCard() {
   const definitions = [
@@ -22,10 +21,20 @@ export default function ThreeDCard() {
             translateZ="50"
             className="text-2xl md:text-4xl font-bold inter-var"
           >
-            <p>
-              dol·lar
-              <span className={`${loraItalic.className}`}> sine</span>
-            </p>
+            <div className="flex items-center gap-3">
+              <p>
+                dol·lar
+                <span className={`${loraItalic.className}`}> sine</span>
+              </p>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-8 h-8 rounded-full"
+                onClick={() => {}}
+              >
+                <IoVolumeMedium className="w-5 h-5" />
+              </Button>
+            </div>
           </CardItem>
           <CardItem as="p" translateZ="60" className="text-xl">
             <span className="block md:text-xl">
