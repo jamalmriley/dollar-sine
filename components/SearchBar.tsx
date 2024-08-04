@@ -16,13 +16,15 @@ export default function SearchBar() {
       <input
         type="search"
         id="searchBar"
-        placeholder="Find a topic..."
+        placeholder="Find courses, topics, and more..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="bg-[transparent] outline-none w-full py-1 px-3"
       />
 
-      <span className="text-xs bg-gray-700 py-0.5 px-2 mr-4 rounded-sm">⌘F</span>
+      <span className="text-xs bg-gray-700 py-0.5 px-2 mr-4 rounded-sm">
+        ⌘F
+      </span>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import CustomH1 from "@/components/CustomH1";
 import { useEffect, useState } from "react";
 
 export default function Greeting({
@@ -28,9 +29,7 @@ export default function Greeting({
 
   return (
     <div>
-      <h1 className="text-3xl md:text-5xl font-extrabold mb-5 select-none">
-        {greeting}, {name}! {emoji}
-      </h1>
+      <CustomH1 text={`${greeting}, ${name}! ${emoji}`} isPaddingEnabled />
     </div>
   );
 }

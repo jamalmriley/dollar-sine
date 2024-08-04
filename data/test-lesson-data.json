@@ -1,0 +1,266 @@
+{
+  "courses": [
+    {
+      "title": "Common Cents",
+      "id": "common-cents",
+      "description": "An introductory financial literacy and consumer math course for grades 6-8.",
+      "image": "",
+      "publishDate": "2025-02-03T06:00:00.000Z",
+      "chapters": [
+        {
+          "id": 1,
+          "name": "Freeloading",
+          "path": "/chapter-1",
+          "difficulty": 1,
+          "introVideoLink": "",
+          "topicsCount": 2,
+          "lessons": [
+            {
+              "id": "1.1",
+              "chapter": "1",
+              "name": "Allowance and Spending Money",
+              "description": "This lesson focuses on basic money skills, including making change and minimizing bill and coin usage. It also focuses on adding and subtracting 1- and 2-digit whole numbers.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Counting money - bills"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["2.NBT.B.5", "2.MD.C.8"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#1.1",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "1.2",
+              "chapter": "1",
+              "name": "To Afford or Not Afford",
+              "description": "This lesson focuses on estimating whole number and decimal sums and differences.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Estimating"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["2.OA.A.1", "5.NBT.A.4"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#1.2",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ],
+          "test": []
+        },
+        {
+          "id": 2,
+          "name": "Getting a Bag",
+          "path": "/chapter-2",
+          "difficulty": 1,
+          "introVideoLink": "",
+          "topicsCount": 6,
+          "lessons": [
+            {
+              "id": "2.1",
+              "chapter": "2",
+              "name": "Getting a Job",
+              "description": "This lesson focuses on comparing decimals.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Comparing money amounts"],
+                "financial_literacy": [
+                  "Understanding labor laws",
+                  "Occupations, education, and income",
+                  "Checking accounts and debit cards"
+                ]
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["4.NF.C.7"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#2.1",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "2.2",
+              "chapter": "2",
+              "name": "Money Management",
+              "description": "This lesson focuses on basic budgeting and spreadsheet skills",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": ["Budgeting", "Using a spreadsheet"]
+              },
+              "prevCCSS": [""],
+              "currCCSS": [""],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#2.2",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ],
+          "test": []
+        },
+        {
+          "id": 3,
+          "name": "Life and Lemons",
+          "path": "/chapter-3",
+          "difficulty": 3,
+          "introVideoLink": "",
+          "topicsCount": 5,
+          "lessons": [
+            {
+              "id": "3.1",
+              "chapter": "3",
+              "name": "Unforeseen Expenses",
+              "description": "This lesson focuses on 1- and 2-step word problems involving the 4 basic operations.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Single- and multi-step word problems"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["3.OA.D.8", "4.OA.A.1", "4.OA.A.2", "4.OA.A.3"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#3.1",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "3.2",
+              "chapter": "3",
+              "name": "Grocery Shopping",
+              "description": "This lesson focuses on counting bills and coins, adding and subtracting decimals, and unit rates.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": [
+                  "Unit rates",
+                  "Counting money - bills and coins"
+                ],
+                "financial_literacy": []
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["2.MD.C.8", "5.NBT.B.7", "7.RP.A.1", "7.RP.A.3"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#3.2",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "3.3",
+              "chapter": "3",
+              "name": "Discretionary Spending",
+              "description": "This lesson focuses on percent change and calculating exact percents for taxes and discounts.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Percent tax and discount"],
+                "financial_literacy": ["Tipping"]
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["7.RP.A.3"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#3.3",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ],
+          "test": []
+        },
+        {
+          "id": 4,
+          "name": "Smart Money",
+          "path": "/chapter-4",
+          "difficulty": 4,
+          "introVideoLink": "",
+          "topicsCount": 3,
+          "lessons": [
+            {
+              "id": "4.1",
+              "chapter": "4",
+              "name": "Short-Term Savings",
+              "description": "This lesson focuses on use of variables and linear equations to represent real-world and mathematical problems.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Linear programming and equations"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["6.EE.B.7", "6.EE.C.9", "7.EE.A.2", "7.EE.B.4"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#4.1",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "4.2",
+              "chapter": "4",
+              "name": "Long-Term Savings",
+              "description": "This lesson focuses on simple interest.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": ["Simple interest"],
+                "financial_literacy": ["Savings accounts"]
+              },
+              "prevCCSS": [""],
+              "currCCSS": ["7.RP.A.3"],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#4.2",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ],
+          "test": []
+        },
+        {
+          "id": 5,
+          "name": "Adulting",
+          "path": "/chapter-5",
+          "difficulty": 2,
+          "introVideoLink": "",
+          "topicsCount": 2,
+          "lessons": [
+            {
+              "id": "5.1",
+              "chapter": "5",
+              "name": "Credit",
+              "description": "This lesson focuses on understanding the world of credit.",
+              "learningObjectives": [""],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": ["Credit cards", "Credit reports"]
+              },
+              "prevCCSS": [""],
+              "currCCSS": [""],
+              "nextCCSS": [""],
+              "pathname": "/courses/TFQ/learning#5.1",
+              "unlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ],
+          "test": []
+        },
+        {
+          "id": 6,
+          "name": "Additional Practice",
+          "path": "/chapter-6",
+          "difficulty": 0,
+          "introVideoLink": "",
+          "topicsCount": 0,
+          "lessons": [],
+          "test": []
+        }
+      ],
+      "topicsCount": 18
+    }
+  ]
+}
