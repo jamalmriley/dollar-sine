@@ -9,8 +9,8 @@
       "chapters": [
         {
           "id": 1,
-          "name": "Freeloading",
-          "path": "/chapter-1",
+          "title": "Freeloading",
+          "description": "This chapter focuses on basic money concepts and the ability to earn and spend money.",
           "difficulty": 1,
           "introVideoLink": "",
           "topicsCount": 2,
@@ -28,7 +28,7 @@
               "prevCCSS": [""],
               "currCCSS": ["2.NBT.B.5", "2.MD.C.8"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#1.1",
+              "pathname": "/courses/common-cents/chapter-1#1.1",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -46,7 +46,7 @@
               "prevCCSS": [""],
               "currCCSS": ["2.OA.A.1", "5.NBT.A.4"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#1.2",
+              "pathname": "/courses/common-cents/chapter-1#1.2",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -56,8 +56,8 @@
         },
         {
           "id": 2,
-          "name": "Getting a Bag",
-          "path": "/chapter-2",
+          "title": "Getting a Bag",
+          "description": "This chapter focuses on getting a job and the necessary skills needed for basic money management.",
           "difficulty": 1,
           "introVideoLink": "",
           "topicsCount": 6,
@@ -79,7 +79,7 @@
               "prevCCSS": [""],
               "currCCSS": ["4.NF.C.7"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#2.1",
+              "pathname": "/courses/common-cents/chapter-2#2.1",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -97,7 +97,7 @@
               "prevCCSS": [""],
               "currCCSS": [""],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#2.2",
+              "pathname": "/courses/common-cents/chapter-2#2.2",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -107,8 +107,8 @@
         },
         {
           "id": 3,
-          "name": "Life and Lemons",
-          "path": "/chapter-3",
+          "title": "Life and Lemons",
+          "description": "This chapter focuses on everyday, discretionary, and unforeseen expenses.",
           "difficulty": 3,
           "introVideoLink": "",
           "topicsCount": 5,
@@ -126,7 +126,7 @@
               "prevCCSS": [""],
               "currCCSS": ["3.OA.D.8", "4.OA.A.1", "4.OA.A.2", "4.OA.A.3"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#3.1",
+              "pathname": "/courses/common-cents/chapter-3#3.1",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -147,7 +147,7 @@
               "prevCCSS": [""],
               "currCCSS": ["2.MD.C.8", "5.NBT.B.7", "7.RP.A.1", "7.RP.A.3"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#3.2",
+              "pathname": "/courses/common-cents/chapter-3#3.2",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -165,7 +165,7 @@
               "prevCCSS": [""],
               "currCCSS": ["7.RP.A.3"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#3.3",
+              "pathname": "/courses/common-cents/chapter-3#3.3",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -175,8 +175,8 @@
         },
         {
           "id": 4,
-          "name": "Smart Money",
-          "path": "/chapter-4",
+          "title": "Smart Money",
+          "description": "This chapter focuses on how and what it takes to save your money wisely.",
           "difficulty": 4,
           "introVideoLink": "",
           "topicsCount": 3,
@@ -194,7 +194,7 @@
               "prevCCSS": [""],
               "currCCSS": ["6.EE.B.7", "6.EE.C.9", "7.EE.A.2", "7.EE.B.4"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#4.1",
+              "pathname": "/courses/common-cents/chapter-4#4.1",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -212,7 +212,7 @@
               "prevCCSS": [""],
               "currCCSS": ["7.RP.A.3"],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#4.2",
+              "pathname": "/courses/common-cents/chapter-4#4.2",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -222,8 +222,8 @@
         },
         {
           "id": 5,
-          "name": "Adulting",
-          "path": "/chapter-5",
+          "title": "Adulting",
+          "description": "This chapter focuses on what credit is, how it works, and why it matters.",
           "difficulty": 2,
           "introVideoLink": "",
           "topicsCount": 2,
@@ -241,7 +241,7 @@
               "prevCCSS": [""],
               "currCCSS": [""],
               "nextCCSS": [""],
-              "pathname": "/courses/TFQ/learning#5.1",
+              "pathname": "/courses/common-cents/chapter-5#5.1",
               "unlocked": false,
               "content": [],
               "accommodations": []
@@ -251,8 +251,8 @@
         },
         {
           "id": 6,
-          "name": "Additional Practice",
-          "path": "/chapter-6",
+          "title": "Additional Practice",
+          "description": "This chapter is for additional skills to practice your financial literacy and consumer math skills.",
           "difficulty": 0,
           "introVideoLink": "",
           "topicsCount": 0,

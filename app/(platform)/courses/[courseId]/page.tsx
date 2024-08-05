@@ -12,7 +12,6 @@ import { FaRegStar, FaStar } from "react-icons/fa";
 import Link from "next/link";
 import CustomH1 from "@/components/CustomH1";
 import { Button } from "@/components/ui/button";
-import { TbLayoutList } from "react-icons/tb";
 
 export default async function CoursePage({ params }: { params: any }) {
   const svgArr = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5, Chapter6];
@@ -41,15 +40,9 @@ export default async function CoursePage({ params }: { params: any }) {
           <h2 className="h2">{course.description}</h2>
         </div>
 
-        <div className="flex gap-3">
-          <Button variant="outline" asChild className="rounded-lg h-10">
-            <Link href="/courses">Back to courses</Link>
-          </Button>
-
-          <Button variant="outline" className="rounded-lg h-10 w-10">
-            <TbLayoutList className="h-10 w-10" />
-          </Button>
-        </div>
+        <Button variant="outline" asChild className="rounded-lg h-10">
+          <Link href="/courses">Back to courses</Link>
+        </Button>
       </div>
 
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
@@ -59,15 +52,15 @@ export default async function CoursePage({ params }: { params: any }) {
             <div>
               <Image
                 src={svgArr[chapter.id - 1]}
-                alt={chapter.name}
+                alt={chapter.title}
                 className="w-full h-40 object-contain p-3 border-b"
               />
               <div className="m-3">
                 <div className="flex justify-between items-start">
-                  {/* Chapter Name and Info */}
+                  {/* Chapter Title and Info */}
                   <div>
                     <span className="text-lg font-bold">
-                      Chapter {chapter.id}: {chapter.name}
+                      Chapter {chapter.id}: {chapter.title}
                     </span>
                     {!!chapter.lessons && (
                       <span
@@ -121,7 +114,7 @@ export default async function CoursePage({ params }: { params: any }) {
               className="h-2 rounded-none"
             />
 
-            <Link href={`/chapter-${chapter.id}`}>
+            <Link href={`/courses/${courseId}/chapter-${chapter.id}`}>
               <div className="badge">
                 <FaPlay />
                 <span>Start</span>
