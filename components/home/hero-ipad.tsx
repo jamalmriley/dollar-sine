@@ -26,8 +26,10 @@ export default function ThreeDCard() {
                 dol·lar
                 <span className={`${loraItalic.className}`}> sine</span>
               </p>
+
+              {/* TODO: Make this play a recording of students saying the phrase. */}
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
                 className="w-8 h-8 rounded-full"
                 onClick={() => {}}

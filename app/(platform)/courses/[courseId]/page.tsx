@@ -12,6 +12,21 @@ import { FaRegStar, FaStar } from "react-icons/fa";
 import Link from "next/link";
 import CustomH1 from "@/components/CustomH1";
 import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 export default async function CoursePage({ params }: { params: any }) {
   const svgArr = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5, Chapter6];
@@ -34,15 +49,47 @@ export default async function CoursePage({ params }: { params: any }) {
 
   return (
     <div className="page-container">
-      <div className="flex justify-between items-center">
-        <div>
-          <CustomH1 text={course.title} isPaddingEnabled={false} />
-          <h2 className="h2">{course.description}</h2>
-        </div>
+      <Breadcrumb className="mb-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/courses">All Courses</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1">
+                  {course.title}
+                  <ChevronDown className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  {courses.map((course: any) => (
+                    <DropdownMenuItem key={course.id}>
+                      <BreadcrumbLink href={`/courses/${course.id}`}>
+                        {course.title}
+                      </BreadcrumbLink>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-        <Button variant="outline" asChild className="rounded-lg h-10">
-          <Link href="/courses">Back to courses</Link>
-        </Button>
+      {/* Title, Subtitle, and Button */}
+      <div className="flex flex-col">
+        <div className="flex justify-between items-center">
+          <CustomH1 text={course.title} isPaddingEnabled={false} />
+          <Button variant="outline" asChild className="rounded-lg h-10">
+            <Link href="/courses">Back to courses</Link>
+          </Button>
+        </div>
+        <h2 className="subtitle">{course.description}</h2>
       </div>
 
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
