@@ -3,8 +3,24 @@ import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { promises as fs } from "fs";
 import { FaPlay } from "react-icons/fa";
-import CustomH1 from "@/components/CustomH1";
 import placeholder from "@/assets/images/placeholders/cc_placeholder.jpg";
+import CustomH1 from "@/components/CustomH1";
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 export default async function AllCourses() {
   const file = await fs.readFile(
@@ -16,7 +32,46 @@ export default async function AllCourses() {
 
   return (
     <div className="page-container">
-        <CustomH1 text="All Courses" isPaddingEnabled />
+      <Breadcrumb className="mb-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1">
+                  All Courses
+                  <ChevronDown className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DropdownMenuItem>
+                    <BreadcrumbLink href="/courses">All Courses</BreadcrumbLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BreadcrumbLink href="/courses/enrolled">
+                      My Courses
+                    </BreadcrumbLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      {/* Title and Button */}
+      <div className="flex flex-col">
+        <div className="flex justify-between items-center">
+          <CustomH1 text="All Courses" isPaddingEnabled />
+
+          <Button variant="outline" asChild className="rounded-lg h-10">
+            <Link href={`/dahsboard`}>Back to dashboard</Link>
+          </Button>
+        </div>
+      </div>
+
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
         {courses.map((course: any) => (
           <div key={course.id} className="card flex flex-col justify-between">
