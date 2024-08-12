@@ -242,6 +242,29 @@ export default async function ChapterPage({ params }: { params: any }) {
             <h2 className="h2">
               {firstName}'{endsWithS ? "" : "s"} Tools 🛠️
             </h2>
+
+            <div className="flex gap-5">
+              <div className="flex flex-col gap-2">
+                <Skeleton className="aspect-square w-28 rounded-md" />
+                <Skeleton className="w-28 h-5 rounded-md" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Skeleton className="aspect-square w-28 rounded-md" />
+                <Skeleton className="w-28 h-5 rounded-md" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Skeleton className="aspect-square w-28 rounded-md" />
+                <Skeleton className="w-28 h-5 rounded-md" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Skeleton className="aspect-square w-28 rounded-md" />
+                <Skeleton className="w-28 h-5 rounded-md" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Skeleton className="aspect-square w-28 rounded-md" />
+                <Skeleton className="w-28 h-5 rounded-md" />
+              </div>
+            </div>
           </div>
         </div>
       </TooltipProvider>
