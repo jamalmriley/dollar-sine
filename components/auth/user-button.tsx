@@ -32,7 +32,7 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
         <p className="font-semibold px-2 py-1">{user?.name}</p>
-        <Separator />
+        <Separator decorative />
 
         <DropdownMenuItem>
           <FaUserCircle className="h-4 w-4 mr-2" />

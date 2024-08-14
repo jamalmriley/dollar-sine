@@ -74,8 +74,16 @@ body,
   @apply bg-secondary text-xs uppercase font-bold rounded-full flex gap-2 px-2 py-1 items-center;
 }
 
+.site-container {
+  @apply flex flex-col h-full;
+}
+
 .page-container {
-  @apply p-10;
+  @apply p-10 h-full;
+}
+
+.page-content {
+  @apply flex grow shrink basis-auto;
 }
 
 .star {
@@ -92,4 +100,12 @@ body,
 
 .subtitle {
   @apply text-lg font-medium mt-1 mb-5 text-gray-500 select-none;
+}
+
+.lesson-h1 {
+  @apply text-xl md:text-3xl font-extrabold select-none;
+}
+
+.lesson-subtitle {
+  @apply font-medium mt-1 mb-5 text-gray-500 select-none;
 }

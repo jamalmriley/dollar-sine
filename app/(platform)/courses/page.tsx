@@ -67,7 +67,7 @@ export default async function AllCourses() {
           <CustomH1 text="All Courses" isPaddingEnabled />
 
           <Button variant="outline" asChild className="rounded-lg h-10">
-            <Link href={`/dahsboard`}>Back to dashboard</Link>
+            <Link href={`/dashboard`}>Back to dashboard</Link>
           </Button>
         </div>
       </div>

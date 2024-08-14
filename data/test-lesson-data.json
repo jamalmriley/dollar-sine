@@ -18,7 +18,7 @@
             {
               "id": "1.1",
               "chapter": "1",
-              "name": "Allowance and Spending Money",
+              "title": "Allowance and Spending Money",
               "description": "This lesson focuses on basic money skills, including making change and minimizing bill and coin usage. It also focuses on adding and subtracting 1- and 2-digit whole numbers.",
               "learningObjectives": [],
               "topics": {
@@ -28,15 +28,17 @@
               "prevCCSS": [],
               "currCCSS": ["2.NBT.B.5", "2.MD.C.8"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-1#1.1",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-1.1",
+              "prevLesson": "",
+              "nextLesson": "1.2",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             },
             {
               "id": "1.2",
               "chapter": "1",
-              "name": "To Afford or Not Afford",
+              "title": "To Afford or Not Afford",
               "description": "This lesson focuses on estimating whole number and decimal sums and differences.",
               "learningObjectives": [],
               "topics": {
@@ -46,8 +48,10 @@
               "prevCCSS": [],
               "currCCSS": ["2.OA.A.1", "5.NBT.A.4"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-1#1.2",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-1.2",
+              "prevLesson": "1.1",
+              "nextLesson": "2.1",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             }
@@ -65,7 +69,7 @@
             {
               "id": "2.1",
               "chapter": "2",
-              "name": "Getting a Job",
+              "title": "Getting a Job",
               "description": "This lesson focuses on comparing decimals.",
               "learningObjectives": [],
               "topics": {
@@ -79,15 +83,17 @@
               "prevCCSS": [],
               "currCCSS": ["4.NF.C.7"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-2#2.1",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-2.1",
+              "prevLesson": "1.2",
+              "nextLesson": "2.2",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             },
             {
               "id": "2.2",
               "chapter": "2",
-              "name": "Money Management",
+              "title": "Money Management",
               "description": "This lesson focuses on basic budgeting and spreadsheet skills.",
               "learningObjectives": [],
               "topics": {
@@ -97,8 +103,10 @@
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-2#2.2",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-2.2",
+              "prevLesson": "2.1",
+              "nextLesson": "3.1",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             }
@@ -116,7 +124,7 @@
             {
               "id": "3.1",
               "chapter": "3",
-              "name": "Unforeseen Expenses",
+              "title": "Unforeseen Expenses",
               "description": "This lesson focuses on 1- and 2-step word problems involving the 4 basic operations.",
               "learningObjectives": [],
               "topics": {
@@ -126,15 +134,17 @@
               "prevCCSS": [],
               "currCCSS": ["3.OA.D.8", "4.OA.A.1", "4.OA.A.2", "4.OA.A.3"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-3#3.1",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-3.1",
+              "prevLesson": "2.2",
+              "nextLesson": "3.2",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             },
             {
               "id": "3.2",
               "chapter": "3",
-              "name": "Grocery Shopping",
+              "title": "Grocery Shopping",
               "description": "This lesson focuses on counting bills and coins, adding and subtracting decimals, and unit rates.",
               "learningObjectives": [],
               "topics": {
@@ -147,15 +157,17 @@
               "prevCCSS": [],
               "currCCSS": ["2.MD.C.8", "5.NBT.B.7", "7.RP.A.1", "7.RP.A.3"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-3#3.2",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-3.2",
+              "prevLesson": "3.1",
+              "nextLesson": "3.3",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             },
             {
               "id": "3.3",
               "chapter": "3",
-              "name": "Discretionary Spending",
+              "title": "Discretionary Spending",
               "description": "This lesson focuses on percent change and calculating exact percents for taxes and discounts.",
               "learningObjectives": [],
               "topics": {
@@ -165,8 +177,10 @@
               "prevCCSS": [],
               "currCCSS": ["7.RP.A.3"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-3#3.3",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-3.3",
+              "prevLesson": "3.2",
+              "nextLesson": "4.1",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             }
@@ -184,7 +198,7 @@
             {
               "id": "4.1",
               "chapter": "4",
-              "name": "Short-Term Savings",
+              "title": "Short-Term Savings",
               "description": "This lesson focuses on use of variables and linear equations to represent real-world and mathematical problems.",
               "learningObjectives": [],
               "topics": {
@@ -194,15 +208,17 @@
               "prevCCSS": [],
               "currCCSS": ["6.EE.B.7", "6.EE.C.9", "7.EE.A.2", "7.EE.B.4"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-4#4.1",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-4.1",
+              "prevLesson": "3.3",
+              "nextLesson": "4.2",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             },
             {
               "id": "4.2",
               "chapter": "4",
-              "name": "Long-Term Savings",
+              "title": "Long-Term Savings",
               "description": "This lesson focuses on simple interest.",
               "learningObjectives": [],
               "topics": {
@@ -212,8 +228,10 @@
               "prevCCSS": [],
               "currCCSS": ["7.RP.A.3"],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-4#4.2",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-4.2",
+              "prevLesson": "4.1",
+              "nextLesson": "5.1",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             }
@@ -231,7 +249,7 @@
             {
               "id": "5.1",
               "chapter": "5",
-              "name": "Credit",
+              "title": "Credit",
               "description": "This lesson focuses on understanding the world of credit.",
               "learningObjectives": [],
               "topics": {
@@ -241,8 +259,10 @@
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/chapter-5#5.1",
-              "unlocked": false,
+              "pathname": "/courses/common-cents/lesson-5.1",
+              "prevLesson": "4.2",
+              "nextLesson": "",
+              "isUnlocked": false,
               "content": [],
               "accommodations": []
             }
