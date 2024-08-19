@@ -8,6 +8,11 @@ body,
   height: 100%;
 }
 
+/* 
+Primary Color: #1E643B
+Secondary Color: #DBF4AD
+*/
+
 @layer base {
   :root {
     --background: 0 0% 100%;
