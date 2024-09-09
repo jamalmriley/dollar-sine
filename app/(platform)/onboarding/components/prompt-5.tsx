@@ -35,7 +35,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function Prompt5() {
-  const [currOptions, setCurrOptions] = useState<string[]>([""]);
+  const [currOptions, setCurrOptions] = useState<string[]>([]);
+  const maxOptions = 5;
 
   const creativeOptions: {
     icon?: JSX.Element;
@@ -117,9 +118,8 @@ export default function Prompt5() {
   return (
     <div className="pt-8">
       {options.map((option, i) => (
-        <div className="inline-block p-2">
+        <div className="inline-block p-2" key={i}>
           <Button
-            key={i}
             variant={
               isSelected(option.label, currOptions) ? "default" : "outline"
             }
@@ -132,6 +132,10 @@ export default function Prompt5() {
                   ? removeElement(option.label, currOptions)
                   : [...currOptions, option.label]
               )
+            }
+            disabled={
+              currOptions.length === maxOptions &&
+              !isSelected(option.label, currOptions)
             }
           >
             {option.icon && option.icon}

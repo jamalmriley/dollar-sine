@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function Prompt1() {
-  const [currOptions, setCurrOptions] = useState<string[]>([""]);
+  const [currOptions, setCurrOptions] = useState<string[]>([]);
   const options: {
     icon?: JSX.Element;
     label: string;
@@ -42,9 +42,8 @@ export default function Prompt1() {
   return (
     <div className="pt-8">
       {options.map((option, i) => (
-        <div className="inline-block p-2">
+        <div className="inline-block p-2" key={i}>
           <Button
-            key={i}
             variant={
               isSelected(option.label, currOptions) ? "default" : "outline"
             }

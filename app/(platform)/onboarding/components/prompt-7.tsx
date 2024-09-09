@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function Prompt7() {
   const [currOption, setCurrOption] = useState<string>("");
