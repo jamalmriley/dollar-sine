@@ -19,7 +19,7 @@ export default function Footer() {
     {
       name: "GitHub",
       icon: <FaGithub />,
-      link: "https://github.com/jamalmriley",
+      link: "https://github.com/jamalmriley/dollar-sine",
     },
     {
       name: "LinkedIn",
@@ -45,7 +45,7 @@ export default function Footer() {
         {/* Social Media Icons */}
         <div className="flex gap-2">
           {socialAccounts.map((platform) => (
-            <Link key={platform.name} href={platform.link}>
+            <Link key={platform.name} href={platform.link} target="_blank">
               <Button variant="ghost" size="icon">
                 {platform.icon}
               </Button>
