@@ -10,14 +10,12 @@ import Prompt3Svg from "@/assets/svg/undraw_passing_by_0un9.svg";
 import Prompt4Svg from "@/assets/svg/undraw_true_friends_c-94-g.svg";
 import Prompt5Svg from "@/assets/svg/undraw_biking_kc-4-f.svg";
 import Prompt6Svg from "@/assets/svg/undraw_favourite_item_pcyo.svg";
-import Prompt7Svg from "@/assets/svg/undraw_special_event_-4-aj8.svg";
-import Prompt8Svg from "@/assets/svg/undraw_savings_re_eq4w.svg";
 import Prompt1 from "./components/prompt-1";
 import Prompt2 from "./components/prompt-2";
+import Prompt3 from "./components/prompt-3";
 import Prompt4 from "./components/prompt-4";
 import Prompt5 from "./components/prompt-5";
-import Prompt7 from "./components/prompt-7";
-import Prompt8 from "./components/prompt-8";
+import Prompt6 from "./components/prompt-6";
 
 export default function OnboardingPage() {
   const [currPrompt, setCurrPrompt] = useState<number>(0);
@@ -27,8 +25,6 @@ export default function OnboardingPage() {
     Prompt4Svg,
     Prompt5Svg,
     Prompt6Svg,
-    Prompt7Svg,
-    Prompt8Svg,
   ];
   const prompts = [
     [
@@ -44,12 +40,13 @@ export default function OnboardingPage() {
         content: <Prompt2 />,
       },
     ],
-    // [
-    //   {
-    //     prompt: "Do you have any pets?",
-    //     description: "",
-    //   },
-    // ],
+    [
+      {
+        prompt: "Do you have any pets?",
+        description: "",
+        content: <Prompt3 />,
+      },
+    ],
     [
       {
         prompt: "How do you mainly get to school?",
@@ -65,24 +62,11 @@ export default function OnboardingPage() {
         content: <Prompt5 />,
       },
     ],
-    // [
-    //   {
-    //     prompt: "What are some things you like to spend money on?",
-    //     description: "Select all that apply.",
-    //   },
-    // ],
     [
       {
-        prompt: "How many days per week do you order food or go out to eat?",
-        description: "",
-        content: <Prompt7 />,
-      },
-    ],
-    [
-      {
-        prompt: "Is there anything that you're saving up for?",
-        description: "",
-        content: <Prompt8 />,
+        prompt: "What are some things you like to spend money on?",
+        description: "Select all that apply.",
+        content: <Prompt6 />,
       },
     ],
     // [{

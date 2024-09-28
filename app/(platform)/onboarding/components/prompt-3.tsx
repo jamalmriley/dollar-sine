@@ -2,14 +2,22 @@ import { IoMdClose } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export default function Prompt2() {
+export default function Prompt3() {
   const [currOptions, setCurrOptions] = useState<string[]>([]);
-  const [siblingCount, setSiblingCount] = useState<number[]>([0, 0, 0, 0]);
+  const [petCount, setPetCount] = useState<number[]>([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ]);
   const options: string[] = [
-    "Older brother",
-    "Older sister",
-    "Younger brother",
-    "Younger sister",
+    "Dog",
+    "Cat",
+    "Fish",
+    "Bird",
+    "Hamster",
+    "Gerbil",
+    "Guinea pig",
+    "Turtle",
+    "Snake",
+    "Lizard",
   ];
 
   const isSelected = (value: string, options: string[]) => {
@@ -51,25 +59,25 @@ export default function Prompt2() {
               !isSelected(option, currOptions) &&
                 setCurrOptions([...currOptions, option]);
               !isSelected(option, currOptions) &&
-                setSiblingCount(updateElement("1", i, siblingCount));
+                setPetCount(updateElement("1", i, petCount));
             }}
           >
             {isSelected(option, currOptions) && (
               <input
                 // type="number"
                 placeholder="1"
-                value={siblingCount[i]}
+                value={petCount[i]}
                 onChange={(e) =>
                   (parseInt(e.target.value) <= 99 || e.target.value === "") &&
-                  setSiblingCount(
-                    updateElement(e.target.value, i, siblingCount)
-                  )
+                  setPetCount(updateElement(e.target.value, i, petCount))
                 }
                 className="bg-[transparent] outline-none w-5 text-center"
               />
             )}
             {isSelected(option, currOptions)
-              ? `${option.toLowerCase()}${siblingCount[i] === 1 ? "" : "s"}`
+              ? `${option.toLowerCase()}${petCount[i] === 1 ? "" : "s"}`
+              : option === "Fish"
+              ? `${option}(es)`
               : `${option}(s)`}
             {isSelected(option, currOptions) && (
               <Button
@@ -78,7 +86,7 @@ export default function Prompt2() {
                 className="rounded-full w-5 h-5"
                 onClick={() => {
                   setCurrOptions(removeElement(option, currOptions));
-                  setSiblingCount(updateElement("0", i, siblingCount));
+                  setPetCount(updateElement("0", i, petCount));
                 }}
               >
                 <IoMdClose size="icon" />
