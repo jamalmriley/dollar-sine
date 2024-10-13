@@ -19,13 +19,7 @@ import Prompt6 from "./components/prompt-6";
 
 export default function OnboardingPage() {
   const [currPrompt, setCurrPrompt] = useState<number>(0);
-  const images = [
-    Prompt1Svg,
-    Prompt3Svg,
-    Prompt4Svg,
-    Prompt5Svg,
-    Prompt6Svg,
-  ];
+  const images = [Prompt1Svg, Prompt3Svg, Prompt4Svg, Prompt5Svg, Prompt6Svg];
   const prompts = [
     [
       {
@@ -65,7 +59,8 @@ export default function OnboardingPage() {
     [
       {
         prompt: "What are some things you like to spend money on?",
-        description: "Select all that apply.",
+        description:
+          "Select all that apply. Left-click to select and deselect options, and right-click to add a savings goal. At least 1 savings goal is required.",
         content: <Prompt6 />,
       },
     ],
