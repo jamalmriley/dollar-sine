@@ -350,109 +350,120 @@ export default async function ContentPage({ params }: { params: any }) {
             <Separator orientation="vertical" className="h-full" />
 
             {/* Right Side */}
-            <div className="flex flex-col justify-between grow p-10">
-              {/* Breadcrumb and Title */}
-              <div className="flex flex-col">
-                <Breadcrumb className="mb-5">
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbLink href="/courses/common-cents">
-                        Common Cents
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbLink
-                        href={`/courses/common-cents/chapter-${lessonPrefix}`}
-                      >
-                        Chapter {lessonPrefix}
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="flex items-center gap-1">
-                            Lesson {lesson.id}
-                            <ChevronDown className="h-4 w-4" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start">
-                            {lessons.map((lesson: any) => (
-                              <DropdownMenuItem key={lesson.id}>
-                                <BreadcrumbLink
-                                  href={`/courses/common-cents/lesson-${lesson.id}`}
-                                >
-                                  Lesson {lesson.id}
-                                </BreadcrumbLink>
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+            <div className="flex flex-row justify-between grow p-10 gap-10 items-end">
+              {/* Breadcrumb, Title, and Interactive Area */}
+              <div className="flex flex-col justify-between w-2/3 h-full">
+                {/* Breadcrumb and Title */}
+                <div className="flex flex-col">
+                  <Breadcrumb className="mb-5">
+                    <BreadcrumbList>
+                      <BreadcrumbItem>
+                        <BreadcrumbLink href="/courses/common-cents">
+                          Common Cents
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbLink
+                          href={`/courses/common-cents/chapter-${lessonPrefix}`}
+                        >
+                          Chapter {lessonPrefix}
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger className="flex items-center gap-1">
+                              Lesson {lesson.id}
+                              <ChevronDown className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                              {lessons.map((lesson: any) => (
+                                <DropdownMenuItem key={lesson.id}>
+                                  <BreadcrumbLink
+                                    href={`/courses/common-cents/lesson-${lesson.id}`}
+                                  >
+                                    Lesson {lesson.id}
+                                  </BreadcrumbLink>
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </BreadcrumbPage>
+                      </BreadcrumbItem>
+                    </BreadcrumbList>
+                  </Breadcrumb>
 
-                {/* Title */}
-                <div className="flex gap-3 items-center">
-                  <h1 className="lesson-h1">
-                    Lesson {lesson.id}: {lesson.title}
-                  </h1>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HiOutlineInformationCircle className="w-6 h-6 text-blue-500" />
-                    </TooltipTrigger>
-                    <TooltipContent className="flex flex-col max-w-80 p-3">
-                      <span className="font-bold mb-1">
-                        What's this lesson about? 🤔
-                      </span>
-                      <span className="text-xs">{lesson.description}</span>
-                    </TooltipContent>
-                  </Tooltip>
+                  {/* Title */}
+                  <div className="flex gap-3 items-center">
+                    <h1 className="lesson-h1">
+                      Lesson {lesson.id}: {lesson.title}
+                    </h1>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HiOutlineInformationCircle className="w-6 h-6 text-blue-500" />
+                      </TooltipTrigger>
+                      <TooltipContent className="flex flex-col max-w-80 p-3">
+                        <span className="font-bold mb-1">
+                          What's this lesson about? 🤔
+                        </span>
+                        <span className="text-xs">{lesson.description}</span>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
+
+                {/* Interactive Area */}
+                <div className="w-full h-full border rounded-md mt-5 flex flex-col">
+                  <div className="w-full flex grow">
+                  </div>
+
+                  {/* Buttons */}
+                  <div
+                    className={`p-5 flex items-center ${
+                      lesson.prevLesson === ""
+                        ? "justify-end"
+                        : lesson.nextLesson === ""
+                        ? "justify-start"
+                        : "justify-between"
+                    }`}
+                  >
+                    {lesson.prevLesson != "" && (
+                      <Button
+                        variant="outline"
+                        asChild
+                        className="rounded-lg h-10 gap-2"
+                      >
+                        <Link
+                          href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
+                        >
+                          <ArrowLeft className="h-5 w-5" />
+                          Previous: Lesson {lesson.prevLesson}
+                        </Link>
+                      </Button>
+                    )}
+                    {lesson.nextLesson !== "" && (
+                      <Button
+                        variant="outline"
+                        asChild
+                        className="rounded-lg h-10 gap-2"
+                      >
+                        <Link
+                          href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
+                        >
+                          Next: Lesson {lesson.nextLesson}
+                          <ArrowRight className="h-5 w-5" />
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Content */}
-              <Skeleton className="w-full h-full my-5" />
-
-              {/* Buttons */}
-              <div
-                className={`flex ${
-                  lesson.prevLesson === ""
-                    ? "justify-end"
-                    : lesson.nextLesson === ""
-                    ? "justify-start"
-                    : "justify-between"
-                }`}
-              >
-                {lesson.prevLesson != "" && (
-                  <Button
-                    variant="outline"
-                    asChild
-                    className="rounded-lg h-10 gap-2"
-                  >
-                    <Link
-                      href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
-                    >
-                      <ArrowLeft className="h-5 w-5" />
-                      Previous: Lesson {lesson.prevLesson}
-                    </Link>
-                  </Button>
-                )}
-                {lesson.nextLesson !== "" && (
-                  <Button
-                    variant="outline"
-                    asChild
-                    className="rounded-lg h-10 gap-2"
-                  >
-                    <Link
-                      href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
-                    >
-                      Next: Lesson {lesson.nextLesson}
-                      <ArrowRight className="h-5 w-5" />
-                    </Link>
-                  </Button>
-                )}
+              {/* Video */}
+              <div className="w-1/3">
+                <Skeleton className="aspect-[9/16]" />
               </div>
             </div>
           </div>
