@@ -2,26 +2,186 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  height: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
+/* 
+Primary Color: #1E643B
+Secondary Color: #DBF4AD
+*/
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.badge {
+  @apply bg-primary text-xs uppercase font-bold rounded-full absolute top-0 right-0 mt-9 mr-3 flex w-10 h-10 justify-center items-center;
+}
+
+.badge-2 {
+  @apply bg-secondary text-xs uppercase font-bold rounded-full flex border px-2 py-1 items-center;
+}
+
+.site-container {
+  @apply flex flex-col h-full;
+}
+
+.page-container {
+  @apply p-10 h-full;
+}
+
+.page-content {
+  @apply flex grow shrink basis-auto;
+}
+
+.star {
+  @apply h-4 w-4;
+}
+
+.h1 {
+  @apply text-2xl md:text-3xl lg:text-5xl font-extrabold select-none;
+}
+
+.h2 {
+  @apply text-2xl font-bold mb-3 select-none;
+}
+
+.subtitle {
+  @apply text-base md:text-lg font-medium mt-1 mb-5 text-gray-500 select-none;
+}
+
+.lesson-h1 {
+  @apply text-xl md:text-3xl font-extrabold select-none;
+}
+
+.lesson-subtitle {
+  @apply font-medium mt-1 mb-5 text-gray-500 select-none;
+}
+
+.tile-parent {
+  @apply flex flex-col justify-between w-full aspect-video border rounded-lg overflow-hidden bg-[#ededed] dark:bg-[#313234] hover:shadow-lg relative transition ease-in-out duration-200;
+}
+
+.tile-child-1,
+.tile-child-2,
+.tile-child-3 {
+  @apply h-3 w-3 rounded-full bg-[#ccc] dark:bg-[#464646] transition ease-in-out duration-200;
+}
+
+.tile-parent:hover .tile-child-1 {
+  @apply bg-[#ff6259];
+}
+
+.tile-parent:hover .tile-child-2 {
+  @apply bg-[#ffc13d];
+}
+
+.tile-parent:hover .tile-child-3 {
+  @apply bg-[#17c94b];
+}
+
+.ais-InstantSearch {
+  max-width: 960px;
+  width: 100%;
+  /* display: block; */
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.ais-Hits-list {
+  position: fixed;
+  top: 100%;
+}
+
+.ais-Hits-list .ais-Hits-item {
+  margin-left: 0;
+  width: 100%;
+}
+
+.ais-Hits-item img {
+  margin-right: 1em;
+}
+
+.ais-InstantSearch .ais-Hits-list {
+  display: flex;
+  flex-direction: column;
+  /* margin-left: 0; */
+  /* margin-top: 0; */
+}
+
+.ais-Hits-list {
+  margin-top: 1em;
+}
+
+.tools-container {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  @apply grid gap-5;
+}
+
+.sidebar-item {
+  @apply h-5 w-5 flex-shrink-0;
 }
