@@ -33,12 +33,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const bannerObj = bannerMessages[bannerMessages.length - 1];
-  const [text, publishDate] = [bannerObj.text, bannerObj.publishDate];
+  const [header, text, publishDate] = [
+    bannerObj.header,
+    bannerObj.text,
+    bannerObj.publishDate,
+  ];
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en">
         <body
-          className={`bg-[#fff] dark:bg-[#121212] ${inter.className} site-container`}
+          className={`bg-[#fff] dark:bg-[#121212] ${inter.className} site-container text-woodsmoke-950 dark:text-woodsmoke-50`}
         >
           <ThemeProvider
             attribute="class"
@@ -48,7 +52,7 @@ export default function RootLayout({
           >
             {/* <Toaster /> */}
             <div className="page-content flex-col">
-              <Banner text={text} publishDate={publishDate} />
+              <Banner header={header} text={text} publishDate={publishDate} />
               {children}
             </div>
           </ThemeProvider>

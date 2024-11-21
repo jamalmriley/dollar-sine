@@ -5,15 +5,11 @@ import {
   FaInstagram,
   FaLinkedinIn,
   FaTiktok,
-  FaCookieBite,
+  FaHeart,
+  FaCode,
 } from "react-icons/fa6";
-import { IoAccessibility } from "react-icons/io5";
 
 export default function Footer() {
-  const footerLinks = [
-    { name: "Cookie Preferences", icon: <FaCookieBite /> },
-    { name: "Accessibility", icon: <IoAccessibility /> },
-  ];
   const socialAccounts = [
     {
       name: "GitHub",
@@ -38,29 +34,27 @@ export default function Footer() {
   ];
 
   return (
-    <div className="flex flex-col justify-center items-center px-10 py-5 gap-3 sm:items-start bg-slate-700 dark:bg-gray-800 text-white">
-      {/* Copyright and Social Media */}
-      <div className="flex flex-col items-center gap-3 w-full sm:flex-row-reverse sm:justify-between">
-        {/* Social Media Icons */}
-        <div className="flex gap-2">
-          {socialAccounts.map((platform) => (
-            <Link key={platform.name} href={platform.link} target="_blank">
-              <Button variant="ghost" size="icon">
-                {platform.icon}
-              </Button>
-            </Link>
-          ))}
-        </div>
+    <div className="flex gap-3 w-full px-10 py-5 border-t bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
+      {/* Credit */}
+      <span className="flex gap-1.5 items-center text-sm font-bold select-none">
+        Created with{" "}
+        <FaHeart className="footer-icon" />{" "}
+        and{" "}
+        <FaCode className="footer-icon" />
+        .
+      </span>
 
-        {/* Credit */}
-        <span className="text-xs font-bold">Created by Jamal Riley.</span>
-      </div>
-
-      {/* Links */}
-      <div className="flex gap-4 md:gap-5">
-        {footerLinks.map((link) => (
-          <Link key={link.name} href={"/"} className="text-center">
-            <span className="text-xs font-bold">{link.name}</span>
+      {/* Social Media Icons */}
+      <div className="flex gap-2">
+        {socialAccounts.map((platform) => (
+          <Link key={platform.name} href={platform.link} target="_blank">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-antique-brass-950 dark:text-antique-brass-100"
+            >
+              {platform.icon}
+            </Button>
           </Link>
         ))}
       </div>

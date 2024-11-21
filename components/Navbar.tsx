@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
-      <div className="flex border-b border-black/10 dark:border-white/10 justify-between px-10 py-2">
+      <div className="flex border-b justify-between px-10 py-2">
         {/* Logo and Text Links */}
         <div className="flex gap-7 items-center">
           <div className="h-10 flex">
@@ -43,7 +43,7 @@ export default function Navbar() {
           <div className="hidden md:flex gap-7 items-center">
             {navLinks.map((link, i) => (
               <Link key={i} className="nav-link" href={link.href}>
-                <span className="block">{link.name}</span>
+                <span className="block text-sm font-bold">{link.name}</span>
               </Link>
             ))}
           </div>
