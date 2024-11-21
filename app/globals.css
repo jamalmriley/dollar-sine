@@ -2,16 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ——————————— BASE ——————————— */
 html,
 body,
 :root {
   height: 100%;
 }
-
-/* 
-Primary Color: #1E643B
-Secondary Color: #DBF4AD
-*/
 
 @layer base {
   :root {
@@ -78,6 +74,11 @@ Secondary Color: #DBF4AD
     @apply bg-background text-foreground;
   }
 }
+
+/* —————————— LAYOUT —————————— */
+/* —————————— MODULE —————————— */
+/* —————————— STATES —————————— */
+/* —————————— THEMES —————————— */
 
 .badge {
   @apply bg-primary text-xs uppercase font-bold rounded-full absolute top-0 right-0 mt-9 mr-3 flex w-10 h-10 justify-center items-center;
