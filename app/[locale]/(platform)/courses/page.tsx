@@ -5,7 +5,6 @@ import { promises as fs } from "fs";
 import { FaPlay } from "react-icons/fa";
 import placeholder from "@/assets/images/placeholders/cc_placeholder.jpg";
 import CustomH1 from "@/components/CustomH1";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import CourseTile from "@/components/CourseTile";
+import LinkButton from "@/components/LinkButton";
 
 export default async function AllCoursesPage() {
   const file = await fs.readFile(
@@ -66,10 +66,7 @@ export default async function AllCoursesPage() {
       <div className="flex flex-col">
         <div className="flex justify-between items-start">
           <CustomH1 text="All Courses" isPaddingEnabled />
-
-          <Button variant="outline" asChild className="rounded-lg h-10">
-            <Link href={`/dashboard`}>Back to dashboard</Link>
-          </Button>
+          <LinkButton text="Back to dashboard" href="/dashboard" />
         </div>
       </div>
 

@@ -36,6 +36,7 @@ import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
 import { LessonContent } from "./LessonContent";
+import LinkButton from "@/components/LinkButton";
 
 export default async function ContentPage({ params }: { params: any }) {
   const [courseId, contentId] = [
@@ -119,9 +120,10 @@ export default async function ContentPage({ params }: { params: any }) {
                   text={`Chapter ${chapter.id}: ${chapter.title}`}
                   isPaddingEnabled={false}
                 />
-                <Button variant="outline" asChild className="rounded-lg h-10">
-                  <Link href={`/courses/${courseId}`}>Back to chapters</Link>
-                </Button>
+                <LinkButton
+                  text="Back to chapters"
+                  href={`/courses/${courseId}`}
+                />
               </div>
               <h2 className="subtitle">{chapter.description}</h2>
             </div>

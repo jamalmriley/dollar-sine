@@ -7,11 +7,9 @@ import Chapter3 from "@/assets/svg/undraw_make_it_rain_re_w9pc.svg";
 import Chapter4 from "@/assets/svg/undraw_savings_re_eq4w.svg";
 import Chapter5 from "@/assets/svg/undraw_credit_card_payments_re_qboh.svg";
 import Chapter6 from "@/assets/svg/undraw_moving_forward_re_rs8p.svg";
-import { FaPlay } from "react-icons/fa";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import Link from "next/link";
 import CustomH1 from "@/components/CustomH1";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import CourseTile from "@/components/CourseTile";
+import LinkButton from "@/components/LinkButton";
 
 export default async function CoursePage({ params }: { params: any }) {
   const svgArr = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5, Chapter6];
@@ -87,9 +86,7 @@ export default async function CoursePage({ params }: { params: any }) {
       <div className="flex flex-col">
         <div className="flex justify-between items-center">
           <CustomH1 text={course.title} isPaddingEnabled={false} />
-          <Button variant="outline" asChild className="rounded-lg h-10">
-            <Link href="/courses">Back to courses</Link>
-          </Button>
+          <LinkButton text="Back to courses" href="/courses" />
         </div>
         <h2 className="subtitle">{course.description}</h2>
       </div>

@@ -1,12 +1,11 @@
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { setTitle } from "@/lib/helpers";
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from "next";
-import Link from "next/link";
 import Greeting from "./components/Greeting";
+import LinkButton from "@/components/LinkButton";
 
 export const metadata: Metadata = setTitle("Dashboard");
 const i18nNamespaces = ["dashboard"];
@@ -32,13 +31,8 @@ export default async function DashboardPage({
           <Greeting name={firstName} />
           {/* <Greeting name={"firstName"} /> */}
           <div className="flex gap-3">
-            <Button variant="outline" asChild className="rounded-lg h-10">
-              <Link href="/courses/enrolled">{t("my-courses")}</Link>
-            </Button>
-
-            <Button variant="outline" asChild className="rounded-lg h-10">
-              <Link href="/courses">{t("all-courses")}</Link>
-            </Button>
+            <LinkButton text={t("my-courses")} href="/courses/enrolled" />
+            <LinkButton text={t("all-courses")} href="/courses" />
           </div>
         </div>
 
