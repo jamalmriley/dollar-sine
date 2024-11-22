@@ -16,40 +16,39 @@ export default function Banner({
   publishDate: Date;
 }) {
   const { t } = useTranslation();
-  const [showBanner, setShowBanner] = useState(true);
+  const [now, setNow] = useState(new Date());
+  const [showBanner, setShowBanner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const initialDate = new Date();
 
   const handleCloseBanner = () => {
     setShowBanner(false);
-    localStorage.setItem("bannerDismissed", "true"); // Store dismissal in local storage
+    localStorage.setItem("lastDismissal", now.toUTCString()); // Store dismissal in local storage
   };
 
+  /* The banner will only display under the following conditions:
+  (The user last pressed the "X" button before the most recent message's publish date.
+  OR
+  The user has never pressed the "X" button.)
+  AND (&&)
+  (The publish date has passed.) */
   useEffect(() => {
-    if (localStorage.getItem("bannerDismissed") === "true") {
-      setShowBanner(false);
-    }
-    setIsLoading(false);
+    const interval = setInterval(() => {
+      const now = new Date();
+      setNow(now);
+      const lastDismissal = localStorage.getItem("lastDismissal");
+      const lastDismissalDate = new Date(lastDismissal ? lastDismissal : 0);
+
+      if (lastDismissalDate <= publishDate && now >= publishDate) {
+        setShowBanner(true);
+      }
+      setIsLoading(false);
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <>
-      {/*
-      The banner will display under the following conditions:
-
-      (The user last pressed the "X" button before the most recent message's publish date.
-      OR  (||)
-      The user has never pressed the "X" button.)
-      AND (&&)
-      (The publish date has passed.)
-
-      ((lastConfirmationDate === undefined
-        ? new Date()
-        : new Date(lastConfirmationDate) <= publishDate) ||
-        value === "") &&
-        now >= publishDate
-
-      */}
-
       {showBanner && !isLoading && (
         <div className="flex justify-between items-center w-full h-20 px-10 py-5 bg-emerald-50 dark:bg-emerald-950">
           <div className="flex items-center gap-3">
