@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { IoMdClose } from "react-icons/io";
 import { CiBullhorn } from "react-icons/ci";
+import { useTranslation } from "react-i18next";
 
 export default function Banner({
-  header,
+  header = "banner-header-1",
   text,
   publishDate,
 }: {
-  header?: string;
+  header: string;
   text: string;
   publishDate: Date;
 }) {
+  const { t } = useTranslation();
   const [showBanner, setShowBanner] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -56,10 +58,10 @@ export default function Banner({
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-lg font-bold text-emerald-950 dark:text-emerald-50">
-                {header}
+                {t(header)}
               </span>
               <span className="text-xs font-medium text-emerald-800 dark:text-emerald-100">
-                {text}
+                {t(text)}
               </span>
             </div>
           </div>

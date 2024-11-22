@@ -11,7 +11,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const { t, resources } = await initTranslations(locale, i18nNamespaces);
+  const { resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
     <TranslationsProvider

@@ -8,8 +8,10 @@ import {
   FaHeart,
   FaCode,
 } from "react-icons/fa6";
+import initTranslations from "@/app/i18n";
+import { cookies } from "next/headers";
 
-export default function Footer() {
+export default async function Footer({ params }: { params: any }) {
   const socialAccounts = [
     {
       name: "GitHub",
@@ -33,15 +35,16 @@ export default function Footer() {
     },
   ];
 
+  const cookieStore = await cookies();
+  const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+  const { t } = await initTranslations(locale, ["layout"]);
+
   return (
     <div className="flex gap-3 w-full px-10 py-5 border-t bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
       {/* Credit */}
       <span className="flex gap-1.5 items-center text-sm font-bold select-none">
-        Created with{" "}
-        <FaHeart className="footer-icon" />{" "}
-        and{" "}
-        <FaCode className="footer-icon" />
-        .
+        {t("footer_created-with")} <FaHeart className="footer-icon" /> {`${t("footer_and")} `}
+        <FaCode className="footer-icon" />.
       </span>
 
       {/* Social Media Icons */}

@@ -21,7 +21,6 @@ export default function LanguageToggle() {
   const currentPathname = usePathname();
 
   const handleChange = (newLocale: string) => {
-    console.log("The new locale is...", newLocale);
     // set cookie for next-i18n-router
     const days = 30;
     const date = new Date();

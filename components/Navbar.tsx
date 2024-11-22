@@ -10,12 +10,19 @@ import LightLogo from "@/assets/images/ds_logo_light.png";
 import DarkLogo from "@/assets/images/ds_logo_dark.png";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import LanguageToggle from "./LanguageToggle";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
+  const { t } = useTranslation();
   const navLinks = [
-    { name: "Home", href: "/", icon: <GoHomeFill /> },
-    { name: "About", href: "/about", icon: <FaBuilding /> },
-    { name: "Support Us", href: "/support-us", icon: <BiSolidDonateHeart /> },
+    { name: t("home"), href: "/", icon: <GoHomeFill /> },
+    { name: t("about"), href: "/about", icon: <FaBuilding /> },
+    {
+      name: t("support-us"),
+      href: "/support-us",
+      icon: <BiSolidDonateHeart />,
+    },
   ];
 
   return (
@@ -63,7 +70,7 @@ export default function Navbar() {
             </SignedIn>
           </div>
           <ModeToggle />
-          {/* <LanguageToggle /> */}
+          <LanguageToggle />
           <div className="flex md:hidden">{/* <MenuToggle /> */}</div>
         </div>
       </div>

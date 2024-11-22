@@ -7,6 +7,8 @@ import Banner from "@/components/Banner";
 import { bannerMessages } from "@/lib/banner-messages";
 import { i18nConfig } from "@/i18nConfig";
 import { dir } from "i18next";
+import TranslationsProvider from "@/components/ui/translations-provider";
+import initTranslations from "../i18n";
 
 export const metadata: Metadata = {
   title: "Dollar Sine",
@@ -28,18 +30,20 @@ export const metadata: Metadata = {
     ],
   }, */
 };
+const i18nNamespaces = ["layout"];
 
 export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params: { locale },
 }: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  const { resources } = await initTranslations(locale, i18nNamespaces);
   const bannerObj = bannerMessages[bannerMessages.length - 1];
   const [header, text, publishDate] = [
     bannerObj.header,
@@ -58,11 +62,17 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {/* <Toaster /> */}
-            <div className="page-content flex-col">
-              <Banner header={header} text={text} publishDate={publishDate} />
-              {children}
-            </div>
+            <TranslationsProvider
+              namespaces={i18nNamespaces}
+              locale={locale}
+              resources={resources}
+            >
+              {/* <Toaster /> */}
+              <div className="page-content flex-col">
+                <Banner header={header} text={text} publishDate={publishDate} />
+                {children}
+              </div>
+            </TranslationsProvider>
           </ThemeProvider>
         </body>
       </html>

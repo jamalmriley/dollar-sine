@@ -1,9 +1,10 @@
 export const bannerMessages: {
-  header?: string;
+  header: string;
   text: string;
   publishDate: Date;
 }[] = [
   {
+    header: "Example Header",
     text: "This is a test message set to display at 4:00 PM!",
     publishDate: new Date(2024, 10, 19, 16, 0, 0, 0),
   },
@@ -18,8 +19,8 @@ export const bannerMessages: {
     publishDate: new Date(2024, 10, 21, 2, 54, 0, 0),
   },
   {
-    header: "Welcome to Dollar Sine! 👋🏿",
-    text: "I'm glad you're here. - Jamal",
+    header: "banner-header-1",
+    text: "banner-message-1",
     publishDate: new Date(2024, 10, 21, 3, 0, 0, 0),
   },
 ];

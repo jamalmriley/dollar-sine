@@ -5,8 +5,10 @@ import Link from "next/link";
 import { lora, loraItalic } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import { IoVolumeMedium } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 export default function Home3DCard() {
+  const { t } = useTranslation();
   const definitions = [
     "a website that teaches students about consumer math and financial literacy.",
     "a cool project made by just a STEM teacher.",
@@ -44,7 +46,7 @@ export default function Home3DCard() {
               -er sahyn &#93;
             </span>
             <span className={`block ${lora.className} md:text-xl font-bold`}>
-              noun
+              {t("noun")}
             </span>
           </CardItem>
           <CardItem translateZ="100" className="w-full mt-4">
@@ -68,14 +70,14 @@ export default function Home3DCard() {
             <CardItem
               translateZ={20}
               as={Link}
-              href="https://twitter.com/mannupaaji"
+              href="/"
               target="__blank"
               className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
             >
-              Try now →
+              {t("try-now")} →
             </CardItem>
             <CardItem translateZ={20} as={Button} className="text-xs">
-              <Link href="/sign-up">Get started</Link>
+              <Link href="/sign-up">{t("get-started")}</Link>
             </CardItem>
           </div>
         </CardBody>
