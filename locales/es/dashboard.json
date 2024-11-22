@@ -1,1 +1,1 @@
-{"all-courses":"Todos los cursos","continue-learning":"Sigue aprendiendo","good-afternoon":"Buenas tardes","good-evening":"Buenas noches","good-morning":"Buen día","my-courses":"Mis cursos"}
+{"all-courses":"Todos los cursos","continue-learning":"Sigue aprendiendo","good-afternoon":"¡Buenas tardes, {{ name }}!","good-evening":"¡Buenas noches, {{ name }}!","good-morning":"¡Buenos días, {{ name }}!","my-courses":"Mis cursos"}

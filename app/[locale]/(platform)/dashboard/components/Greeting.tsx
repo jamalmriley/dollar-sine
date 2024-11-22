@@ -31,7 +31,7 @@ export default function Greeting({
 
   return (
     <div>
-      <CustomH1 text={`${t(greeting)}, ${name}! ${emoji}`} isPaddingEnabled />
+      <CustomH1 text={`${t(greeting, { name })} ${emoji}`} isPaddingEnabled />
     </div>
   );
 }
