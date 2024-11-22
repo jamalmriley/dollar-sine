@@ -2,18 +2,19 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ModeToggle } from "@/components/ModeToggle";
 import LightLogo from "@/assets/images/ds_logo_light.png";
 import DarkLogo from "@/assets/images/ds_logo_dark.png";
+// import { Search } from "@/components/Search";
 import { UserButton } from "@clerk/nextjs";
-// import { Search } from "./Search";
+import { ModeToggle } from "@/components/ModeToggle";
+import LanguageToggle from "@/components/LanguageToggle";
 
 export default function DashNavbar() {
   return (
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
       <div className="flex border-b border-black/10 dark:border-white/10 justify-between px-10 py-2 items-center">
         {/* Logo */}
-        <div className="h-10 w-40 flex">
+        <div className="h-10 flex">
           <Link href="/dashboard">
             <Image
               src={LightLogo}
@@ -30,10 +31,11 @@ export default function DashNavbar() {
         </div>
         {/* <Search /> */}
         {/* Right Side */}
-        <div className="flex w-40 justify-end items-center gap-3">
+        <div className="flex justify-end items-center gap-3">
           <UserButton />
           <ModeToggle />
-          {/* <LanguageToggle /> */}
+          <LanguageToggle />
+
           <div className="flex md:hidden">{/* <MenuToggle /> */}</div>
         </div>
       </div>

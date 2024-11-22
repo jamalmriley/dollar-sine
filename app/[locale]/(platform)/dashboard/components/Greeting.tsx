@@ -1,13 +1,15 @@
 "use client";
 
-import CustomH1 from "@/components/CustomH1";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import CustomH1 from "@/components/CustomH1";
 
 export default function Greeting({
   name,
 }: {
   name: String | null | undefined;
 }) {
+  const { t } = useTranslation();
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -19,17 +21,17 @@ export default function Greeting({
 
   const greeting =
     time.getHours() < 12
-      ? "Good morning"
+      ? "good-morning"
       : time.getHours() < 18
-      ? "Good afternoon"
-      : "Good evening";
+      ? "good-afternoon"
+      : "good-evening";
 
   const emoji =
     time.getHours() < 12 ? "☀️" : time.getHours() < 18 ? "👋🏿" : "🌙";
 
   return (
     <div>
-      <CustomH1 text={`${greeting}, ${name}! ${emoji}`} isPaddingEnabled />
+      <CustomH1 text={`${t(greeting)}, ${name}! ${emoji}`} isPaddingEnabled />
     </div>
   );
 }
