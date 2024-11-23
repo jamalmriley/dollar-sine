@@ -9,12 +9,13 @@ import { ModeToggle } from "@/components/ModeToggle";
 import LightLogo from "@/assets/images/ds_logo_light.png";
 import DarkLogo from "@/assets/images/ds_logo_dark.png";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
+import LinkButton from "./LinkButton";
+import { t } from "@/lib/helpers";
 
-export default function Navbar() {
-  const { t } = useTranslation();
+export default function LandingNavbar() {
+  // const { t } = useTranslation();
   const navLinks = [
     { name: t("home"), href: "/", icon: <GoHomeFill /> },
     { name: t("about"), href: "/about", icon: <FaBuilding /> },
@@ -63,14 +64,12 @@ export default function Navbar() {
               <SignInButton />
             </SignedOut>
             <SignedIn>
-              <Button asChild>
-                <Link href="/dashboard">Go to dashboard</Link>
-              </Button>
+              <LinkButton text="Go to dashboard" href="/dashboard" />
               <UserButton />
             </SignedIn>
           </div>
           <ModeToggle />
-          <LanguageToggle />
+          {/* <LanguageToggle /> */}
           <div className="flex md:hidden">{/* <MenuToggle /> */}</div>
         </div>
       </div>

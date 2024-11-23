@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import CustomH1 from "@/components/CustomH1";
+import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import LinkButton from "@/components/LinkButton";
+import Link from "next/link";
 
 export default async function MyCoursesPage() {
   const user = await currentUser();
@@ -67,7 +68,10 @@ export default async function MyCoursesPage() {
             text={`${firstName}'${endsWithS ? "" : "s"} Courses`}
             isPaddingEnabled
           />
-          <LinkButton text="Back to dashboard" href="/dashboard" />
+
+          <Button variant="outline" asChild className="rounded-lg h-10">
+            <Link href={`/dashboard`}>Back to dashboard</Link>
+          </Button>
         </div>
       </div>
     </div>

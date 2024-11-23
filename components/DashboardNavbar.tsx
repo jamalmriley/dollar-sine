@@ -9,7 +9,7 @@ import { UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "@/components/ModeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 
-export default function DashNavbar() {
+export default function DashboardNavbar() {
   return (
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
       <div className="flex border-b border-black/10 dark:border-white/10 justify-between px-10 py-2 items-center">
@@ -34,7 +34,7 @@ export default function DashNavbar() {
         <div className="flex justify-end items-center gap-3">
           <UserButton />
           <ModeToggle />
-          <LanguageToggle />
+          {/* <LanguageToggle /> */}
 
           <div className="flex md:hidden">{/* <MenuToggle /> */}</div>
         </div>
