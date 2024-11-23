@@ -29,7 +29,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import CourseTile from "@/components/CourseTile";
 import { Suspense } from "react";
-import Loading from "@/app/loading";
+import Loading from "@/app/[locale]/loading";
 
 export default async function CoursePage({ params }: { params: any }) {
   const svgArr = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5, Chapter6];

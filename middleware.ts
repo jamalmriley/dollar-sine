@@ -1,4 +1,4 @@
-/* import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { i18nRouter } from "next-i18n-router";
 import { i18nConfig } from "./i18nConfig";
 
@@ -25,15 +25,15 @@ export default clerkMiddleware(async (auth, req) => {
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    // "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // "/(api|trpc)(.*)", // Clerk - API routes
-    // "/((?!api|static|.*\\..*|_next).*)", // i18nexus - API routes
-    "/((?!static|.*\\..*|_next).*)", // Source: https://stackoverflow.com/questions/78441347/next-intl-integration-with-clerk
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)", // Clerk - API routes
+    "/((?!api|static|.*\\..*|_next).*)", // i18nexus - API routes
+    // "/((?!static|.*\\..*|_next).*)", // Source: https://stackoverflow.com/questions/78441347/next-intl-integration-with-clerk
   ],
 };
- */
 
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+/* import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
@@ -57,3 +57,4 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
+ */

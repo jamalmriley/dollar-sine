@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { promises as fs } from "fs";
-import Loading from "@/app/loading";
+import Loading from "@/app/[locale]/loading";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ChapterContent from "./components/ChapterContent";
 import { LessonContent } from "./components/LessonContent";
