@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { IoMdClose } from "react-icons/io";
 import { CiBullhorn } from "react-icons/ci";
 import { useTranslation } from "react-i18next";
+import { t } from "@/lib/helpers";
 
 export default function Banner({
   header = "banner-header-1",
@@ -15,11 +16,10 @@ export default function Banner({
   text: string;
   publishDate: Date;
 }) {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [now, setNow] = useState(new Date());
   const [showBanner, setShowBanner] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const initialDate = new Date();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleCloseBanner = () => {
     setShowBanner(false);
@@ -33,6 +33,7 @@ export default function Banner({
   AND (&&)
   (The publish date has passed.) */
   useEffect(() => {
+    setIsLoaded(true);
     const interval = setInterval(() => {
       const now = new Date();
       setNow(now);
@@ -42,14 +43,13 @@ export default function Banner({
       if (lastDismissalDate <= publishDate && now >= publishDate) {
         setShowBanner(true);
       }
-      setIsLoading(false);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <>
-      {showBanner && !isLoading && (
+      {showBanner && isLoaded && (
         <div className="flex justify-between items-center w-full h-20 px-10 py-5 bg-emerald-50 dark:bg-emerald-950">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-emerald-500 dark:bg-emerald-400 rounded-full flex items-center justify-center">

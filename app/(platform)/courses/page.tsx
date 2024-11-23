@@ -5,6 +5,7 @@ import { promises as fs } from "fs";
 import { FaPlay } from "react-icons/fa";
 import placeholder from "@/assets/images/placeholders/cc_placeholder.jpg";
 import CustomH1 from "@/components/CustomH1";
+import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,7 +22,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import CourseTile from "@/components/CourseTile";
-import LinkButton from "@/components/LinkButton";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
 
 export default async function AllCoursesPage() {
   const file = await fs.readFile(
@@ -66,45 +68,47 @@ export default async function AllCoursesPage() {
       <div className="flex flex-col">
         <div className="flex justify-between items-start">
           <CustomH1 text="All Courses" isPaddingEnabled />
-          <LinkButton text="Back to dashboard" href="/dashboard" />
+
+          <Button variant="outline" asChild className="rounded-lg h-10">
+            <Link href={`/dashboard`}>Back to dashboard</Link>
+          </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {courses.map((course: any) => (
-          <CourseTile key={course.id}>
-            <Image
-              // src={course.image}
-              src={placeholder}
-              alt={`${course.title} Course Image`}
-              className="object-cover"
-            />
-
-            {/* Course Name, Info, and Progress */}
-            <div className="absolute bottom-0 left-0 w-full">
-              {/* Course Name and Info */}
-              <div className="p-3 bg-gradient-to-t from-zinc-950">
-                <h2 className="text-lg text-white font-bold mb-1">
-                  {course.title}
-                </h2>
-                <p className="text-xs text-white">{course.description}</p>
-              </div>
-
-              <Progress
-                value={Math.floor(Math.random() * 101)}
-                className="h-1.5 rounded-none"
+      <Suspense fallback={<Loading />}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {courses.map((course: any) => (
+            <CourseTile key={course.id}>
+              <Image
+                // src={course.image}
+                src={placeholder}
+                alt={`${course.title} Course Image`}
+                className="object-cover"
               />
-            </div>
 
-            {/* Start Button */}
-            <Link href={`/courses/${course.id}`}>
-              <div className="badge">
-                <FaPlay className="w-5 h-5" />
+              {/* Course Name, Info, and Progress */}
+              <div className="absolute bottom-0 left-0 w-full">
+                {/* Course Name and Info */}
+                <div className="p-3 bg-gradient-to-t from-zinc-950">
+                  <h2 className="text-lg text-white font-bold mb-1">
+                    {course.title}
+                  </h2>
+                  <p className="text-xs text-white">{course.description}</p>
+                </div>
+
+                <Progress value={50} className="h-1.5 rounded-none" />
               </div>
-            </Link>
-          </CourseTile>
-        ))}
-      </div>
+
+              {/* Start Button */}
+              <Link href={`/courses/${course.id}`}>
+                <div className="badge">
+                  <FaPlay className="w-5 h-5" />
+                </div>
+              </Link>
+            </CourseTile>
+          ))}
+        </div>
+      </Suspense>
     </div>
   );
 }

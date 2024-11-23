@@ -10,8 +10,9 @@ import {
 } from "react-icons/fa6";
 import initTranslations from "@/app/i18n";
 import { cookies } from "next/headers";
+import { t } from "@/lib/helpers";
 
-export default async function Footer({ params }: { params: any }) {
+export default async function Footer() {
   const socialAccounts = [
     {
       name: "GitHub",
@@ -35,9 +36,9 @@ export default async function Footer({ params }: { params: any }) {
     },
   ];
 
-  const cookieStore = await cookies();
-  const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
-  const { t } = await initTranslations(locale, ["layout"]);
+  // const cookieStore = await cookies();
+  // const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+  // const { t } = await initTranslations(locale, ["layout"]);
 
   return (
     <div className="flex gap-3 w-full px-10 py-5 border-t bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
