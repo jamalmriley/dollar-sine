@@ -7,6 +7,8 @@ import { bannerMessages } from "@/lib/banner-messages";
 import { i18nConfig } from "@/i18nConfig";
 import "../globals.css";
 import { inter } from "../fonts";
+import TranslationsProvider from "@/components/ui/translations-provider";
+import initTranslations from "../i18n";
 
 export const metadata: Metadata = {
   title: "Dollar Sine",
@@ -33,7 +35,9 @@ export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
-export default function RootLayout({
+const i18nNamespaces = ["layout"];
+
+export default async function RootLayout({
   children,
   params: { locale },
 }: {
@@ -46,6 +50,9 @@ export default function RootLayout({
     bannerObj.text,
     bannerObj.publishDate,
   ];
+
+  const { resources } = await initTranslations(locale, i18nNamespaces);
+
   return (
     <ClerkProvider>
       <html lang={locale} dir={dir(locale)}>
@@ -58,11 +65,16 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {/* <Toaster /> */}
-            <div className="page-content flex-col">
-              <Banner header={header} text={text} publishDate={publishDate} />
-              {children}
-            </div>
+            <TranslationsProvider
+              namespaces={i18nNamespaces}
+              locale={locale}
+              resources={resources}
+            >
+              <div className="page-content flex-col">
+                <Banner header={header} text={text} publishDate={publishDate} />
+                {children}
+              </div>
+            </TranslationsProvider>
           </ThemeProvider>
         </body>
       </html>

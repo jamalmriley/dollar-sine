@@ -6,10 +6,9 @@ import { lora, loraItalic } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import { IoVolumeMedium } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
-import { t } from "@/lib/helpers";
 
 export default function Home3DCard() {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const definitions = [
     "a website that teaches students about consumer math and financial literacy.",
     "a cool project made by just a STEM teacher.",

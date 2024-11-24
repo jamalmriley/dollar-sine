@@ -34,7 +34,7 @@ export default function DashboardNavbar() {
         <div className="flex justify-end items-center gap-3">
           <UserButton />
           <ModeToggle />
-          {/* <LanguageToggle /> */}
+          <LanguageToggle />
 
           <div className="flex md:hidden">{/* <MenuToggle /> */}</div>
         </div>

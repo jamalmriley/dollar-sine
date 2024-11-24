@@ -11,11 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { t } from "@/lib/helpers";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>

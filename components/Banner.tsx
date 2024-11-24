@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { IoMdClose } from "react-icons/io";
 import { CiBullhorn } from "react-icons/ci";
 import { useTranslation } from "react-i18next";
-import { t } from "@/lib/helpers";
 
 export default function Banner({
   header = "banner-header-1",
@@ -16,7 +15,7 @@ export default function Banner({
   text: string;
   publishDate: Date;
 }) {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const [now, setNow] = useState(new Date());
   const [showBanner, setShowBanner] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);

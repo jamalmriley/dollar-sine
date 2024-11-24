@@ -12,10 +12,9 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
 import LinkButton from "./LinkButton";
-import { t } from "@/lib/helpers";
 
 export default function LandingNavbar() {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const navLinks = [
     { name: t("home"), href: "/", icon: <GoHomeFill /> },
     { name: t("about"), href: "/about", icon: <FaBuilding /> },
@@ -64,12 +63,12 @@ export default function LandingNavbar() {
               <SignInButton />
             </SignedOut>
             <SignedIn>
-              <LinkButton text="Go to dashboard" href="/dashboard" />
+              <LinkButton text={t("my-dashboard")} href="/dashboard" />
               <UserButton />
             </SignedIn>
           </div>
           <ModeToggle />
-          {/* <LanguageToggle /> */}
+          <LanguageToggle />
           <div className="flex md:hidden">{/* <MenuToggle /> */}</div>
         </div>
       </div>
