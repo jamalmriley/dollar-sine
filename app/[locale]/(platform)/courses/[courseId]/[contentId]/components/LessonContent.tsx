@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -37,6 +37,7 @@ import {
 import { HiOutlineInformationCircle } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 export function LessonContent({
   courseId,
@@ -49,50 +50,66 @@ export function LessonContent({
   lessons: any;
   lesson: any;
 }) {
+  const { t } = useTranslation();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
   const links = [
     {
-      label: "Prereq Check",
+      // label: "Prereq Check",
+      label: t("intro"),
       href: "#",
       icon: <LuClipboardCheck className="sidebar-item" />,
     },
     {
-      label: "Lecture",
+      label: t("lecture"),
       href: "#",
       icon: <LuHeadphones className="sidebar-item" />,
     },
     {
-      label: "Activity #1",
+      label: t("activity-1"),
       href: "#",
       icon: <LuPencilRuler className="sidebar-item" />,
     },
     {
-      label: "Checkpoint",
+      label: t("checkpoint"),
       href: "#",
       icon: <TbZoomCheck className="sidebar-item" />,
     },
     {
-      label: "Activity #2",
+      label: t("activity-2"),
       href: "#",
       icon: <LuGamepad2 className="sidebar-item" />,
     },
     {
-      label: "Practice",
+      label: t("practice"),
       href: "#",
       icon: <GiRunningShoe className="sidebar-item" />,
     },
     {
-      label: "Quiz",
+      label: t("quiz"),
       href: "#",
       icon: <MdOutlineQuiz className="sidebar-item" />,
     },
     {
-      label: "Wrap-Up",
+      label: t("wrapping-up"),
       href: "#",
       icon: <PiFlagCheckeredFill className="sidebar-item" />,
     },
   ];
   const [open, setOpen] = useState<boolean>(false);
   const [currStep, setCurrStep] = useState<number>(0);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  if (!isLoaded) {
+    <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
+      <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
+      <p className="font-medium">Thanos was right...</p>
+    </div>;
+  }
+
   return (
     <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-gray-100 dark:bg-neutral-800 h-full">
       {/* Sidebar */}
@@ -118,7 +135,7 @@ export function LessonContent({
 
           <SidebarLink
             link={{
-              label: "My Tools",
+              label: t("my-tools"),
               href: "#",
               icon: <FaToolbox className="sidebar-item" />,
             }}
@@ -142,7 +159,7 @@ export function LessonContent({
                 <BreadcrumbLink
                   href={`/courses/common-cents/chapter-${lessonPrefix}`}
                 >
-                  Chapter {lessonPrefix}
+                  {t("chapter-number", { chapterId: lessonPrefix })}
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -150,7 +167,7 @@ export function LessonContent({
                 <BreadcrumbPage>
                   <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-1">
-                      Lesson {lesson.id}
+                      {t("lesson-number", { lessonId: lesson.id })}
                       <ChevronDown className="h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
@@ -159,7 +176,7 @@ export function LessonContent({
                           <BreadcrumbLink
                             href={`/courses/common-cents/lesson-${lesson.id}`}
                           >
-                            Lesson {lesson.id}
+                            {t("lesson-number", { lessonId: lesson.id })}
                           </BreadcrumbLink>
                         </DropdownMenuItem>
                       ))}
@@ -173,7 +190,7 @@ export function LessonContent({
           {/* Title */}
           <div className="flex gap-3 items-center">
             <h1 className="lesson-h1">
-              Lesson {lesson.id}: {lesson.title}
+              {t("lesson-number", { lessonId: lesson.id })}: {lesson.title}
             </h1>
             <Tooltip>
               <TooltipTrigger>
@@ -214,7 +231,7 @@ export function LessonContent({
                     href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
                   >
                     <ArrowLeft className="h-5 w-5" />
-                    Previous: Lesson {lesson.prevLesson}
+                    {t("previous-lesson", { lessonId: lesson.prevLesson })}
                   </Link>
                 </Button>
               )}
@@ -227,7 +244,7 @@ export function LessonContent({
                   <Link
                     href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
                   >
-                    Next: Lesson {lesson.nextLesson}
+                    {t("next-lesson", { lessonId: lesson.nextLesson })}
                     <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>

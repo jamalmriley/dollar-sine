@@ -9,7 +9,7 @@ import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/lib/helpers";
 
 export const metadata: Metadata = setTitle("Dashboard");
-const i18nNamespaces = ["dashboard"];
+const i18nNamespaces = ["dashboard", "platform-layout"];
 
 export default async function DashboardPage({
   params: { locale },
@@ -31,13 +31,19 @@ export default async function DashboardPage({
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <Greeting name={firstName} />
           <div className="flex gap-3">
-            <LinkButton text={t("my-courses")} href="/courses/enrolled" />
-            <LinkButton text={t("all-courses")} href="/courses" />
+            <LinkButton
+              text={t("platform-layout:my-courses")}
+              href="/courses/enrolled"
+            />
+            <LinkButton
+              text={t("platform-layout:all-courses")}
+              href="/courses"
+            />
           </div>
         </div>
 
         <div className="mt-5">
-          <h2 className="h2">{t("continue-learning")}</h2>
+          <h2 className="h2">{t("platform-layout:continue-learning")}</h2>
 
           <CourseTile>
             <Skeleton className="h-full rounded-none" />

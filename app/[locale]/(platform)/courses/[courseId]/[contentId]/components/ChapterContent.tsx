@@ -1,4 +1,6 @@
-import { currentUser } from "@clerk/nextjs/server";
+"use client";
+
+import Loading from "@/app/[locale]/loading";
 import CustomH1 from "@/components/CustomH1";
 import LinkButton from "@/components/LinkButton";
 import {
@@ -32,6 +34,8 @@ import {
 import { getStandard } from "@/data/standards";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaPlay } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
 
@@ -44,21 +48,31 @@ export default async function ChapterContent({
   course: any;
   chapter: any;
 }) {
-  const user = await currentUser();
-  const firstName = user?.firstName;
-  const lastLetter = firstName?.charAt(firstName.length - 1);
-  const endsWithS: boolean = lastLetter?.toLowerCase() === "s";
+  const { t } = useTranslation();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  if (!isLoaded) {
+    <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
+      <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
+      <p className="font-medium">Thanos was right...</p>
+    </div>;
+  }
 
   return (
     <div className="page-container">
       <Breadcrumb className="mb-5">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+            <BreadcrumbLink href="/dashboard">{t("dashboard")}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/courses">All Courses</BreadcrumbLink>
+            {/* TODO: make it say "My Courses" if this is an enrolled course, or "All Courses" if it is not. */}
+            <BreadcrumbLink href="/courses">{t("all-courses")}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -71,7 +85,7 @@ export default async function ChapterContent({
             <BreadcrumbPage>
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-1">
-                  Chapter {chapter.id}
+                  {t("chapter-number", { chapterId: chapter.id })}
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
@@ -80,7 +94,7 @@ export default async function ChapterContent({
                       <BreadcrumbLink
                         href={`/courses/common-cents/chapter-${chapter.id}`}
                       >
-                        Chapter {chapter.id}
+                        {t("chapter-number", { chapterId: chapter.id })}
                       </BreadcrumbLink>
                     </DropdownMenuItem>
                   ))}
@@ -94,10 +108,15 @@ export default async function ChapterContent({
       <div className="flex flex-col">
         <div className="flex justify-between items-center">
           <CustomH1
-            text={`Chapter ${chapter.id}: ${chapter.title}`}
+            text={`${t("chapter-number", { chapterId: chapter.id })}: ${
+              chapter.title
+            }`}
             isPaddingEnabled={false}
           />
-          <LinkButton text="Back to chapters" href={`/courses/${courseId}`} />
+          <LinkButton
+            text={t("back-to-chapters")}
+            href={`/courses/${courseId}`}
+          />
         </div>
         <h2 className="subtitle">{chapter.description}</h2>
       </div>
@@ -113,7 +132,9 @@ export default async function ChapterContent({
                   <div className="flex items-center gap-2 mb-1">
                     <FaPlay />
                     {/* TODO: Make it say "Start" or "Resume" depending on status. */}
-                    <span>Resume Lesson {chapter.id}.1</span>
+                    <span>
+                      {t("resume-lesson", { lessonId: `${chapter.id}.1` })}
+                    </span>
                   </div>
 
                   <Progress value={50} className="h-1" />
@@ -125,7 +146,7 @@ export default async function ChapterContent({
               <Link href={`/courses/${courseId}/chapter-${chapter.id}`}>
                 <div className="flex items-center gap-2">
                   <VscDebugRestart />
-                  <span>Restart</span>
+                  <span>{t("restart")}</span>
                 </div>
               </Link>
             </Button>
@@ -134,7 +155,7 @@ export default async function ChapterContent({
 
         {/* Lesson and Resource Lists */}
         <div className="w-full md:w-1/2 flex flex-col">
-          <h2 className="h2 mt-5 md:mt-0">Lessons 📚</h2>
+          <h2 className="h2 mt-5 md:mt-0">{t("lessons")} 📚</h2>
           <Accordion type="single" collapsible className="mb-10">
             {chapter.lessons.map((lesson: any) => (
               <AccordionItem key={lesson.id} value={lesson.id}>
@@ -150,7 +171,8 @@ export default async function ChapterContent({
                         <FaPlay className="w-1 h-1" />
                       </Link>
                     </Button>
-                    Lesson {lesson.id}: {lesson.title}
+                    {t("lesson-number", { lessonId: lesson.id })}:{" "}
+                    {lesson.title}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col items-center md:items-start">
@@ -230,11 +252,9 @@ export default async function ChapterContent({
             ))}
           </Accordion>
 
-          {/* Student Tools */}
+          {/* My Tools */}
           <div>
-            <h2 className="h2">
-              {firstName}'{endsWithS ? "" : "s"} Tools 🛠️
-            </h2>
+            <h2 className="h2">{t("my-tools")} 🛠️</h2>
 
             <div className="tools-container">
               <div className="flex flex-col gap-2">

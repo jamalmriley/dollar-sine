@@ -4,8 +4,21 @@ import Loading from "@/app/[locale]/loading";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ChapterContent from "./components/ChapterContent";
 import { LessonContent } from "./components/LessonContent";
+import TranslationsProvider from "@/components/ui/translations-provider";
+import initTranslations from "@/app/i18n";
+import { currentUser } from "@clerk/nextjs/server";
+
+const i18nNamespaces = ["platform-layout", "common-cents"];
 
 export default async function ContentPage({ params }: { params: any }) {
+  const locale: string = params.locale;
+  const { resources } = await initTranslations(locale, i18nNamespaces);
+
+  const user = await currentUser();
+  const firstName = user?.firstName;
+  const lastLetter = firstName?.charAt(firstName.length - 1);
+  const endsWithS: boolean = lastLetter?.toLowerCase() === "s";
+
   const [courseId, contentId] = [
     params.courseId, // (await params).courseId,
     params.contentId, // (await params).contentId,
@@ -32,26 +45,32 @@ export default async function ContentPage({ params }: { params: any }) {
   return (
     <div className="h-full">
       <Suspense fallback={<Loading />}>
-        <TooltipProvider>
-          {/* Chapter Content */}
-          {contentType === "chapter" && (
-            <ChapterContent
-              courseId={courseId}
-              course={course}
-              chapter={chapter}
-            />
-          )}
+        <TranslationsProvider
+          namespaces={i18nNamespaces}
+          locale={locale}
+          resources={resources}
+        >
+          <TooltipProvider>
+            {/* Chapter Content */}
+            {contentType === "chapter" && (
+              <ChapterContent
+                courseId={courseId}
+                course={course}
+                chapter={chapter}
+              />
+            )}
 
-          {/* Lesson Content */}
-          {contentType === "lesson" && (
-            <LessonContent
-              courseId={courseId}
-              lessonPrefix={lessonPrefix}
-              lessons={lessons}
-              lesson={lesson}
-            />
-          )}
-        </TooltipProvider>
+            {/* Lesson Content */}
+            {contentType === "lesson" && (
+              <LessonContent
+                courseId={courseId}
+                lessonPrefix={lessonPrefix}
+                lessons={lessons}
+                lesson={lesson}
+              />
+            )}
+          </TooltipProvider>
+        </TranslationsProvider>
       </Suspense>
     </div>
   );

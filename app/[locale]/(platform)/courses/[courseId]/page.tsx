@@ -30,11 +30,22 @@ import { ChevronDown } from "lucide-react";
 import CourseTile from "@/components/CourseTile";
 import { Suspense } from "react";
 import Loading from "@/app/[locale]/loading";
+import { Metadata } from "next";
+import { setTitle } from "@/lib/helpers";
+import initTranslations from "@/app/i18n";
+import TranslationsProvider from "@/components/ui/translations-provider";
+import LinkButton from "@/components/LinkButton";
+
+export const metadata: Metadata = setTitle("Common Cents");
+const i18nNamespaces = ["platform-layout", "common-cents"];
 
 export default async function CoursePage({ params }: { params: any }) {
+  const locale: string = params.locale;
+  const { t, resources } = await initTranslations(locale, i18nNamespaces);
+
   const svgArr = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5, Chapter6];
   // const courseId = (await params).courseId;
-  const courseId = params.courseId;
+  const courseId: string = params.courseId;
 
   const difficultyLevels = new Map();
   difficultyLevels.set(0, "Varies");
@@ -54,118 +65,127 @@ export default async function CoursePage({ params }: { params: any }) {
   return (
     <div className="page-container">
       <Suspense fallback={<Loading />}>
-        <Breadcrumb className="mb-5">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/courses">All Courses</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1">
-                    {course.title}
-                    <ChevronDown className="h-4 w-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    {courses.map((course: any) => (
-                      <DropdownMenuItem key={course.id}>
-                        <BreadcrumbLink href={`/courses/${course.id}`}>
-                          {course.title}
-                        </BreadcrumbLink>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <TranslationsProvider
+          namespaces={i18nNamespaces}
+          locale={locale}
+          resources={resources}
+        >
+          <Breadcrumb className="mb-5">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard">
+                  {t("dashboard")}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                {/* TODO: make it say "My Courses" if this is an enrolled course, or "All Courses" if it is not. */}
+                <BreadcrumbLink href="/courses">
+                  {t("all-courses")}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center gap-1">
+                      {course.title}
+                      <ChevronDown className="h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      {courses.map((course: any) => (
+                        <DropdownMenuItem key={course.id}>
+                          <BreadcrumbLink href={`/courses/${course.id}`}>
+                            {course.title}
+                          </BreadcrumbLink>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
-        {/* Title, Subtitle, and Button */}
-        <div className="flex flex-col">
-          <div className="flex justify-between items-center">
-            <CustomH1 text={course.title} isPaddingEnabled={false} />
-            <Button variant="outline" asChild className="rounded-lg h-10">
-              <Link href="/courses">Back to courses</Link>
-            </Button>
+          {/* Title, Subtitle, and Button */}
+          <div className="flex flex-col">
+            <div className="flex justify-between items-center">
+              <CustomH1 text={course.title} isPaddingEnabled={false} />
+              <LinkButton text={t("back-to-courses")} href="/courses" />
+            </div>
+            <h2 className="subtitle">{course.description}</h2>
           </div>
-          <h2 className="subtitle">{course.description}</h2>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {course.chapters.map((chapter: any) => (
-            <CourseTile key={chapter.id}>
-              <Link href={`/courses/${courseId}/chapter-${chapter.id}`}>
-                {/* Image and Content */}
-                <Image
-                  src={svgArr[chapter.id - 1]}
-                  alt={chapter.title}
-                  className="object-contain p-10 bg-blue-300"
-                />
-                {/* Chapter Name, Info, and Progress */}
-                <div className="absolute bottom-0 left-0 w-full">
-                  {/* Chapter Name and Info */}
-                  <div className="flex justify-between items-start px-3 pt-10 pb-3 bg-gradient-to-t from-zinc-950 text-white">
-                    {/* Chapter Title and Info */}
-                    <div>
-                      <span className="text-lg font-bold">
-                        Chapter {chapter.id}: {chapter.title}
-                      </span>
-                      {!!chapter.lessons && (
-                        <span
-                          className={`text-sm ${
-                            chapter.lessons.length === 0 ? "hidden" : "block"
-                          }`}
-                        >
-                          {`${chapter.lessons.length} lesson${
-                            chapter.lessons.length === 1 ? "" : "s"
-                          } • ${chapter.topicsCount} topic${
-                            chapter.topicsCount === 1 ? "" : "s"
-                          }`}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {course.chapters.map((chapter: any) => (
+              <CourseTile key={chapter.id}>
+                <Link href={`/courses/${courseId}/chapter-${chapter.id}`}>
+                  {/* Image and Content */}
+                  <Image
+                    src={svgArr[chapter.id - 1]}
+                    alt={chapter.title}
+                    className="object-contain p-10 bg-blue-300"
+                  />
+                  {/* Chapter Name, Info, and Progress */}
+                  <div className="absolute bottom-0 left-0 w-full">
+                    {/* Chapter Name and Info */}
+                    <div className="flex justify-between items-start px-3 pt-10 pb-3 bg-gradient-to-t from-zinc-950 text-white">
+                      {/* Chapter Title and Info */}
+                      <div>
+                        <span className="text-lg font-bold">
+                          Chapter {chapter.id}: {chapter.title}
                         </span>
-                      )}
+                        {!!chapter.lessons && (
+                          <span
+                            className={`text-sm ${
+                              chapter.lessons.length === 0 ? "hidden" : "block"
+                            }`}
+                          >
+                            {`${chapter.lessons.length} lesson${
+                              chapter.lessons.length === 1 ? "" : "s"
+                            } • ${chapter.topicsCount} topic${
+                              chapter.topicsCount === 1 ? "" : "s"
+                            }`}
+                          </span>
+                        )}
 
-                      {/* <span className="block text-sm font-bold">31% completed</span> */}
-                    </div>
+                        {/* <span className="block text-sm font-bold">31% completed</span> */}
+                      </div>
 
-                    {/* Ratings */}
-                    <div className="text-xs font-bold flex flex-col items-end gap-1 py-1">
-                      <span className="flex gap-0.5">
-                        {chapter.difficulty >= 1 ? (
-                          <FaStar className="star text-yellow-200" />
-                        ) : (
-                          <FaRegStar className="star text-gray-500" />
-                        )}
-                        {chapter.difficulty >= 2 ? (
-                          <FaStar className="star text-yellow-200" />
-                        ) : (
-                          <FaRegStar className="star text-gray-500" />
-                        )}
-                        {chapter.difficulty >= 3 ? (
-                          <FaStar className="star text-yellow-200" />
-                        ) : (
-                          <FaRegStar className="star text-gray-500" />
-                        )}
-                        {chapter.difficulty >= 4 ? (
-                          <FaStar className="star text-yellow-200" />
-                        ) : (
-                          <FaRegStar className="star text-gray-500" />
-                        )}
-                      </span>
-                      {difficultyLevels.get(chapter.difficulty)}
+                      {/* Ratings */}
+                      <div className="text-xs font-bold flex flex-col items-end gap-1 py-1">
+                        <span className="flex gap-0.5">
+                          {chapter.difficulty >= 1 ? (
+                            <FaStar className="star text-yellow-200" />
+                          ) : (
+                            <FaRegStar className="star text-gray-500" />
+                          )}
+                          {chapter.difficulty >= 2 ? (
+                            <FaStar className="star text-yellow-200" />
+                          ) : (
+                            <FaRegStar className="star text-gray-500" />
+                          )}
+                          {chapter.difficulty >= 3 ? (
+                            <FaStar className="star text-yellow-200" />
+                          ) : (
+                            <FaRegStar className="star text-gray-500" />
+                          )}
+                          {chapter.difficulty >= 4 ? (
+                            <FaStar className="star text-yellow-200" />
+                          ) : (
+                            <FaRegStar className="star text-gray-500" />
+                          )}
+                        </span>
+                        {difficultyLevels.get(chapter.difficulty)}
+                      </div>
                     </div>
+                    <Progress value={50} className="h-1.5 rounded-none" />
                   </div>
-                  <Progress value={50} className="h-1.5 rounded-none" />
-                </div>
-              </Link>
-            </CourseTile>
-          ))}
-        </div>
+                </Link>
+              </CourseTile>
+            ))}
+          </div>
+        </TranslationsProvider>
       </Suspense>
     </div>
   );

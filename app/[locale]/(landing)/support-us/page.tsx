@@ -1,15 +1,30 @@
-import { setTitle } from "@/lib/helpers";
 import { Metadata } from "next";
+import initTranslations from "@/app/i18n";
+import TranslationsProvider from "@/components/ui/translations-provider";
+import { setTitle } from "@/lib/helpers";
 
-export const metadata: Metadata = setTitle("Support me");
+export const metadata: Metadata = setTitle("Support Us");
+const i18nNamespaces = ["support-us"];
 
-export default function SupportUsPage() {
+export default async function SupportUsPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  const { t, resources } = await initTranslations(locale, i18nNamespaces);
+
   return (
-    <div className="page-container">
-      <h1 className="h1">Support Us</h1>
-      <p>support me for free: share my project on social media</p>
-      <p>support my classroom: wish list</p>
-      <p>donate: buy me coffee</p>
-    </div>
+    <TranslationsProvider
+      namespaces={i18nNamespaces}
+      locale={locale}
+      resources={resources}
+    >
+      <div className="page-container">
+        <h1 className="h1">{t("support-us")}</h1>
+        <p>support me for free: share my project on social media</p>
+        <p>support my classroom: wish list</p>
+        <p>donate: buy me coffee</p>
+      </div>
+    </TranslationsProvider>
   );
 }
