@@ -69,7 +69,7 @@ export default function LanguageToggle() {
               aria-label="Spanish"
             />
           )}
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

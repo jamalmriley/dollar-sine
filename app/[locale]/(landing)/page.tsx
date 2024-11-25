@@ -17,7 +17,7 @@ export default async function HomePage({
       locale={locale}
       resources={resources}
     >
-      <main className="flex justify-center">
+      <main className="w-full h-full flex justify-center items-center">
         <Home3DCard />
       </main>
     </TranslationsProvider>

@@ -7,7 +7,10 @@ import { LessonContent } from "./components/LessonContent";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "@/app/i18n";
 import { currentUser } from "@clerk/nextjs/server";
+import { setTitle } from "@/lib/helpers";
+import { Metadata } from "next";
 
+export const metadata: Metadata = setTitle("Common Cents");
 const i18nNamespaces = ["platform-layout", "common-cents"];
 
 export default async function ContentPage({ params }: { params: any }) {

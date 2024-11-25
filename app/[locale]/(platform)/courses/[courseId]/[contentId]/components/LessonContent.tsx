@@ -111,10 +111,10 @@ export function LessonContent({
   }
 
   return (
-    <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-gray-100 dark:bg-neutral-800 h-full">
+    <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-givry-50 dark:bg-emerald-950 h-full">
       {/* Sidebar */}
       <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10">
+        <SidebarBody className="justify-between gap-10 bg-givry-50 dark:bg-emerald-950">
           <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             <div className="mt-8 flex flex-col gap-2">
               {links.map((link, i) => (
@@ -123,7 +123,7 @@ export function LessonContent({
                   className={`${
                     i === currStep
                       ? "text-primary"
-                      : "text-neutral-700 dark:text-neutral-200"
+                      : "text-neutral-700 dark:text-emerald-100"
                   }`}
                   onClick={() => setCurrStep(i)}
                 >

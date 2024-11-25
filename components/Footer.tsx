@@ -43,9 +43,17 @@ export default async function Footer() {
     <div className="flex gap-3 w-full px-10 py-5 border-t bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
       {/* Credit */}
       <span className="flex gap-1.5 items-center text-sm font-bold select-none">
-        {t("footer_created-with")} <FaHeart className="footer-icon" />{" "}
+        {t("footer_created-with")}{" "}
+        <span>
+          <span className="sr-only">code</span>
+          <FaCode className="footer-icon" />
+        </span>{" "}
         {`${t("footer_and")} `}
-        <FaCode className="footer-icon" />.
+        <span>
+          <span className="sr-only">love</span>
+          <FaHeart className="footer-icon" />
+        </span>
+        .
       </span>
 
       {/* Social Media Icons */}

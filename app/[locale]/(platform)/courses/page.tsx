@@ -101,30 +101,25 @@ export default async function AllCoursesPage({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {courses.map((course: any) => (
               <CourseTile key={course.id}>
-                <Image
-                  // src={course.image}
-                  src={placeholder}
-                  alt={`${course.title} Course Image`}
-                  className="object-cover"
-                />
-
-                {/* Course Name, Info, and Progress */}
-                <div className="absolute bottom-0 left-0 w-full">
-                  {/* Course Name and Info */}
-                  <div className="p-3 bg-gradient-to-t from-zinc-950">
-                    <h2 className="text-lg text-white font-bold mb-1">
-                      {course.title}
-                    </h2>
-                    <p className="text-xs text-white">{course.description}</p>
-                  </div>
-
-                  <Progress value={50} className="h-1.5 rounded-none" />
-                </div>
-
-                {/* Start Button */}
                 <Link href={`/courses/${course.id}`}>
-                  <div className="badge">
-                    <FaPlay className="w-5 h-5" />
+                  <Image
+                    // src={course.image}
+                    src={placeholder}
+                    alt={`${course.title} Course Image`}
+                    className="object-cover"
+                  />
+
+                  {/* Course Name, Info, and Progress */}
+                  <div className="absolute bottom-0 left-0 w-full">
+                    {/* Course Name and Info */}
+                    <div className="p-3 bg-gradient-to-t from-zinc-950">
+                      <h2 className="text-lg text-white font-bold mb-1">
+                        {course.title}
+                      </h2>
+                      <p className="text-xs text-white">{course.description}</p>
+                    </div>
+
+                    <Progress value={50} className="h-1.5 rounded-none" />
                   </div>
                 </Link>
               </CourseTile>
