@@ -9,5 +9,3 @@ export function setTitle(
     description,
   };
 }
-
-export const t = (text: string) => `t(${text})`;

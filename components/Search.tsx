@@ -11,11 +11,9 @@ import {
 } from "react-instantsearch";
 // import 'instantsearch.css/themes/satellite.css';
 
-const algoliaAppId = process.env.REACT_APP_ALGOLIA_APP_ID || "KPMD8KNKQ3";
-const algoliaApiKey =
-  process.env.REACT_APP_ALGOLIA_SEARCH_API_KEY ||
-  "49ac7f6347c021cdaf1004bad324c34f";
-const searchClient = algoliasearch(algoliaAppId, algoliaApiKey);
+const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
+const algoliaApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY;
+const searchClient = algoliasearch(algoliaAppId as string, algoliaApiKey as string);
 
 function Hit({ hit }: { hit: any }) {
   return (
