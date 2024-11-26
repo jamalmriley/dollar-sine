@@ -220,6 +220,7 @@ export default async function ChapterContent({
                     to view topics.
                   </span>
                   {/* Focus Standard(s) */}
+                  {/* TODO: Only display for teacher/admin accounts. */}
                   <div className="w-full">
                     {!!lesson.currCCSS.length && (
                       <div className="flex flex-col gap-5 border border-dotted rounded-xl p-3">

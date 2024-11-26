@@ -76,118 +76,122 @@ body,
 }
 
 /* —————————— LAYOUT —————————— */
+@layer base {
+  .site-container {
+    @apply flex flex-col h-full;
+  }
+
+  .page-container {
+    @apply p-10 h-full;
+  }
+
+  .page-content {
+    @apply flex grow shrink basis-auto;
+  }
+
+  .footer-icon {
+    @apply text-xl text-antique-brass-600 dark:text-antique-brass-400 hover:scale-125 transform transition ease-in-out duration-200;
+  }
+}
+
 /* —————————— MODULE —————————— */
+@layer base {
+  .badge {
+    @apply bg-primary text-xs uppercase font-bold rounded-full absolute top-0 right-0 mt-9 mr-3 flex w-10 h-10 justify-center items-center;
+  }
+
+  .badge-2 {
+    @apply bg-secondary text-xs uppercase font-bold rounded-full flex border px-2 py-1 items-center;
+  }
+
+  .star {
+    @apply h-4 w-4;
+  }
+
+  .tile-parent {
+    @apply flex flex-col justify-between w-full aspect-video border rounded-lg overflow-hidden bg-[#ededed] dark:bg-[#313234] hover:shadow-lg relative transition ease-in-out duration-200;
+  }
+
+  .tile-child-1,
+  .tile-child-2,
+  .tile-child-3 {
+    @apply h-3 w-3 rounded-full bg-[#ccc] dark:bg-[#464646] transition ease-in-out duration-200;
+  }
+
+  .tile-parent:hover .tile-child-1 {
+    @apply bg-[#ff6259];
+  }
+
+  .tile-parent:hover .tile-child-2 {
+    @apply bg-[#ffc13d];
+  }
+
+  .tile-parent:hover .tile-child-3 {
+    @apply bg-[#17c94b];
+  }
+
+  .tools-container {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    @apply grid gap-5;
+  }
+
+  .sidebar-item {
+    @apply h-5 w-5 flex-shrink-0;
+  }
+
+  /* Algolia Components */
+  .ais-InstantSearch {
+    @apply max-w-[600px] w-full my-0 mx-5 overflow-hidden;
+  }
+
+  .search-box {
+    @apply w-full h-10 pl-10 pr-3 py-2 bg-white dark:bg-[#121212] border placeholder-slate-400 focus:outline-none focus:border-emerald-400 rounded-full text-sm;
+  }
+
+  .search-submit-icon {
+    @apply absolute top-0 left-0 w-4 h-10 ml-4 fill-woodsmoke-700 dark:fill-woodsmoke-100;
+  }
+
+  .search-reset-icon {
+    @apply absolute top-1 right-0 w-4 px-0.5 h-8 mr-4 fill-woodsmoke-700 dark:fill-woodsmoke-100 bg-white dark:bg-[#121212];
+  }
+
+  .ais-Hits-list {
+    @apply w-full md:max-w-[600px] flex flex-col fixed top-full left-0 md:left-auto shadow-md border-x border-b;
+  }
+
+  .ais-Hits-list .ais-Hits-item {
+    @apply w-full md:max-w-[600px] px-5 py-3 bg-white dark:bg-neutral-800 border-b;
+  }
+
+  .highlighted-hits {
+    @apply bg-selective-yellow-200 dark:bg-selective-yellow-300;
+  }
+}
+
 /* —————————— STATES —————————— */
+@layer base {
+}
+
 /* —————————— THEMES —————————— */
+@layer base {
+  .h1 {
+    @apply text-2xl md:text-3xl lg:text-5xl font-extrabold select-none;
+  }
 
-.badge {
-  @apply bg-primary text-xs uppercase font-bold rounded-full absolute top-0 right-0 mt-9 mr-3 flex w-10 h-10 justify-center items-center;
-}
+  .h2 {
+    @apply text-2xl font-bold mb-3 select-none;
+  }
 
-.badge-2 {
-  @apply bg-secondary text-xs uppercase font-bold rounded-full flex border px-2 py-1 items-center;
-}
+  .subtitle {
+    @apply text-base md:text-lg font-medium mt-1 mb-5 text-gray-500 select-none;
+  }
 
-.site-container {
-  @apply flex flex-col h-full;
-}
+  .lesson-h1 {
+    @apply text-xl md:text-3xl font-extrabold select-none;
+  }
 
-.page-container {
-  @apply p-10 h-full;
-}
-
-.page-content {
-  @apply flex grow shrink basis-auto;
-}
-
-.star {
-  @apply h-4 w-4;
-}
-
-.h1 {
-  @apply text-2xl md:text-3xl lg:text-5xl font-extrabold select-none;
-}
-
-.h2 {
-  @apply text-2xl font-bold mb-3 select-none;
-}
-
-.subtitle {
-  @apply text-base md:text-lg font-medium mt-1 mb-5 text-gray-500 select-none;
-}
-
-.lesson-h1 {
-  @apply text-xl md:text-3xl font-extrabold select-none;
-}
-
-.lesson-subtitle {
-  @apply font-medium mt-1 mb-5 text-gray-500 select-none;
-}
-
-.tile-parent {
-  @apply flex flex-col justify-between w-full aspect-video border rounded-lg overflow-hidden bg-[#ededed] dark:bg-[#313234] hover:shadow-lg relative transition ease-in-out duration-200;
-}
-
-.tile-child-1,
-.tile-child-2,
-.tile-child-3 {
-  @apply h-3 w-3 rounded-full bg-[#ccc] dark:bg-[#464646] transition ease-in-out duration-200;
-}
-
-.tile-parent:hover .tile-child-1 {
-  @apply bg-[#ff6259];
-}
-
-.tile-parent:hover .tile-child-2 {
-  @apply bg-[#ffc13d];
-}
-
-.tile-parent:hover .tile-child-3 {
-  @apply bg-[#17c94b];
-}
-
-.ais-InstantSearch {
-  max-width: 960px;
-  width: 100%;
-  /* display: block; */
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.ais-Hits-list {
-  position: fixed;
-  top: 100%;
-}
-
-.ais-Hits-list .ais-Hits-item {
-  margin-left: 0;
-  width: 100%;
-}
-
-.ais-Hits-item img {
-  margin-right: 1em;
-}
-
-.ais-InstantSearch .ais-Hits-list {
-  display: flex;
-  flex-direction: column;
-  /* margin-left: 0; */
-  /* margin-top: 0; */
-}
-
-.ais-Hits-list {
-  margin-top: 1em;
-}
-
-.tools-container {
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  @apply grid gap-5;
-}
-
-.sidebar-item {
-  @apply h-5 w-5 flex-shrink-0;
-}
-
-.footer-icon {
-  @apply text-xl text-antique-brass-600 dark:text-antique-brass-400 hover:scale-125 transform transition ease-in-out duration-200;
+  .lesson-subtitle {
+    @apply font-medium mt-1 mb-5 text-gray-500 select-none;
+  }
 }
