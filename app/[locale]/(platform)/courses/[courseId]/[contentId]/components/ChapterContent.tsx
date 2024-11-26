@@ -1,8 +1,7 @@
 "use client";
 
-import Loading from "@/app/[locale]/loading";
 import CustomH1 from "@/components/CustomH1";
-import LinkButton from "@/components/LinkButton";
+import CustomButton from "@/components/CustomButton";
 import {
   Accordion,
   AccordionContent,
@@ -17,14 +16,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -33,7 +30,6 @@ import {
 } from "@/components/ui/tooltip";
 import { getStandard } from "@/data/standards";
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlay } from "react-icons/fa";
@@ -113,7 +109,7 @@ export default async function ChapterContent({
             }`}
             isPaddingEnabled={false}
           />
-          <LinkButton
+          <CustomButton
             text={t("back-to-chapters")}
             href={`/courses/${courseId}`}
           />
@@ -126,30 +122,18 @@ export default async function ChapterContent({
         <div className="w-full md:w-1/2 flex flex-col">
           <Skeleton className="aspect-[16/9] md:mr-10 mb-5 rounded-md" />
           <div className="flex gap-3 w-full justify-center md:justify-start">
-            <Button asChild variant="outline" className="p-5">
-              <Link href={`/courses/${courseId}/lesson-${chapter.id}.1`}>
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2 mb-1">
-                    <FaPlay />
-                    {/* TODO: Make it say "Start" or "Resume" depending on status. */}
-                    <span>
-                      {t("resume-lesson", { lessonId: `${chapter.id}.1` })}
-                    </span>
-                  </div>
+            {/* TODO: Make it say "Start" or "Resume" depending on status. */}
+            <CustomButton
+              text={t("resume-lesson", { lessonId: `${chapter.id}.1` })}
+              href={`/courses/${courseId}/lesson-${chapter.id}.1`}
+              startIcon={<FaPlay />}
+            />
 
-                  <Progress value={50} className="h-1" />
-                </div>
-              </Link>
-            </Button>
-
-            <Button asChild variant="outline">
-              <Link href={`/courses/${courseId}/chapter-${chapter.id}`}>
-                <div className="flex items-center gap-2">
-                  <VscDebugRestart />
-                  <span>{t("restart")}</span>
-                </div>
-              </Link>
-            </Button>
+            <CustomButton
+              text={t("restart")}
+              href={`/courses/${courseId}/chapter-${chapter.id}`}
+              startIcon={<VscDebugRestart />}
+            />
           </div>
         </div>
 
@@ -160,17 +144,13 @@ export default async function ChapterContent({
             {chapter.lessons.map((lesson: any) => (
               <AccordionItem key={lesson.id} value={lesson.id}>
                 <AccordionTrigger className="">
+                  {/* TODO: Make sr-text say "Start" or "Resume" depending on status. */}
                   <span className="flex gap-3 items-center">
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="icon"
-                      className="w-8 h-8 rounded-full"
-                    >
-                      <Link href={`/courses/${courseId}/lesson-${lesson.id}`}>
-                        <FaPlay className="w-1 h-1" />
-                      </Link>
-                    </Button>
+                    <CustomButton
+                      href={`/courses/${courseId}/lesson-${lesson.id}`}
+                      startIcon={<FaPlay />}
+                      srText={`Start Lesson ${lesson.id}`}
+                    />
                     {t("lesson-number", { lessonId: lesson.id })}:{" "}
                     {lesson.title}
                   </span>

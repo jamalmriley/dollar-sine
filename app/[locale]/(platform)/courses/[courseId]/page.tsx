@@ -34,7 +34,7 @@ import { Metadata } from "next";
 import { setTitle } from "@/lib/helpers";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import LinkButton from "@/components/LinkButton";
+import CustomButton from "@/components/CustomButton";
 
 export const metadata: Metadata = setTitle("Common Cents");
 const i18nNamespaces = ["platform-layout", "common-cents"];
@@ -111,7 +111,7 @@ export default async function CoursePage({ params }: { params: any }) {
           <div className="flex flex-col">
             <div className="flex justify-between items-center">
               <CustomH1 text={course.title} isPaddingEnabled={false} />
-              <LinkButton text={t("back-to-courses")} href="/courses" />
+              <CustomButton text={t("back-to-courses")} href="/courses" />
             </div>
             <h2 className="subtitle">{course.description}</h2>
           </div>

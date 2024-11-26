@@ -38,6 +38,7 @@ import { HiOutlineInformationCircle } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
+import CustomButton from "@/components/CustomButton";
 
 export function LessonContent({
   courseId,
@@ -222,32 +223,18 @@ export function LessonContent({
               }`}
             >
               {lesson.prevLesson != "" && (
-                <Button
-                  variant="outline"
-                  asChild
-                  className="rounded-lg h-10 gap-2"
-                >
-                  <Link
-                    href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
-                  >
-                    <ArrowLeft className="h-5 w-5" />
-                    {t("previous-lesson", { lessonId: lesson.prevLesson })}
-                  </Link>
-                </Button>
+                <CustomButton
+                  text={t("previous-lesson", { lessonId: lesson.prevLesson })}
+                  href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
+                  startIcon={<ArrowLeft />}
+                />
               )}
               {lesson.nextLesson !== "" && (
-                <Button
-                  variant="outline"
-                  asChild
-                  className="rounded-lg h-10 gap-2"
-                >
-                  <Link
-                    href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
-                  >
-                    {t("next-lesson", { lessonId: lesson.nextLesson })}
-                    <ArrowRight className="h-5 w-5" />
-                  </Link>
-                </Button>
+                <CustomButton
+                  text={t("next-lesson", { lessonId: lesson.nextLesson })}
+                  href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
+                  endIcon={<ArrowRight />}
+                />
               )}
             </div>
           </div>

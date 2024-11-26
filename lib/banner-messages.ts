@@ -2,6 +2,8 @@ export const bannerMessages: {
   header: string;
   text: string;
   publishDate: Date;
+  buttonText?: string;
+  buttonHref?: string;
 }[] = [
   {
     header: "Example Header",
@@ -19,8 +21,10 @@ export const bannerMessages: {
     publishDate: new Date(2024, 10, 21, 2, 54, 0, 0),
   },
   {
-    header: "banner-header-1",
-    text: "banner-message-1",
+    header: "banner:header-1",
+    text: "banner:message-1",
     publishDate: new Date(2024, 10, 21, 3, 0, 0, 0),
+    buttonText: "banner:button-text-1",
+    buttonHref: "/onboarding",
   },
 ];

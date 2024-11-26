@@ -11,7 +11,7 @@ import DarkLogo from "@/assets/images/ds_logo_dark.png";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
-import LinkButton from "./LinkButton";
+import CustomButton from "./CustomButton";
 import { Button } from "./ui/button";
 import { IoMenu } from "react-icons/io5";
 import {
@@ -92,7 +92,7 @@ export default function LandingNavbar() {
           </SignedOut>
           <SignedIn>
             <div className="hidden md:block">
-              <LinkButton text={t("my-dashboard")} href="/dashboard" />
+              <CustomButton text={t("my-dashboard")} href="/dashboard" />
             </div>
             <UserButton />
           </SignedIn>

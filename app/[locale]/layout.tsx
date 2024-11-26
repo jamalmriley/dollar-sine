@@ -35,7 +35,7 @@ export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
-const i18nNamespaces = ["layout"];
+const i18nNamespaces = ["layout","banner"];
 
 export default async function RootLayout({
   children,
@@ -45,10 +45,12 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   const bannerObj = bannerMessages[bannerMessages.length - 1];
-  const [header, text, publishDate] = [
+  const [header, text, publishDate, buttonText, buttonHref] = [
     bannerObj.header,
     bannerObj.text,
     bannerObj.publishDate,
+    bannerObj.buttonText,
+    bannerObj.buttonHref,
   ];
 
   const { resources } = await initTranslations(locale, i18nNamespaces);
@@ -71,7 +73,13 @@ export default async function RootLayout({
               resources={resources}
             >
               <div className="page-content flex-col">
-                <Banner header={header} text={text} publishDate={publishDate} />
+                <Banner
+                  header={header}
+                  text={text}
+                  publishDate={publishDate}
+                  buttonText={buttonText}
+                  buttonHref={buttonHref}
+                />
                 {children}
               </div>
             </TranslationsProvider>
