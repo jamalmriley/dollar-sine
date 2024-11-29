@@ -3,7 +3,7 @@ import { dir } from "i18next";
 import { ClerkProvider } from "@clerk/nextjs";
 import Banner from "@/components/Banner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { bannerMessages } from "@/lib/banner-messages";
+import { bannerMessages } from "@/utils/banner-info";
 import { i18nConfig } from "@/i18nConfig";
 import "../globals.css";
 import { inter } from "../fonts";

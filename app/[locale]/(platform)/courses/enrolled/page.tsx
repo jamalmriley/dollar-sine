@@ -18,7 +18,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import initTranslations from "@/app/i18n";
-import { setTitle } from "@/lib/helpers";
+import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import TranslationsProvider from "@/components/ui/translations-provider";
 

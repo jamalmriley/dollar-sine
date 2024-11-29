@@ -31,7 +31,7 @@ import CourseTile from "@/components/CourseTile";
 import { Suspense } from "react";
 import Loading from "@/app/[locale]/loading";
 import { Metadata } from "next";
-import { setTitle } from "@/lib/helpers";
+import { setTitle } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import CustomButton from "@/components/CustomButton";

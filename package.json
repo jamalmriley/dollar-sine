@@ -6,14 +6,17 @@
     "dev": "i18nexus pull && next dev",
     "build": "i18nexus pull && next build",
     "start": "i18nexus pull && next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "data": "tsx ./utils/data.ts"
   },
   "dependencies": {
+    "@clerk/elements": "^0.19.8",
     "@clerk/nextjs": "^6.4.0",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-context-menu": "^2.2.2",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
@@ -21,6 +24,7 @@
     "algoliasearch": "^5.15.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "firebase": "^11.0.2",
     "framer-motion": "^11.11.17",
     "i18next": "^23.16.8",
     "i18next-resources-to-backend": "^1.2.1",
@@ -51,6 +55,7 @@
     "i18nexus-cli": "^3.5.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

@@ -6,7 +6,7 @@ import CourseTile from "@/components/CourseTile";
 import CustomButton from "@/components/CustomButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import { setTitle } from "@/lib/helpers";
+import { setTitle } from "@/utils/ui";
 
 export const metadata: Metadata = setTitle("Dashboard");
 const i18nNamespaces = ["dashboard", "platform-layout"];

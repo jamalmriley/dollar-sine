@@ -212,7 +212,7 @@ export default async function ChapterContent({
                           {lesson.currCCSS.map((standard: string) => (
                             <Tooltip key={standard}>
                               <TooltipTrigger>
-                                <span className="badge-2">{standard}</span>
+                                <span className="badge-2 hover:scale-110 relative transition duration-500">{standard}</span>
                               </TooltipTrigger>
                               <TooltipContent className="flex flex-col max-w-80 p-3">
                                 <span className="font-bold mb-1">

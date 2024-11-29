@@ -27,7 +27,7 @@ import Loading from "@/app/[locale]/loading";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "@/app/i18n";
 import { Metadata } from "next";
-import { setTitle } from "@/lib/helpers";
+import { setTitle } from "@/utils/ui";
 
 export const metadata: Metadata = setTitle("All Courses");
 const i18nNamespaces = ["platform-layout"];

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import { setTitle } from "@/lib/helpers";
+import { setTitle } from "@/utils/ui";
 
 export const metadata: Metadata = setTitle("Support Us");
 const i18nNamespaces = ["support-us"];

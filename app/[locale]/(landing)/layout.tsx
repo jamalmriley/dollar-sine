@@ -1,6 +1,6 @@
 import LandingNavbar from "@/components/LandingNavbar";
 import Footer from "@/components/Footer";
-import { navHeight } from "@/lib/ui";
+import { navHeight } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 

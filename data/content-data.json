@@ -1,0 +1,274 @@
+{
+  "courses": [
+    {
+      "title": "Common Cents",
+      "id": "common-cents",
+      "description": "An introductory financial literacy and consumer math course for grades 6-8.",
+      "imageUrl": "",
+      "publishDate": "2025-02-03T06:00:00.000Z",
+      "chapters": [
+        {
+          "id": 1,
+          "title": "Freeloading",
+          "description": "This chapter focuses on basic money concepts and the ability to earn and spend money.",
+          "difficulty": 1,
+          "topicsCount": 2,
+          "lessons": [
+            {
+              "id": "1.1",
+              "chapter": "1",
+              "title": "Allowance and Spending Money",
+              "description": "This lesson focuses on basic money skills, including making change and minimizing bill and coin usage. It also focuses on adding and subtracting 1- and 2-digit whole numbers.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Counting money - bills"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": ["2.NBT.B.5", "2.MD.C.8"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-1.1",
+              "prevLesson": "",
+              "nextLesson": "1.2",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "1.2",
+              "chapter": "1",
+              "title": "To Afford or Not Afford",
+              "description": "This lesson focuses on estimating whole number and decimal sums and differences.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Estimating"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": ["2.OA.A.1", "5.NBT.A.4"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-1.2",
+              "prevLesson": "1.1",
+              "nextLesson": "2.1",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Getting a Bag",
+          "description": "This chapter focuses on getting a job and the necessary skills needed for basic money management.",
+          "difficulty": 1,
+          "topicsCount": 6,
+          "lessons": [
+            {
+              "id": "2.1",
+              "chapter": "2",
+              "title": "Getting a Job",
+              "description": "This lesson focuses on comparing decimals.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Comparing money amounts"],
+                "financial_literacy": [
+                  "Understanding labor laws",
+                  "Occupations, education, and income",
+                  "Checking accounts and debit cards"
+                ]
+              },
+              "prevCCSS": [],
+              "currCCSS": ["4.NF.C.7"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-2.1",
+              "prevLesson": "1.2",
+              "nextLesson": "2.2",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "2.2",
+              "chapter": "2",
+              "title": "Money Management",
+              "description": "This lesson focuses on basic budgeting and spreadsheet skills.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": ["Budgeting", "Using a spreadsheet"]
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-2.2",
+              "prevLesson": "2.1",
+              "nextLesson": "3.1",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Life and Lemons",
+          "description": "This chapter focuses on everyday, discretionary, and unforeseen expenses.",
+          "difficulty": 3,
+          "topicsCount": 5,
+          "lessons": [
+            {
+              "id": "3.1",
+              "chapter": "3",
+              "title": "Unforeseen Expenses",
+              "description": "This lesson focuses on 1- and 2-step word problems involving the 4 basic operations.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Single- and multi-step word problems"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": ["3.OA.D.8", "4.OA.A.1", "4.OA.A.2", "4.OA.A.3"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-3.1",
+              "prevLesson": "2.2",
+              "nextLesson": "3.2",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "3.2",
+              "chapter": "3",
+              "title": "Grocery Shopping",
+              "description": "This lesson focuses on counting bills and coins, adding and subtracting decimals, and unit rates.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [
+                  "Unit rates",
+                  "Counting money - bills and coins"
+                ],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": ["2.MD.C.8", "5.NBT.B.7", "7.RP.A.1", "7.RP.A.3"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-3.2",
+              "prevLesson": "3.1",
+              "nextLesson": "3.3",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "3.3",
+              "chapter": "3",
+              "title": "Discretionary Spending",
+              "description": "This lesson focuses on percent change and calculating exact percents for taxes, discounts, and even inflation.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Percent tax and discount"],
+                "financial_literacy": ["Tipping"]
+              },
+              "prevCCSS": [],
+              "currCCSS": ["7.RP.A.3"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-3.3",
+              "prevLesson": "3.2",
+              "nextLesson": "4.1",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Smart Money",
+          "description": "This chapter focuses on how and what it takes to save your money wisely.",
+          "difficulty": 4,
+          "topicsCount": 3,
+          "lessons": [
+            {
+              "id": "4.1",
+              "chapter": "4",
+              "title": "Short-Term Savings",
+              "description": "This lesson focuses on use of variables and linear equations to represent real-world and mathematical problems.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Linear programming and equations"],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": ["6.EE.B.7", "6.EE.C.9", "7.EE.A.2", "7.EE.B.4"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-4.1",
+              "prevLesson": "3.3",
+              "nextLesson": "4.2",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "4.2",
+              "chapter": "4",
+              "title": "Long-Term Savings",
+              "description": "This lesson focuses on simple interest.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": ["Simple interest"],
+                "financial_literacy": ["Savings accounts"]
+              },
+              "prevCCSS": [],
+              "currCCSS": ["7.RP.A.3"],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-4.2",
+              "prevLesson": "4.1",
+              "nextLesson": "5.1",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Adulting",
+          "description": "This chapter focuses on what credit is, how it works, and why it matters.",
+          "difficulty": 2,
+          "topicsCount": 2,
+          "lessons": [
+            {
+              "id": "5.1",
+              "chapter": "5",
+              "title": "Credit",
+              "description": "This lesson focuses on understanding the world of credit.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": ["Credit cards", "Credit reports"]
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-5.1",
+              "prevLesson": "4.2",
+              "nextLesson": "",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Additional Practice",
+          "description": "This chapter is for additional skills to practice your financial literacy and consumer math skills.",
+          "difficulty": 0,
+          "topicsCount": 0,
+          "lessons": []
+        }
+      ],
+      "topicsCount": 18
+    }
+  ]
+}

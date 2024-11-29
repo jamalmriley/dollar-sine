@@ -2,7 +2,7 @@ import initTranslations from "@/app/i18n";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import TranslationsProvider from "@/components/ui/translations-provider";
 
-const i18nNamespaces = ["layout"];
+const i18nNamespaces = ["layout", "platform-layout"];
 
 export default async function DashboardLayout({
   children,
