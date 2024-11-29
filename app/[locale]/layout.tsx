@@ -9,6 +9,8 @@ import "../globals.css";
 import { inter } from "../fonts";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "../i18n";
+import OnboardingBanner from "@/components/OnboardingBanner";
+import VerifyEmailBanner from "@/components/VerifyEmailBanner";
 
 export const metadata: Metadata = {
   title: "Dollar Sine",
@@ -35,7 +37,7 @@ export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
 }
 
-const i18nNamespaces = ["layout","banner"];
+const i18nNamespaces = ["layout", "banner"];
 
 export default async function RootLayout({
   children,
@@ -73,13 +75,15 @@ export default async function RootLayout({
               resources={resources}
             >
               <div className="page-content flex-col">
-                <Banner
+                <OnboardingBanner />
+                <VerifyEmailBanner />
+                {/* <Banner
                   header={header}
                   text={text}
                   publishDate={publishDate}
                   buttonText={buttonText}
                   buttonHref={buttonHref}
-                />
+                /> */}
                 {children}
               </div>
             </TranslationsProvider>
