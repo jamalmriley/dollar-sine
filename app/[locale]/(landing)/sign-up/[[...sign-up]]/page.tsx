@@ -16,33 +16,62 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { db } from "@/utils/firebase";
 import { useSignUp } from "@clerk/nextjs";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { Eye, EyeOff } from "lucide-react";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
-  const [firstName, setFirstName] = useState("Jamal");
-  const [lastName, setLastName] = useState("Riley");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("student");
+  const [companyType, setCompanyType] = useState("school");
+
+  const [firstNamePlaceholder, setFirstNamePlaceholder] = useState("John");
+  const [lastNamePlaceholder, setLastNamePlaceholder] = useState("Doe");
 
   const roles = [
     { label: "Student", value: "student" },
     { label: "Parent/Guardian", value: "guardian" },
     { label: "Teacher", value: "teacher" },
-    { label: "Admin", value: "admin" },
-    { label: "Super Admin", value: "super_admin" },
+    { label: "Administrator", value: "administrator" },
+  ];
+
+  const companyTypes = [
+    { label: "School", value: "school" },
+    { label: "Organization", value: "organization" },
+  ];
+
+  const innovators: { firstName: string; lastName: string }[] = [
+    { firstName: "Benjamin", lastName: "Banneker" },
+    { firstName: "David", lastName: "Blackwell" },
+    { firstName: "Elbert Frank", lastName: "Cox" },
+    { firstName: "Mark", lastName: "Dean" },
+    { firstName: "Lonnie", lastName: "Johnson" },
+    { firstName: "John", lastName: "Urschel" },
+
+    { firstName: "Marjorie", lastName: "Lee Browne" },
+    { firstName: "Annie", lastName: "Easley" },
+    { firstName: "Euphemia", lastName: "Haynes" },
+    { firstName: "Fern", lastName: "Hunt" },
+    { firstName: "Mae", lastName: "Jemison" },
+    { firstName: "Katherine", lastName: "Johnson" },
+    { firstName: "Valerie", lastName: "Thomas" },
   ];
 
   const router = useRouter();
@@ -75,57 +104,57 @@ export default function SignUpPage() {
           password,
         })
         .then(() => {
-          // const userId = user.id as string;
-          setDoc(doc(db, "users", emailAddress), {
-            firstName,
-            lastName,
-            emailAddress,
-            emailVerified: false,
-            createdAt: new Date(),
-            role,
-            isOnboardingCompleted: false,
-            guardians: [],
-            enrolledCourses: [],
-            organizations: [],
-            tools: [],
-            profile: {
-              summary: "",
-              personal: {
-                lives_with: [],
-                pets: [],
-                transpo: null,
-                interests: [],
-                spendingCategories: [],
-                savingsGoals: [],
-              },
-              academic: {
-                gradeLevel: null,
-                track: null,
-                testScores: {
-                  iReady: {
-                    overallScore: null,
-                    noScore: null,
-                    aaScore: null,
-                    geoScore: null,
-                    mdScore: null,
-                  },
-                  nweaMap: {
-                    overallScore: null,
-                    noScore: null,
-                    oaScore: null,
-                    geoScore: null,
-                    mdScore: null,
-                  },
-                },
-              },
-            },
-          })
-            .then(() => {
-              console.log("User sucessully created!");
-            })
-            .catch((error: any) => {
-              console.error("Error creating user: ", error);
-            });
+          // TODO: Toaster notification welcoming the user?
+          // setDoc(doc(db, "users", emailAddress), {
+          //   firstName,
+          //   lastName,
+          //   emailAddress,
+          //   emailVerified: false,
+          //   createdAt: new Date(),
+          //   role,
+          //   isOnboardingCompleted: false,
+          //   guardians: [],
+          //   enrolledCourses: [],
+          //   organizations: [],
+          //   tools: [],
+          //   profile: {
+          //     summary: "",
+          //     personal: {
+          //       lives_with: [],
+          //       pets: [],
+          //       transpo: null,
+          //       interests: [],
+          //       spendingCategories: [],
+          //       savingsGoals: [],
+          //     },
+          //     academic: {
+          //       gradeLevel: null,
+          //       track: null,
+          //       testScores: {
+          //         iReady: {
+          //           overallScore: null,
+          //           noScore: null,
+          //           aaScore: null,
+          //           geoScore: null,
+          //           mdScore: null,
+          //         },
+          //         nweaMap: {
+          //           overallScore: null,
+          //           noScore: null,
+          //           oaScore: null,
+          //           geoScore: null,
+          //           mdScore: null,
+          //         },
+          //       },
+          //     },
+          //   },
+          // })
+          //   .then(() => {
+          //     console.log("User sucessully created!");
+          //   })
+          //   .catch((error: any) => {
+          //     console.error("Error creating user: ", error);
+          //   });
         })
         .catch((error) => {
           console.log(error);
@@ -133,8 +162,6 @@ export default function SignUpPage() {
         .finally(() => {
           // TODO: Set loading state to be false.
         });
-
-      // Create Firebase doc with emailVerified: false, createdAt: new Date(), etc.
 
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
@@ -181,8 +208,17 @@ export default function SignUpPage() {
     }
   }
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randInt = Math.floor(Math.random() * innovators.length);
+      setFirstNamePlaceholder(innovators[randInt].firstName);
+      setLastNamePlaceholder(innovators[randInt].lastName);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="flex items-center justify-center">
+    <div className="page-container flex justify-center items-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
@@ -191,42 +227,74 @@ export default function SignUpPage() {
         </CardHeader>
         <CardContent>
           {!pendingVerification ? (
-            <form onSubmit={submit} className="space-y-4">
-              <div className="space-y-2">
+            <form onSubmit={submit} className="flex flex-col w-full gap-5">
+              {/* First and Last Name */}
+              <div className="form-row">
+                <div className="form-item">
+                  <Label htmlFor="firstname">First Name</Label>
+                  <Input
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    id="firstname"
+                    name="firstname"
+                    placeholder={firstNamePlaceholder}
+                    type="text"
+                    autoCapitalize="on"
+                    autoComplete="given-name"
+                    required
+                  />
+                </div>
+                <div className="form-item">
+                  <Label htmlFor="lastname">Last Name</Label>
+                  <Input
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    id="lastname"
+                    name="lastname"
+                    placeholder={lastNamePlaceholder}
+                    type="text"
+                    autoCapitalize="on"
+                    autoComplete="family-name"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="form-item">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  type="email"
-                  id="email"
                   value={emailAddress}
                   onChange={(e) => setEmailAddress(e.target.value)}
+                  id="email"
+                  name="email"
+                  placeholder="name@example.com"
+                  type="email"
+                  autoCapitalize="off"
+                  autoComplete="email"
                   required
                 />
               </div>
-              <div className="space-y-2">
+
+              {/* Password */}
+              <div className="form-item">
                 <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-500" />
-                    )}
-                  </button>
-                </div>
+                <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                  name="password"
+                  placeholder="••••••••"
+                  type="password"
+                  autoCapitalize="off"
+                  autoComplete="new-password"
+                  required
+                />
               </div>
-              <div className="space-y-2">
-                I am a
+
+              {/* Role and Company Type */}
+              <div className="flex gap-3 items-baseline min-w-fit">
+                I am {role === "administrator" ? "an" : "a"}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline">{role}</Button>
@@ -242,7 +310,44 @@ export default function SignUpPage() {
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+                {/* {role !== "student" && ( */}
+                {/* <span className="flex gap-3 items-baseline min-w-fit"> */}
+                <div>at {companyType === "organization" ? "an" : "a"}</div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">{companyType}</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {companyTypes.map((role) => (
+                      <DropdownMenuItem
+                        key={role.value}
+                        onClick={() => setCompanyType(role.value)}
+                      >
+                        {role.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
+
+              {/* Company Name */}
+              {/* <div className="form-item">
+                <Label htmlFor="organization">
+                  What is the name of your {companyType}?
+                </Label>
+                <Input
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  id="organization"
+                  name="organization"
+                  placeholder={`your ${companyType} name`}
+                  type="organization"
+                  autoCapitalize="off"
+                  autoComplete="organization"
+                  required
+                />
+              </div> */}
+
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
@@ -253,16 +358,29 @@ export default function SignUpPage() {
               </Button>
             </form>
           ) : (
-            <form onSubmit={onPressVerify} className="space-y-4">
-              <div className="space-y-2">
+            <form
+              onSubmit={onPressVerify}
+              className="flex flex-col gap-5 w-full"
+            >
+              <div className="form-item items-center">
                 <Label htmlFor="code">Verification Code</Label>
-                <Input
+                <InputOTP
+                  maxLength={6}
                   id="code"
                   value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="Enter verification code"
+                  onChange={(e) => setCode(e)}
+                  pattern={REGEXP_ONLY_DIGITS}
                   required
-                />
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
               </div>
               {error && (
                 <Alert variant="destructive">

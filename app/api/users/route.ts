@@ -8,7 +8,45 @@ export async function POST(request: NextRequest) {
   const role = searchParams.get("role") || "student";
 
   await client.users.updateUserMetadata(userId, {
-    publicMetadata: { role },
+    publicMetadata: {
+      role,
+      isOnboardingCompleted: false,
+      guardians: [],
+      enrolledCourses: [],
+      organizations: [],
+      tools: [],
+      profile: {
+        summary: "",
+        personal: {
+          lives_with: [],
+          pets: [],
+          transpo: null,
+          interests: [],
+          spendingCategories: [],
+          savingsGoals: [],
+        },
+        academic: {
+          gradeLevel: null,
+          track: null,
+          testScores: {
+            iReady: {
+              overallScore: null,
+              noScore: null,
+              aaScore: null,
+              geoScore: null,
+              mdScore: null,
+            },
+            nweaMap: {
+              overallScore: null,
+              noScore: null,
+              oaScore: null,
+              geoScore: null,
+              mdScore: null,
+            },
+          },
+        },
+      },
+    },
   });
   return NextResponse.json({ success: true });
 }
