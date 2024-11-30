@@ -1,5 +1,6 @@
 "use client";
 
+import { FullLogo } from "@/components/Logo";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -219,11 +220,18 @@ export default function SignUpPage() {
 
   return (
     <div className="page-container flex justify-center items-center">
-      <Card className="w-full max-w-md">
-        <CardHeader>
+      <Card className="flex flex-col gap-5 w-full max-w-md">
+        <CardHeader className="flex flex-col items-center">
+          <div className="mb-3">
+            <FullLogo dimensions={12} textSize="3xl" />
+          </div>
+
           <CardTitle className="text-2xl font-bold text-center">
-            Get started with Dollar Sine
+            Get started for free
           </CardTitle>
+          <span className="text-sm text-muted-foreground">
+            No credit card required
+          </span>
         </CardHeader>
         <CardContent>
           {!pendingVerification ? (
@@ -353,7 +361,7 @@ export default function SignUpPage() {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100">
                 Sign Up
               </Button>
             </form>

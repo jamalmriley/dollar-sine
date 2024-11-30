@@ -1,13 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { GoHomeFill } from "react-icons/go";
 import { FaBuilding } from "react-icons/fa6";
 import { BiSolidDonateHeart } from "react-icons/bi";
 import { ModeToggle } from "@/components/ModeToggle";
-import LightLogo from "@/assets/images/ds_logo_light.png";
-import DarkLogo from "@/assets/images/ds_logo_dark.png";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
@@ -20,10 +17,10 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdLogin } from "react-icons/md";
 import { Separator } from "./ui/separator";
-import { loraItalic } from "@/app/fonts";
 import { usePathname } from "next/navigation";
+import { FullLogo, ResponsiveLogo } from "@/components/Logo";
 
 export default function LandingNavbar() {
   const { t } = useTranslation();
@@ -50,17 +47,7 @@ export default function LandingNavbar() {
           {/* Logo */}
           <div className="h-10 flex">
             <Link href="/">
-              <Image
-                src={LightLogo}
-                alt="Logo"
-                className="object-contain h-10 w-10 block dark:hidden"
-              />
-
-              <Image
-                src={DarkLogo}
-                alt="Logo"
-                className="object-contain h-10 w-10 hidden dark:block"
-              />
+              <ResponsiveLogo />
             </Link>
           </div>
 
@@ -68,16 +55,18 @@ export default function LandingNavbar() {
           <div className="hidden md:flex gap-7 items-center">
             {navLinks.map((link, i) => (
               <Link key={i} className="nav-link" href={link.href}>
-                <span className={`hidden md:block text-sm font-bold ${
-                        pathname === link.href ||
-                        (pathname ===
-                          `/es${
-                            link.href.endsWith("/")
-                              ? link.href.slice(0, -1)
-                              : link.href
-                          }` &&
-                          "text-emerald-400")
-                      }`}>
+                <span
+                  className={`hidden md:block text-sm font-bold ${
+                    pathname === link.href ||
+                    (pathname ===
+                      `/es${
+                        link.href.endsWith("/")
+                          ? link.href.slice(0, -1)
+                          : link.href
+                      }` &&
+                      "text-emerald-400")
+                  }`}
+                >
                   {link.label}
                 </span>
               </Link>
@@ -111,10 +100,7 @@ export default function LandingNavbar() {
               </DrawerTrigger>
               <DrawerContent className="p-5 flex flex-col gap-4">
                 <DrawerHeader className="flex justify-between items-center p-0 mb-5">
-                  <h1 className="h1">
-                    dollar
-                    <span className={`${loraItalic.className}`}> sine</span>
-                  </h1>
+                  <FullLogo />
                   <div className="flex gap-3">
                     <ModeToggle />
                     <LanguageToggle />
@@ -140,12 +126,22 @@ export default function LandingNavbar() {
                   </Link>
                 ))}
                 <Separator />
-                <Link className="nav-link" href="/dashboard">
-                  <span className="flex items-center gap-3 text-sm font-bold">
-                    <MdDashboard className="w-5 h-5" />
-                    {t("my-dashboard")}
-                  </span>
-                </Link>
+                <SignedOut>
+                  <Link className="nav-link" href="/sign-in">
+                    <span className="flex items-center gap-3 text-sm font-bold">
+                      <MdLogin className="w-5 h-5" />
+                      {t("sign-in")}
+                    </span>
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <Link className="nav-link" href="/dashboard">
+                    <span className="flex items-center gap-3 text-sm font-bold">
+                      <MdDashboard className="w-5 h-5" />
+                      {t("my-dashboard")}
+                    </span>
+                  </Link>
+                </SignedIn>
                 {/* <DrawerFooter className="pt-2">
                   <DrawerClose asChild>
                     <Button variant="outline">Close</Button>
