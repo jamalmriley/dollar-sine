@@ -4,7 +4,7 @@ import { navHeight } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 
-const i18nNamespaces = ["layout"];
+const i18nNamespaces = ["layout", "sign-up"];
 
 export default async function LandingLayout({
   children,

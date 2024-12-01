@@ -10,10 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -24,15 +29,19 @@ import {
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { db } from "@/utils/firebase";
+import { beginsWithVowel } from "@/utils/general";
 import { useSignUp } from "@clerk/nextjs";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { t } = useTranslation();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -40,22 +49,28 @@ export default function SignUpPage() {
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
-  const [role, setRole] = useState("student");
-  const [companyType, setCompanyType] = useState("school");
+  const [role, setRole] = useState("");
+  const [relation, setRelation] = useState("");
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
   const [firstNamePlaceholder, setFirstNamePlaceholder] = useState("John");
   const [lastNamePlaceholder, setLastNamePlaceholder] = useState("Doe");
 
-  const roles = [
-    { label: "Student", value: "student" },
-    { label: "Parent/Guardian", value: "guardian" },
-    { label: "Teacher", value: "teacher" },
-    { label: "Administrator", value: "administrator" },
-  ];
+  const roles = ["Teacher", "Administrator"];
 
-  const companyTypes = [
-    { label: "School", value: "school" },
-    { label: "Organization", value: "organization" },
+  const guardianTypes: string[] = [
+    "Parent",
+    "Stepparent",
+    "Grandparent",
+    "Aunt",
+    "Uncle",
+    "Older sibling",
+    "Older stepsibling",
+    "Foster parent",
+    "Adoptive parent",
+    "Family member",
+    "Guardian",
+    "Caregiver",
   ];
 
   const innovators: { firstName: string; lastName: string }[] = [
@@ -77,11 +92,9 @@ export default function SignUpPage() {
 
   const router = useRouter();
 
-  if (!isLoaded) return null;
-
   async function addMetadataToUser(userId: string) {
     const res = await fetch(
-      `http://localhost:3000/api/users?userId=${userId}&role=${role}`,
+      `http://localhost:3000/api/users?userId=${userId}&role=${role}&relation=${relation}`,
       {
         method: "POST",
       }
@@ -218,12 +231,14 @@ export default function SignUpPage() {
     return () => clearInterval(interval);
   }, []);
 
+  if (!isLoaded) return null;
+
   return (
     <div className="page-container flex justify-center items-center">
       <Card className="flex flex-col gap-5 w-full max-w-md">
         <CardHeader className="flex flex-col items-center">
           <div className="mb-3">
-            <FullLogo dimensions={12} textSize="3xl" />
+            <FullLogo />
           </div>
 
           <CardTitle className="text-2xl font-bold text-center">
@@ -239,7 +254,7 @@ export default function SignUpPage() {
               {/* First and Last Name */}
               <div className="form-row">
                 <div className="form-item">
-                  <Label htmlFor="firstname">First Name</Label>
+                  <Label htmlFor="firstname">{t("sign-up:first-name")}</Label>
                   <Input
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
@@ -253,7 +268,7 @@ export default function SignUpPage() {
                   />
                 </div>
                 <div className="form-item">
-                  <Label htmlFor="lastname">Last Name</Label>
+                  <Label htmlFor="lastname">{t("sign-up:last-name")}</Label>
                   <Input
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
@@ -270,7 +285,7 @@ export default function SignUpPage() {
 
               {/* Email */}
               <div className="form-item">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("sign-up:email")}</Label>
                 <Input
                   value={emailAddress}
                   onChange={(e) => setEmailAddress(e.target.value)}
@@ -286,7 +301,7 @@ export default function SignUpPage() {
 
               {/* Password */}
               <div className="form-item">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("sign-up:password")}</Label>
                 <Input
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -300,68 +315,103 @@ export default function SignUpPage() {
                 />
               </div>
 
-              {/* Role and Company Type */}
+              {/* Role */}
               <div className="flex gap-3 items-baseline min-w-fit">
-                I am {role === "administrator" ? "an" : "a"}
+                {relation !== "" && (
+                  <>
+                    I{firstName === "" ? " " : `, ${firstName}, `}am{" "}
+                    {relation === "" || !beginsWithVowel(relation) ? "a" : "an"}
+                  </>
+                )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline">{role}</Button>
+                    {relation === "" ? (
+                      <Button variant="outline">
+                        Select a role that best describes you.
+                      </Button>
+                    ) : (
+                      <span className="flex">
+                        <span className="border-b px-2 pb-1">{relation}</span>.
+                      </span>
+                    )}
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    {roles.map((role) => (
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <span>Parent/Guardian</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          {guardianTypes.map((guardianType, idx) => (
+                            <DropdownMenuItem
+                              key={idx}
+                              onClick={() => {
+                                setRole("guardian");
+                                setRelation(guardianType.toLowerCase());
+                              }}
+                            >
+                              <span>{guardianType}</span>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                    {roles.map((role, idx) => (
                       <DropdownMenuItem
-                        key={role.value}
-                        onClick={() => setRole(role.value)}
+                        key={idx}
+                        onClick={() => {
+                          const val =
+                            role === "Administrator"
+                              ? "admin"
+                              : role.toLowerCase();
+                          setRole(val);
+                          setRelation(role.toLowerCase());
+                        }}
                       >
-                        {role.label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                {/* {role !== "student" && ( */}
-                {/* <span className="flex gap-3 items-baseline min-w-fit"> */}
-                <div>at {companyType === "organization" ? "an" : "a"}</div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">{companyType}</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {companyTypes.map((role) => (
-                      <DropdownMenuItem
-                        key={role.value}
-                        onClick={() => setCompanyType(role.value)}
-                      >
-                        {role.label}
+                        <span>{role}</span>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
 
-              {/* Company Name */}
-              {/* <div className="form-item">
-                <Label htmlFor="organization">
-                  What is the name of your {companyType}?
-                </Label>
-                <Input
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  id="organization"
-                  name="organization"
-                  placeholder={`your ${companyType} name`}
-                  type="organization"
-                  autoCapitalize="off"
-                  autoComplete="organization"
-                  required
+              {/* Terms of Service */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={isTermsAccepted}
+                  onClick={() => setIsTermsAccepted(!isTermsAccepted)}
                 />
-              </div> */}
+                <Label
+                  htmlFor="terms"
+                  className="text-xs font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I have read and accept the{" "}
+                  <span className="text-muted-foreground hover:underline">
+                    <Link href="/legal">Terms and Conditions</Link>
+                  </span>
+                  .
+                </Label>
+              </div>
 
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-              <Button type="submit" className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100">
+              <Button
+                type="submit"
+                className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100"
+                disabled={
+                  firstName === "" ||
+                  lastName === "" ||
+                  emailAddress === "" ||
+                  password === "" ||
+                  role === "" ||
+                  relation === "" ||
+                  !isTermsAccepted
+                }
+              >
                 Sign Up
               </Button>
             </form>

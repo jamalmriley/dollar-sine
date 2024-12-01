@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
 
+type Role = "student" | "guardian" | "teacher" | "admin";
+
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId") || "user_";
-  const role = searchParams.get("role") || "student";
+  const role = searchParams.get("role") as Role;
+  const relation = searchParams.get("relation") || "other";
 
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
+  const publicMetadata = {
+    student: {
       role,
       isOnboardingCompleted: false,
       guardians: [],
-      enrolledCourses: [],
       organizations: [],
+      classes: [],
+      myCourses: [],
       tools: [],
       profile: {
         summary: "",
@@ -47,6 +51,50 @@ export async function POST(request: NextRequest) {
         },
       },
     },
+    guardian: {
+      role,
+      isOnboardingCompleted: false,
+      organizations: [],
+      classes: [],
+      myCourses: [],
+      students: [],
+      profile: {
+        relation,
+        pronouns: null,
+      },
+    },
+    teacher: {
+      role,
+      relation,
+      jobTitle: "",
+      isOnboardingCompleted: false,
+      organizations: [],
+      classes: [],
+      myCourses: [],
+      students: [],
+      profile: {
+        relation,
+        pronouns: null,
+      },
+    },
+    admin: {
+      role,
+      relation: "admin",
+      jobTitle: "",
+      isOnboardingCompleted: false,
+      organizations: [],
+      classes: [],
+      myCourses: [],
+      students: [],
+      profile: {
+        relation,
+        pronouns: null,
+      },
+    },
+  };
+
+  await client.users.updateUserMetadata(userId, {
+    publicMetadata: publicMetadata[role],
   });
   return NextResponse.json({ success: true });
 }
