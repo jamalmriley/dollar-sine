@@ -31,7 +31,6 @@ import { Label } from "@/components/ui/label";
 import { db } from "@/utils/firebase";
 import { beginsWithVowel } from "@/utils/general";
 import { useSignUp } from "@clerk/nextjs";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -201,14 +200,11 @@ export default function SignUpPage() {
       }
 
       if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
-        await updateDoc(doc(db, "users", emailAddress), {
-          emailVerified: true,
-        })
+        await setActive({ session: completeSignUp.createdSessionId })
           .then(() => {
             const userId = completeSignUp.createdUserId as string;
             addMetadataToUser(userId);
-            console.log("User sucessully updated!");
+            // console.log("User sucessully updated!");
           })
           .catch((error: any) => {
             console.error("Error updating user: ", error);
@@ -240,7 +236,6 @@ export default function SignUpPage() {
           <div className="mb-3">
             <FullLogo />
           </div>
-
           <CardTitle className="text-2xl font-bold text-center">
             Get started for free
           </CardTitle>
@@ -316,67 +311,75 @@ export default function SignUpPage() {
               </div>
 
               {/* Role */}
-              <div className="flex gap-3 items-baseline min-w-fit">
-                {relation !== "" && (
-                  <>
-                    I{firstName === "" ? " " : `, ${firstName}, `}am{" "}
-                    {relation === "" || !beginsWithVowel(relation) ? "a" : "an"}
-                  </>
-                )}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    {relation === "" ? (
-                      <Button variant="outline">
-                        Select a role that best describes you.
-                      </Button>
-                    ) : (
-                      <span className="flex">
-                        <span className="border-b px-2 pb-1">{relation}</span>.
-                      </span>
+              <div className="form-item">
+                <Label htmlFor="role">Which role best describes you?</Label>
+                <div className="flex items-end h-9">
+                  <div className="flex gap-3 items-baseline min-w-fit text-sm">
+                    {relation !== "" && (
+                      <>
+                        I am{" "}
+                        {relation === "" || !beginsWithVowel(relation)
+                          ? "a"
+                          : "an"}
+                      </>
                     )}
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>
-                        <span>Parent/Guardian</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          {guardianTypes.map((guardianType, idx) => (
-                            <DropdownMenuItem
-                              key={idx}
-                              onClick={() => {
-                                setRole("guardian");
-                                setRelation(guardianType.toLowerCase());
-                              }}
-                            >
-                              <span>{guardianType}</span>
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                    {roles.map((role, idx) => (
-                      <DropdownMenuItem
-                        key={idx}
-                        onClick={() => {
-                          const val =
-                            role === "Administrator"
-                              ? "admin"
-                              : role.toLowerCase();
-                          setRole(val);
-                          setRelation(role.toLowerCase());
-                        }}
-                      >
-                        <span>{role}</span>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild id="role" name="role">
+                        {relation === "" ? (
+                          <Button variant="outline">Choose a role</Button>
+                        ) : (
+                          <span className="flex">
+                            <span className="border-b px-2 pb-1">
+                              {relation}
+                            </span>
+                            .
+                          </span>
+                        )}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <span>Parent/Guardian</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              {guardianTypes.map((guardianType, idx) => (
+                                <DropdownMenuItem
+                                  key={idx}
+                                  onClick={() => {
+                                    setRole("guardian");
+                                    setRelation(guardianType.toLowerCase());
+                                  }}
+                                >
+                                  <span>{guardianType}</span>
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                        {roles.map((role, idx) => (
+                          <DropdownMenuItem
+                            key={idx}
+                            onClick={() => {
+                              const val =
+                                role === "Administrator"
+                                  ? "admin"
+                                  : role.toLowerCase();
+                              setRole(val);
+                              setRelation(role.toLowerCase());
+                            }}
+                          >
+                            <span>{role}</span>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
               </div>
 
               {/* Terms of Service */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-2">
                 <Checkbox
                   id="terms"
                   checked={isTermsAccepted}
