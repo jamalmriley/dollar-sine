@@ -1,6 +1,6 @@
 # Dollar Sine
 
-Welcome friends! This is the codebase for the Bluesky Social app.
+Welcome! This is the codebase for the Dollar Sine app.
 
 Get the app itself:
 

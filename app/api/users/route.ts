@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
 
-type Role = "student" | "guardian" | "teacher" | "admin";
+export type Role = "student" | "guardian" | "teacher" | "admin";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
