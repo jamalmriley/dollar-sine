@@ -17,8 +17,7 @@ export default function VerifyEmailBanner() {
   return (
     <Banner
       requiresSignIn={true}
-      // renderCondition={!hasVerifiedEmailAddress}
-      renderCondition={hasVerifiedEmailAddress} // Use this until sendConfirmationEmail function is created and works.
+      renderCondition={!hasVerifiedEmailAddress}
       type="warning"
       icon={<MdAlternateEmail className="w-full h-full" />}
       header="banner:verify-email-banner-header"
