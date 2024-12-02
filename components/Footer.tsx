@@ -40,7 +40,7 @@ export default async function Footer() {
   const { t } = await initTranslations(locale, ["layout"]);
 
   return (
-    <div className="flex gap-3 w-full px-10 py-5 border-t bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
+    <div className="flex gap-3 w-full px-10 py-5 bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
       {/* Credit */}
       <span className="flex gap-1.5 items-center text-sm font-bold select-none">
         {t("footer_created-with")}{" "}

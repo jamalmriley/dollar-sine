@@ -11,6 +11,7 @@ import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "../i18n";
 import OnboardingBanner from "@/components/OnboardingBanner";
 import VerifyEmailBanner from "@/components/VerifyEmailBanner";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Dollar Sine",
@@ -86,6 +87,7 @@ export default async function RootLayout({
                 /> */}
                 {children}
               </div>
+              <Toaster />
             </TranslationsProvider>
           </ThemeProvider>
         </body>

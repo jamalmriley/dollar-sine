@@ -20,7 +20,7 @@ import {
 import { MdDashboard, MdLogin } from "react-icons/md";
 import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
-import { FullLogo, ResponsiveLogo } from "@/components/Logo";
+import { FullLogo, SquareLogo } from "@/components/Logo";
 
 export default function LandingNavbar() {
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ export default function LandingNavbar() {
           {/* Logo */}
           <div className="h-10 flex">
             <Link href="/">
-              <ResponsiveLogo />
+              <SquareLogo />
             </Link>
           </div>
 

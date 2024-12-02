@@ -1,1 +1,1 @@
-{"email":"Correo electrónico","first-name":"Nombre de pila","last-name":"Apellido","password":"Contraseña","sign-up":"Inscribirse"}
+{"email":"Correo electrónico","first-name":"Nombre de pila","last-name":"Apellido","password":"Contraseña","resend-code":"Reenviar código","resend-code-plural":"Reenviar código en {{ seconds }} segundos","resend-code-singular":"Reenviar código en {{ seconds }} segundo","sign-up":"Inscribirse","verify-email":"Verificar correo electrónico"}
