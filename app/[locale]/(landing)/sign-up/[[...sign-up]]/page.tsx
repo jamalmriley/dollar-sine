@@ -40,6 +40,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MdRefresh } from "react-icons/md";
 import PlaceholderImage from "@/assets/images/placeholders/sign-in-placeholder-image.jpg";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -98,7 +99,7 @@ export default function SignUpPage() {
 
   async function addMetadataToUser(userId: string) {
     const res = await fetch(
-      `http://localhost:3000/api/users?userId=${userId}&role=${role}&relation=${relation}`,
+      `/api/users/update?userId=${userId}&role=${role}&relation=${relation}`,
       {
         method: "POST",
       }
@@ -109,9 +110,7 @@ export default function SignUpPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isLoaded) {
-      return;
-    }
+    if (!isLoaded) return;
 
     try {
       await signUp
@@ -368,13 +367,12 @@ export default function SignUpPage() {
                 {/* Password */}
                 <div className="form-item">
                   <Label htmlFor="password">{t("sign-up:password")}</Label>
-                  <Input
+                  <PasswordInput
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     id="password"
                     name="password"
                     placeholder="••••••••"
-                    type="password"
                     autoCapitalize="off"
                     autoComplete="new-password"
                     required
@@ -454,7 +452,7 @@ export default function SignUpPage() {
                   <Checkbox
                     id="terms"
                     checked={isTermsAccepted}
-                    onClick={() => setIsTermsAccepted(!isTermsAccepted)}
+                    onClick={() => setIsTermsAccepted((val) => !val)}
                   />
                   <Label
                     htmlFor="terms"
@@ -507,6 +505,7 @@ export default function SignUpPage() {
                     onChange={(e) => setCode(e)}
                     pattern={REGEXP_ONLY_DIGITS}
                     required
+                    autoComplete="one-time-code"
                   >
                     <InputOTPGroup>
                       <InputOTPSlot

@@ -17,11 +17,12 @@ export default function DashboardNavbar() {
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
       <div className="flex gap-3 border-b justify-between px-10 py-2 items-center">
         {/* Left: Logo and Admin Button */}
-        <div className="h-10 w-1/6 min-w-[92px] flex gap-3">
+        {/* <div className="h-10 w-1/6 min-w-[92px] flex gap-3"> */}
+        <div className="h-10 w-1/6 min-w-10 flex gap-3">
           <Link href="/dashboard">
             <SquareLogo />
           </Link>
-          <>
+          {/* <>
             <CustomButton
               text={t("platform-layout:admin")}
               href="/admin"
@@ -35,7 +36,7 @@ export default function DashboardNavbar() {
               startIcon={<MdAdminPanelSettings />}
               className="lg:hidden"
             />
-          </>
+          </> */}
         </div>
 
         <Search />

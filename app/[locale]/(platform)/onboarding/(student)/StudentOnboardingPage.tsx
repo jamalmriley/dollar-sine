@@ -10,12 +10,12 @@ import Prompt3Svg from "@/assets/svg/undraw_passing_by_0un9.svg";
 import Prompt4Svg from "@/assets/svg/undraw_true_friends_c-94-g.svg";
 import Prompt5Svg from "@/assets/svg/undraw_biking_kc-4-f.svg";
 import Prompt6Svg from "@/assets/svg/undraw_favourite_item_pcyo.svg";
-import Prompt1 from "./components/prompt-1";
-import Prompt2 from "./components/prompt-2";
-import Prompt3 from "./components/prompt-3";
-import Prompt4 from "./components/prompt-4";
-import Prompt5 from "./components/prompt-5";
-import Prompt6 from "./components/prompt-6";
+import Prompt1 from "./components/Prompt1";
+import Prompt2 from "./components/Prompt2";
+import Prompt3 from "./components/Prompt3";
+import Prompt4 from "./components/Prompt4";
+import Prompt5 from "./components/Prompt5";
+import Prompt6 from "./components/Prompt6";
 
 export default function StudentOnboardingPage() {
   const [currPrompt, setCurrPrompt] = useState<number>(0);
@@ -115,7 +115,7 @@ export default function StudentOnboardingPage() {
               key={i}
               onClick={() => setCurrPrompt(i)}
               className={`transform ease-out duration-500 ${
-                i === currPrompt ? "w-5 bg-primary" : "w-2 bg-gray-500"
+                i === currPrompt ? "w-5 bg-primary" : "w-2 bg-muted-foreground"
               } h-2 rounded-full`}
             />
           ))}

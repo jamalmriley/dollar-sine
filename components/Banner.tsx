@@ -7,6 +7,7 @@ import { CiBullhorn } from "react-icons/ci";
 import { useTranslation } from "react-i18next";
 import CustomButton from "./CustomButton";
 import { SignedIn } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
 
 export default function Banner({
   requiresSignIn,
@@ -19,6 +20,7 @@ export default function Banner({
   buttonText,
   buttonHref,
   buttonAction,
+  renderExclusionList,
 }: {
   requiresSignIn: boolean;
   renderCondition?: boolean;
@@ -30,8 +32,10 @@ export default function Banner({
   buttonText?: string;
   buttonHref?: string;
   buttonAction?: any;
+  renderExclusionList?: string[];
 }) {
   const { t } = useTranslation();
+  const pathname = usePathname();
   const [now, setNow] = useState(new Date());
   const [showBanner, setShowBanner] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -67,6 +71,16 @@ export default function Banner({
     localStorage.setItem("lastDismissal", now.toUTCString()); // Store dismissal in local storage
   };
 
+  const isExcludedPathname = (arr: string[] | undefined) => {
+    if (!arr || arr === undefined) return true;
+
+    for (const el of arr) {
+      if (pathname.includes(el)) return true;
+    }
+
+    return false;
+  };
+
   /* The banner will only display under the following conditions:
   (The user last pressed the "X" button before the most recent message's publish date.
   OR
@@ -92,7 +106,9 @@ export default function Banner({
     <BannerContainer requiresSignIn={requiresSignIn}>
       {renderCondition && showBanner && isLoaded && (
         <div
-          className={`flex justify-between items-center w-full md:h-20 px-5 md:px-10 py-5 border-b gap-3 ${bgTailwindProps}`}
+          className={`${
+            isExcludedPathname(renderExclusionList) ? "hidden" : "flex"
+          } justify-between items-center w-full md:h-20 px-5 md:px-10 py-5 border-b gap-3 ${bgTailwindProps}`}
         >
           {/* Icon and Text */}
           <div className="flex items-center gap-3">

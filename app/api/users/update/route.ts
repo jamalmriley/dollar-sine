@@ -12,8 +12,10 @@ export async function POST(request: NextRequest) {
 
   const publicMetadata = {
     student: {
+      displayName: null,
       role,
       isOnboardingCompleted: false,
+      onboardingLink: "/onboarding",
       guardians: [],
       organizations: [],
       classes: [],
@@ -52,8 +54,10 @@ export async function POST(request: NextRequest) {
       },
     },
     guardian: {
+      displayName: null,
       role,
       isOnboardingCompleted: false,
+      onboardingLink: "/onboarding",
       organizations: [],
       classes: [],
       myCourses: [],
@@ -64,10 +68,12 @@ export async function POST(request: NextRequest) {
       },
     },
     teacher: {
+      displayName: null,
       role,
       relation,
       jobTitle: "",
       isOnboardingCompleted: false,
+      onboardingLink: "/onboarding",
       organizations: [],
       classes: [],
       myCourses: [],
@@ -78,10 +84,12 @@ export async function POST(request: NextRequest) {
       },
     },
     admin: {
+      displayName: null,
       role,
       relation: "admin",
       jobTitle: "",
       isOnboardingCompleted: false,
+      onboardingLink: "/onboarding",
       organizations: [],
       classes: [],
       myCourses: [],

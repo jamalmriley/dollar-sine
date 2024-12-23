@@ -25,7 +25,7 @@ export default async function LandingLayout({
         <div className={`h-[${navHeight}px]`}>
           <LandingNavbar />
         </div>
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 z-20">{children}</div>
         <Footer />
       </div>
     </TranslationsProvider>

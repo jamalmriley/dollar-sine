@@ -8,6 +8,7 @@ export default function OnboardingBanner() {
   const { isLoaded, isSignedIn, user } = useUser();
   const isOnboardingCompleted = user?.publicMetadata
     .isOnboardingCompleted as boolean;
+  const onboardingLink = user?.publicMetadata.onboardingLink as string;
 
   if (!isLoaded || !isSignedIn) return null;
 
@@ -21,7 +22,8 @@ export default function OnboardingBanner() {
       text="banner:onboarding-banner-text"
       publishDate={new Date(0)}
       buttonText="banner:onboarding-banner-button"
-      buttonHref="/onboarding"
+      buttonHref={onboardingLink || "/onboarding"}
+      renderExclusionList={["/onboarding"]}
     />
   );
 }

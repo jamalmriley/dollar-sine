@@ -13,7 +13,10 @@ import {
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
 const algoliaApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY;
-const searchClient = algoliasearch(algoliaAppId as string, algoliaApiKey as string);
+const searchClient = algoliasearch(
+  algoliaAppId as string,
+  algoliaApiKey as string
+);
 
 function Hit({ hit }: { hit: any }) {
   return (
@@ -57,7 +60,7 @@ export default function Search() {
       indexName="test-search-data"
       future={{ preserveSharedStateOnUnmount: true }}
     >
-      <Configure hitsPerPage={5} />
+      <Configure hitsPerPage={10} />
       <div className="ais-InstantSearch">
         {/* <div> */}
         <SearchBox
@@ -73,7 +76,13 @@ export default function Search() {
         />
         <EmptyQueryBoundary fallback={null}>
           <NoResultsBoundary fallback={<NoResults />}>
-            <Hits hitComponent={Hit} className="ais-Hits-list" />
+            <Hits
+              hitComponent={Hit}
+              classNames={{
+                list: "ais-Hits-list-global",
+                item: "ais-Hits-item-global",
+              }}
+            />
           </NoResultsBoundary>
         </EmptyQueryBoundary>
       </div>

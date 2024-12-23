@@ -62,7 +62,7 @@ const config: Config = {
           "100": "#cbffe5",
           "200": "#9dfdd1",
           "300": "#5ef7ba",
-          "400": "#16db93", // Main
+          "400": "#16db93",
           "500": "#00d089",
           "600": "#00aa70",
           "700": "#00885e",
@@ -70,12 +70,25 @@ const config: Config = {
           "900": "#005840",
           "950": "#003225",
         },
+        "dodger-blue": {
+          "50": "#eef9ff",
+          "100": "#d9f1ff",
+          "200": "#bce7ff",
+          "300": "#8ed9ff",
+          "400": "#59c2ff",
+          "500": "#28a0ff",
+          "600": "#1b86f5",
+          "700": "#146fe1",
+          "800": "#1758b6",
+          "900": "#194c8f",
+          "950": "#142f57",
+        },
         "antique-brass": {
           "50": "#f9f4f1",
           "100": "#ede2d8",
           "200": "#d8c2af",
           "300": "#c4a085",
-          "400": "#b98a6d", // Main
+          "400": "#b98a6d",
           "500": "#ab6e55",
           "600": "#965849",
           "700": "#7e453f",
@@ -86,7 +99,7 @@ const config: Config = {
         givry: {
           "50": "#fcf8f0",
           "100": "#f9efdb",
-          "200": "#f4e1c1", // Main
+          "200": "#f4e1c1",
           "300": "#e9c388",
           "400": "#e0a257",
           "500": "#d98836",
@@ -101,7 +114,7 @@ const config: Config = {
           "100": "#fff2c6",
           "200": "#fee589",
           "300": "#fed14b",
-          "400": "#fdb813", // Main
+          "400": "#fdb813",
           "500": "#f79b09",
           "600": "#db7404",
           "700": "#b65007",
@@ -120,7 +133,7 @@ const config: Config = {
           "700": "#4b4c59",
           "800": "#41424b",
           "900": "#393941",
-          "950": "#0e0e10", // Main
+          "950": "#0e0e10",
         },
       },
       borderRadius: {
@@ -145,10 +158,66 @@ const config: Config = {
             height: "0",
           },
         },
+        marquee: {
+          from: {
+            transform: "translateX(0)",
+          },
+          to: {
+            transform: "translateX(calc(-100% - var(--gap)))",
+          },
+        },
+        "marquee-vertical": {
+          from: {
+            transform: "translateY(0)",
+          },
+          to: {
+            transform: "translateY(calc(-100% - var(--gap)))",
+          },
+        },
+        moveHorizontal: {
+          "0%": {
+            transform: "translateX(-50%) translateY(-10%)",
+          },
+          "50%": {
+            transform: "translateX(50%) translateY(10%)",
+          },
+          "100%": {
+            transform: "translateX(-50%) translateY(-10%)",
+          },
+        },
+        moveInCircle: {
+          "0%": {
+            transform: "rotate(0deg)",
+          },
+          "50%": {
+            transform: "rotate(180deg)",
+          },
+          "100%": {
+            transform: "rotate(360deg)",
+          },
+        },
+        moveVertical: {
+          "0%": {
+            transform: "translateY(-50%)",
+          },
+          "50%": {
+            transform: "translateY(50%)",
+          },
+          "100%": {
+            transform: "translateY(-50%)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        marquee: "marquee var(--duration) infinite linear",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+        first: "moveVertical 30s ease infinite",
+        second: "moveInCircle 20s reverse infinite",
+        third: "moveInCircle 40s linear infinite",
+        fourth: "moveHorizontal 40s ease infinite",
+        fifth: "moveInCircle 20s ease infinite",
       },
     },
   },
