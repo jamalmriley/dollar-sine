@@ -2,7 +2,6 @@
 
 import { Progress } from "@/components/ui/progress";
 import Prompt1 from "./components/Prompt1";
-import Prompt2 from "./components/Prompt2";
 import Prompt3 from "./components/Prompt3";
 import {
   Carousel,
@@ -11,18 +10,26 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import AddColleagues from "./components/(prompt-2)/AddColleagues";
+import AddStudents from "./components/(prompt-2)/AddStudents";
+import AddGuardians from "./components/(prompt-2)/AddGuardians";
 
 export default function AdminOnboardingPage() {
-  const prompts = [<Prompt1 />, <Prompt2 />, <Prompt3 />];
+  const prompts = [
+    { content: <Prompt1 />, basis: "basis-full" },
+    { content: <AddColleagues />, basis: "basis-1/3" },
+    { content: <AddStudents />, basis: "basis-1/3" },
+    { content: <AddGuardians />, basis: "basis-1/3" },
+    { content: <Prompt3 />, basis: "basis-full" },
+  ];
 
   return (
     <div className="page-container flex justify-center items-center">
       <Carousel className="w-11/12 lg:w-[95%]">
         <CarouselContent>
           {prompts.map((prompt, index) => (
-            <CarouselItem key={index}>
-              <div className="size-full">{prompt}</div>
+            <CarouselItem key={index} className={prompt.basis}>
+              {prompt.content}
             </CarouselItem>
           ))}
           {/* 

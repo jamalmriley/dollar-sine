@@ -10,7 +10,7 @@ import Pronouns from "./(prompt-1)/Pronouns";
 import JobTitle from "./(prompt-1)/JobTitle";
 import DisplayName from "./(prompt-1)/DisplayName";
 import ProfileImageUpload from "./(prompt-1)/ProfileImageUpload";
-import CreateOrJoinOrg from "./(prompt-1)/CreateOrJoinOrg";
+import CreateOrg from "./(prompt-1)/CreateOrg";
 import { saveOnboardingProgress } from "@/utils/onboarding";
 import UserCards from "./(prompt-1)/UserCards";
 import SkinTone from "./(prompt-1)/SkinTone";
@@ -65,9 +65,9 @@ export default function Prompt1() {
     },
     // Org
     {
-      title: "Create or join your organization.",
+      title: "Create your organization.",
       description: "",
-      content: <CreateOrJoinOrg />,
+      content: <CreateOrg />,
     },
   ];
 

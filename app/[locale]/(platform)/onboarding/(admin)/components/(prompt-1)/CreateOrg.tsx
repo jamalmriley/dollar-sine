@@ -37,7 +37,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { generateRandString } from "@/utils/general";
 import { autocomplete } from "@/utils/google";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
@@ -51,42 +50,20 @@ import { useActiveUserContext } from "@/contexts/active-user-context";
 import { toast } from "@/hooks/use-toast";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 
-export default function CreateOrJoinOrg() {
+export default function CreateOrg() {
   return (
-    <Tabs defaultValue="create" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="create">Create</TabsTrigger>
-        <TabsTrigger value="join">Join</TabsTrigger>
-      </TabsList>
-      <TabsContent value="create">
-        <Card>
-          <CardHeader>
-            <CardTitle>Create an organization</CardTitle>
-            <CardDescription>
-              Is your organization new to Dollar Sine? Add it now while
-              finishing your onboarding.
-            </CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <CreateOrgDrawerDialog />
-          </CardFooter>
-        </Card>
-      </TabsContent>
-      <TabsContent value="join">
-        <Card>
-          <CardHeader>
-            <CardTitle>Join an organization</CardTitle>
-            <CardDescription>
-              Does your organization already exist in Dollar Sine? Find and join
-              it here.
-            </CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <JoinOrgDrawerDialog />
-          </CardFooter>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    <Card>
+      <CardHeader>
+        <CardTitle>Create an organization</CardTitle>
+        <CardDescription>
+          Is your organization new to Dollar Sine? Add it now while finishing
+          your onboarding.
+        </CardDescription>
+      </CardHeader>
+      <CardFooter>
+        <CreateOrgDrawerDialog />
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -379,147 +356,6 @@ function CreateOrgForm() {
         disabled={!orgName || !orgAddress || !orgSlug || !orgJoinCode}
       >
         Create organization
-      </Button>
-    </form>
-  );
-}
-
-function JoinOrgDrawerDialog() {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button>Join organization</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Join organization</DialogTitle>
-            <DialogDescription>Find your organization here.</DialogDescription>
-          </DialogHeader>
-          <JoinOrgForm />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button>Join organization</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="text-left px-5">
-          <DrawerTitle>Join organization</DrawerTitle>
-          <DrawerDescription>Find your organization here.</DrawerDescription>
-        </DrawerHeader>
-        <div className="px-5">
-          <JoinOrgForm />
-        </div>
-        <DrawerFooter className="pt-3 px-5">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
-function JoinOrgForm() {
-  const { setHasClickedOrTyped } = useActiveUserContext();
-  const { user, isLoaded } = useUser();
-
-  const [orgName, setOrgName] = useQueryState("orgName", {
-    defaultValue: "",
-  });
-
-  const [orgJoinCode, setOrgJoinCode] = useQueryState("orgJoinCode", {
-    defaultValue: "",
-  });
-
-  const validate = (value: string) => {
-    // ^               ->  Assert the start of the string
-    // (?![-_])        ->  Negative lookahead to assert that the string does not start with a hyphen or underscore.
-    // (?!.*[-_]$)     ->  Negative lookahead to assert that the string does not end with a hyphen or underscore.
-    // [a-zA-Z0-9-_]+  ->  Allowable characters
-    // $               ->  Assert the end of the string
-    const pattern = /^(?![-_])(?!.*[-_]$)[a-zA-Z0-9-_]+$/;
-    return pattern.test(value);
-  };
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    if (!isLoaded || !user) return;
-
-    await fetch(
-      `/api/organizations/create?&userId=${user.id}&orgName=${orgName}&orgJoinCode=${orgJoinCode}`,
-      {
-        method: "POST",
-      }
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setOrgName("");
-        setOrgJoinCode("");
-
-        toast({
-          variant: "default",
-          title: json.message,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        toast({
-          variant: "destructive",
-          title: "Error joining organization",
-        });
-      });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="w-full h-full flex flex-col gap-5">
-      {/* Org Name and Join Code */}
-      {/* TODO: Validate these fields and make sure org ID isn't taken. If conditions aren't met, disable the button */}
-      <div className="flex gap-5">
-        {/* Org Name */}
-        <div className="grid gap-2 w-full">
-          <Label htmlFor="org-name" className="text-sm font-bold">
-            Organization Name
-          </Label>
-          <Input
-            id="org-name"
-            value={orgName}
-            onChange={(e) => {
-              setHasClickedOrTyped(true);
-              setOrgName(e.target.value);
-            }}
-            className="w-full"
-          />
-        </div>
-
-        {/* Join Code */}
-        <div className="grid gap-2 w-full">
-          <Label htmlFor="join-code" className="text-sm font-bold">
-            Join Code
-          </Label>
-          <Input
-            id="join-code"
-            value={orgJoinCode}
-            placeholder="abc123"
-            onChange={(e) => {
-              setHasClickedOrTyped(true);
-              setOrgJoinCode(e.target.value);
-            }}
-            className="w-full"
-          />
-        </div>
-      </div>
-
-      <Button type="submit" disabled={!orgName || !orgJoinCode}>
-        Join organization
       </Button>
     </form>
   );

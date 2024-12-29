@@ -1,4 +1,4 @@
-export const beginsWithVowel = (text: string) => {
+export const beginsWithVowel = (text: string): boolean => {
   const firstLetter = text[0].toLowerCase();
   return (
     firstLetter === "a" ||
@@ -9,7 +9,7 @@ export const beginsWithVowel = (text: string) => {
   );
 };
 
-export const generateRandString = (length: number) => {
+export const generateRandString = (length: number): string => {
   const chars: (string | number)[] = [
     "a",
     "b",
@@ -64,7 +64,7 @@ export const generateRandString = (length: number) => {
   return result;
 };
 
-export const properString = (text: string) => {
+export const properString = (text: string): string => {
   let charArr: string[] = text.split("");
   let result = "";
   for (let i = 0; i < charArr.length; i++) {
@@ -75,7 +75,7 @@ export const properString = (text: string) => {
   return result;
 };
 
-export const truncateString = (text: string, maxLength: number) => {
+export const truncateString = (text: string, maxLength: number): string => {
   if (text.length < maxLength) return text;
 
   let charArr: string[] = text.split("");
@@ -87,4 +87,41 @@ export const truncateString = (text: string, maxLength: number) => {
   }
 
   return `${result.trim()}...`;
+};
+
+export const truncateEmail = (email: string, maxLength: number): string => {
+  if (email.length < maxLength) return email;
+
+  const [username, domain]: [username: string, domain: string] = [
+    email.split("@")[0],
+    email.split("@")[1],
+  ];
+  const ellipsis: string = "...";
+  const delimiter: string = "@";
+
+  let trailingChars: string = username.slice(-3);
+  let leadingChars: string = username.slice(
+    0,
+    maxLength -
+      (domain.length +
+        ellipsis.length +
+        trailingChars.length +
+        delimiter.length)
+  );
+
+  return `${leadingChars}${ellipsis}${trailingChars}${delimiter}${domain}`;
+};
+
+export const listItemsAsString = (items: string[]): string => {
+  let result = "";
+
+  if (items.length <= 2) return items.join(" and ").trim();
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const isLastItem = i === items.length - 1;
+
+    if (!isLastItem) result += `${item}, `;
+    else result += `and ${item}`;
+  }
+  return result.trim();
 };

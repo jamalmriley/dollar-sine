@@ -176,6 +176,27 @@ body,
     @apply flex flex-col gap-2;
   }
 
+  .separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .separator::before,
+  .separator::after {
+    content: "";
+    flex: 1;
+    border-bottom-width: 1px;
+  }
+
+  .separator:not(:empty)::before {
+    margin-right: 0.25em;
+  }
+
+  .separator:not(:empty)::after {
+    margin-left: 0.25em;
+  }
+
   /* Algolia Inline Search */
 
   .ais-InstantSearch-inline {
@@ -299,8 +320,12 @@ body,
     @apply text-xl lg:text-2xl font-bold mb-3 select-none;
   }
 
+  .h3 {
+    @apply text-base md:text-lg font-medium text-muted-foreground select-none;
+  }
+
   .subtitle {
-    @apply text-base md:text-lg font-medium mt-1 mb-5 text-gray-500 select-none;
+    @apply text-base md:text-lg font-medium mt-1 mb-5 text-muted-foreground select-none;
   }
 
   .text-2xs {

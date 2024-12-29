@@ -1,4 +1,3 @@
-import { Role } from "@/app/api/users/update/route";
 import React from "react";
 import StudentOnboardingPage from "./(student)/StudentOnboardingPage";
 import GuardianOnboardingPage from "./(guardian)/GuardianOnboardingPage";
