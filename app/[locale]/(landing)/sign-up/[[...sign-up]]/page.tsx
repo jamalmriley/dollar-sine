@@ -102,10 +102,11 @@ export default function SignUpPage() {
       `/api/users/update?userId=${userId}&role=${role}&relation=${relation}`,
       {
         method: "POST",
+        body: JSON.stringify({}),
       }
-    )
-      .then((res) => res.json())
-      .then((json) => console.log(json));
+    ); // .then((res) => console.log(res));
+    // .then((res) => res.json())
+    // .then((json) => console.log(json));
   }
 
   async function submit(e: React.FormEvent) {
@@ -245,7 +246,6 @@ export default function SignUpPage() {
           .then(() => {
             const userId = completeSignUp.createdUserId as string;
             addMetadataToUser(userId);
-            // console.log("User sucessully updated!");
           })
           .catch((error: any) => {
             console.error("Error updating user: ", error);

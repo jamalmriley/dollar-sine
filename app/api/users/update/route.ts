@@ -8,8 +8,16 @@ export async function POST(request: NextRequest) {
   const userId = searchParams.get("userId") || "user_";
   const role = searchParams.get("role") as Role;
   const relation = searchParams.get("relation") || "other";
+  const body = await request.formData();
+  const prefix = body.get("prefix") as String;
+  const displayName = body.get("displayName") as String;
+  const displayNameFormat = body.get("displayNameFormat") as String;
+  const jobTitle = body.get("jobTitle") as String;
+  const pronouns = body.get("pronouns") as String;
+  const skinTone = body.get("skinTone") as String;
+  const file = body.get("image") as File;
 
-  const publicMetadata = {
+  const metadata = {
     student: {
       displayName: null,
       role,
@@ -83,10 +91,7 @@ export async function POST(request: NextRequest) {
       },
     },
     admin: {
-      displayName: null,
       role,
-      relation: "admin",
-      jobTitle: "",
       isOnboardingCompleted: false,
       onboardingLink: "/onboarding",
       organizations: [],
@@ -94,14 +99,79 @@ export async function POST(request: NextRequest) {
       myCourses: [],
       students: [],
       profile: {
+        prefix,
+        displayName,
+        displayNameFormat,
+        jobTitle,
+        pronouns,
         relation,
-        pronouns: null,
+        skinTone,
       },
     },
   };
 
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: publicMetadata[role],
-  });
-  return NextResponse.json({ success: true });
+  const publicMetadata = metadata[role];
+
+  type Response = {
+    status: number;
+    success: boolean;
+    message: { title: string; description: string };
+  };
+
+  const responses: Response[] = [];
+
+  await client.users
+    .updateUserMetadata(userId, { publicMetadata })
+    .then((user) => {
+      // If the file is null, it will return as the string "null".
+      // So it should only update the profile picture when it is an actual file.
+      if (typeof file !== "string") {
+        client.users
+          .updateUserProfileImage(userId, { file })
+          .then(() => {
+            return {
+              status: 200,
+              success: true,
+              message: {
+                title: "Profile picture successfully updated ✅",
+                description: `Looking good, ${user.firstName}!`,
+              },
+            };
+          })
+          .catch((err) => {
+            console.error(err);
+            return {
+              status: 400,
+              success: false,
+              message: {
+                title: "Error updating profile picture",
+                description:
+                  "Please try again. If the issue persists, please contact support.",
+              },
+            };
+          });
+      }
+
+      responses.push({
+        status: 200,
+        success: true,
+        message: {
+          title: "User succesfully updated ✅",
+          description: "",
+        },
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      responses.push({
+        status: 400,
+        success: false,
+        message: {
+          title: "Error updating user",
+          description: "Bad request. Please try again.",
+        },
+      });
+    });
+
+  return NextResponse.json(responses);
 }

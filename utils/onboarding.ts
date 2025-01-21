@@ -1,5 +1,14 @@
 import { toast } from "@/hooks/use-toast";
 
+export type ProfileMetadata = {
+  prefix: string;
+  displayName: string;
+  displayNameFormat: string;
+  jobTitle: string;
+  pronouns: string;
+  skinTone: string;
+};
+
 export async function saveOnboardingProgress(userId: string, link: string) {
   await fetch(
     `http://localhost:3000/api/onboarding?user_id=${userId}&onboarding_link=${link}`,
@@ -11,14 +20,14 @@ export async function saveOnboardingProgress(userId: string, link: string) {
     .then((json) => {
       toast({
         variant: "default",
-        title: "Progress saved ✅",
+        title: "Onboarding progress saved ✅",
       });
       // console.log(json);
     })
     .catch((error) => {
       toast({
         variant: "destructive",
-        title: "Error saving progress",
+        title: "Error saving onboarding progress",
       });
       console.error(error);
     });

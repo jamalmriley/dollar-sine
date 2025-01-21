@@ -6,6 +6,7 @@ import { db } from "@/utils/firebase";
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
   const { searchParams } = new URL(request.url);
+  const id = searchParams.get("orgId") || "";
   const name = searchParams.get("orgName") || "";
   const slug = searchParams.get("orgSlug") || "";
   const createdBy = searchParams.get("userId") || "";
@@ -21,36 +22,27 @@ export async function POST(request: NextRequest) {
   };
 
   await client.organizations
-    .createOrganization({
+    .updateOrganization(id, {
       name,
       slug,
-      createdBy,
       maxAllowedMemberships: 10,
       publicMetadata,
     })
-    .then((org) => {
+    .then(() => {
       try {
-        const organizationId = org.id;
-
-        // If the file is null, it will return as the string "null".
-        // So it should only update the logo when it is an actual file.
-        if (typeof file !== "string") {
-          client.organizations.updateOrganizationLogo(organizationId, { file });
-        }
+        if (file) client.organizations.updateOrganizationLogo(id, { file });
 
         setDoc(doc(db, "organizations", slug), {
-          id: org.id,
+          id,
           name,
           slug,
           members: [createdBy],
         })
           .then(() => {
-            console.log("Organization successfully added to Firebase!");
+            console.log("Organization successfully updated in Firebase!");
           })
           .catch((error: any) => {
-            console.error("Error adding organization to Firebase: ", error);
-            // TODO: Return a message about the organization failing to be updated in our database. The message should say that the team has been notified of the issue.
-            // TODO: Use Resend (and possible Twilio) to send a message to notify team of the issue. 
+            console.error("Error updating organization in Firebase: ", error);
           });
       } catch (err) {
         console.error(err);
@@ -61,13 +53,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         status: 200,
         success: false,
-        message: "Error creating organization. Please refresh and try again.",
+        message: "Error updating organization. Please refresh and try again.",
       });
     });
 
   return NextResponse.json({
     status: 200,
     success: true,
-    message: "Organization successfully created ✅",
+    message: "Organization successfully updated ✅",
   });
 }

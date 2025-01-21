@@ -176,6 +176,31 @@ body,
     @apply flex flex-col gap-2;
   }
 
+  .card {
+    /* @apply w-1/4 relative left-0 border rounded-lg overflow-hidden aspect-[3.375/2.125] rotate-90; */
+    @apply w-1/2 relative flex justify-center items-center left-0 rounded-xl overflow-hidden aspect-[3.375/2.125] shadow-md bg-white dark:bg-black;
+  }
+
+  .card:not(:first-child) {
+    @apply ml-[-150px];
+  }
+
+  .card:hover {
+    @apply transition-all ease-in-out duration-500;
+    transform: translateY(20px);
+  }
+
+  .card:hover ~ .card {
+    left: 150px;
+  }
+
+  .spotlight {
+    position: absolute;
+    border-radius: 8px;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+
   .separator {
     display: flex;
     align-items: center;
@@ -195,6 +220,10 @@ body,
 
   .separator:not(:empty)::after {
     margin-left: 0.25em;
+  }
+
+  .expandable-content {
+    @apply transition-all ease-in-out duration-500;
   }
 
   /* Algolia Inline Search */
@@ -317,7 +346,7 @@ body,
   }
 
   .h2 {
-    @apply text-xl lg:text-2xl font-bold mb-3 select-none;
+    @apply text-xl lg:text-2xl font-bold mb-2 select-none;
   }
 
   .h3 {
@@ -325,7 +354,7 @@ body,
   }
 
   .subtitle {
-    @apply text-base md:text-lg font-medium mt-1 mb-5 text-muted-foreground select-none;
+    @apply text-base md:text-lg font-medium mb-5 text-muted-foreground select-none;
   }
 
   .text-2xs {

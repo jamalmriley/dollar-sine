@@ -112,6 +112,12 @@ export const truncateEmail = (email: string, maxLength: number): string => {
   return `${leadingChars}${ellipsis}${trailingChars}${delimiter}${domain}`;
 };
 
+export const isValidEmail = (email: string): boolean => {
+  const re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
 export const listItemsAsString = (items: string[]): string => {
   let result = "";
 
@@ -124,4 +130,8 @@ export const listItemsAsString = (items: string[]): string => {
     else result += `and ${item}`;
   }
   return result.trim();
+};
+
+export const delay = (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };

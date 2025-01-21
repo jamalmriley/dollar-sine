@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-export const navHeight = 57;
+export const NAV_HEIGHT = 57;
 
 export function setTitle(
   title: string,

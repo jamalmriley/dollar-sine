@@ -7,6 +7,7 @@ import CustomButton from "@/components/CustomButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
+import TestSpotlightComponent from "./components/TestSpotlightComponent";
 
 export const metadata: Metadata = setTitle("Dashboard");
 const i18nNamespaces = ["dashboard", "platform-layout"];
@@ -43,6 +44,7 @@ export default async function DashboardPage({
         </div>
 
         <div className="mt-5">
+          <TestSpotlightComponent />
           <h2 className="h2">{t("platform-layout:continue-learning")}</h2>
 
           <CourseTile>

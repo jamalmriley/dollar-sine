@@ -135,6 +135,19 @@ const config: Config = {
           "900": "#393941",
           "950": "#0e0e10",
         },
+        "moomoo-orange": {
+          "50": "#fff8ec",
+          "100": "#fff0d3",
+          "200": "#ffdda5",
+          "300": "#ffc46d",
+          "400": "#ffa032",
+          "500": "#ff820a",
+          "600": "#fe6900", // Default
+          "700": "#cc4b02",
+          "800": "#a13b0b",
+          "900": "#82320c",
+          "950": "#461704",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -207,6 +220,16 @@ const config: Config = {
             transform: "translateY(-50%)",
           },
         },
+        orbit: {
+          "0%": {
+            transform:
+              "rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))",
+          },
+          "100%": {
+            transform:
+              "rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -218,6 +241,7 @@ const config: Config = {
         third: "moveInCircle 40s linear infinite",
         fourth: "moveHorizontal 40s ease infinite",
         fifth: "moveInCircle 20s ease infinite",
+        orbit: "orbit calc(var(--duration)*1s) linear infinite",
       },
     },
   },

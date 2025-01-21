@@ -1,6 +1,6 @@
 import Image from "next/image";
-import LightLogo from "@/assets/images/ds_logo_light.png";
-import DarkLogo from "@/assets/images/ds_logo_dark.png";
+import LightLogo from "@/assets/images/logos/dollar_sine/ds_logo_light.png";
+import DarkLogo from "@/assets/images/logos/dollar_sine/ds_logo_dark.png";
 import { loraItalic } from "@/app/fonts";
 
 export function FullLogo({
