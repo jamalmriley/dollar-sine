@@ -5,7 +5,7 @@
       "id": "common-cents",
       "description": "An introductory financial literacy and consumer math course for grades 6-8.",
       "imageUrl": "",
-      "publishDate": "2025-02-03T06:00:00.000Z",
+      "publishDate": "2025-07-01T06:00:00.000Z",
       "chapters": [
         {
           "id": 1,
@@ -163,7 +163,7 @@
               "id": "3.3",
               "chapter": "3",
               "title": "Discretionary Spending",
-              "description": "This lesson focuses on percent change and calculating exact percents for taxes, discounts, and even inflation.",
+              "description": "This lesson focuses on percent change and calculating exact percents for taxes, discounts, tips, and even inflation.",
               "learningObjectives": [],
               "topics": {
                 "consumer_math": ["Percent tax and discount"],
@@ -252,7 +252,7 @@
               "nextCCSS": [],
               "pathname": "/courses/common-cents/lesson-5.1",
               "prevLesson": "4.2",
-              "nextLesson": "",
+              "nextLesson": "6.1",
               "isUnlocked": false,
               "content": [],
               "accommodations": []
@@ -261,14 +261,177 @@
         },
         {
           "id": 6,
-          "title": "Additional Practice",
-          "description": "This chapter is for additional skills to practice your financial literacy and consumer math skills.",
+          "title": "Additional Topics",
+          "description": "This chapter is for additional skills to practice your financial literacy and consumer math skills and explore how finance applies to different professions.",
           "difficulty": 0,
-          "topicsCount": 0,
-          "lessons": []
+          "topicsCount": 1,
+          "lessons": [
+            {
+              "id": "6.1",
+              "chapter": 6,
+              "title": "Practice Makes Perfect",
+              "description": "This lesson allows for more practice on all consumer math skills presented in chapters 1-5.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-6.1",
+              "prevLesson": "5.1",
+              "nextLesson": "6.2",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "6.2",
+              "chapter": 6,
+              "title": "Another Science Experiment (Noah's Lesson)",
+              "description": "This lesson explores the connection between financial industry and life science via a science experiment that highlights recycling, composting, and gardening. This one's for you, Noah.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": ["Using a spreadsheet"]
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-6.2",
+              "prevLesson": "6.1",
+              "nextLesson": "6.3",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "6.3",
+              "chapter": 6,
+              "title": "The Frugal Foodie (Serenity's Lesson)",
+              "description": "This lesson explores the connection between the financial and culinary industries via cooking everyday meals on an everyday budget. This one's for you, Serenity.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-6.3",
+              "prevLesson": "6.2",
+              "nextLesson": "6.4",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "6.4",
+              "chapter": 6,
+              "title": "Bots and Bucks (Nylah's Lesson)",
+              "description": "This lesson explores the connection between the financial and engineering industries via robotics. Use robotics kits to build and upgrade the FLEX machines. This one's for you, Nylah.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-6.4",
+              "prevLesson": "6.3",
+              "nextLesson": "6.5",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "6.5",
+              "chapter": 6,
+              "title": "From Code to Cash (Connor's Lesson)",
+              "description": "This lesson explores the connection between the financial and engineering industries via coding. Choose between block-based and text-based coding to program the FLEX systems using Python. This one's for you, Connor.",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-6.5",
+              "prevLesson": "6.4",
+              "nextLesson": "",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
         }
       ],
-      "topicsCount": 18
+      "topicsCount": 19,
+      "pricing": [
+        {
+          "name": "Base",
+          "price": 49,
+          "desc": "Perfect for an educator and their small group or homeschooling.",
+          "features": [
+            "Access for you and up to 5 users",
+            "1 printed teacher manual",
+            "1 teacher workbook",
+            "5 student workbooks (plus 2 extra)",
+            "5 FLEX Cards (plus 2 extra)",
+            "1 FLEX Card Reader",
+            "1 FLEX POS System",
+            "1 FLEX ATM"
+          ],
+          "addOns": {
+            "user_limit": 20,
+            "teacher_tools_limit": 3,
+            "edtech_limit": "user_limit"
+          }
+        },
+        {
+          "name": "Plus",
+          "price": 99,
+          "desc": "Perfect for an educator, their colleagues, and their classroom.",
+          "features": [
+            "Access for up to 30 users",
+            "3 printed teacher manuals",
+            "3 teacher workbooks",
+            "30 student workbooks (plus 5 extra)",
+            "30 FLEX Cards (plus 5 extra)",
+            "5 FLEX Card Readers",
+            "5 FLEX POS Systems",
+            "5 FLEX ATMs"
+          ],
+          "addOns": {
+            "user_limit": 50,
+            "teacher_tools_limit": 10,
+            "edtech_limit": "user_limit"
+          }
+        },
+        {
+          "name": "Pro",
+          "price": 199,
+          "desc": "Perfect for an educator, their colleagues, and multiple classes or sections of students.",
+          "features": [
+            "Access for up to 100 users",
+            "5 printed teacher manuals",
+            "5 teacher workbooks",
+            "100 student workbooks (plus 5 extra)",
+            "100 FLEX Cards (plus 5 extra)",
+            "10 FLEX Card Readers",
+            "10 FLEX POS Systems",
+            "10 FLEX ATMs"
+          ],
+          "addOns": {
+            "user_limit": 250,
+            "teacher_tools_limit": 25,
+            "edtech_limit": "user_limit"
+          }
+        }
+      ]
     }
   ]
 }

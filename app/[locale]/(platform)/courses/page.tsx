@@ -40,7 +40,7 @@ export default async function AllCoursesPage({
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
 
   const file = await fs.readFile(
-    process.cwd() + "/data/test-lesson-data.json",
+    process.cwd() + "/data/content-data.json",
     "utf8"
   );
   const data = JSON.parse(file);

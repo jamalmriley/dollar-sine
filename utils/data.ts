@@ -265,3 +265,5 @@ async function updateStandards(fileName: string, subcollection: string) {
   await updateSearch("search-data", subcollections.search);
   await updateStandards("standards-data", subcollections.standards);
 })();
+
+// Run "npm run data" to execute the async function in this file.

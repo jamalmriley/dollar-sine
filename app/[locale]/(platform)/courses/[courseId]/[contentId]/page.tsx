@@ -28,7 +28,7 @@ export default async function ContentPage({ params }: { params: any }) {
   ];
   const contentType = contentId.split("-")[0];
   const file = await fs.readFile(
-    process.cwd() + "/data/test-lesson-data.json",
+    process.cwd() + "/data/content-data.json",
     "utf8"
   );
   const data = JSON.parse(file);

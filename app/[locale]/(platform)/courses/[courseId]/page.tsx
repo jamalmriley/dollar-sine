@@ -55,7 +55,7 @@ export default async function CoursePage({ params }: { params: any }) {
   difficultyLevels.set(4, "Expert");
 
   const file = await fs.readFile(
-    process.cwd() + "/data/test-lesson-data.json",
+    process.cwd() + "/data/content-data.json",
     "utf8"
   );
   const data = JSON.parse(file);
