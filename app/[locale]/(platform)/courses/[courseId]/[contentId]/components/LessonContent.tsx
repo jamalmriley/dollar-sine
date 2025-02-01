@@ -195,7 +195,7 @@ export function LessonContent({
             </h1>
             <Tooltip>
               <TooltipTrigger>
-                <HiOutlineInformationCircle className="w-6 h-6 text-blue-500" />
+                <HiOutlineInformationCircle className="w-6 h-6 text-dodger-blue-500" />
               </TooltipTrigger>
               <TooltipContent className="flex flex-col max-w-80 p-3">
                 <span className="font-bold mb-1">

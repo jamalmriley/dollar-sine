@@ -2,6 +2,18 @@ import { db } from "@/utils/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
+export type Pricing = {
+  name: string;
+  price: number;
+  description: string;
+  features: string[];
+  addOns: {
+    userLimit: number | string;
+    teacherToolsLimit: number | string;
+    edTechLimit: number | string;
+  };
+};
+
 export type CourseData = {
   description: string;
   id: string;
@@ -9,6 +21,7 @@ export type CourseData = {
   publishDate: { seconds: number; nanoseconds: number };
   title: string;
   topicsCount: number;
+  pricing: Pricing[];
 };
 
 export async function GET(request: any) {

@@ -135,3 +135,26 @@ export const listItemsAsString = (items: string[]): string => {
 export const delay = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const formatCurrency = (
+  value: number,
+  currencyCode: string = "USD"
+): string => {
+  // TODO: Change locale based on user?
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currencyCode,
+  }).format(value);
+};
+
+export const removeElementFromArr = (
+  arr: string[],
+  target: string
+): string[] => {
+  const result = [];
+
+  for (const el of arr) {
+    if (el !== target) result.push(el);
+  }
+  return result;
+};

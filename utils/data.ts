@@ -27,6 +27,7 @@ async function updateContent(fileName: string, subcollection: string) {
       publishDate,
       chapters,
       topicsCount,
+      pricing,
     ] = [
       course.title,
       course.id,
@@ -35,6 +36,7 @@ async function updateContent(fileName: string, subcollection: string) {
       course.publishDate,
       course.chapters,
       course.topicsCount,
+      course.pricing,
     ];
 
     await setDoc(doc(db, "courses", COURSE_ID), {
@@ -44,6 +46,7 @@ async function updateContent(fileName: string, subcollection: string) {
       imageUrl,
       publishDate: new Date(publishDate),
       topicsCount,
+      pricing,
     })
       .then(() => {
         console.log(`${title}: Course successfully updated in Firebase!`);
@@ -203,7 +206,9 @@ async function updateSearch(fileName: string, subcollection: string) {
       }
     )
       .then(() => {
-        console.log(`${lessonId}: Lesson successfully updated in Firebase! (Course search)`);
+        console.log(
+          `${lessonId}: Lesson successfully updated in Firebase! (Course search)`
+        );
       })
       .catch((error: any) => {
         console.error("Error updating lesson:", error);
@@ -221,7 +226,9 @@ async function updateSearch(fileName: string, subcollection: string) {
       pathname,
     })
       .then(() => {
-        console.log(`${lessonId}: Lesson successfully updated in Firebase! (Global search)`);
+        console.log(
+          `${lessonId}: Lesson successfully updated in Firebase! (Global search)`
+        );
       })
       .catch((error: any) => {
         console.error("Error updating lesson:", error);

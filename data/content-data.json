@@ -272,10 +272,7 @@
               "title": "Practice Makes Perfect",
               "description": "This lesson allows for more practice on all consumer math skills presented in chapters 1-5.",
               "learningObjectives": [],
-              "topics": {
-                "consumer_math": [],
-                "financial_literacy": []
-              },
+              "topics": { "consumer_math": [], "financial_literacy": [] },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -312,10 +309,7 @@
               "title": "The Frugal Foodie (Serenity's Lesson)",
               "description": "This lesson explores the connection between the financial and culinary industries via cooking everyday meals on an everyday budget. This one's for you, Serenity.",
               "learningObjectives": [],
-              "topics": {
-                "consumer_math": [],
-                "financial_literacy": []
-              },
+              "topics": { "consumer_math": [], "financial_literacy": [] },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -332,10 +326,7 @@
               "title": "Bots and Bucks (Nylah's Lesson)",
               "description": "This lesson explores the connection between the financial and engineering industries via robotics. Use robotics kits to build and upgrade the FLEX machines. This one's for you, Nylah.",
               "learningObjectives": [],
-              "topics": {
-                "consumer_math": [],
-                "financial_literacy": []
-              },
+              "topics": { "consumer_math": [], "financial_literacy": [] },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -352,10 +343,7 @@
               "title": "From Code to Cash (Connor's Lesson)",
               "description": "This lesson explores the connection between the financial and engineering industries via coding. Choose between block-based and text-based coding to program the FLEX systems using Python. This one's for you, Connor.",
               "learningObjectives": [],
-              "topics": {
-                "consumer_math": [],
-                "financial_literacy": []
-              },
+              "topics": { "consumer_math": [], "financial_literacy": [] },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -369,12 +357,12 @@
           ]
         }
       ],
-      "topicsCount": 19,
+      "topicsCount": 18,
       "pricing": [
         {
           "name": "Base",
           "price": 49,
-          "desc": "Perfect for an educator and their small group or homeschooling.",
+          "description": "Perfect for an educator and their small group or homeschooling.",
           "features": [
             "Access for you and up to 5 users",
             "1 printed teacher manual",
@@ -386,15 +374,15 @@
             "1 FLEX ATM"
           ],
           "addOns": {
-            "user_limit": 20,
-            "teacher_tools_limit": 3,
-            "edtech_limit": "user_limit"
+            "userLimit": 20,
+            "teacherToolsLimit": 3,
+            "edTechLimit": "userLimit"
           }
         },
         {
           "name": "Plus",
           "price": 99,
-          "desc": "Perfect for an educator, their colleagues, and their classroom.",
+          "description": "Perfect for an educator, their colleagues, and their classroom.",
           "features": [
             "Access for up to 30 users",
             "3 printed teacher manuals",
@@ -406,15 +394,15 @@
             "5 FLEX ATMs"
           ],
           "addOns": {
-            "user_limit": 50,
-            "teacher_tools_limit": 10,
-            "edtech_limit": "user_limit"
+            "userLimit": 50,
+            "teacherToolsLimit": 10,
+            "edTechLimit": "userLimit"
           }
         },
         {
           "name": "Pro",
           "price": 199,
-          "desc": "Perfect for an educator, their colleagues, and multiple classes or sections of students.",
+          "description": "Perfect for an educator, their colleagues, and multiple classes or sections of students.",
           "features": [
             "Access for up to 100 users",
             "5 printed teacher manuals",
@@ -426,9 +414,9 @@
             "10 FLEX ATMs"
           ],
           "addOns": {
-            "user_limit": 250,
-            "teacher_tools_limit": 25,
-            "edtech_limit": "user_limit"
+            "userLimit": 250,
+            "teacherToolsLimit": 25,
+            "edTechLimit": "userLimit"
           }
         }
       ]
