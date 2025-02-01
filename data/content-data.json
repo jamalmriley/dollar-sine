@@ -269,8 +269,8 @@
             {
               "id": "6.1",
               "chapter": 6,
-              "title": "Practice Makes Perfect",
-              "description": "This lesson allows for more practice on all consumer math skills presented in chapters 1-5.",
+              "title": "Another Science Experiment (Noah's Lesson)",
+              "description": "This lesson explores the connection between financial industry and life science via a science experiment that highlights recycling, composting, and gardening. This one's for you, Noah.",
               "learningObjectives": [],
               "topics": { "consumer_math": [], "financial_literacy": [] },
               "prevCCSS": [],
@@ -286,13 +286,10 @@
             {
               "id": "6.2",
               "chapter": 6,
-              "title": "Another Science Experiment (Noah's Lesson)",
-              "description": "This lesson explores the connection between financial industry and life science via a science experiment that highlights recycling, composting, and gardening. This one's for you, Noah.",
+              "title": "The Frugal Foodie (Serenity's Lesson)",
+              "description": "This lesson explores the connection between the financial and culinary industries via cooking everyday meals on an everyday budget. This one's for you, Serenity.",
               "learningObjectives": [],
-              "topics": {
-                "consumer_math": [],
-                "financial_literacy": ["Using a spreadsheet"]
-              },
+              "topics": { "consumer_math": [], "financial_literacy": [] },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -306,10 +303,13 @@
             {
               "id": "6.3",
               "chapter": 6,
-              "title": "The Frugal Foodie (Serenity's Lesson)",
-              "description": "This lesson explores the connection between the financial and culinary industries via cooking everyday meals on an everyday budget. This one's for you, Serenity.",
+              "title": "The Economics of Slime (Josh's Lesson)",
+              "description": "This lesson explores the connection between financial industry, chemistry, entrepreneurship, and business management via a science experiment with everyone's favorite ingredient — slime! This one's for you, Joshua.",
               "learningObjectives": [],
-              "topics": { "consumer_math": [], "financial_literacy": [] },
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": ["Using a spreadsheet"]
+              },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
