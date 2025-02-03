@@ -1,6 +1,5 @@
 "use client";
 
-import { useActiveUserContext } from "@/contexts/active-user-context";
 import { generateDisplayName } from "@/utils/onboarding";
 import { useUser } from "@clerk/nextjs";
 import { parseAsBoolean, useQueryState } from "nuqs";
@@ -15,7 +14,6 @@ export default function Prefix() {
     "Teacher",
     "Dr.",
   ];
-  const { setHasClickedOrTyped } = useActiveUserContext();
 
   const [prefix, setPrefix] = useQueryState("prefix", { defaultValue: "" });
 
@@ -95,7 +93,6 @@ export default function Prefix() {
                   isPrefixIncluded
                 );
 
-                setHasClickedOrTyped(true);
                 setIsCustomPrefix(false);
                 setPrefix(prfx);
                 if (displayNameFormat !== "")
@@ -123,7 +120,6 @@ export default function Prefix() {
                 isPrefixIncluded
               );
 
-              setHasClickedOrTyped(true);
               setIsCustomPrefix(true);
               setPrefix("");
               if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
@@ -151,7 +147,6 @@ export default function Prefix() {
                 isPrefixIncluded
               );
 
-              setHasClickedOrTyped(true);
               setPrefix(e.target.value);
               if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
             }}

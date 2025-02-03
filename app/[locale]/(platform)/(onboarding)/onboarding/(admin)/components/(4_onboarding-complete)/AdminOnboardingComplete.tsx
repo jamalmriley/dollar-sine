@@ -1,3 +1,5 @@
+"use client";
+
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import {
   CalculatorIcon,
@@ -10,8 +12,17 @@ import UserCards from "./UserCards";
 import DownloadApp from "./DownloadApp";
 import Wallet from "./Wallet";
 import Integrations from "./Integrations";
+import { FaCheckCircle } from "react-icons/fa";
+import { formatCurrency } from "@/utils/general";
+import { Separator } from "@/components/ui/separator";
+import { useUser } from "@clerk/nextjs";
+import Receipt from "./Receipt";
 
-export default function FeaturesBentoGrid() {
+// Your onboarding is now complete! You're all set, {firstName}.
+// TODO: Make a receipt bento grid thingy ya dig too
+// And put button that makes onboarding status set to done
+
+export default function AdminOnboardingComplete() {
   const features = [
     {
       Icon: TrophyIcon,
@@ -73,9 +84,7 @@ export default function FeaturesBentoGrid() {
       href: "#",
       cta: "Learn more",
       className: "col-span-3 lg:col-span-2",
-      background: (
-        <Integrations />
-      ),
+      background: <Integrations />,
     },
     {
       Icon: CalculatorIcon,
@@ -114,14 +123,16 @@ export default function FeaturesBentoGrid() {
 
   return (
     <div className="h-full flex gap-4 justify-center">
-      <BentoGrid className="w-1/2">
+      <Receipt amount="1" />
+
+      {/* <BentoGrid className="w-1/2">
         {features.map((feature, idx) => (
           <BentoCard key={idx} {...feature} />
         ))}
       </BentoGrid>
       <BentoGrid className="w-1/4">
         <BentoCard {...lastCard} />
-      </BentoGrid>
+      </BentoGrid> */}
     </div>
   );
 }

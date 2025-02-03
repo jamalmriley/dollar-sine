@@ -15,14 +15,12 @@ import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { FormEventHandler, useEffect, useState } from "react";
 import OrgLogoUpload from "./OrgLogoUpload";
-import { useActiveUserContext } from "@/contexts/active-user-context";
 import { toast } from "@/hooks/use-toast";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
 
 export default function CreateOrUpdateOrg() {
-  const { setHasClickedOrTyped } = useActiveUserContext();
   const { orgLogo, setOrgLogo, isUpdatingOrg, isLoading, setIsLoading } =
     useOnboardingContext();
   const { user, isLoaded } = useUser();
@@ -136,7 +134,6 @@ export default function CreateOrUpdateOrg() {
             id="org-name"
             value={orgName}
             onChange={(e) => {
-              setHasClickedOrTyped(true);
               setOrgName(e.target.value);
               if (!hasCustomOrgSlug) setOrgSlug(createOrgSlug(e.target.value));
             }}
@@ -155,7 +152,6 @@ export default function CreateOrUpdateOrg() {
             value={orgSlug}
             onChange={(e) => {
               const re = /^[a-zA-Z0-9_]+$/;
-              setHasClickedOrTyped(true);
               setOrgSlug(e.target.value);
               setHasCustomOrgSlug(e.target.value !== "");
             }}
@@ -181,7 +177,6 @@ export default function CreateOrUpdateOrg() {
             placeholder="Search an address..."
             value={orgAddress}
             onValueChange={(e) => {
-              setHasClickedOrTyped(true);
               setOrgAddress(e);
             }}
             onFocus={() => setShowPredictions(true)}
@@ -235,7 +230,6 @@ export default function CreateOrUpdateOrg() {
           id="2fa"
           checked={is2FARequired}
           onClick={() => {
-            setHasClickedOrTyped(true);
             setIs2FARequired((prev) => !prev);
           }}
         />

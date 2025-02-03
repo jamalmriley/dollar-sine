@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useActiveUserContext } from "@/contexts/active-user-context";
 import { useQueryState } from "nuqs";
 
 export default function SkinTone() {
@@ -19,7 +18,6 @@ export default function SkinTone() {
     { label: "medium-dark", icon: "👋🏾" },
     { label: "dark", icon: "👋🏿" },
   ];
-  const { setHasClickedOrTyped } = useActiveUserContext();
 
   const [skinTone, setSkinTone] = useQueryState("skinTone", {
     defaultValue: "",
@@ -55,7 +53,6 @@ export default function SkinTone() {
             <DropdownMenuItem
               key={obj.label}
               onClick={() => {
-                setHasClickedOrTyped(true);
                 setSkinTone(obj.label);
               }}
             >

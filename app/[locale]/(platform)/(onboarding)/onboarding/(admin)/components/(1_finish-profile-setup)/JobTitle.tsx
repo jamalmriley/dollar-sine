@@ -5,7 +5,6 @@ import { useActiveUserContext } from "@/contexts/active-user-context";
 import { useQueryState } from "nuqs";
 
 export default function JobTitle() {
-  const { setHasClickedOrTyped } = useActiveUserContext();
   const [jobTitle, setJobTitle] = useQueryState("jobTitle", {
     defaultValue: "",
   });
@@ -31,7 +30,6 @@ export default function JobTitle() {
         required
         value={jobTitle}
         onChange={(e) => {
-          setHasClickedOrTyped(true);
           setJobTitle(e.target.value);
         }}
       />

@@ -1,0 +1,10 @@
+[lcl-host]
+realm-apid = 'development'
+
+[org]
+apid = 'dollar-sine-5ec916'
+
+[service]
+apid = 'ds-web'
+category = 'javascript'
+cert-style = 'acme'

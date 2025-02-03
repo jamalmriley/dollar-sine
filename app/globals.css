@@ -292,6 +292,28 @@ body,
     @apply border-4 border-dashed border-muted-foreground;
   }
 
+  .receipt {
+    @apply w-80 h-96 flex flex-col justify-between items-center p-5 rounded-t-xl overflow-hidden;
+    filter: drop-shadow(0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.2));
+  }
+
+  .receipt::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    @apply bg-primary-foreground;
+    --mask: conic-gradient(
+        from -45deg at bottom,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      50%/2rem 100%;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+  }
+
   .custom-shape-divider-top-1733810752 {
     position: absolute;
     top: 0;

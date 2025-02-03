@@ -11,7 +11,7 @@ export type ProfileMetadata = {
 
 export async function saveOnboardingProgress(userId: string, link: string) {
   await fetch(
-    `http://localhost:3000/api/onboarding?user_id=${userId}&onboarding_link=${link}`,
+    `api/onboarding?user_id=${userId}&onboarding_link=${link}`,
     {
       method: "POST",
     }

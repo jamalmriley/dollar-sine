@@ -17,8 +17,6 @@ import { useCallback, useEffect, useState } from "react";
 import { saveOnboardingProgress } from "@/utils/onboarding";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { useActiveUserContext } from "@/contexts/active-user-context";
-import FeaturesBentoGrid from "./components/(4_onboarding-complete)/FeaturesBentoGrid";
 import Profile, {
   isFinishProfileSetupCompleted,
 } from "./components/(1_finish-profile-setup)/Profile";
@@ -28,7 +26,6 @@ export default function AdminOnboardingPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
-  const { hasClickedOrTyped } = useActiveUserContext();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
@@ -62,7 +59,7 @@ export default function AdminOnboardingPage() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const userId = user?.id;
-      if (hasClickedOrTyped && userId) {
+      if (userId) {
         const fullPathname = `/${
           params.locale
         }${pathname}?${searchParams.toString()}`;
@@ -96,74 +93,61 @@ export default function AdminOnboardingPage() {
 
   if (!user || !isLoaded) return;
   return (
-    <>
-      {/* TODO: If onboarding is fully complete, display FeaturesBentoGrid */}
-      {1 + 1 === 2 ? (
-        <div className="h-full flex flex-col justify-between items-center pt-10">
-          {/* Carousel */}
-          <Carousel
-            setApi={setApi}
-            opts={{ watchDrag: false }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {prompts.map((prompt, index) => (
-                <CarouselItem
-                  key={index}
-                  className={`max-h-[36rem] flex justify-center ${prompt.basis}`}
-                >
-                  {prompt.content}
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-
-          {/* Buttons and Indicators */}
-          <div className="flex gap-5 items-center mt-5">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onClick={scrollPrev}
-              disabled={current === 1}
+    <div className="h-full flex flex-col justify-between items-center pt-10">
+      {/* Carousel */}
+      <Carousel setApi={setApi} opts={{ watchDrag: false }} className="w-full">
+        <CarouselContent>
+          {prompts.map((prompt, index) => (
+            <CarouselItem
+              key={index}
+              className={`max-h-[36rem] flex justify-center ${prompt.basis}`}
             >
-              <FaArrowLeft />
-            </Button>
-            {prompts.map((_, i) => (
-              // <Link to={`#${_.id}`}>
-              <div
-                key={i}
-                className={`transform ease-out duration-500 ${
-                  i + 1 === current
-                    ? "w-5 bg-emerald-400"
-                    : "w-2 bg-muted-foreground/30"
-                } h-2 rounded-full`}
-              />
-              // </Link>
-            ))}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onClick={scrollNext}
-              disabled={current === count || !prompts[current - 1].isCompleted}
-            >
-              <FaArrowRight />
-            </Button>
-          </div>
+              {prompt.content}
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
 
-          {/* Progress Bar*/}
-          <Progress
-            value={((current - 1) / count) * 100}
-            className="h-2 rounded-none"
+      {/* Buttons and Indicators */}
+      <div className="flex gap-5 items-center mt-5">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          onClick={scrollPrev}
+          disabled={current === 1}
+        >
+          <FaArrowLeft />
+        </Button>
+        {prompts.map((_, i) => (
+          // <Link to={`#${_.id}`}>
+          <div
+            key={i}
+            className={`transform ease-out duration-500 ${
+              i + 1 === current
+                ? "w-5 bg-emerald-400"
+                : "w-2 bg-muted-foreground/30"
+            } h-2 rounded-full`}
           />
-        </div>
-      ) : (
-        <div className="page-container flex justify-center items-center">
-          <FeaturesBentoGrid />
-        </div>
-      )}
-    </>
+          // </Link>
+        ))}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          onClick={scrollNext}
+          disabled={current === count || !prompts[current - 1].isCompleted}
+        >
+          <FaArrowRight />
+        </Button>
+      </div>
+
+      {/* Progress Bar*/}
+      <Progress
+        value={((current - 1) / count) * 100}
+        className="h-2 rounded-none"
+      />
+    </div>
   );
 }
 

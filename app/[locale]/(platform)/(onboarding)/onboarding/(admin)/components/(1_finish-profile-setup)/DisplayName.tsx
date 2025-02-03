@@ -9,14 +9,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useActiveUserContext } from "@/contexts/active-user-context";
 import { generateDisplayName } from "@/utils/onboarding";
 import { useUser } from "@clerk/nextjs";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
 export default function DisplayName() {
-  const { setHasClickedOrTyped } = useActiveUserContext();
-
   const [prefix] = useQueryState("prefix", { defaultValue: "" });
 
   const [displayNameFormat, setDisplayNameFormat] = useQueryState(
@@ -116,7 +113,6 @@ export default function DisplayName() {
                     newDisplayNameValue,
                     isPrefixIncluded
                   );
-                  setHasClickedOrTyped(true);
                   setDisplayNameFormat(newDisplayNameFormat);
                   setDisplayName(newDisplayName);
                 }}
@@ -143,7 +139,6 @@ export default function DisplayName() {
               displayNameValue,
               !isPrefixIncluded
             );
-            setHasClickedOrTyped(true);
             setDisplayName(newDisplayName);
           }}
         />

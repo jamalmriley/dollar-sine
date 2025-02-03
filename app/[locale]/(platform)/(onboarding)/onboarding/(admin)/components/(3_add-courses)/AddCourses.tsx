@@ -79,7 +79,7 @@ export default function AddCourses() {
 }
 
 const planSchema = z.object({
-  id: z.number(),
+  // id: z.number(),
   name: z.string(),
   price: z.number(),
 });
@@ -89,7 +89,7 @@ const planSchema = z.object({
 //   quantity: z.number(),
 // });
 
-const courseSchema = z.object({
+export const courseSchema = z.object({
   id: z.string(),
   title: z.string(),
   plan: planSchema.optional(),
@@ -99,7 +99,9 @@ const courseSchema = z.object({
 type Course = z.infer<typeof courseSchema>;
 
 // CREATE
-function addCourse(courses: Course[], id: string) {}
+function addCourse(courses: Course[], course: Course): Course[] {
+  return [...courses, course];
+}
 
 // READ
 function findCourse(courses: Course[], id: string): number {
@@ -113,7 +115,7 @@ function findCourse(courses: Course[], id: string): number {
 function findPlan(courses: Course[], planName: string): number {
   for (let i = 0; i < courses.length; i++) {
     let plan = courses[i].plan;
-    if (plan && plan.name === planName) return plan.id;
+    if (plan && plan.name === planName) return i;
   }
   return -1;
 }
@@ -207,7 +209,8 @@ function CourseCard({
                     // See if the course is already added. If so, remove it. If not, add it.
                     if (!isCourseSelected) {
                       // Add the course to the array.
-                      setSelectedCourses([...selectedCourses, obj]);
+                      const newArr = addCourse(selectedCourses, obj);
+                      setSelectedCourses(newArr);
                     } else {
                       // Remove the course from the array.
                       const newArr = removeCourse(selectedCourses, id);
@@ -248,7 +251,7 @@ function CourseCard({
                   const newCourse: Course = {
                     id,
                     title,
-                    plan: { id: i, name: plan.name, price: plan.price },
+                    plan: { name: plan.name, price: plan.price },
                   };
                   if (selectedCourses)
                     setSelectedCourses(

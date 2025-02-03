@@ -147,6 +147,10 @@ export const formatCurrency = (
   }).format(value);
 };
 
+export const convertToSubcurrency = (amount: number, factor: number = 100) => {
+  return Math.round(amount * factor);
+};
+
 export const removeElementFromArr = (
   arr: string[],
   target: string

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useActiveUserContext } from "@/contexts/active-user-context";
 import { algoliasearch } from "algoliasearch";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
@@ -22,7 +21,6 @@ export default function Pronouns() {
     algoliaApiKey as string
   );
 
-  const { setHasClickedOrTyped } = useActiveUserContext();
   const [pronouns, setPronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
@@ -31,7 +29,6 @@ export default function Pronouns() {
   // const esPronouns: string[] = ["ella", "elle", "elli", "su"];
 
   function Hit({ hit }: { hit: any }) {
-    const { setHasClickedOrTyped } = useActiveUserContext();
     const pronoun = hit.name;
 
     return (
@@ -44,7 +41,6 @@ export default function Pronouns() {
           }`}
           disabled={pronouns.split("/").indexOf(pronoun) !== -1}
           onClick={() => {
-            setHasClickedOrTyped(true);
             setPronouns((pronouns) =>
               [
                 ...pronouns.split("/").filter((el: string) => el !== ""),
@@ -182,7 +178,6 @@ export default function Pronouns() {
                 variant="ghost"
                 className="rounded-full w-auto h-auto p-0.5"
                 onClick={() => {
-                  setHasClickedOrTyped(true);
                   const newPronouns = pronouns
                     .split("/")
                     .filter((el) => el !== pronoun)
