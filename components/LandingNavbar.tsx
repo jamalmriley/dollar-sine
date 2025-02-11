@@ -41,7 +41,7 @@ export default function LandingNavbar() {
 
   return (
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
-      <div className="flex border-b justify-between px-10 py-2">
+      <div className="flex border-b border-default-color justify-between px-10 py-2">
         {/* Logo and Text Links */}
         <div className="flex gap-7 items-center">
           {/* Logo */}

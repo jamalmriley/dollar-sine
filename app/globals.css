@@ -117,6 +117,10 @@ body,
 
 /* —————————— MODULE —————————— */
 @layer base {
+  .border-default-color {
+    @apply border-black dark:border-inherit;
+  }
+
   .chip-no-animation {
     @apply text-xs font-bold rounded-full border px-3 py-1;
   }
@@ -263,7 +267,7 @@ body,
   }
 
   .search-box {
-    @apply w-full h-10 pl-10 pr-3 py-2 bg-white dark:bg-[#121212] border placeholder-muted-foreground focus:outline-none focus:border-emerald-400 rounded-full text-sm;
+    @apply w-full h-10 pl-10 pr-3 py-2 bg-white dark:bg-[#121212] border border-default-color placeholder-muted-foreground focus:outline-none focus:border-emerald-400 rounded-full text-sm;
   }
 
   .search-submit-icon {
@@ -293,8 +297,8 @@ body,
   }
 
   .receipt {
-    @apply w-80 h-96 flex flex-col justify-between items-center p-5 rounded-t-xl overflow-hidden;
-    filter: drop-shadow(0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.2));
+    @apply w-80 h-full flex flex-col justify-around items-center p-5 overflow-hidden;
+    filter: drop-shadow(0 1px rgba(0, 0, 0));
   }
 
   .receipt::before {
@@ -302,7 +306,7 @@ body,
     position: absolute;
     z-index: -1;
     inset: 0;
-    @apply bg-primary-foreground;
+    @apply bg-primary-foreground rounded-t-xl border border-default-color pointer-events-none;
     --mask: conic-gradient(
         from -45deg at bottom,
         #0000,
@@ -368,7 +372,7 @@ body,
   }
 
   .h2 {
-    @apply text-xl lg:text-2xl font-bold mb-2 select-none;
+    @apply text-xl lg:text-2xl font-bold select-none;
   }
 
   .h3 {

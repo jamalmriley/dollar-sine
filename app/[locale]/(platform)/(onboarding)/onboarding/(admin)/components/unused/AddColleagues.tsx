@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { TiUserAdd } from "react-icons/ti";
-import FileUpload from "./FileUpload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -26,9 +25,10 @@ import { useUser } from "@clerk/nextjs";
 import { generateQueryString, InvitationResponse } from "@/utils/api";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import PendingInvitations from "./PendingInvitations";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import FileUpload from "./FileUpload";
 import UsersToInvite from "./UsersToInvite";
+import PendingInvitations from "./PendingInvitations";
 
 export default function AddColleagues() {
   const { user, isLoaded } = useUser();

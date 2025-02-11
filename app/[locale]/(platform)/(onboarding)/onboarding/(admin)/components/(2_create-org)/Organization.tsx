@@ -7,6 +7,13 @@ import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { Button } from "@/components/ui/button";
 import { MdClose } from "react-icons/md";
 import { parseAsBoolean, useQueryState } from "nuqs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Organization() {
   const { setOrgLogo, isUpdatingOrg, setIsUpdatingOrg } =
@@ -44,14 +51,14 @@ export default function Organization() {
   };
 
   return (
-    <div
-      className={`w-full h-full ${
+    <Card
+      className={`w-full h-full mx-10 ${
         isUpdatingOrg ? "max-w-3xl" : "max-w-lg"
-      } flex flex-col md:border rounded-lg px-10 md:px-5 py-5 gap-4 md:bg-primary-foreground`}
+      }`}
     >
-      <div className="flex flex-col">
-        <div className="flex justify-between">
-          <h2 className="h2">{header.title}</h2>
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle className="h2">{header.title}</CardTitle>
           {isUpdatingOrg && (
             <Button
               variant="ghost"
@@ -72,18 +79,22 @@ export default function Organization() {
           )}
         </div>
         {header.description !== "" && (
-          <span className="subtitle">{header.description}</span>
+          <CardDescription className="subtitle">
+            {header.description}
+          </CardDescription>
         )}
-      </div>
+      </CardHeader>
 
-      {isUpdatingOrg ? (
-        <CreateOrUpdateOrg />
-      ) : isCreateOrgCompleted() ? (
-        <OrgAlreadyCreated />
-      ) : (
-        <CreateOrUpdateOrg />
-      )}
-    </div>
+      <CardContent>
+        {isUpdatingOrg ? (
+          <CreateOrUpdateOrg />
+        ) : isCreateOrgCompleted() ? (
+          <OrgAlreadyCreated />
+        ) : (
+          <CreateOrUpdateOrg />
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

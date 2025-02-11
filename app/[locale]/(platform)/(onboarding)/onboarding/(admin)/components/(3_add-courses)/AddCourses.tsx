@@ -12,6 +12,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { HiOutlineInformationCircle } from "react-icons/hi2";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function AddCourses() {
   const header = {
@@ -52,15 +60,17 @@ export default function AddCourses() {
   }, []);
 
   return (
-    <div className="w-full h-full max-w-3xl flex flex-col justify-normal md:border rounded-lg px-10 md:px-5 py-5 md:bg-primary-foreground">
-      <div className="flex flex-col">
-        <h2 className="h2">{header.title}</h2>
+    <Card className="w-full h-full max-w-3xl mx-10">
+      <CardHeader>
+        <CardTitle className="h2">{header.title}</CardTitle>
         {header.description !== "" && (
-          <span className="subtitle">{header.description}</span>
+          <CardDescription className="subtitle">
+            {header.description}
+          </CardDescription>
         )}
-      </div>
+      </CardHeader>
 
-      <div className="flex justify-center gap-5 mb-5">
+      <CardContent className="flex justify-center gap-5 mb-5">
         {courses.map((course) => (
           <CourseCard
             key={course.id}
@@ -71,10 +81,12 @@ export default function AddCourses() {
             imageUrl={course.imageUrl}
           />
         ))}
-      </div>
+      </CardContent>
 
-      <PaymentWindow />
-    </div>
+      <CardFooter>
+        <PaymentWindow />
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -170,14 +182,14 @@ function CourseCard({
       <div
         className={`${
           selectedCourses && findCourse(selectedCourses, id) !== -1 && ""
-        } flex border rounded-lg expandable-content`}
+        } flex border border-default-color rounded-lg expandable-content`}
       >
         {/* CourseTile */}
         <div
           className={`w-48 min-w-48 aspect-[9/16] rounded-lg overflow-hidden bg-scroll flex flex-col justify-between ${
             selectedCourses &&
             findCourse(selectedCourses, id) !== -1 &&
-            "border-r"
+            "border-r border-default-color"
           }`}
           style={{
             backgroundImage: `url(${

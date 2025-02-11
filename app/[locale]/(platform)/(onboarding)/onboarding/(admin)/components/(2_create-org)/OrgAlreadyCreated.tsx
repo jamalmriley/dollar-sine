@@ -47,7 +47,7 @@ export default function OrgAlreadyCreated() {
 
   if (!organization || !isLoaded) return false;
   return (
-    <div className="flex flex-col border rounded-lg overflow-hidden">
+    <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
       {/* Org Content */}
       <div className="p-5 w-full">
         <div
@@ -131,7 +131,7 @@ export default function OrgAlreadyCreated() {
 
               {/* Creation Date */}
               <span className="text-xs text-muted-foreground">
-                Created{" "}
+                Organization created{" "}
                 {formatRelative(
                   new Date(organization.createdAt),
                   new Date()
@@ -145,7 +145,7 @@ export default function OrgAlreadyCreated() {
 
       <Button
         variant="ghost"
-        className="rounded-none border-t"
+        className="bg-primary-foreground rounded-none border-t border-default-color"
         onClick={() => setToggle((prev) => !prev)}
       >
         <span className="sr-only">

@@ -15,7 +15,7 @@ export default function DashboardNavbar() {
   const { session } = useSession();
   return (
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
-      <div className="flex gap-3 border-b justify-between px-10 py-2 items-center">
+      <div className="flex gap-3 border-b border-default-color justify-between px-10 py-2 items-center">
         {/* Left: Logo and Admin Button */}
         {/* <div className="h-10 w-1/6 min-w-[92px] flex gap-3"> */}
         <div className="h-10 w-1/6 min-w-10 flex gap-3">

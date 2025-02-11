@@ -1,5 +1,9 @@
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { NotificationDemo } from "./NotificationDemo";
+import StyledButton from "@/components/StyledButton";
+import Link from "next/link";
+import { IOS_APP_LINK } from "@/utils/app";
+import { MdComputer, MdSmartphone } from "react-icons/md";
 
 export default function Iphone() {
   return (
@@ -10,12 +14,34 @@ export default function Iphone() {
       <div className="absolute -inset-[1px] border-[3px] border-zinc-700 border-opacity-40 rounded-[37px] pointer-events-none" />
 
       {/* Screen Content */}
-      <div className="relative w-full h-full rounded-[37px] overflow-hidden flex justify-center bg-white dark:bg-black">
-        <BackgroundGradientAnimation>
-          <div className="absolute z-50 inset-0 flex justify-center pointer-events-none">
-            <NotificationDemo />
-          </div>
-        </BackgroundGradientAnimation>
+      <div className="relative w-full h-full rounded-[37px] overflow-hidden flex justify-center bg-muted-foreground">
+        {/* <BackgroundGradientAnimation> */}
+        <div className="absolute z-50 inset-0 flex justify-center">
+          <NotificationDemo />
+        </div>
+
+        <div className="flex flex-col gap-5 md:hidden">
+          <div className="size-32 mt-32 mb-10 bg-white rounded-lg shadow-md mx-auto" />
+          <StyledButton>
+            <Link
+              href={IOS_APP_LINK}
+              className="flex justify-center items-center gap-2"
+            >
+              <MdSmartphone />
+              Download our app
+            </Link>
+          </StyledButton>
+          <StyledButton>
+            <Link
+              href="/dashboard"
+              className="flex justify-center items-center gap-2"
+            >
+              <MdComputer />
+              Go to dashboard
+            </Link>
+          </StyledButton>
+        </div>
+        {/* </BackgroundGradientAnimation> */}
       </div>
 
       {/* Left Side Buttons */}

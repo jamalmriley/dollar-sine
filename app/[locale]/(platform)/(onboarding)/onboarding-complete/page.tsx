@@ -2,10 +2,8 @@ import AdminOnboardingComplete from "../onboarding/(admin)/components/(4_onboard
 
 export default function OnboardingComplete() {
   return (
-    <div>
-      <div className="page-container flex justify-center items-center">
-        <AdminOnboardingComplete />
-      </div>
+    <div className="page-container">
+      <AdminOnboardingComplete />
     </div>
   );
 }

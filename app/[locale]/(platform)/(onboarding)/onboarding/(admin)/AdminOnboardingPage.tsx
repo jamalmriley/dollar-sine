@@ -12,7 +12,7 @@ import Organization, {
 } from "./components/(2_create-org)/Organization";
 import AddCourses from "./components/(3_add-courses)/AddCourses";
 import { Button } from "@/components/ui/button";
-import { FaArrowLeft, FaArrowRight, FaCheck } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { saveOnboardingProgress } from "@/utils/onboarding";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
