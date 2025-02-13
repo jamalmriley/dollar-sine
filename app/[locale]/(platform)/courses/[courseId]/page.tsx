@@ -7,11 +7,9 @@ import Chapter3 from "@/assets/svg/undraw_make_it_rain_re_w9pc.svg";
 import Chapter4 from "@/assets/svg/undraw_savings_re_eq4w.svg";
 import Chapter5 from "@/assets/svg/undraw_credit_card_payments_re_qboh.svg";
 import Chapter6 from "@/assets/svg/undraw_moving_forward_re_rs8p.svg";
-import { FaPlay } from "react-icons/fa";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import Link from "next/link";
 import CustomH1 from "@/components/CustomH1";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -34,7 +32,7 @@ import { Metadata } from "next";
 import { setTitle } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import CustomButton from "@/components/CustomButton";
+import StyledButton from "@/components/StyledButton";
 
 export const metadata: Metadata = setTitle("Common Cents");
 const i18nNamespaces = ["platform-layout", "common-cents"];
@@ -111,7 +109,9 @@ export default async function CoursePage({ params }: { params: any }) {
           <div className="flex flex-col">
             <div className="flex justify-between items-center">
               <CustomH1 text={course.title} isPaddingEnabled={false} />
-              <CustomButton text={t("back-to-courses")} href="/courses" />
+              <Link href="/courses">
+                <StyledButton>{t("back-to-courses")}</StyledButton>
+              </Link>
             </div>
             <h2 className="subtitle">{course.description}</h2>
           </div>

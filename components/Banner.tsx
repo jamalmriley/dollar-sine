@@ -108,7 +108,7 @@ export default function Banner({
         <div
           className={`${
             isExcludedPathname(renderExclusionList) ? "hidden" : "flex"
-          } justify-between items-center w-full md:h-20 px-5 md:px-10 py-5 border-b gap-3 ${bgTailwindProps}`}
+          } justify-between items-center w-full md:h-20 px-5 md:px-10 py-5 border-b border-default-color gap-3 ${bgTailwindProps}`}
         >
           {/* Icon and Text */}
           <div className="flex items-center gap-3">

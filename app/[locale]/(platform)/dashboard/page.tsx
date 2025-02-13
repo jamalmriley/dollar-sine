@@ -3,10 +3,11 @@ import { currentUser } from "@clerk/nextjs/server";
 import Greeting from "./components/Greeting";
 import initTranslations from "@/app/i18n";
 import CourseTile from "@/components/CourseTile";
-import CustomButton from "@/components/CustomButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
+import StyledButton from "@/components/StyledButton";
+import Link from "next/link";
 
 export const metadata: Metadata = setTitle("Dashboard");
 const i18nNamespaces = ["dashboard", "platform-layout"];
@@ -30,15 +31,16 @@ export default async function DashboardPage({
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <Greeting name={firstName} />
-          <div className="flex gap-3">
-            <CustomButton
-              text={t("platform-layout:my-courses")}
-              href="/courses/enrolled"
-            />
-            <CustomButton
-              text={t("platform-layout:all-courses")}
-              href="/courses"
-            />
+          <div className="flex gap-5">
+            <StyledButton>
+              <Link href="/courses/enrolled">
+                {t("platform-layout:my-courses")}
+              </Link>
+            </StyledButton>
+
+            <StyledButton>
+              <Link href="/courses">{t("platform-layout:all-courses")}</Link>
+            </StyledButton>
           </div>
         </div>
 

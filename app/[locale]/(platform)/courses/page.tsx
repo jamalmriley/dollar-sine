@@ -2,10 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { promises as fs } from "fs";
-import { FaPlay } from "react-icons/fa";
 import placeholder from "@/assets/images/placeholders/cc_placeholder.jpg";
 import CustomH1 from "@/components/CustomH1";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,6 +26,7 @@ import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "@/app/i18n";
 import { Metadata } from "next";
 import { setTitle } from "@/utils/ui";
+import StyledButton from "@/components/StyledButton";
 
 export const metadata: Metadata = setTitle("All Courses");
 const i18nNamespaces = ["platform-layout"];
@@ -91,9 +90,9 @@ export default async function AllCoursesPage({
           <div className="flex justify-between items-start">
             <CustomH1 text={t("all-courses")} isPaddingEnabled />
 
-            <Button variant="outline" asChild className="rounded-lg h-10">
+            <StyledButton>
               <Link href={`/dashboard`}>{t("back-to-dashboard")}</Link>
-            </Button>
+            </StyledButton>
           </div>
         </div>
 

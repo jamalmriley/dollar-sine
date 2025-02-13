@@ -39,6 +39,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import CustomButton from "@/components/CustomButton";
+import StyledButton from "@/components/StyledButton";
 
 export function LessonContent({
   courseId,
@@ -145,7 +146,7 @@ export function LessonContent({
       </Sidebar>
 
       {/* Dashboard */}
-      <div className="flex flex-col h-full w-full justify-between grow p-10 gap-5 rounded-tl-2xl border-l bg-[#fff] dark:bg-[#121212]">
+      <div className="flex flex-col h-full w-full justify-between grow p-10 gap-5 rounded-tl-2xl border-l border-default-color bg-[#fff] dark:bg-[#121212]">
         {/* Breadcrumb and Title */}
         <div className="flex flex-col">
           <Breadcrumb className="mb-5">
@@ -210,7 +211,7 @@ export function LessonContent({
         {/* Interactive Area and Video */}
         <div className="flex flex-col-reverse md:flex-row grow gap-10">
           {/* Interactive Area */}
-          <div className="w-full h-full p-5 border rounded-md flex flex-col justify-between">
+          <div className="w-full h-full p-5 border border-default-color rounded-md flex flex-col justify-between">
             <span className="h2">{links[currStep].label}</span>
             {/* Buttons */}
             <div
@@ -223,18 +224,26 @@ export function LessonContent({
               }`}
             >
               {lesson.prevLesson != "" && (
-                <CustomButton
-                  text={t("previous-lesson", { lessonId: lesson.prevLesson })}
+                <Link
                   href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
-                  startIcon={<ArrowLeft />}
-                />
+                  className="flex justify-center items-center gap-2"
+                >
+                  <StyledButton>
+                    <ArrowLeft />
+                    {t("previous-lesson", { lessonId: lesson.prevLesson })}
+                  </StyledButton>
+                </Link>
               )}
               {lesson.nextLesson !== "" && (
-                <CustomButton
-                  text={t("next-lesson", { lessonId: lesson.nextLesson })}
+                <Link
                   href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
-                  endIcon={<ArrowRight />}
-                />
+                  className="flex justify-center items-center gap-2"
+                >
+                  <StyledButton>
+                    {t("next-lesson", { lessonId: lesson.nextLesson })}
+                    <ArrowRight />
+                  </StyledButton>
+                </Link>
               )}
             </div>
           </div>

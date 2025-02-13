@@ -34,6 +34,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlay } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
+import StyledButton from "@/components/StyledButton";
+import Link from "next/link";
 
 export default async function ChapterContent({
   courseId,
@@ -109,10 +111,9 @@ export default async function ChapterContent({
             }`}
             isPaddingEnabled={false}
           />
-          <CustomButton
-            text={t("back-to-chapters")}
-            href={`/courses/${courseId}`}
-          />
+          <Link href={`/courses/${courseId}`}>
+            <StyledButton>{t("back-to-chapters")}</StyledButton>
+          </Link>
         </div>
         <h2 className="subtitle">{chapter.description}</h2>
       </div>
@@ -121,19 +122,28 @@ export default async function ChapterContent({
         {/* Placeholder and Buttons */}
         <div className="w-full md:w-1/2 flex flex-col">
           <Skeleton className="aspect-[16/9] md:mr-10 mb-5 rounded-md" />
-          <div className="flex gap-3 w-full justify-center md:justify-start">
+          <div className="flex gap-5 w-full justify-center md:justify-start">
             {/* TODO: Make it say "Start" or "Resume" depending on status. */}
-            <CustomButton
-              text={t("resume-lesson", { lessonId: `${chapter.id}.1` })}
-              href={`/courses/${courseId}/lesson-${chapter.id}.1`}
-              startIcon={<FaPlay />}
-            />
 
-            <CustomButton
-              text={t("restart")}
+            <Link
+              href={`/courses/${courseId}/lesson-${chapter.id}.1`}
+              className="flex justify-center items-center gap-2"
+            >
+              <StyledButton>
+                <FaPlay />
+                {t("resume-lesson", { lessonId: `${chapter.id}.1` })}
+              </StyledButton>
+            </Link>
+
+            <Link
               href={`/courses/${courseId}/chapter-${chapter.id}`}
-              startIcon={<VscDebugRestart />}
-            />
+              className="flex justify-center items-center gap-2"
+            >
+              <StyledButton>
+                <VscDebugRestart />
+                {t("restart")}
+              </StyledButton>
+            </Link>
           </div>
         </div>
 
@@ -145,12 +155,15 @@ export default async function ChapterContent({
               <AccordionItem key={lesson.id} value={lesson.id}>
                 <AccordionTrigger className="">
                   {/* TODO: Make sr-text say "Start" or "Resume" depending on status. */}
-                  <span className="flex gap-3 items-center">
-                    <CustomButton
-                      href={`/courses/${courseId}/lesson-${lesson.id}`}
-                      startIcon={<FaPlay />}
-                      srText={`Start Lesson ${lesson.id}`}
-                    />
+                  <span className="flex gap-4 items-center">
+                    <Link href={`/courses/${courseId}/lesson-${lesson.id}`}>
+                      <StyledButton size="icon">
+                        <FaPlay />
+                        <span className="sr-only">
+                          {`Start Lesson ${lesson.id}`}
+                        </span>
+                      </StyledButton>
+                    </Link>
                     {t("lesson-number", { lessonId: lesson.id })}:{" "}
                     {lesson.title}
                   </span>
@@ -203,7 +216,7 @@ export default async function ChapterContent({
                   {/* TODO: Only display for teacher/admin accounts. */}
                   <div className="w-full">
                     {!!lesson.currCCSS.length && (
-                      <div className="flex flex-col gap-5 border border-dotted rounded-xl p-3">
+                      <div className="flex flex-col gap-5 border border-default-color border-dotted rounded-xl p-3">
                         <span className="font-bold text-sm">
                           Focus Standard
                           {lesson.currCCSS.length === 1 ? "" : "s"}
@@ -212,7 +225,9 @@ export default async function ChapterContent({
                           {lesson.currCCSS.map((standard: string) => (
                             <Tooltip key={standard}>
                               <TooltipTrigger>
-                                <span className="badge-2 hover:scale-110 relative transition duration-500">{standard}</span>
+                                <span className="badge-2 hover:scale-110 relative transition duration-500">
+                                  {standard}
+                                </span>
                               </TooltipTrigger>
                               <TooltipContent className="flex flex-col max-w-80 p-3">
                                 <span className="font-bold mb-1">
