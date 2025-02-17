@@ -221,7 +221,7 @@ function PaymentForm({ amount }: { amount: number }) {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://localhost:3000/onboarding-complete?amount=${amount}`,
+        return_url: "http://localhost:3000/onboarding-complete",
       },
     });
 

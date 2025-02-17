@@ -4,11 +4,10 @@ import Link from "next/link";
 import { GoHomeFill } from "react-icons/go";
 import { FaBuilding } from "react-icons/fa6";
 import { BiSolidDonateHeart } from "react-icons/bi";
-import { ModeToggle } from "@/components/ModeToggle";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import LanguageToggle from "./LanguageToggle";
+import ModeToggle from "@/components/ModeToggle";
 import { useTranslation } from "react-i18next";
-import CustomButton from "./CustomButton";
 import { Button } from "./ui/button";
 import { IoMenu } from "react-icons/io5";
 import {
@@ -21,6 +20,8 @@ import { MdDashboard, MdLogin } from "react-icons/md";
 import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
 import { FullLogo, SquareLogo } from "@/components/Logo";
+import StyledUserButton from "./StyledUserButton";
+import StyledButton from "./StyledButton";
 
 export default function LandingNavbar() {
   const { t } = useTranslation();
@@ -81,9 +82,11 @@ export default function LandingNavbar() {
           </SignedOut>
           <SignedIn>
             <div className="hidden md:block">
-              <CustomButton text={t("my-dashboard")} href="/dashboard" />
+              <Link href="/dashboard">
+                <StyledButton>{t("my-dashboard")}</StyledButton>
+              </Link>
             </div>
-            <UserButton />
+            <StyledUserButton />
           </SignedIn>
           <div className="hidden md:flex gap-3">
             <ModeToggle />
@@ -93,10 +96,10 @@ export default function LandingNavbar() {
           <div className="md:hidden">
             <Drawer closeThreshold={0.5}>
               <DrawerTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <IoMenu className="w-[1.2rem]" />
+                <StyledButton variant="outline" size="icon">
+                  <IoMenu className="size-9" />
                   <span className="sr-only">Toggle menu</span>
-                </Button>
+                </StyledButton>
               </DrawerTrigger>
               <DrawerContent className="p-5 flex flex-col gap-4">
                 <DrawerHeader className="flex justify-between items-center p-0 mb-5">

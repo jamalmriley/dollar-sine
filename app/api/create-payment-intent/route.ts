@@ -12,11 +12,22 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error("Internal Error:", error);
+    console.error(error);
     // TODO: Handle other errors (e.g. network issues, parsing errors, etc.)
-    return NextResponse.json(
-      { error: `Internal Server Error: ${error}` },
-      { status: 500 }
-    );
+    return NextResponse.json({ error }, { status: 500 });
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const clientSecret = searchParams.get("clientSecret") || "";
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(clientSecret);
+
+    return NextResponse.json({ status: 200, paymentIntent });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

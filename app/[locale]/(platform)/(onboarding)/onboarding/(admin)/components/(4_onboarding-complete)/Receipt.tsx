@@ -6,7 +6,15 @@ import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdFileDownload } from "react-icons/md";
 
-export default function Receipt({ amount }: { amount: string }) {
+export default function Receipt({
+  purchaseTotal,
+  purchaseDate,
+  confirmationCode,
+}: {
+  purchaseTotal: string;
+  purchaseDate: string;
+  confirmationCode: string;
+}) {
   const { user, isLoaded, isSignedIn } = useUser();
   if (!user || !isLoaded || !isSignedIn) return;
   return (
@@ -30,18 +38,18 @@ export default function Receipt({ amount }: { amount: string }) {
         <div className="flex justify-between">
           <span className="text-muted-foreground">Purchase Total</span>
           <span className="font-semibold">
-            {formatCurrency(parseInt(amount))}
+            {formatCurrency(parseInt(purchaseTotal) / 100)}
           </span>
         </div>
         <Separator />
         <div className="flex justify-between">
           <span className="text-muted-foreground">Purchase Date</span>
-          <span className="font-semibold">new Date()</span>
+          <span className="font-semibold">{purchaseDate}</span>
         </div>
         <Separator />
         <div className="flex justify-between">
           <span className="text-muted-foreground">Confirmation Code</span>
-          <span className="font-semibold">#WBYCEIYDBO</span>
+          <span className="font-semibold">{confirmationCode}</span>
         </div>
       </div>
 

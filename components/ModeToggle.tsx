@@ -24,7 +24,7 @@ export default function ModeToggle() {
           className="relative inline-block group border-0"
         >
           {/* Back */}
-          <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 group-hover:-translate-x-0 group-hover:-translate-y-0 rounded-md bg-black dark:bg-emerald-400" />
+          <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 group-hover:-translate-x-0 group-hover:-translate-y-0 rounded-md bg-black/75 dark:bg-emerald-400" />
           {/* Front */}
           <span className="absolute inset-0 w-full h-full rounded-md border border-default-color bg-primary-foreground group-hover:bg-emerald-100 group-hover:border-emerald-950" />
           {/* Text */}
