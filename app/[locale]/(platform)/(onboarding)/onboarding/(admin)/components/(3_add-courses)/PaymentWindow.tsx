@@ -2,29 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
+  DrawerOverlay,
+  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  parseAsArrayOf,
-  parseAsJson,
-  parseAsString,
-  useQueryState,
-} from "nuqs";
+import { parseAsArrayOf, parseAsJson, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import {
@@ -93,41 +82,12 @@ export function PaymentWindow() {
   const buyCourseDesc: string =
     "Complete your purchase by entering your payment details below.";
 
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          {selectedCourses && (
-            <Button
-              className="w-[420px] md:w-[600px] mx-auto"
-              disabled={selectedCourses.length === 0 || !isPlansSelected()}
-            >
-              {buyCourseTitle}
-            </Button>
-          )}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{buyCourseTitle}</DialogTitle>
-            <DialogDescription>{buyCourseDesc}</DialogDescription>
-          </DialogHeader>
-          <Elements
-            stripe={stripePromise}
-            options={{
-              mode: "payment",
-              amount: convertToSubcurrency(grandTotal),
-              currency: "usd",
-            }}
-          >
-            <PaymentForm amount={grandTotal} />
-          </Elements>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer
+      open={open}
+      onOpenChange={setOpen}
+      direction={isDesktop ? "right" : "bottom"}
+    >
       <DrawerTrigger asChild>
         {selectedCourses && (
           <Button
@@ -143,7 +103,7 @@ export function PaymentWindow() {
           <DrawerTitle>{buyCourseTitle}</DrawerTitle>
           <DrawerDescription>{buyCourseDesc}</DrawerDescription>
         </DrawerHeader>
-        <div className="px-5">
+        <div className="px-5 overflow-y-auto">
           <Elements
             stripe={stripePromise}
             options={{
@@ -155,11 +115,6 @@ export function PaymentWindow() {
             <PaymentForm amount={grandTotal} />
           </Elements>
         </div>
-        <DrawerFooter className="mx-1">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

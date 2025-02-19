@@ -7,13 +7,13 @@ import { FaCheckCircle } from "react-icons/fa";
 import { MdFileDownload } from "react-icons/md";
 
 export default function Receipt({
-  purchaseTotal,
-  purchaseDate,
-  confirmationCode,
+  transactionTotal,
+  transactionDate,
+  transactionCode,
 }: {
-  purchaseTotal: string;
-  purchaseDate: string;
-  confirmationCode: string;
+  transactionTotal: string;
+  transactionDate: string;
+  transactionCode: string;
 }) {
   const { user, isLoaded, isSignedIn } = useUser();
   if (!user || !isLoaded || !isSignedIn) return;
@@ -21,7 +21,7 @@ export default function Receipt({
     <div className="receipt">
       <FaCheckCircle className="size-10 text-emerald-400" />
 
-      {/* Purchase Header */}
+      {/* Transaction Header */}
       <div className="text-center">
         <h1 className="text-lg font-bold">Thanks, {user.firstName}!</h1>
         <p className="text-sm text-muted-foreground">
@@ -33,27 +33,27 @@ export default function Receipt({
         </p>
       </div>
 
-      {/* Purchase Summary */}
+      {/* Transaction Summary */}
       <div className="w-full flex flex-col gap-1.5 text-xs">
         <div className="flex justify-between">
           <span className="text-muted-foreground">Purchase Total</span>
           <span className="font-semibold">
-            {formatCurrency(parseInt(purchaseTotal) / 100)}
+            {formatCurrency(parseInt(transactionTotal) / 100)}
           </span>
         </div>
         <Separator />
         <div className="flex justify-between">
           <span className="text-muted-foreground">Purchase Date</span>
-          <span className="font-semibold">{purchaseDate}</span>
+          <span className="font-semibold">{transactionDate}</span>
         </div>
         <Separator />
         <div className="flex justify-between">
           <span className="text-muted-foreground">Confirmation Code</span>
-          <span className="font-semibold">{confirmationCode}</span>
+          <span className="font-semibold">{transactionCode}</span>
         </div>
       </div>
 
-      {/* Purchase Message */}
+      {/* Transaction Message */}
       <p className="text-xs text-muted-foreground">
         Welcome to Dollar Sine, {user.firstName}!
       </p>

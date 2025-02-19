@@ -95,11 +95,11 @@ export default function ProfileAlreadyCreated() {
                   toggle ? "h-10" : "h-0"
                 }`}
               >
-                <span className="flex items-center text-xs text-muted-foreground">
+                <span className="flex items-center text-xs text-muted-foreground hover:underline">
                   <MdEmail className="size-5 p-0.5 mr-2" />
                   <span>{user.emailAddresses[0].emailAddress}</span>
                 </span>
-                <span className="flex items-center text-xs text-muted-foreground hover:underline">
+                <span className="flex items-center text-xs text-muted-foreground">
                   <MdAlternateEmail className="size-5 p-0.5 mr-2" />
                   <span>{user.id}</span>
                 </span>

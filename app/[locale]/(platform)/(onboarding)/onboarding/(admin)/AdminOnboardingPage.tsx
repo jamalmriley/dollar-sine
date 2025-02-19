@@ -23,7 +23,7 @@ import Profile, {
 
 export default function AdminOnboardingPage() {
   const pathname = usePathname();
-  const params = useParams();
+  const { locale } = useParams();
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
 
@@ -60,9 +60,7 @@ export default function AdminOnboardingPage() {
     const timeoutId = setTimeout(() => {
       const userId = user?.id;
       if (userId) {
-        const fullPathname = `/${
-          params.locale
-        }${pathname}?${searchParams.toString()}`;
+        const fullPathname = `/${locale}${pathname}?${searchParams.toString()}`;
         const alteredFullPathname = fullPathname.replaceAll("&", ">"); // Replaces "&" with ">" so that the full pathname is saved to the user's metadata.
         // console.log(fullPathname);
         saveOnboardingProgress(userId, alteredFullPathname);

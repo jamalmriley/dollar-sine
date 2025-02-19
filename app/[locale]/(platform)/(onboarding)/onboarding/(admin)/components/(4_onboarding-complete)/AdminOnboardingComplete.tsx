@@ -9,47 +9,31 @@ import StyledButton from "@/components/StyledButton";
 import { MdComputer, MdSmartphone } from "react-icons/md";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import { useUser } from "@clerk/nextjs";
+import { completeOnboardingProgress } from "@/utils/onboarding";
+import { useOnboardingContext } from "@/contexts/onboarding-context";
 
 // TODO: Put button that makes onboarding status set to done
 
 export default function AdminOnboardingComplete() {
+  const {
+    transactionTotal,
+    transactionDate,
+    transactionCode,
+    isOnboardingComplete,
+  } = useOnboardingContext();
+  const { user, isLoaded } = useUser();
+  if (!user || !isLoaded) return;
+
   const [paymentIntent] = useQueryState("payment_intent", {
     defaultValue: "",
   });
 
-  const [total, setTotal] = useState<string>("0");
-  const [date, setDate] = useState<string>("");
-  const [code, setCode] = useState<string>("");
-
   useEffect(() => {
-    fetch(`/api/create-payment-intent?clientSecret=${paymentIntent}`, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const paymentIntent = data.paymentIntent;
-        setTotal(paymentIntent.amount);
-        setDate(
-          format(
-            new Date(paymentIntent.created * 1000),
-            "MM/dd/yyyy 'at' h:mm a"
-            // , { locale: es } // TODO: Add locale functionality
-          )
-        );
-        setCode(formatConfirmationCode(paymentIntent.id));
-      });
+    completeOnboardingProgress(user.id, paymentIntent);
   }, []);
 
-  function formatConfirmationCode(code: string): string {
-    const strStart = 3;
-    const strLength = 6;
-    let first6Chars = code
-      .substring(strStart, strStart + strLength)
-      .toUpperCase();
-    return `C-${first6Chars}`;
-  }
-
+  if (!isOnboardingComplete) return;
   return (
     <div className="size-full flex flex-col justify-between items-center">
       <h1 className="h1 text-center">Your onboarding is complete!</h1>
@@ -66,9 +50,9 @@ export default function AdminOnboardingComplete() {
         {/* Component */}
         <div className="h-96">
           <Receipt
-            purchaseTotal={total}
-            purchaseDate={date}
-            confirmationCode={code}
+            transactionTotal={transactionTotal}
+            transactionDate={transactionDate}
+            transactionCode={transactionCode}
           />
         </div>
       </div>

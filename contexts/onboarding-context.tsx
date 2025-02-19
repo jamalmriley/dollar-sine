@@ -2,6 +2,13 @@
 
 import { createContext, useContext, useState } from "react";
 
+/*
+setTotal
+setDate
+setCode
+setSuccess -
+*/
+
 type OnboardingContext = {
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
@@ -19,6 +26,14 @@ type OnboardingContext = {
   setHasInvitedUsers: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  transactionTotal: string;
+  setTransactionTotal: React.Dispatch<React.SetStateAction<string>>;
+  transactionDate: string;
+  setTransactionDate: React.Dispatch<React.SetStateAction<string>>;
+  transactionCode: string;
+  setTransactionCode: React.Dispatch<React.SetStateAction<string>>;
+  isOnboardingComplete: boolean;
+  setIsOnboardingComplete: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const OnboardingContext = createContext<OnboardingContext | null>(null);
@@ -38,6 +53,12 @@ export default function OnboardingContextProvider({
   const [hasInvitedUsers, setHasInvitedUsers] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [transactionTotal, setTransactionTotal] = useState<string>("");
+  const [transactionDate, setTransactionDate] = useState<string>("");
+  const [transactionCode, setTransactionCode] = useState<string>("");
+  const [isOnboardingComplete, setIsOnboardingComplete] =
+    useState<boolean>(false);
+
   return (
     <OnboardingContext.Provider
       value={{
@@ -55,6 +76,14 @@ export default function OnboardingContextProvider({
         setHasInvitedUsers,
         isLoading,
         setIsLoading,
+        transactionTotal,
+        setTransactionTotal,
+        transactionDate,
+        setTransactionDate,
+        transactionCode,
+        setTransactionCode,
+        isOnboardingComplete,
+        setIsOnboardingComplete,
       }}
     >
       {children}
