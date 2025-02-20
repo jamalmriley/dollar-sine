@@ -2,13 +2,6 @@
 
 import { createContext, useContext, useState } from "react";
 
-/*
-setTotal
-setDate
-setCode
-setSuccess -
-*/
-
 type OnboardingContext = {
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
@@ -18,6 +11,8 @@ type OnboardingContext = {
   setIsUpdatingProfile: React.Dispatch<React.SetStateAction<boolean>>;
   isUpdatingOrg: boolean;
   setIsUpdatingOrg: React.Dispatch<React.SetStateAction<boolean>>;
+  lastRetrievedCourses: string;
+  setLastRetrievedCourses: React.Dispatch<React.SetStateAction<string>>;
   users: { emailAddress: string; role: string }[] | undefined;
   setUsers: React.Dispatch<
     React.SetStateAction<{ emailAddress: string; role: string }[] | undefined>
@@ -47,6 +42,7 @@ export default function OnboardingContextProvider({
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
+  const [lastRetrievedCourses, setLastRetrievedCourses] = useState<string>("");
   const [users, setUsers] = useState<
     { emailAddress: string; role: string }[] | undefined
   >();
@@ -70,6 +66,8 @@ export default function OnboardingContextProvider({
         setIsUpdatingProfile,
         isUpdatingOrg,
         setIsUpdatingOrg,
+        lastRetrievedCourses,
+        setLastRetrievedCourses,
         users,
         setUsers,
         hasInvitedUsers,

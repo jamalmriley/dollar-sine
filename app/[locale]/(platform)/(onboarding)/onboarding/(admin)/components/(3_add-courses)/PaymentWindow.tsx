@@ -25,7 +25,6 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { convertToSubcurrency, formatCurrency } from "@/utils/general";
 import { Loader2 } from "lucide-react";
-import { courseSchema } from "./AddCourses";
 import {
   Accordion,
   AccordionContent,
@@ -33,6 +32,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import { courseSchema } from "./CourseCard";
 
 // Calling `loadStripe` outside of a component’s render avoids recreating the `Stripe` object on every render.
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)

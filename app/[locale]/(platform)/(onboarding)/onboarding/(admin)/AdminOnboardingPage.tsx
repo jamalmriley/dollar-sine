@@ -74,10 +74,21 @@ export default function AdminOnboardingPage() {
     if (!api) return;
 
     setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
+
+    const initValue = localStorage.getItem("onboardingStep");
+    if (initValue) {
+      api.scrollTo(parseInt(initValue) - 1, true); // 0-based index
+      setCurrent(parseInt(initValue)); // 1-based index
+    } else {
+      setCurrent(api.selectedScrollSnap() + 1);
+    }
 
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1);
+      localStorage.setItem(
+        "onboardingStep",
+        String(api.selectedScrollSnap() + 1)
+      );
     });
   }, [api]);
 
