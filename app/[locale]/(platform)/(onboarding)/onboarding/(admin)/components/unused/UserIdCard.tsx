@@ -1,7 +1,7 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { properString, truncateEmail, truncateString } from "@/utils/general";
+import { properString, truncateEmail } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
 import { useQueryState } from "nuqs";
 import { FaBuilding, FaKey } from "react-icons/fa";

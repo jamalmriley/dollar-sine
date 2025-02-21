@@ -1,196 +1,152 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { algoliasearch } from "algoliasearch";
-import { useQueryState } from "nuqs";
-import { useState } from "react";
-import { MdClose } from "react-icons/md";
 import {
-  Configure,
-  Hits,
-  InstantSearch,
-  SearchBox,
-  useInstantSearch,
-} from "react-instantsearch";
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { useQueryState } from "nuqs";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function Pronouns() {
-  const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
-  const algoliaApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY;
-  const searchClient = algoliasearch(
-    algoliaAppId as string,
-    algoliaApiKey as string
-  );
-
   const [pronouns, setPronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
 
-  const [showHits, setShowHits] = useState(false);
-  // const esPronouns: string[] = ["ella", "elle", "elli", "su"];
+  const [open, setOpen] = useState<boolean>(false);
+  const {
+    isHeSelected,
+    setIsHeSelected,
+    isSheSelected,
+    setIsSheSelected,
+    isTheySelected,
+    setIsTheySelected,
+  } = useOnboardingContext();
 
-  function Hit({ hit }: { hit: any }) {
-    const pronoun = hit.name;
+  type Pronoun = {
+    checked: boolean;
+    onCheckedChange: Dispatch<SetStateAction<boolean>>;
+    subjective: string;
+    objective: string;
+    possessive: string;
+  };
 
-    return (
-      <div>
-        <button
-          className={`${
-            pronouns.split("/").indexOf(pronoun) !== -1
-              ? "ais-Hits-item-inline-disabled"
-              : "ais-Hits-item-inline"
-          }`}
-          disabled={pronouns.split("/").indexOf(pronoun) !== -1}
-          onClick={() => {
-            setPronouns((pronouns) =>
-              [
-                ...pronouns.split("/").filter((el: string) => el !== ""),
-                pronoun,
-              ].join("/")
-            );
-          }}
-        >
-          {pronoun}
-        </button>
-      </div>
-    );
-  }
+  // TODO: Support Spanish pronouns
+  // he: ella/ella/ellas
+  // she: elle/elle/elles
+  // they: el/el/ellos
 
-  function EmptyQueryBoundary({
-    children,
-    fallback,
-  }: {
-    children: any;
-    fallback: any;
-  }) {
-    const { indexUiState } = useInstantSearch();
+  const pronounsArr: Pronoun[] = [
+    {
+      checked: isHeSelected,
+      onCheckedChange: setIsHeSelected,
+      subjective: "he",
+      objective: "him",
+      possessive: "his",
+      // reflexive: "himself",
+    },
+    {
+      checked: isSheSelected,
+      onCheckedChange: setIsSheSelected,
+      subjective: "she",
+      objective: "her",
+      possessive: "hers",
+      // reflexive: "herself",
+    },
+    {
+      checked: isTheySelected,
+      onCheckedChange: setIsTheySelected,
+      subjective: "they",
+      objective: "them",
+      possessive: "theirs",
+      // reflexive: "themself",
+    },
+  ];
 
-    if (!indexUiState.query) {
-      return (
-        <>
-          {fallback}
-          <div hidden>{children}</div>
-        </>
-      );
-    }
+  useEffect(() => {
+    const getPronouns = async () => {
+      const result: string[] = [];
+      const arr = pronounsArr.filter((pronoun) => pronoun.checked);
+      for (let i = 0; i < arr.length; i++) {
+        const pronoun = arr[i];
+        if (arr.length === 1) {
+          result.push(
+            pronoun.subjective,
+            pronoun.objective,
+            pronoun.possessive
+          );
+        } else {
+          result.push(pronoun.subjective);
+        }
+      }
 
-    return children;
-  }
+      await setPronouns(result.length > 0 ? result.join("/") : null);
+    };
 
-  function NoResultsBoundary({
-    children,
-    fallback,
-  }: {
-    children: any;
-    fallback: any;
-  }) {
-    const { results } = useInstantSearch();
-
-    // The `__isArtificial` flag makes sure not to display the No Results message
-    // when no hits have been returned.
-    if (!results.__isArtificial && results.nbHits === 0) {
-      return (
-        <>
-          {fallback}
-          <div hidden>{children}</div>
-        </>
-      );
-    }
-
-    return children;
-  }
-
-  function NoResults() {
-    const { indexUiState } = useInstantSearch();
-
-    return (
-      <div>
-        <p>
-          No results for <q>{indexUiState.query}</q>.
-        </p>
-      </div>
-    );
-  }
+    getPronouns();
+  }, [open]);
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex gap-5 items-start">
+      <div className="flex justify-between items-start">
         <div className="flex flex-col">
           <span
             className={`text-sm font-semibold ${
-              pronouns !== "" ? "text-muted-foreground line-through" : ""
+              pronouns ? "text-muted-foreground line-through" : ""
             }`}
           >
             Add your pronouns.
           </span>
           <span className="text-xs font-medium text-muted-foreground mb-2">
-            Choose 2 or 3.
+            Choose as many as you'd like!
           </span>
         </div>
 
-        {/* Pronoun Search */}
-        <InstantSearch
-          searchClient={searchClient}
-          indexName="en-pronouns"
-          future={{ preserveSharedStateOnUnmount: true }}
-        >
-          <Configure hitsPerPage={10} />
-          <div className="ais-InstantSearch-inline">
-            <SearchBox
-              onFocus={() => setShowHits(true)}
-              // onBlur={() => setShowHits(false)}
-              classNames={{
-                form: "relative",
-                input: "inline-search-box",
-                submitIcon: "inline-search-submit-icon",
-                resetIcon: "inline-search-reset-icon",
+        {/* Dropdown */}
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              {pronouns !== "" ? pronouns : "Choose"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel className="text-center">
+              Pronouns
+            </DropdownMenuLabel>
+            {pronounsArr.map((pronoun, i) => (
+              <span key={i}>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem
+                  checked={pronoun.checked}
+                  onCheckedChange={pronoun.onCheckedChange}
+                  onSelect={(e) => e.preventDefault()}
+                  className="flex flex-col justify-center"
+                >
+                  <span className="w-full text-sm font-semibold">
+                    {pronoun.subjective}
+                  </span>
+                  <span className="w-full text-xs text-muted-foreground">
+                    {pronoun.objective}/{pronoun.possessive}
+                  </span>
+                </DropdownMenuCheckboxItem>
+              </span>
+            ))}
+            <Button
+              className="w-full mt-5"
+              onClick={() => {
+                setOpen(false);
               }}
-              placeholder="Add your pronouns..."
-            />
-            {showHits && (
-              <EmptyQueryBoundary fallback={null}>
-                <NoResultsBoundary fallback={<NoResults />}>
-                  <Hits
-                    hitComponent={Hit}
-                    classNames={{
-                      list: "ais-Hits-list-inline",
-                      item: "",
-                    }}
-                  />
-                </NoResultsBoundary>
-              </EmptyQueryBoundary>
-            )}
-          </div>
-        </InstantSearch>
-      </div>
-
-      {/* Selected Pronouns */}
-      {pronouns !== "" && (
-        <div className="flex items-baseline px-3 py-2 border rounded-lg gap-2">
-          <span className="text-xs font-semibold">My pronouns are:</span>
-          {pronouns.split("/").map((pronoun) => (
-            <span
-              key={pronoun}
-              className="chip flex justify-between items-center px-2 py-0.5 gap-2"
             >
-              {pronoun}
-              <Button
-                size="icon"
-                variant="ghost"
-                className="rounded-full w-auto h-auto p-0.5"
-                onClick={() => {
-                  const newPronouns = pronouns
-                    .split("/")
-                    .filter((el) => el !== pronoun)
-                    .join("/");
-                  setPronouns(newPronouns);
-                }}
-              >
-                <MdClose />
-              </Button>
-            </span>
-          ))}
-        </div>
-      )}
+              Done
+            </Button>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

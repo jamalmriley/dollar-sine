@@ -13,7 +13,12 @@ export default function ProfileAlreadyCreated() {
   const { user, isLoaded } = useUser();
   if (!user || !isLoaded) return;
 
-  const { setIsUpdatingProfile } = useOnboardingContext();
+  const {
+    setIsUpdatingProfile,
+    setIsHeSelected,
+    setIsSheSelected,
+    setIsTheySelected,
+  } = useOnboardingContext();
   const [toggle, setToggle] = useState(false);
   const metadata = user.publicMetadata.profile as ProfileMetadata;
 
@@ -70,12 +75,23 @@ export default function ProfileAlreadyCreated() {
                   size="icon"
                   className="rounded-full"
                   onClick={() => {
+                    const pronounsHelper = (pronouns: string) => {
+                      const arr = pronouns.split("/");
+
+                      for (const pronoun of arr) {
+                        if (pronoun === "he") setIsHeSelected(true);
+                        else if (pronoun === "she") setIsSheSelected(true);
+                        else if (pronoun === "they") setIsTheySelected(true);
+                      }
+                    };
+
                     setIsUpdatingProfile(true);
                     setPrefix(metadata.prefix);
                     setDisplayName(metadata.displayName);
                     setDisplayNameFormat(metadata.displayNameFormat);
                     setJobTitle(metadata.jobTitle);
                     setPronouns(metadata.pronouns);
+                    pronounsHelper(metadata.pronouns);
                     setSkinTone(metadata.skinTone);
                   }}
                 >

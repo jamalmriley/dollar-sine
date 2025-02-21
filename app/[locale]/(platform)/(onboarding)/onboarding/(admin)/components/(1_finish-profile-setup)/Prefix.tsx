@@ -82,7 +82,9 @@ export default function Prefix() {
         {prefixes.map((prfx) => (
           <div key={prfx} className="inline-block p-2">
             <button
-              className={`chip ${prfx === prefix ? "border-primary" : ""}`}
+              className={`chip ${
+                prfx === prefix ? "border-default-color" : ""
+              }`}
               onClick={() => {
                 const displayNameValue = getDisplayNameValue(
                   displayNameFormat
@@ -93,10 +95,12 @@ export default function Prefix() {
                   isPrefixIncluded
                 );
 
-                setIsCustomPrefix(false);
-                setPrefix(prfx);
-                if (displayNameFormat !== "")
-                  setDisplayNameValue(newDisplayName);
+                // setIsCustomPrefix(false);
+                // setPrefix(prfx);
+                // if (displayNameFormat !== "")
+                //   setDisplayNameValue(newDisplayName);
+
+                console.log(newDisplayName);
               }}
             >
               {prfx}
@@ -120,10 +124,9 @@ export default function Prefix() {
                 isPrefixIncluded
               );
 
-              setIsCustomPrefix(true);
-              setPrefix("");
-              if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
-
+              // setIsCustomPrefix(true);
+              // setPrefix("");
+              // if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
               console.log(newDisplayName);
             }}
           >

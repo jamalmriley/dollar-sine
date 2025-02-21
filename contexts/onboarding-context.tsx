@@ -3,6 +3,12 @@
 import { createContext, useContext, useState } from "react";
 
 type OnboardingContext = {
+  isHeSelected: boolean;
+  setIsHeSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  isSheSelected: boolean;
+  setIsSheSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  isTheySelected: boolean;
+  setIsTheySelected: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
   orgLogo: File | undefined;
@@ -38,6 +44,9 @@ export default function OnboardingContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [isHeSelected, setIsHeSelected] = useState<boolean>(false);
+  const [isSheSelected, setIsSheSelected] = useState<boolean>(false);
+  const [isTheySelected, setIsTheySelected] = useState<boolean>(false);
   const [profilePic, setProfilePic] = useState<File | undefined>();
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
@@ -58,6 +67,12 @@ export default function OnboardingContextProvider({
   return (
     <OnboardingContext.Provider
       value={{
+        isHeSelected,
+        setIsHeSelected,
+        isSheSelected,
+        setIsSheSelected,
+        isTheySelected,
+        setIsTheySelected,
         profilePic,
         setProfilePic,
         orgLogo,

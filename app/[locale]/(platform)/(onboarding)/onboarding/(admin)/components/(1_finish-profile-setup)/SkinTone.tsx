@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useQueryState } from "nuqs";
@@ -45,19 +46,21 @@ export default function SkinTone() {
         </span>
       </div>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant="outline">{findSkinTone(skinTone).icon}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {skinTones.map((obj) => (
-            <DropdownMenuItem
-              key={obj.label}
-              onClick={() => {
-                setSkinTone(obj.label);
-              }}
-            >
-              {obj.icon}
-            </DropdownMenuItem>
+          {skinTones.map((obj, i) => (
+            <span key={obj.label}>
+              {i !== 0 && <DropdownMenuSeparator />}
+              <DropdownMenuItem
+                onClick={() => {
+                  setSkinTone(obj.label);
+                }}
+              >
+                <span className="w-full text-center">{obj.icon}</span>
+              </DropdownMenuItem>
+            </span>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

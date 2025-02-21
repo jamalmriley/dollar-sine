@@ -122,7 +122,7 @@ body,
   }
 
   .chip-no-animation {
-    @apply text-xs font-bold rounded-full px-3 py-1;
+    @apply text-xs font-bold rounded-full px-3 py-1 border;
   }
 
   .chip {

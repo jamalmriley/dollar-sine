@@ -85,7 +85,7 @@ export default function DisplayName() {
         </div>
 
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
               className={`max-w-40 ${
