@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
       currency: "usd",
       automatic_payment_methods: { enabled: true },
     });
-
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error(error);
@@ -21,10 +20,8 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const clientSecret = searchParams.get("clientSecret") || "";
-
+    const clientSecret = searchParams.get("clientSecret") as string;
     const paymentIntent = await stripe.paymentIntents.retrieve(clientSecret);
-
     return NextResponse.json({ status: 200, paymentIntent });
   } catch (error) {
     console.error(error);

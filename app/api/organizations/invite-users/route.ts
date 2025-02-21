@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
 import { listItemsAsString } from "@/utils/general";
-import { InvitationError, InvitationResponse } from "@/utils/api";
+import { InvitationError, InvitationResponse, Response } from "@/utils/api";
 
 // Creates and revokes user invitations
 export async function POST(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const role = searchParams.get("role") as string; // as Role;
 
     if (invitationType === "single") {
-      const invite = await client.organizations
+      const invite: Response = await client.organizations
         .createOrganizationInvitation({
           organizationId,
           inviterUserId,
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const requestingUserId = body.requestingUserId;
 
-    const revoke = await client.organizations
+    const revoke: Response = await client.organizations
       .revokeOrganizationInvitation({
         organizationId,
         invitationId,
@@ -218,7 +218,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const organizationId = searchParams.get("organizationId") as string;
 
-  const invitations = await client.organizations
+  const invitations: Response = await client.organizations
     .getOrganizationInvitationList({
       organizationId,
     })

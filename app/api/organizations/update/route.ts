@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { Response } from "@/utils/api";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
@@ -21,7 +20,7 @@ export async function POST(request: NextRequest) {
     is2FARequired,
   };
 
-  await client.organizations
+  const update: Response = await client.organizations
     .updateOrganization(id, {
       name,
       slug,
@@ -31,35 +30,56 @@ export async function POST(request: NextRequest) {
     .then(() => {
       try {
         if (file) client.organizations.updateOrganizationLogo(id, { file });
-
-        setDoc(doc(db, "organizations", slug), {
-          id,
-          name,
-          slug,
-          members: [createdBy],
-        })
-          .then(() => {
-            console.log("Organization successfully updated in Firebase!");
-          })
-          .catch((error: any) => {
-            console.error("Error updating organization in Firebase: ", error);
-          });
       } catch (err) {
         console.error(err);
+        return {
+          status: 500,
+          success: false,
+          message: {
+            title: "Error updating organization",
+            description:
+              "The organization's logo could not be uploaded. Please try again.",
+          },
+        };
       }
+      return {
+        status: 200,
+        success: true,
+        message: {
+          title: "Organization successfully updated ✅",
+          description: "",
+        },
+      };
     })
     .catch((err) => {
-      console.log(err);
-      return NextResponse.json({
-        status: 200,
+      const error = err.errors[0];
+      console.error(err);
+      return {
+        status: parseInt(error.code),
         success: false,
-        message: "Error updating organization. Please refresh and try again.",
-      });
+        message: {
+          title: "Error updating organization",
+          description: error.longMessage,
+        },
+      };
     });
 
-  return NextResponse.json({
-    status: 200,
-    success: true,
-    message: "Organization successfully updated ✅",
-  });
+  return NextResponse.json(update);
 }
+
+/* try {
+  setDoc(doc(db, "organizations", slug), {
+    id,
+    name,
+    slug,
+    members: [createdBy],
+  })
+    .then(() => {
+      console.log("Organization successfully updated in Firebase!");
+    })
+    .catch((error: any) => {
+      console.error("Error updating organization in Firebase: ", error);
+    });
+} catch (err) {
+  console.error(err);
+} */

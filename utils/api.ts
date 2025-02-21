@@ -1,3 +1,9 @@
+export type Response = {
+  status: number;
+  success: boolean;
+  message: { title: string; description: string };
+};
+
 export type InvitationResponse = {
   status: number;
   success: boolean;

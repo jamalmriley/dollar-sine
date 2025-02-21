@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
 import { Role } from "@/utils/roles";
+import { Response } from "@/utils/api";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
@@ -112,66 +113,49 @@ export async function POST(request: NextRequest) {
 
   const publicMetadata = metadata[role];
 
-  type Response = {
-    status: number;
-    success: boolean;
-    message: { title: string; description: string };
-  };
-
-  const responses: Response[] = [];
-
-  await client.users
+  const update: Response = await client.users
     .updateUserMetadata(userId, { publicMetadata })
     .then((user) => {
-      // If the file is null, it will return as the string "null".
-      // So it should only update the profile picture when it is an actual file.
-      if (typeof file !== "string") {
-        client.users
-          .updateUserProfileImage(userId, { file })
-          .then(() => {
-            return {
-              status: 200,
-              success: true,
-              message: {
-                title: "Profile picture successfully updated ✅",
-                description: `Looking good, ${user.firstName}!`,
-              },
-            };
-          })
-          .catch((err) => {
-            console.error(err);
-            return {
-              status: 400,
-              success: false,
-              message: {
-                title: "Error updating profile picture",
-                description:
-                  "Please try again. If the issue persists, please contact support.",
-              },
-            };
-          });
+      try {
+        // If the file is null, it will return as the string "null".
+        // So it should only update the profile picture when it is an actual file.
+        if (typeof file !== "string") {
+          client.users.updateUserProfileImage(userId, { file });
+        }
+      } catch (err) {
+        console.error(err);
+        return {
+          status: 500,
+          success: false,
+          message: {
+            title: "Error updating profile",
+            description:
+              "Your profile picture could not be uploaded. Please try again.",
+          },
+        };
       }
 
-      responses.push({
+      return {
         status: 200,
         success: true,
         message: {
-          title: "User succesfully updated ✅",
+          title: "Profile succesfully updated ✅",
           description: "",
         },
-      });
+      };
     })
     .catch((err) => {
       console.error(err);
-      responses.push({
+      return {
         status: 400,
         success: false,
         message: {
-          title: "Error updating user",
-          description: "Bad request. Please try again.",
+          title: "Error updating profile",
+          description:
+            "There was an issue updating your profile. Please try again.",
         },
-      });
+      };
     });
 
-  return NextResponse.json(responses);
+  return NextResponse.json(update);
 }
