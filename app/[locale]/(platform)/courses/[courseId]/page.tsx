@@ -109,9 +109,9 @@ export default async function CoursePage({ params }: { params: any }) {
           <div className="flex flex-col">
             <div className="flex justify-between items-center">
               <CustomH1 text={course.title} isPaddingEnabled={false} />
-              <Link href="/courses">
-                <StyledButton>{t("back-to-courses")}</StyledButton>
-              </Link>
+              <StyledButton>
+                <Link href="/courses">{t("back-to-courses")}</Link>
+              </StyledButton>
             </div>
             <h2 className="subtitle">{course.description}</h2>
           </div>

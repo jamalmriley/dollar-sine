@@ -32,15 +32,13 @@ export default async function DashboardPage({
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <Greeting name={firstName} />
           <div className="flex gap-5">
-            <StyledButton>
-              <Link href="/courses/enrolled">
-                {t("platform-layout:my-courses")}
-              </Link>
-            </StyledButton>
+            <Link href="/courses/enrolled">
+              <StyledButton>{t("platform-layout:my-courses")}</StyledButton>
+            </Link>
 
-            <StyledButton>
-              <Link href="/courses">{t("platform-layout:all-courses")}</Link>
-            </StyledButton>
+            <Link href="/courses">
+              <StyledButton>{t("platform-layout:all-courses")}</StyledButton>
+            </Link>
           </div>
         </div>
 

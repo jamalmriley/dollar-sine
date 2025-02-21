@@ -82,9 +82,9 @@ export default function LandingNavbar() {
           </SignedOut>
           <SignedIn>
             <div className="hidden md:block">
-              <Link href="/dashboard">
-                <StyledButton>{t("my-dashboard")}</StyledButton>
-              </Link>
+              <StyledButton>
+                <Link href="/dashboard">{t("my-dashboard")}</Link>
+              </StyledButton>
             </div>
             <StyledUserButton />
           </SignedIn>

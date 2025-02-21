@@ -90,9 +90,9 @@ export default async function AllCoursesPage({
           <div className="flex justify-between items-start">
             <CustomH1 text={t("all-courses")} isPaddingEnabled />
 
-            <StyledButton>
-              <Link href={`/dashboard`}>{t("back-to-dashboard")}</Link>
-            </StyledButton>
+            <Link href={`/dashboard`}>
+              <StyledButton>{t("back-to-dashboard")}</StyledButton>
+            </Link>
           </div>
         </div>
 

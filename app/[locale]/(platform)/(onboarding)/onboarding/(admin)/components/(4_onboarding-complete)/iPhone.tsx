@@ -22,24 +22,22 @@ export default function Iphone() {
 
         <div className="flex flex-col gap-5 md:hidden">
           <div className="size-32 mt-32 mb-10 bg-white rounded-lg shadow-md mx-auto" />
-          <StyledButton>
-            <Link
-              href={IOS_APP_LINK}
-              className="flex justify-center items-center gap-2"
-            >
+          <Link
+            href={IOS_APP_LINK}
+            className="flex justify-center items-center"
+          >
+            <StyledButton>
               <MdSmartphone />
               Download our app
-            </Link>
-          </StyledButton>
-          <StyledButton>
-            <Link
-              href="/dashboard"
-              className="flex justify-center items-center gap-2"
-            >
+            </StyledButton>
+          </Link>
+
+          <Link href="/dashboard" className="flex justify-center items-center">
+            <StyledButton>
               <MdComputer />
               Go to dashboard
-            </Link>
-          </StyledButton>
+            </StyledButton>
+          </Link>
         </div>
         {/* </BackgroundGradientAnimation> */}
       </div>

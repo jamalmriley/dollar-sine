@@ -85,7 +85,8 @@ export default function Prefix() {
               className={`chip ${
                 prfx === prefix ? "border-default-color" : ""
               }`}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 const displayNameValue = getDisplayNameValue(
                   displayNameFormat
                 ) as string;
@@ -95,12 +96,10 @@ export default function Prefix() {
                   isPrefixIncluded
                 );
 
-                // setIsCustomPrefix(false);
-                // setPrefix(prfx);
-                // if (displayNameFormat !== "")
-                //   setDisplayNameValue(newDisplayName);
-
-                console.log(newDisplayName);
+                setIsCustomPrefix(false);
+                setPrefix(prfx);
+                if (displayNameFormat !== "")
+                  setDisplayNameValue(newDisplayName);
               }}
             >
               {prfx}
@@ -114,7 +113,8 @@ export default function Prefix() {
                 ? "chip-no-animation border-primary rounded-r-none border-r-0 pr-2"
                 : "chip"
             }
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               const displayNameValue = getDisplayNameValue(
                 displayNameFormat
               ) as string;
@@ -124,10 +124,9 @@ export default function Prefix() {
                 isPrefixIncluded
               );
 
-              // setIsCustomPrefix(true);
-              // setPrefix("");
-              // if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
-              console.log(newDisplayName);
+              setIsCustomPrefix(true);
+              setPrefix("");
+              if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
             }}
           >
             <span>Add your own{isCustomPrefix && ":"}</span>

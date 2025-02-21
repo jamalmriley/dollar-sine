@@ -1,7 +1,6 @@
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { useParams } from "next/navigation";
 
 export type ProfileMetadata = {
   prefix: string;
@@ -35,9 +34,9 @@ export async function saveOnboardingProgress(userId: string, link: string) {
 
 export async function completeOnboardingProgress(
   userId: string,
-  paymentIntent: string
+  paymentIntent: string,
+  locale: string
 ) {
-  const { locale } = useParams();
   const {
     setTransactionTotal,
     setTransactionDate,

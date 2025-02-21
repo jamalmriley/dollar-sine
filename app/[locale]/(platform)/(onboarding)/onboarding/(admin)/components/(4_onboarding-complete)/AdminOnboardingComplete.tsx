@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { completeOnboardingProgress } from "@/utils/onboarding";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { useParams } from "next/navigation";
 
 // TODO: Put button that makes onboarding status set to done
 
@@ -22,6 +23,7 @@ export default function AdminOnboardingComplete() {
     transactionCode,
     isOnboardingComplete,
   } = useOnboardingContext();
+  // const params = useParams();
   const { user, isLoaded } = useUser();
   if (!user || !isLoaded) return;
 
@@ -30,7 +32,7 @@ export default function AdminOnboardingComplete() {
   });
 
   useEffect(() => {
-    completeOnboardingProgress(user.id, paymentIntent);
+    completeOnboardingProgress(user.id, paymentIntent, "en");
   }, []);
 
   if (!isOnboardingComplete) return;
@@ -59,26 +61,23 @@ export default function AdminOnboardingComplete() {
 
       {/* Buttons */}
       <div className="flex flex-col md:flex-row md:justify-around gap-5 md:gap-20 mb-1">
-        <StyledButton>
-          <Link
-            href={IOS_APP_LINK}
-            target="_blank"
-            className="flex justify-center items-center gap-2"
-          >
+        <Link
+          href={IOS_APP_LINK}
+          target="_blank"
+          className="flex justify-center items-center"
+        >
+          <StyledButton>
             <MdSmartphone />
             Download our app
-          </Link>
-        </StyledButton>
+          </StyledButton>
+        </Link>
 
-        <StyledButton>
-          <Link
-            href="/dashboard"
-            className="flex justify-center items-center gap-2"
-          >
+        <Link href="/dashboard" className="flex justify-center items-center">
+          <StyledButton>
             <MdComputer />
             Go to dashboard
-          </Link>
-        </StyledButton>
+          </StyledButton>
+        </Link>
       </div>
     </div>
   );
