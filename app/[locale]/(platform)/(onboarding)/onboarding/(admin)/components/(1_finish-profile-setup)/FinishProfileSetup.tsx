@@ -19,8 +19,7 @@ import { Button } from "@/components/ui/button";
 import { FormEventHandler, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { ProfileMetadata } from "@/utils/onboarding";
-import { Response } from "@/utils/api";
+import { PostResponse, ProfileMetadata } from "@/utils/api";
 
 export default function FinishProfileSetup() {
   const {
@@ -87,7 +86,7 @@ export default function FinishProfileSetup() {
       { method: "POST", body }
     )
       .then((res) => res.json())
-      .then((json: Response) => {
+      .then((json: PostResponse) => {
         setPrefix("");
         setDisplayName("");
         setDisplayNameFormat("");
@@ -123,7 +122,10 @@ export default function FinishProfileSetup() {
       <div className="flex grow items-end">
         <Button
           type="submit"
-          className="w-full"
+          className={`w-full ${
+            isLoading &&
+            "disabled:pointer-events-auto cursor-progress hover:bg-primary"
+          }`}
           disabled={
             isLoading ||
             (isUpdatingProfile

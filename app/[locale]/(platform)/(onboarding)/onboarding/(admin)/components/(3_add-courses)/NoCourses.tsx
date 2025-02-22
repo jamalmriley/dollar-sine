@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 
 export default function NoCourses() {
-  const { setLastRetrievedCourses } = useOnboardingContext();
+  const { setLastUpdated } = useOnboardingContext();
   return (
     <div className="flex border border-default-color rounded-lg overflow-hidden expandable-content">
       {/* CourseTile */}
@@ -30,7 +30,7 @@ export default function NoCourses() {
               className="h-7 rounded-full"
               onClick={() => {
                 const value = new Date().toString();
-                setLastRetrievedCourses(value);
+                setLastUpdated(value);
               }}
             >
               <span className="text-xs">Try again</span>

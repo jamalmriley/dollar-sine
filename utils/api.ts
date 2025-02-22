@@ -1,7 +1,55 @@
-export type Response = {
+import { EmailAddress } from "@clerk/nextjs/server";
+
+// —————————— DATA —————————— //
+
+export type UserData = {
+  createdAt: number;
+  emailAddresses: EmailAddress[];
+  firstName: string | null;
+  id: string;
+  imageUrl: string;
+  lastName: string | null;
+  publicMetadata: any;
+};
+
+export type OrgData = {
+  createdAt: number;
+  createdBy: string;
+  id: string;
+  imageUrl: string;
+  maxAllowedMemberships: number;
+  name: string;
+  publicMetadata: OrgMetadata;
+  slug: string;
+};
+
+export type ProfileMetadata = {
+  prefix: string;
+  displayName: string;
+  displayNameFormat: string;
+  jobTitle: string;
+  pronouns: string;
+  skinTone: string;
+};
+
+export type OrgMetadata = {
+  organizationAddress: string;
+  is2FARequired: boolean;
+};
+
+// —————————— RESPONSES —————————— //
+
+export type PostResponse = {
   status: number;
   success: boolean;
-  message: { title: string; description: string };
+  message: { title: string; description?: string };
+};
+
+export type GetResponse = {
+  status: number;
+  success: boolean;
+  data: any;
+  message: { title: string; description?: string };
 };
 
 export type InvitationResponse = {

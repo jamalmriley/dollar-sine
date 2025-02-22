@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { Response } from "@/utils/api";
+import { PostResponse } from "@/utils/api";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   const locale = searchParams.get("locale") as string;
   const onboardingLink = `/${locale}/onboarding`;
 
-  const update: Response = await client.users
+  const update: PostResponse = await client.users
     .updateUserMetadata(userId, {
       publicMetadata: { isOnboardingCompleted: true, onboardingLink },
     })

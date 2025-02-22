@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(error);
     // TODO: Handle other errors (e.g. network issues, parsing errors, etc.)
-    return NextResponse.json({ error }, { status: 500 });
+    return NextResponse.json({ error }, { status: 400 });
   }
 }
 
@@ -25,6 +25,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ status: 200, paymentIntent });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error }, { status: 500 });
+    return NextResponse.json({ error }, { status: 400 });
   }
 }

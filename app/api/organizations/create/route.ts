@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { Response } from "@/utils/api";
+import { PostResponse } from "@/utils/api";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     is2FARequired,
   };
 
-  const org: Response = await client.organizations
+  const org: PostResponse = await client.organizations
     .createOrganization({
       name,
       slug,
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       } catch (err) {
         console.error(err);
         return {
-          status: 500,
+          status: 400,
           success: false,
           message: {
             title: "Error creating organization",

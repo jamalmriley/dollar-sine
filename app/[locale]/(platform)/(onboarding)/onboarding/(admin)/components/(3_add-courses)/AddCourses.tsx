@@ -20,8 +20,7 @@ export default function AddCourses() {
     description: "Select the courses you want to add for your organization.",
   };
 
-  const { isLoading, setIsLoading, lastRetrievedCourses } =
-    useOnboardingContext();
+  const { isLoading, setIsLoading, lastUpdated } = useOnboardingContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [courses, setCourses] = useState<CourseData[]>([]);
   const getCourses = async (): Promise<any> => {
@@ -50,13 +49,13 @@ export default function AddCourses() {
         setCourses(data);
         setIsLoading(false);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         setIsLoading(false);
       }
     };
 
     fetchAndSetCourses();
-  }, [lastRetrievedCourses]);
+  }, [lastUpdated]);
 
   return (
     <Card className="w-full h-full max-w-3xl mx-10">

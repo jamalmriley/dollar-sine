@@ -1,139 +1,72 @@
 import { Button } from "@/components/ui/button";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { emojis, SkinTone } from "@/utils/emoji";
-import { ProfileMetadata } from "@/utils/onboarding";
+import { GetResponse, UserData } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
-import { formatRelative } from "date-fns";
-import { useQueryState } from "nuqs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { MdAlternateEmail, MdEdit, MdEmail } from "react-icons/md";
+import {
+  ProfileCard,
+  ProfileCardError,
+  ProfileCardSkeleton,
+} from "./ProfileCard";
 
 export default function ProfileAlreadyCreated() {
-  const { user, isLoaded } = useUser();
-  if (!user || !isLoaded) return;
+  const { user, isLoaded, isSignedIn } = useUser();
+  if (!isSignedIn || !isLoaded) return;
 
-  const {
-    setIsUpdatingProfile,
-    setIsHeSelected,
-    setIsSheSelected,
-    setIsTheySelected,
-  } = useOnboardingContext();
+  const { isLoading, setIsLoading, lastUpdated } = useOnboardingContext();
+  const [userData, setUserData] = useState<UserData>();
   const [toggle, setToggle] = useState(false);
-  const metadata = user.publicMetadata.profile as ProfileMetadata;
 
-  const [prefix, setPrefix] = useQueryState("prefix", {
-    defaultValue: "",
-  });
-  const [displayName, setDisplayName] = useQueryState("displayName", {
-    defaultValue: "",
-  });
-  const [displayNameFormat, setDisplayNameFormat] = useQueryState(
-    "displayNameFormat",
-    {
-      defaultValue: "",
-    }
-  );
-  const [jobTitle, setJobTitle] = useQueryState("jobTitle", {
-    defaultValue: "",
-  });
-  const [pronouns, setPronouns] = useQueryState("pronouns", {
-    defaultValue: "",
-  });
-  const [skinTone, setSkinTone] = useQueryState("skinTone", {
-    defaultValue: "",
-  });
+  const getUser = async (): Promise<any> => {
+    const fetchedUser = await fetch(`/api/users/get?userId=${user.id}`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((json: GetResponse) => {
+        // console.log(json)
+        return json.data;
+      });
+    // .catch((err) => {
+    //   console.error(err);
+    //   return err;
+    // });
+
+    return fetchedUser;
+  };
+
+  useEffect(() => {
+    const fetchAndSetUser = async () => {
+      setIsLoading(true);
+      try {
+        const userData = await getUser();
+        setUserData(userData);
+        setIsLoading(false);
+      } catch (error) {
+        // console.error(error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchAndSetUser();
+  }, [lastUpdated]);
 
   return (
     <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
-      {/* User Content */}
-      <div className="p-5 w-full">
-        <div
-          className={`expandable-content ${
-            toggle ? "h-32" : "h-24"
-          } flex gap-5 select-none`}
-        >
-          {/* User Image */}
-          <img
-            src={user.imageUrl}
-            alt={user.id}
-            className="aspect-square h-full rounded-lg overflow-hidden"
-          />
-
-          {/* User Details */}
-          <div className="flex grow flex-col justify-between">
-            {/* User Basic Details */}
-            <div className="flex flex-col">
-              <div className="w-full flex justify-between items-center">
-                <span className="text-lg font-bold">
-                  {metadata.displayName}{" "}
-                  {emojis.handWave[metadata.skinTone as SkinTone]}
-                </span>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                  onClick={() => {
-                    const pronounsHelper = (pronouns: string) => {
-                      const arr = pronouns.split("/");
-
-                      for (const pronoun of arr) {
-                        if (pronoun === "he") setIsHeSelected(true);
-                        else if (pronoun === "she") setIsSheSelected(true);
-                        else if (pronoun === "they") setIsTheySelected(true);
-                      }
-                    };
-
-                    setIsUpdatingProfile(true);
-                    setPrefix(metadata.prefix);
-                    setDisplayName(metadata.displayName);
-                    setDisplayNameFormat(metadata.displayNameFormat);
-                    setJobTitle(metadata.jobTitle);
-                    setPronouns(metadata.pronouns);
-                    pronounsHelper(metadata.pronouns);
-                    setSkinTone(metadata.skinTone);
-                  }}
-                >
-                  <span className="sr-only">Edit user</span>
-                  <MdEdit />
-                </Button>
-              </div>
-              <span className="text-sm">{metadata.jobTitle}</span>
-              <span className="text-sm">Pronouns: {metadata.pronouns}</span>
-            </div>
-
-            {/* User Expanded Details and Creation Date */}
-            <div className="flex flex-col">
-              {/* User Expanded Details */}
-              <div
-                className={`flex flex-col expandable-content overflow-hidden ${
-                  toggle ? "h-10" : "h-0"
-                }`}
-              >
-                <span className="flex items-center text-xs text-muted-foreground hover:underline">
-                  <MdEmail className="size-5 p-0.5 mr-2" />
-                  <span>{user.emailAddresses[0].emailAddress}</span>
-                </span>
-                <span className="flex items-center text-xs text-muted-foreground">
-                  <MdAlternateEmail className="size-5 p-0.5 mr-2" />
-                  <span>{user.id}</span>
-                </span>
-              </div>
-
-              {/* Creation Date */}
-              <span className="text-xs text-muted-foreground">
-                User created{" "}
-                {formatRelative(
-                  new Date(user.createdAt!),
-                  new Date()
-                  // , { locale: es } // TODO: Add locale functionality
-                )}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* 
+      If the user has loaded and there is data, display the ProfileCard component.
+      If the user has loaded and there is no data, display the ProfileCardError component.
+      If the user has not loaded yet, display the ProfileCardSkeleton component.
+      */}
+      {!isLoading ? (
+        userData ? (
+          <ProfileCard toggle={toggle} userData={userData} />
+        ) : (
+          <ProfileCardError toggle={toggle} />
+        )
+      ) : (
+        <ProfileCardSkeleton toggle={toggle} />
+      )}
 
       <Button
         variant="ghost"

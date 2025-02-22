@@ -24,4 +24,4 @@ const handWave: Emoji = {
   dark: "👋🏿",
 };
 
-export const emojis = { handWave };
+export const EMOJIS = { handWave };

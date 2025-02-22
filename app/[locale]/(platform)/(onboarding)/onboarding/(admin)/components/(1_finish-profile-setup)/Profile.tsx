@@ -5,7 +5,6 @@ import { MdClose } from "react-icons/md";
 import FinishProfileSetup from "./FinishProfileSetup";
 import ProfileAlreadyCreated from "./ProfileAlreadyCreated";
 import { useUser } from "@clerk/nextjs";
-import { ProfileMetadata } from "@/utils/onboarding";
 import {
   Card,
   CardContent,
@@ -13,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ProfileMetadata } from "@/utils/api";
 
 export default function Profile() {
   const { isUpdatingProfile, setIsUpdatingProfile, setProfilePic } =

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { Response } from "@/utils/api";
+import { PostResponse } from "@/utils/api";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     .get("onboarding_link")
     ?.replaceAll(">", "&"); // Undoes the replacing of "&" with ">" so that the real pathname is saved to the user's metadata.
 
-  const update: Response = await client.users
+  const update: PostResponse = await client.users
     .updateUserMetadata(userId, {
       publicMetadata: { onboardingLink },
     })

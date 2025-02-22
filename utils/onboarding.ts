@@ -2,15 +2,6 @@ import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
-export type ProfileMetadata = {
-  prefix: string;
-  displayName: string;
-  displayNameFormat: string;
-  jobTitle: string;
-  pronouns: string;
-  skinTone: string;
-};
-
 export async function saveOnboardingProgress(userId: string, link: string) {
   await fetch(`/api/onboarding?user_id=${userId}&onboarding_link=${link}`, {
     method: "POST",

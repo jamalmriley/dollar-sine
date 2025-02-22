@@ -19,7 +19,7 @@ import { toast } from "@/hooks/use-toast";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
-import { Response } from "@/utils/api";
+import { PostResponse } from "@/utils/api";
 
 export default function CreateOrUpdateOrg() {
   const {
@@ -83,7 +83,7 @@ export default function CreateOrUpdateOrg() {
       }
     )
       .then((res) => res.json())
-      .then((json: Response) => {
+      .then((json: PostResponse) => {
         setOrgName("");
         setOrgAddress("");
         setOrgSlug("");
@@ -244,7 +244,10 @@ export default function CreateOrUpdateOrg() {
       <div className="flex grow items-end">
         <Button
           type="submit"
-          className="w-full"
+          className={`w-full ${
+            isLoading &&
+            "disabled:pointer-events-auto cursor-progress hover:bg-primary"
+          }`}
           disabled={
             isLoading ||
             (isUpdatingOrg
