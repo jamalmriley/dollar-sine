@@ -69,88 +69,90 @@ export default function DisplayName() {
 
   return (
     <div className="w-full h-full flex flex-col gap-4">
-      {/* Prompt and Dropdown */}
-      <div className="flex justify-between items-start">
-        <div className="flex flex-col">
-          <span
-            className={`text-sm font-semibold ${
-              displayName !== "" ? "text-muted-foreground line-through" : ""
-            }`}
-          >
-            Choose a display name format.
-          </span>
-          <span className="text-xs font-medium text-muted-foreground mb-2">
-            This is the name other users will see.
-          </span>
-        </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className={`max-w-40 ${
-                displayNameFormat === ""
-                  ? "text-muted-foreground"
-                  : displayNameFormat === "First Initial & Last Name" ||
-                    displayNameFormat === "First Name & Last Initial"
-                  ? "text-xs"
-                  : ""
+      <div className="w-full h-full flex justify-between md:flex-col md:gap-4">
+        {/* Header and Dropdown */}
+        <div className="flex justify-between items-start">
+          <div className="hidden md:flex flex-col">
+            <span
+              className={`text-sm font-semibold ${
+                displayName !== "" ? "text-muted-foreground line-through" : ""
               }`}
             >
-              {displayNameFormat || "Choose"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Display Name Format</DropdownMenuLabel>
-            {displayNameFormats.map((obj, i) => (
-              <DropdownMenuItem
-                key={i}
-                onClick={() => {
-                  const newDisplayNameFormat = obj.type as string;
-                  const newDisplayNameValue = obj.value as string;
-                  const newDisplayName = generateDisplayName(
-                    prefix,
-                    newDisplayNameValue,
-                    isPrefixIncluded
-                  );
-                  setDisplayNameFormat(newDisplayNameFormat);
-                  setDisplayName(newDisplayName);
-                }}
+              Choose a display name format.
+            </span>
+            <span className="text-xs font-medium text-muted-foreground">
+              This is the name other users will see.
+            </span>
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className={`max-w-40 ${
+                  displayNameFormat === ""
+                    ? "text-muted-foreground"
+                    : displayNameFormat === "First Initial & Last Name" ||
+                      displayNameFormat === "First Name & Last Initial"
+                    ? "text-xs"
+                    : ""
+                }`}
               >
-                {obj.type}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                {displayNameFormat || "Choose"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Display Name Format</DropdownMenuLabel>
+              {displayNameFormats.map((obj, i) => (
+                <DropdownMenuItem
+                  key={i}
+                  onClick={() => {
+                    const newDisplayNameFormat = obj.type as string;
+                    const newDisplayNameValue = obj.value as string;
+                    const newDisplayName = generateDisplayName(
+                      prefix,
+                      newDisplayNameValue,
+                      isPrefixIncluded
+                    );
+                    setDisplayNameFormat(newDisplayNameFormat);
+                    setDisplayName(newDisplayName);
+                  }}
+                >
+                  {obj.type}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Checkbox */}
+        <div className="flex items-center gap-2 text-xs">
+          <Checkbox
+            id="includePrefix"
+            checked={isPrefixIncluded}
+            onClick={() => {
+              setIsPrefixIncluded((val) => !val);
+              const displayNameValue = getDisplayNameValue(
+                displayNameFormat
+              ) as string;
+              const newDisplayName = generateDisplayName(
+                prefix,
+                displayNameValue,
+                !isPrefixIncluded
+              );
+              setDisplayName(newDisplayName);
+            }}
+          />
+          <label
+            htmlFor="includePrefix"
+            className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Include prefix in display name
+          </label>
+        </div>
       </div>
 
-      {/* Checkbox */}
-      <div className="flex items-center gap-2 text-xs">
-        <Checkbox
-          id="includePrefix"
-          checked={isPrefixIncluded}
-          onClick={() => {
-            setIsPrefixIncluded((val) => !val);
-            const displayNameValue = getDisplayNameValue(
-              displayNameFormat
-            ) as string;
-            const newDisplayName = generateDisplayName(
-              prefix,
-              displayNameValue,
-              !isPrefixIncluded
-            );
-            setDisplayName(newDisplayName);
-          }}
-        />
-        <label
-          htmlFor="includePrefix"
-          className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Include prefix in display name
-        </label>
-      </div>
-
-      {/* Selected Pronouns */}
+      {/* Display Name */}
       {displayName !== "" && (
         <div className="flex items-baseline px-3 py-2 border rounded-lg gap-2 text-xs">
           <span>

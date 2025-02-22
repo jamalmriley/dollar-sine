@@ -58,12 +58,14 @@ export default function AdminOnboardingPage() {
   // Save the onboarding progress once the user stops typing for at least 3 seconds.
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const userId = user?.id;
-      if (userId) {
-        const fullPathname = `/${locale}${pathname}?${searchParams.toString()}`;
+      const isOnboardingCompleted = user?.publicMetadata.isOnboardingCompleted;
+      if (user && !isOnboardingCompleted) {
+        const fullPathname = `/${locale}${pathname}${
+          searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
+        }`;
         const alteredFullPathname = fullPathname.replaceAll("&", ">"); // Replaces "&" with ">" so that the full pathname is saved to the user's metadata.
         // console.log(fullPathname);
-        saveOnboardingProgress(userId, alteredFullPathname);
+        saveOnboardingProgress(user.id, alteredFullPathname);
       }
     }, 3000);
     return () => clearTimeout(timeoutId);

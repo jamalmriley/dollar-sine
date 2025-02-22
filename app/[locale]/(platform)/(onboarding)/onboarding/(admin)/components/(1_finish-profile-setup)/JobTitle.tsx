@@ -11,16 +11,21 @@ export default function JobTitle() {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <span
-        className={`text-sm font-semibold ${
-          jobTitle !== "" ? "text-muted-foreground line-through" : ""
-        }`}
-      >
-        Set your job title.
-      </span>
-      <span className="text-xs font-medium text-muted-foreground mb-2">
-        What do you do at your organization?
-      </span>
+      {/* Header */}
+      <div className="hidden md:flex flex-col">
+        <span
+          className={`text-sm font-semibold ${
+            jobTitle !== "" ? "text-muted-foreground line-through" : ""
+          }`}
+        >
+          Set your job title.
+        </span>
+        <span className="text-xs font-medium text-muted-foreground mb-2">
+          What do you do at your organization?
+        </span>
+      </div>
+
+      {/* Input */}
       <Input
         id="job-title"
         name="job-title"

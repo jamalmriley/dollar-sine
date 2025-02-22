@@ -92,61 +92,60 @@ export default function Pronouns() {
   }, [open]);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex justify-between items-start">
-        <div className="flex flex-col">
-          <span
-            className={`text-sm font-semibold ${
-              pronouns ? "text-muted-foreground line-through" : ""
-            }`}
-          >
-            Add your pronouns.
-          </span>
-          <span className="text-xs font-medium text-muted-foreground mb-2">
-            Choose as many as you'd like!
-          </span>
-        </div>
-
-        {/* Dropdown */}
-        <DropdownMenu open={open} onOpenChange={setOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              {pronouns !== "" ? pronouns : "Choose"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel className="text-center">
-              Pronouns
-            </DropdownMenuLabel>
-            {pronounsArr.map((pronoun, i) => (
-              <span key={i}>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem
-                  checked={pronoun.checked}
-                  onCheckedChange={pronoun.onCheckedChange}
-                  onSelect={(e) => e.preventDefault()}
-                  className="flex flex-col justify-center"
-                >
-                  <span className="w-full text-sm font-semibold">
-                    {pronoun.subjective}
-                  </span>
-                  <span className="w-full text-xs text-muted-foreground">
-                    {pronoun.objective}/{pronoun.possessive}
-                  </span>
-                </DropdownMenuCheckboxItem>
-              </span>
-            ))}
-            <Button
-              className="w-full mt-5"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              Done
-            </Button>
-          </DropdownMenuContent>
-        </DropdownMenu>
+    <div className="size-full flex justify-between items-center md:items-start">
+      {/* Header */}
+      <div className="flex flex-col">
+        <span
+          className={`hidden md:block text-sm font-semibold ${
+            pronouns ? "text-muted-foreground line-through" : ""
+          }`}
+        >
+          Add your pronouns.
+        </span>
+        <span className="text-xs font-medium text-muted-foreground">
+          Choose as many as you'd like!
+        </span>
       </div>
+
+      {/* Dropdown */}
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">
+            {pronouns !== "" ? pronouns : "Choose"}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel className="text-center">
+            Pronouns
+          </DropdownMenuLabel>
+          {pronounsArr.map((pronoun, i) => (
+            <span key={i}>
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                checked={pronoun.checked}
+                onCheckedChange={pronoun.onCheckedChange}
+                onSelect={(e) => e.preventDefault()}
+                className="flex flex-col justify-center"
+              >
+                <span className="w-full text-sm font-semibold">
+                  {pronoun.subjective}
+                </span>
+                <span className="w-full text-xs text-muted-foreground">
+                  {pronoun.objective}/{pronoun.possessive}
+                </span>
+              </DropdownMenuCheckboxItem>
+            </span>
+          ))}
+          <Button
+            className="w-full mt-5"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            Done
+          </Button>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

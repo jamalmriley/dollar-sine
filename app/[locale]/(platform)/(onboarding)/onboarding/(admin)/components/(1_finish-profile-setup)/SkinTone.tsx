@@ -32,19 +32,22 @@ export default function SkinTone() {
   };
 
   return (
-    <div className="w-full h-full flex justify-between items-start">
+    <div className="size-full flex justify-between items-center md:items-start">
+      {/* Header */}
       <div className="flex flex-col">
         <span
-          className={`text-sm font-semibold ${
+          className={`hidden md:block text-sm font-semibold ${
             skinTone !== "" ? "text-muted-foreground line-through" : ""
           }`}
         >
           Select your skin tone.
         </span>
-        <span className="text-xs font-medium text-muted-foreground mb-2">
+        <span className="text-xs font-medium text-muted-foreground">
           Emojis will be in your skin tone by default.
         </span>
       </div>
+
+      {/* Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">{findSkinTone(skinTone).icon}</Button>

@@ -68,16 +68,21 @@ export default function Prefix() {
 
   return (
     <div className="w-full flex flex-col">
-      <span
-        className={`text-sm font-semibold ${
-          prefix !== "" ? "text-muted-foreground line-through" : ""
-        }`}
-      >
-        Select a prefix below.
-      </span>
-      <span className="text-xs font-medium text-muted-foreground mb-2">
-        Don't see one that fits you? Add your own!
-      </span>
+      {/* Header */}
+      <div className="hidden md:flex flex-col">
+        <span
+          className={`text-sm font-semibold ${
+            prefix !== "" ? "text-muted-foreground line-through" : ""
+          }`}
+        >
+          Select a prefix below.
+        </span>
+        <span className="text-xs font-medium text-muted-foreground mb-2">
+          Don't see one that fits you? Add your own!
+        </span>
+      </div>
+
+      {/* Buttons */}
       <div>
         {prefixes.map((prfx) => (
           <div key={prfx} className="inline-block p-2">

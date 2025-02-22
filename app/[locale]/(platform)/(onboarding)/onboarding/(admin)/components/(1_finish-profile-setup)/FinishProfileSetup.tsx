@@ -20,6 +20,7 @@ import { FormEventHandler, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { ProfileMetadata } from "@/utils/onboarding";
+import { Response } from "@/utils/api";
 
 export default function FinishProfileSetup() {
   const {
@@ -86,7 +87,7 @@ export default function FinishProfileSetup() {
       { method: "POST", body }
     )
       .then((res) => res.json())
-      .then((json) => {
+      .then((json: Response) => {
         setPrefix("");
         setDisplayName("");
         setDisplayNameFormat("");
@@ -96,14 +97,11 @@ export default function FinishProfileSetup() {
         setIsLoading(false);
         setIsUpdatingProfile(false);
 
-        for (const response of json) {
-          toast({
-            variant: response.success ? "default" : "destructive",
-            title: response.message.title,
-            description: response.message.description,
-          });
-          // delay(3000);
-        }
+        toast({
+          variant: json.success ? "default" : "destructive",
+          title: json.message.title,
+          description: json.message.description,
+        });
       })
       .catch((err) => {
         console.error(err);

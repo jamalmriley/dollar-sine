@@ -19,10 +19,17 @@ import { toast } from "@/hooks/use-toast";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
+import { Response } from "@/utils/api";
 
 export default function CreateOrUpdateOrg() {
-  const { orgLogo, setOrgLogo, isUpdatingOrg, isLoading, setIsLoading } =
-    useOnboardingContext();
+  const {
+    orgLogo,
+    setOrgLogo,
+    isUpdatingOrg,
+    setIsUpdatingOrg,
+    isLoading,
+    setIsLoading,
+  } = useOnboardingContext();
   const { user, isLoaded } = useUser();
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
   const [showPredictions, setShowPredictions] = useState<boolean>(false);
@@ -76,26 +83,25 @@ export default function CreateOrUpdateOrg() {
       }
     )
       .then((res) => res.json())
-      .then((json) => {
+      .then((json: Response) => {
         setOrgName("");
         setOrgAddress("");
         setOrgSlug("");
         setOrgLogo(undefined);
         setIs2FARequired(false);
         setIsLoading(false);
+        setIsUpdatingOrg(false);
 
         toast({
-          variant: "default",
-          title: json.message,
+          variant: json.success ? "default" : "destructive",
+          title: json.message.title,
+          description: json.message.description,
         });
       })
       .catch((err) => {
         console.error(err);
         setIsLoading(false);
-        toast({
-          variant: "destructive",
-          title: "Error creating organization",
-        });
+        setIsUpdatingOrg(false);
       });
   };
 
