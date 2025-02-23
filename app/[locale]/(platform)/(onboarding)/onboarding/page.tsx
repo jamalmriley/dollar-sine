@@ -16,14 +16,14 @@ export default async function OnboardingPage() {
   if (!role) return;
 
   return (
-    <div className="w-full h-full">
-      <OnboardingContextProvider>
+    <OnboardingContextProvider>
+      <div className="w-full h-full">
         {role === "student" && <StudentOnboardingPage />}
         {role === "guardian" && <GuardianOnboardingPage />}
         {role === "teacher" && <TeacherOnboardingPage />}
         {role === "admin" && <AdminOnboardingPage />}
         {/* {role === "admin" && <div className="page-container">admin</div>} */}
-      </OnboardingContextProvider>
-    </div>
+      </div>
+    </OnboardingContextProvider>
   );
 }

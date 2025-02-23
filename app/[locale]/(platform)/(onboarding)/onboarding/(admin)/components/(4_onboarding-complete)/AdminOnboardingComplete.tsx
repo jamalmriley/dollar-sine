@@ -8,22 +8,24 @@ import { IOS_APP_LINK } from "@/utils/app";
 import StyledButton from "@/components/StyledButton";
 import { MdComputer, MdSmartphone } from "react-icons/md";
 import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import { completeOnboardingProgress } from "@/utils/onboarding";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { useParams } from "next/navigation";
+import { format } from "date-fns";
 
 // TODO: Put button that makes onboarding status set to done
 
 export default function AdminOnboardingComplete() {
   const {
     transactionTotal,
+    setTransactionTotal,
     transactionDate,
+    setTransactionDate,
     transactionCode,
+    setTransactionCode,
     isOnboardingComplete,
+    setIsOnboardingComplete,
   } = useOnboardingContext();
-  // const params = useParams();
   const { user, isLoaded } = useUser();
   if (!user || !isLoaded) return;
 
@@ -32,7 +34,50 @@ export default function AdminOnboardingComplete() {
   });
 
   useEffect(() => {
-    completeOnboardingProgress(user.id, paymentIntent, "en");
+    const completeAdminOnboarding = async (
+      userId: string,
+      paymentIntent: string,
+      locale: string
+    ) => {
+      function formatConfirmationCode(code: string): string {
+        const strStart = 3;
+        const strLength = 6;
+        let first6Chars = code
+          .substring(strStart, strStart + strLength)
+          .toUpperCase();
+        return `C-${first6Chars}`;
+      }
+
+      // Get transaction info from the payment intent.
+      fetch(`/api/create-payment-intent?clientSecret=${paymentIntent}`, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const paymentIntent = data.paymentIntent;
+          setTransactionTotal(paymentIntent.amount);
+          setTransactionDate(
+            format(
+              new Date(paymentIntent.created * 1000),
+              "MM/dd/yyyy 'at' h:mm a"
+              // , { locale: es } // TODO: Add locale functionality
+            )
+          );
+          setTransactionCode(formatConfirmationCode(paymentIntent.id));
+        });
+
+      // Update the user's onboarding status to complete.
+      // TODO: Add locale functionality
+      fetch(`/api/onboarding-complete?user_id=${userId}&locale=${locale}`, {
+        method: "POST",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) setIsOnboardingComplete(data.success);
+        });
+    };
+
+    completeAdminOnboarding(user.id, paymentIntent, "en");
   }, []);
 
   if (!isOnboardingComplete) return;

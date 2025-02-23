@@ -74,9 +74,14 @@ export default function CreateOrUpdateOrg() {
 
     const body: any = new FormData();
     await body.append("image", orgLogo || null);
+    const orgId = user.organizationMemberships[0].organization.id;
 
     await fetch(
-      `/api/organizations/create?orgName=${orgName}&orgSlug=${orgSlug}&userId=${user.id}&orgAddress=${orgAddress}&is2FARequired=${is2FARequired}`,
+      `/api/organizations/${isUpdatingOrg ? "update" : "create"}?${
+        isUpdatingOrg ? `orgId=${orgId}&` : ""
+      }orgName=${orgName}&orgSlug=${orgSlug}&userId=${
+        user.id
+      }&orgAddress=${orgAddress}&is2FARequired=${is2FARequired}`,
       {
         method: "POST",
         body,
@@ -93,15 +98,22 @@ export default function CreateOrUpdateOrg() {
         setIsUpdatingOrg(false);
 
         toast({
-          variant: json.success ? "default" : "destructive",
+          variant: "default",
           title: json.message.title,
           description: json.message.description,
         });
       })
       .catch((err) => {
-        console.error(err);
+        // console.error(err);
         setIsLoading(false);
-        setIsUpdatingOrg(false);
+
+        toast({
+          variant: "destructive",
+          title: `Error ${
+            isUpdatingOrg ? "creating" : "updating"
+          } organization`,
+          // description: err.message,
+        });
       });
   };
 

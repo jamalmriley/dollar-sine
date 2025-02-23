@@ -1,23 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { PostResponse } from "@/utils/api";
+import { OrgMetadata, PostResponse } from "@/utils/api";
 
 export async function POST(request: NextRequest) {
   const client = await clerkClient();
   const { searchParams } = new URL(request.url);
-  const name = searchParams.get("orgName") || "";
-  const slug = searchParams.get("orgSlug") || "";
-  const createdBy = searchParams.get("userId") || "";
-  const organizationAddress = searchParams.get("orgAddress") || "";
-  const organizationJoinCode = searchParams.get("orgJoinCode") || "";
+  const name = searchParams.get("orgName") as string;
+  const slug = searchParams.get("orgSlug") as string;
+  const createdBy = searchParams.get("userId") as string;
+  const organizationAddress = searchParams.get("orgAddress") as string;
   const is2FARequired = Boolean(searchParams.get("is2FARequired")) || false;
   const file = (await request.formData()).get("image") as File;
 
-  const publicMetadata = {
-    organizationAddress,
-    organizationJoinCode,
-    is2FARequired,
-  };
+  const publicMetadata: OrgMetadata = { organizationAddress, is2FARequired };
 
   const org: PostResponse = await client.organizations
     .createOrganization({

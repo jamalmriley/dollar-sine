@@ -3,10 +3,10 @@ import AdminOnboardingComplete from "../onboarding/(admin)/components/(4_onboard
 
 export default function OnboardingComplete() {
   return (
-    <div className="page-container">
-      <OnboardingContextProvider>
+    <OnboardingContextProvider>
+      <div className="page-container">
         <AdminOnboardingComplete />
-      </OnboardingContextProvider>
-    </div>
+      </div>
+    </OnboardingContextProvider>
   );
 }
