@@ -94,7 +94,7 @@ export default function LandingNavbar() {
           </div>
           {/* Mobile Drawer Menu */}
           <div className="md:hidden">
-            <Drawer closeThreshold={0.5}>
+            <Drawer closeThreshold={0.5} direction="bottom">
               <DrawerTrigger asChild>
                 <StyledButton variant="outline" size="icon">
                   <IoMenu className="size-9" />

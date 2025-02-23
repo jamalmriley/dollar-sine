@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ProfileMetadata } from "@/utils/api";
+import { isEmptyObject } from "@/utils/general";
 
 export default function Profile() {
   const { isUpdatingProfile, setIsUpdatingProfile, setProfilePic } =
@@ -67,7 +68,7 @@ export default function Profile() {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full"
+              className="rounded-full size-5 lg:size-6"
               onClick={() => {
                 setIsUpdatingProfile(false);
                 setPrefix("");
@@ -105,11 +106,14 @@ export default function Profile() {
 }
 
 export const isFinishProfileSetupCompleted = (): boolean => {
-  const { user } = useUser();
-  if (!user) return false;
+  const { user, isLoaded } = useUser();
+  if (!user || !isLoaded) return false;
 
-  const { prefix, displayName, jobTitle, pronouns, skinTone } = user
-    .publicMetadata.profile as ProfileMetadata;
+  const metadata = user.publicMetadata;
+  if (isEmptyObject(metadata)) return false;
+
+  const { prefix, displayName, jobTitle, pronouns, skinTone } =
+    metadata.profile as ProfileMetadata;
 
   return (
     prefix !== "" &&

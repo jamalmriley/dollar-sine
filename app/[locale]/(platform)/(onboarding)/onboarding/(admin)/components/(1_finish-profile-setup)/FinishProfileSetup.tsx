@@ -20,6 +20,7 @@ import { FormEventHandler, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { PostResponse, ProfileMetadata } from "@/utils/api";
+import { isEmptyObject } from "@/utils/general";
 
 export default function FinishProfileSetup() {
   const {
@@ -56,14 +57,15 @@ export default function FinishProfileSetup() {
 
   const metadata = user.publicMetadata.profile as ProfileMetadata;
 
-  const hasProfileUpdated: boolean = !user
-    ? false
-    : metadata.prefix !== prefix ||
-      metadata.displayName !== displayName ||
-      metadata.displayNameFormat !== displayNameFormat ||
-      metadata.jobTitle !== jobTitle ||
-      metadata.pronouns !== pronouns ||
-      metadata.skinTone !== skinTone;
+  const hasProfileUpdated: boolean =
+    !user || isEmptyObject(metadata)
+      ? false
+      : metadata.prefix !== prefix ||
+        metadata.displayName !== displayName ||
+        metadata.displayNameFormat !== displayNameFormat ||
+        metadata.jobTitle !== jobTitle ||
+        metadata.pronouns !== pronouns ||
+        metadata.skinTone !== skinTone;
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     if (!user || !isLoaded) return;

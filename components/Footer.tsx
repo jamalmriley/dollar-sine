@@ -42,7 +42,7 @@ export default async function Footer() {
   return (
     <div className="flex flex-col">
       {/* Waves */}
-      <div className="footer-waves landing-footer-waves z-0">
+      {/* <div className="footer-waves landing-footer-waves z-0">
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +65,9 @@ export default async function Footer() {
             className="shape-fill"
           ></path>
         </svg>
-      </div>
+      </div> */}
       {/* Content */}
-      <div className="flex gap-3 w-full px-10 pb-5 bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
+      <div className="flex gap-3 w-full px-10 py-5 bg-antique-brass-200 dark:bg-woodsmoke-950 text-antique-brass-950 dark:text-antique-brass-100 flex-col-reverse md:flex-row items-center md:justify-between">
         {/* Credit */}
         <span className="flex gap-1.5 items-center text-sm font-bold select-none">
           {t("footer_created-with")}{" "}

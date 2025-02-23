@@ -10,13 +10,12 @@ export async function POST(request: NextRequest) {
   const role = searchParams.get("role") as Role;
   const relation = searchParams.get("relation") || "other";
   const body = await request.formData();
-  const prefix = body.get("prefix") as String;
-  const displayName = body.get("displayName") as String;
-  const displayNameFormat = body.get("displayNameFormat") as String;
-  const jobTitle = body.get("jobTitle") as String;
-  const pronouns = body.get("pronouns") as String;
-  const skinTone = body.get("skinTone") as String;
-  const file = body.get("image") as File;
+  const prefix = body.get("prefix") || "";
+  const displayName = body.get("displayName") || "";
+  const displayNameFormat = body.get("displayNameFormat") || "";
+  const jobTitle = body.get("jobTitle") || "";
+  const pronouns = body.get("pronouns") || "";
+  const skinTone = body.get("skinTone") || "";
 
   const metadata = {
     student: {
@@ -119,6 +118,7 @@ export async function POST(request: NextRequest) {
       try {
         // If the file is null, it will return as the string "null".
         // So it should only update the profile picture when it is an actual file.
+        const file = body.get("image") as File;
         if (typeof file !== "string") {
           client.users.updateUserProfileImage(userId, { file });
         }
@@ -140,7 +140,6 @@ export async function POST(request: NextRequest) {
         success: true,
         message: {
           title: "Profile succesfully updated ✅",
-          description: "",
         },
       };
     })

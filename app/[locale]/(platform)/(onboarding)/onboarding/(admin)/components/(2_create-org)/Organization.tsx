@@ -63,7 +63,7 @@ export default function Organization() {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full"
+              className="rounded-full size-5 lg:size-6"
               onClick={() => {
                 setIsUpdatingOrg(false);
                 setOrgName("");

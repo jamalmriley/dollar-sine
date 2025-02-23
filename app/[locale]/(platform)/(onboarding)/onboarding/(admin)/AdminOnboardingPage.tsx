@@ -37,22 +37,16 @@ export default function AdminOnboardingPage() {
     {
       id: "step-1",
       content: <Profile />,
-      title: "Finish setting up your profile.",
-      basis: "basis-full",
       isCompleted: isFinishProfileSetupCompleted(),
     },
     {
       id: "step-2",
       content: <Organization />,
-      title: "Create your organization.",
-      basis: "basis-full",
       isCompleted: isCreateOrgCompleted(),
     },
     {
       id: "step-3",
       content: <AddCourses />,
-      title: "Browse and add courses.",
-      basis: "basis-full",
       isCompleted: true,
     },
   ];
@@ -131,10 +125,10 @@ export default function AdminOnboardingPage() {
       {/* Carousel */}
       <Carousel setApi={setApi} opts={{ watchDrag: false }} className="w-full">
         <CarouselContent>
-          {prompts.map((prompt, index) => (
+          {prompts.map((prompt) => (
             <CarouselItem
-              key={index}
-              className={`max-h-[36rem] flex justify-center ${prompt.basis}`}
+              key={prompt.id}
+              className={`max-h-[36rem] flex justify-center`}
             >
               {prompt.content}
             </CarouselItem>
@@ -184,50 +178,3 @@ export default function AdminOnboardingPage() {
     </div>
   );
 }
-
-//  {/* Checklist */}
-//           {/* <div className="w-72 min-w-72 flex flex-col items-center border rounded-lg p-5">
-//           <span className="text-lg font-bold">Onboarding Checklist</span>
-//           {prompts.map((prompt, i) => (
-//             <div
-//               key={i}
-//               className={`w-full h-8 flex items-center gap-3 ${
-//                 i + 1 < current && "text-muted-foreground line-through"
-//               }`}
-//             >
-//               {/* Checkbox *-/}
-//               <div className="h-full flex flex-col items-center">
-//                 <Separator
-//                   decorative
-//                   orientation="vertical"
-//                   className={`h-2 ${i === 0 && "bg-transparent"}`}
-//                 />
-//                 <div className="size-4">
-//                   {i + 1 < current ? (
-//                     <FaCheckCircle className="size-full" />
-//                   ) : (
-//                     <div
-//                       className={`size-full rounded-full ${
-//                         i + 1 === current ? "border-2" : "border"
-//                       }`}
-//                     />
-//                   )}
-//                 </div>
-//                 <Separator
-//                   decorative
-//                   orientation="vertical"
-//                   className={`h-2 ${
-//                     i === prompts.length - 1 && "bg-transparent"
-//                   }`}
-//                 />
-//               </div>
-//               <span
-//                 className={`text-sm ${
-//                   i + 1 === current ? "font-bold" : "font-medium"
-//                 }`}
-//               >
-//                 {prompt.title}
-//               </span>
-//             </div>
-//           ))}
-//         </div> */}

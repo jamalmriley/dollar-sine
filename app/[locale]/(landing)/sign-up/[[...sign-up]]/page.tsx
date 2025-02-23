@@ -41,6 +41,7 @@ import { useTranslation } from "react-i18next";
 import { MdRefresh } from "react-icons/md";
 import PlaceholderImage from "@/assets/images/placeholders/sign-in-placeholder-image.jpg";
 import { PasswordInput } from "@/components/ui/password-input";
+import { PostResponse } from "@/utils/api";
 
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -98,15 +99,38 @@ export default function SignUpPage() {
   const router = useRouter();
 
   async function addMetadataToUser(userId: string) {
-    const res = await fetch(
+    const body: any = new FormData();
+    await fetch(
       `/api/users/update?userId=${userId}&role=${role}&relation=${relation}`,
-      {
-        method: "POST",
-        body: JSON.stringify({}),
-      }
-    ); // .then((res) => console.log(res));
-    // .then((res) => res.json())
-    // .then((json) => console.log(json));
+      { method: "POST", body }
+    )
+      .then((res) => res.json())
+      .then((json: PostResponse) => {
+        toast({
+          variant: "default",
+          title: "User successfully created! ✅",
+          description: "Welcome to Dollar Sine! Let's get you set up.",
+        });
+      })
+      .catch((err) => {
+        // console.error(err);
+        toast({
+          variant: "destructive",
+          title: "Error creating user",
+          description:
+            "There was an issue setting up your account. Please try again.",
+          action: (
+            <ToastAction
+              altText="Try again"
+              className="flex gap-2"
+              onClick={() => addMetadataToUser(userId)}
+            >
+              <MdRefresh />
+              Try again
+            </ToastAction>
+          ),
+        });
+      });
   }
 
   async function submit(e: React.FormEvent) {
@@ -121,59 +145,7 @@ export default function SignUpPage() {
           emailAddress,
           password,
         })
-        .then(() => {
-          // TODO: Toaster notification welcoming the user?
-          // setDoc(doc(db, "users", emailAddress), {
-          //   firstName,
-          //   lastName,
-          //   emailAddress,
-          //   emailVerified: false,
-          //   createdAt: new Date(),
-          //   role,
-          //   isOnboardingCompleted: false,
-          //   guardians: [],
-          //   enrolledCourses: [],
-          //   organizations: [],
-          //   tools: [],
-          //   profile: {
-          //     summary: "",
-          //     personal: {
-          //       lives_with: [],
-          //       pets: [],
-          //       transpo: null,
-          //       interests: [],
-          //       spendingCategories: [],
-          //       savingsGoals: [],
-          //     },
-          //     academic: {
-          //       gradeLevel: null,
-          //       track: null,
-          //       testScores: {
-          //         iReady: {
-          //           overallScore: null,
-          //           noScore: null,
-          //           aaScore: null,
-          //           geoScore: null,
-          //           mdScore: null,
-          //         },
-          //         nweaMap: {
-          //           overallScore: null,
-          //           noScore: null,
-          //           oaScore: null,
-          //           geoScore: null,
-          //           mdScore: null,
-          //         },
-          //       },
-          //     },
-          //   },
-          // })
-          //   .then(() => {
-          //     console.log("User sucessully created!");
-          //   })
-          //   .catch((error: any) => {
-          //     console.error("Error creating user: ", error);
-          //   });
-        })
+        .then(() => {})
         .catch((error) => {
           console.log(error);
         })
@@ -185,7 +157,7 @@ export default function SignUpPage() {
       await setPendingVerification(true);
       await setSeconds(60);
     } catch (err: any) {
-      console.error(JSON.stringify(err, null, 2));
+      // console.error(JSON.stringify(err, null, 2));
       setError(err.errors[0].message);
     }
   }
@@ -259,6 +231,7 @@ export default function SignUpPage() {
     }
   }
 
+  // Name Placeholders
   useEffect(() => {
     const interval = setInterval(() => {
       const randInt = Math.floor(Math.random() * innovators.length);
@@ -268,6 +241,7 @@ export default function SignUpPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Timer
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds > 0) setSeconds((seconds) => seconds - 1);
@@ -282,7 +256,7 @@ export default function SignUpPage() {
     <div className="page-container flex justify-center items-center w-full md:p-0">
       {/* Left Side */}
       <div className="hidden md:flex flex-col pl-10 w-1/2 h-full bg-gradient-to-r from-white via-white dark:from-woodsmoke-950 dark:via-woodsmoke-950 to-transparent text-antique-brass-950 dark:text-antique-brass-100 justify-center">
-        <h1 className="h1">
+        <h1 className="h1 mb-3">
           {!pendingVerification
             ? "Get started for free"
             : `Check your email, ${firstName}!`}

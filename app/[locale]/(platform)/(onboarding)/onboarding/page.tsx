@@ -13,7 +13,8 @@ export default async function OnboardingPage() {
   const user = await currentUser();
   const role = user?.publicMetadata.role;
 
-  if (!role) return;
+  if (!role)
+    return <h1 className="h1 my-0 mx-auto">This user's role is not found.</h1>;
 
   return (
     <OnboardingContextProvider>
@@ -22,7 +23,6 @@ export default async function OnboardingPage() {
         {role === "guardian" && <GuardianOnboardingPage />}
         {role === "teacher" && <TeacherOnboardingPage />}
         {role === "admin" && <AdminOnboardingPage />}
-        {/* {role === "admin" && <div className="page-container">admin</div>} */}
       </div>
     </OnboardingContextProvider>
   );

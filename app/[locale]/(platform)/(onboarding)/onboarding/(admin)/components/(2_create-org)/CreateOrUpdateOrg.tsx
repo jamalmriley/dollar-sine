@@ -20,6 +20,7 @@ import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
 import { PostResponse } from "@/utils/api";
+import { isEmptyObject } from "@/utils/general";
 
 export default function CreateOrUpdateOrg() {
   const {
@@ -121,13 +122,14 @@ export default function CreateOrUpdateOrg() {
     user && user.organizationMemberships.length > 0
       ? user.organizationMemberships[0].organization
       : undefined;
-  const organizationId = organization?.id;
-  const hasOrgUpdated: boolean = !organization
-    ? false
-    : organization.name !== orgName ||
-      organization.slug !== orgSlug ||
-      String(organization.publicMetadata.organizationAddress) !== orgAddress ||
-      Boolean(organization.publicMetadata.is2FARequired) !== is2FARequired;
+  const hasOrgUpdated: boolean =
+    !organization || isEmptyObject(organization.publicMetadata)
+      ? false
+      : organization.name !== orgName ||
+        organization.slug !== orgSlug ||
+        String(organization.publicMetadata.organizationAddress) !==
+          orgAddress ||
+        Boolean(organization.publicMetadata.is2FARequired) !== is2FARequired;
 
   useEffect(() => {
     const fetchPredictions = async () => {
