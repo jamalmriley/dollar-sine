@@ -20,12 +20,14 @@ import { useUser } from "@clerk/nextjs";
 import Profile, {
   isFinishProfileSetupCompleted,
 } from "./components/(1_finish-profile-setup)/Profile";
+import { useOnboardingContext } from "@/contexts/onboarding-context";
 
 export default function AdminOnboardingPage() {
   const pathname = usePathname();
   const { locale } = useParams();
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
+  const { setIsUpdatingProfile, setIsUpdatingOrg } = useOnboardingContext();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
@@ -69,6 +71,27 @@ export default function AdminOnboardingPage() {
       }
     }, 3000);
     return () => clearTimeout(timeoutId);
+  }, [searchParams]);
+
+  // Determine the state of the carousel components based on the search params.
+  useEffect(() => {
+    const profileParams = [
+      "prefix",
+      "displayName",
+      "displayNameFormat",
+      "jobTitle",
+      "pronouns",
+      "skinTone",
+    ];
+    const orgParams = ["orgName", "orgAddress", "orgSlug", "is2FARequired"];
+
+    const searchParamKeys = searchParams.keys().toArray();
+
+    if (searchParamKeys.length === 0) return;
+    for (const key of searchParamKeys) {
+      if (profileParams.indexOf(key) !== -1) setIsUpdatingProfile(true);
+      if (orgParams.indexOf(key) !== -1) setIsUpdatingOrg(true);
+    }
   }, [searchParams]);
 
   // Maintain the state of the custom carousel.

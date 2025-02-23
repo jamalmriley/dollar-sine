@@ -14,14 +14,13 @@ export async function POST(request: NextRequest) {
     .updateUserMetadata(userId, {
       publicMetadata: { onboardingLink },
     })
-    .then(() => {
-      // console.log(user);
+    .then((user) => {
       return {
         status: 200,
         success: true,
         message: {
-          title: "Progress saved",
-          description: `Your nboarding progress has been successfully saved.`,
+          title: "Onboarding progress saved ✅",
+          description: "Your onboarding progress has been successfully saved.",
         },
       };
     })
@@ -32,7 +31,7 @@ export async function POST(request: NextRequest) {
         status: parseInt(error.code),
         success: false,
         message: {
-          title: "Error saving progress",
+          title: "Error saving onboarding progress",
           description: error.longMessage,
         },
       };

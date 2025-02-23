@@ -1,25 +1,19 @@
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { PostResponse } from "./api";
 
 export async function saveOnboardingProgress(userId: string, link: string) {
   await fetch(`/api/onboarding?user_id=${userId}&onboarding_link=${link}`, {
     method: "POST",
   })
     .then((res) => res.json())
-    .then((json) => {
-      toast({
-        variant: "default",
-        title: "Onboarding progress saved ✅",
-      });
+    .then((json: PostResponse) => {
       // console.log(json);
-    })
-    .catch((error) => {
       toast({
-        variant: "destructive",
-        title: "Error saving onboarding progress",
+        variant: json.success ? "default" : "destructive",
+        title: json.message.title,
       });
-      console.error(error);
     });
 }
 

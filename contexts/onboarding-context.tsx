@@ -1,5 +1,6 @@
 "use client";
 
+import { CourseData } from "@/app/api/courses/route";
 import { createContext, useContext, useState } from "react";
 
 type OnboardingContext = {
@@ -17,6 +18,8 @@ type OnboardingContext = {
   setIsUpdatingProfile: React.Dispatch<React.SetStateAction<boolean>>;
   isUpdatingOrg: boolean;
   setIsUpdatingOrg: React.Dispatch<React.SetStateAction<boolean>>;
+  courses: CourseData[];
+  setCourses: React.Dispatch<React.SetStateAction<CourseData[]>>;
   lastUpdated: string;
   setLastUpdated: React.Dispatch<React.SetStateAction<string>>;
   users: { emailAddress: string; role: string }[] | undefined;
@@ -51,6 +54,7 @@ export default function OnboardingContextProvider({
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
+  const [courses, setCourses] = useState<CourseData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [users, setUsers] = useState<
     { emailAddress: string; role: string }[] | undefined
@@ -81,6 +85,8 @@ export default function OnboardingContextProvider({
         setIsUpdatingProfile,
         isUpdatingOrg,
         setIsUpdatingOrg,
+        courses,
+        setCourses,
         lastUpdated,
         setLastUpdated,
         users,

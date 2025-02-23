@@ -20,9 +20,9 @@ export default function AddCourses() {
     description: "Select the courses you want to add for your organization.",
   };
 
-  const { isLoading, setIsLoading, lastUpdated } = useOnboardingContext();
+  const { courses, setCourses, isLoading, setIsLoading, lastUpdated } =
+    useOnboardingContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [courses, setCourses] = useState<CourseData[]>([]);
   const getCourses = async (): Promise<any> => {
     const courses = await fetch("/api/courses", {
       method: "GET",

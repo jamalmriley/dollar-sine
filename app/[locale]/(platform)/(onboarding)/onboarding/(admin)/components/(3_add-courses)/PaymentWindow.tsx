@@ -3,13 +3,9 @@
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
@@ -33,14 +29,47 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { courseSchema } from "./CourseCard";
+import { useOnboardingContext } from "@/contexts/onboarding-context";
 
 // Calling `loadStripe` outside of a component’s render avoids recreating the `Stripe` object on every render.
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
   throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined.");
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
+// Returns the price of the selected plan.
+function getPlanPrice(
+  courses: any,
+  courseId: string,
+  planName: string
+): number {
+  let result = 0;
+  for (const course of courses) {
+    const { id, pricing } = course;
+    if (courseId === id) {
+      for (const plan of pricing) {
+        if (planName === plan.name) {
+          result += plan.price;
+        }
+      }
+    }
+  }
+  return result;
+}
+
+const getTotalAmount = (selectedCourses: any, courses: any): number => {
+  let result = 0;
+  if (!selectedCourses) return result;
+
+  for (const course of selectedCourses) {
+    const { id, plan } = course;
+    if (plan) result += getPlanPrice(courses, id, plan);
+  }
+  return result;
+}; // Returns the total amount of all selected courses.
+
 export function PaymentWindow() {
-  const [open, setOpen] = useState(false);
+  const { courses } = useOnboardingContext();
+  const [open, setOpen] = useState<boolean>(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [selectedCourses] = useQueryState(
     "courses",
@@ -57,20 +86,12 @@ export function PaymentWindow() {
     return true;
   }; // Ensures that all selected courses have plans selected before purchase is allowed.
 
-  const getTotalAmount = (): number => {
-    let result = 0;
-    if (!selectedCourses) return result;
-
-    for (const course of selectedCourses) {
-      const plan = course.plan;
-      if (plan) result += plan.price;
-    }
-    return result;
-  }; // Returns the total amount of all selected courses.
   const [discountAmt, discountPercent] = [0, 0];
   const taxRate = 0.1;
-  const taxAmt = taxRate * (getTotalAmount() - discountAmt);
-  const grandTotal = getTotalAmount() - discountAmt + taxAmt;
+  const taxAmt =
+    taxRate * (getTotalAmount(selectedCourses, courses) - discountAmt);
+  const grandTotal =
+    getTotalAmount(selectedCourses, courses) - discountAmt + taxAmt;
 
   const buyCourseTitle: string = selectedCourses
     ? `Buy ${
@@ -121,6 +142,7 @@ export function PaymentWindow() {
 }
 
 function PaymentForm({ amount }: { amount: number }) {
+  const { courses } = useOnboardingContext();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -133,20 +155,12 @@ function PaymentForm({ amount }: { amount: number }) {
     parseAsArrayOf(parseAsJson(courseSchema.parse))
   );
 
-  const getTotalAmount = (): number => {
-    let result = 0;
-    if (!selectedCourses) return result;
-
-    for (const course of selectedCourses) {
-      const plan = course.plan;
-      if (plan) result += plan.price;
-    }
-    return result;
-  }; // Returns the total amount of all selected courses.
   const [discountAmt, discountPercent] = [0, 0];
   const taxRate = 0.1;
-  const taxAmt = taxRate * (getTotalAmount() - discountAmt);
-  const grandTotal = getTotalAmount() - discountAmt + taxAmt;
+  const taxAmt =
+    taxRate * (getTotalAmount(selectedCourses, courses) - discountAmt);
+  const grandTotal =
+    getTotalAmount(selectedCourses, courses) - discountAmt + taxAmt;
 
   useEffect(() => {
     fetch("/api/create-payment-intent", {
@@ -207,17 +221,25 @@ function PaymentForm({ amount }: { amount: number }) {
               {selectedCourses.map((course) => (
                 <div key={course.id} className="flex justify-between">
                   <span>
-                    {course.title} - {course.plan!.name} Package
+                    {course.title}{" "}
+                    {course.plan === "" && `- ${course.plan} Package`}
                   </span>
 
-                  <span>{formatCurrency(course.plan!.price)}</span>
+                  <span>
+                    {course.plan === "" &&
+                      formatCurrency(
+                        getPlanPrice(courses, course.id, course.plan)
+                      )}
+                  </span>
                 </div>
               ))}
               <Separator />
               {/* Subtotal */}
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>{formatCurrency(getTotalAmount())}</span>
+                <span>
+                  {formatCurrency(getTotalAmount(selectedCourses, courses))}
+                </span>
               </div>
               {/* Discount */}
               <div className="flex justify-between">
