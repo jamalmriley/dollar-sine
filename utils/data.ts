@@ -2,7 +2,6 @@ import { doc, setDoc } from "firebase/firestore";
 import { promises as fs } from "fs";
 import { db } from "@/utils/firebase";
 
-const COURSE_ID: string = "common-cents";
 const subcollections = {
   content: "content",
   search: "search",
@@ -39,7 +38,7 @@ async function updateContent(fileName: string, subcollection: string) {
       course.pricing,
     ];
 
-    await setDoc(doc(db, "courses", COURSE_ID), {
+    await setDoc(doc(db, "courses", courseId), {
       title,
       id: courseId,
       description,
@@ -67,11 +66,7 @@ async function updateContent(fileName: string, subcollection: string) {
         ];
 
       await setDoc(
-        doc(
-          db,
-          `courses/${COURSE_ID}/${subcollection}`,
-          `chapter-${chapterId}`
-        ),
+        doc(db, `courses/${courseId}/${subcollection}`, `chapter-${chapterId}`),
         {
           id: chapterId,
           title,
@@ -127,7 +122,7 @@ async function updateContent(fileName: string, subcollection: string) {
         await setDoc(
           doc(
             db,
-            `courses/${COURSE_ID}/${subcollection}/chapter-${chapterId}/lessons`,
+            `courses/${courseId}/${subcollection}/chapter-${chapterId}/lessons`,
             `lesson-${lessonId}`
           ),
           {
@@ -192,7 +187,7 @@ async function updateSearch(fileName: string, subcollection: string) {
     ];
 
     await setDoc(
-      doc(db, `courses/${COURSE_ID}/${subcollection}`, `lesson-${lessonId}`),
+      doc(db, `courses/${courseId}/${subcollection}`, `lesson-${lessonId}`),
       {
         courseName,
         courseId,
@@ -244,22 +239,37 @@ async function updateStandards(fileName: string, subcollection: string) {
 
   const standards = JSON.parse(file);
   for (const standard of standards) {
-    const [id, gradeLevel, domainCode, domainName, description] = [
-      standard.id,
+    const [
+      courseName,
+      courseId,
+      standardId,
+      gradeLevel,
+      domainCode,
+      domainName,
+      description,
+    ] = [
+      standard.courseName,
+      standard.courseId,
+      standard.standardId,
       standard.gradeLevel,
       standard.domainCode,
       standard.domainName,
       standard.description,
     ];
 
-    await setDoc(doc(db, `courses/${COURSE_ID}/${subcollection}`, id), {
+    await setDoc(doc(db, `courses/${courseId}/${subcollection}`, standardId), {
+      courseName,
+      courseId,
+      standardId,
       gradeLevel,
       domainCode,
       domainName,
       description,
     })
       .then(() => {
-        console.log(`${id}: Standard successfully updated in Firebase!`);
+        console.log(
+          `${standardId}: Standard successfully updated in Firebase!`
+        );
       })
       .catch((error: any) => {
         console.error("Error updating standard:", error);

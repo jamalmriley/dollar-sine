@@ -240,7 +240,7 @@
             {
               "id": "5.1",
               "chapter": "5",
-              "title": "Credit",
+              "title": "Credit Cards",
               "description": "This lesson focuses on understanding the world of credit.",
               "learningObjectives": [],
               "topics": {
@@ -252,7 +252,27 @@
               "nextCCSS": [],
               "pathname": "/courses/common-cents/lesson-5.1",
               "prevLesson": "4.2",
-              "nextLesson": "6.1a",
+              "nextLesson": "5.2",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": "5.2",
+              "chapter": 5,
+              "title": "Credit Scores",
+              "description": "",
+              "learningObjectives": [],
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-5.2",
+              "prevLesson": "5.1",
+              "nextLesson": "6.1",
               "isUnlocked": false,
               "content": [],
               "accommodations": []
@@ -261,40 +281,26 @@
         },
         {
           "id": 6,
-          "title": "F.I.R.E. Projects",
-          "description": "This chapter is composed of projects that focus on (f)inance and (i)ndustry (r)esearch and (e)xploration. These projects are truly fire. 🔥",
-          "difficulty": 0,
-          "topicsCount": 1,
+          "title": "The Bottom Line",
+          "description": "This chapter puts everything we've learned in a fun, final project. Simulate different stages of life and the financial decisions that come with it.",
+          "difficulty": 4,
+          "topicsCount": 0,
           "lessons": [
             {
-              "id": "6.1a",
+              "id": "6.1",
               "chapter": 6,
-              "title": "From Bots to Bucks (Nylah's Lesson)",
-              "description": "This lesson explores the connection between the financial and engineering industries via robotics. Use robotics kits to build and upgrade the FLEX machines. This one's for you, Nylah.",
+              "title": "High School",
+              "description": "",
               "learningObjectives": [],
-              "topics": { "consumer_math": [], "financial_literacy": [] },
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
-              "pathname": "/courses/common-cents/lesson-6.1a",
-              "prevLesson": "5.1",
-              "nextLesson": "6.1b",
-              "isUnlocked": false,
-              "content": [],
-              "accommodations": []
-            },
-            {
-              "id": "6.1b",
-              "chapter": 6,
-              "title": "From Code to Cash (Connor's Lesson)",
-              "description": "This lesson explores the connection between the financial and engineering industries via coding. Choose between block-based and text-based coding to program the FLEX systems using Python. This one's for you, Connor.",
-              "learningObjectives": [],
-              "topics": { "consumer_math": [], "financial_literacy": [] },
-              "prevCCSS": [],
-              "currCCSS": [],
-              "nextCCSS": [],
-              "pathname": "/courses/common-cents/lesson-6.1b",
-              "prevLesson": "6.1a",
+              "pathname": "/courses/common-cents/lesson-6.1",
+              "prevLesson": "5.2",
               "nextLesson": "6.2",
               "isUnlocked": false,
               "content": [],
@@ -303,15 +309,18 @@
             {
               "id": "6.2",
               "chapter": 6,
-              "title": "The Influencer Insight (Micah's Lesson)",
-              "description": "This lesson explores the connection between social media and entrepreneurship, and all the financial considerations that come with it. Get an insight into the world of social media influencing and learn what it takes to make a successful income from it. This one's for you, bestie.",
+              "title": "College",
+              "description": "",
               "learningObjectives": [],
-              "topics": { "consumer_math": [], "financial_literacy": [] },
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
               "pathname": "/courses/common-cents/lesson-6.2",
-              "prevLesson": "6.1b",
+              "prevLesson": "6.1",
               "nextLesson": "6.3",
               "isUnlocked": false,
               "content": [],
@@ -320,12 +329,12 @@
             {
               "id": "6.3",
               "chapter": 6,
-              "title": "The Economics of Slime (Joshua's Lesson)",
-              "description": "This lesson explores the connection between financial industry, chemistry, entrepreneurship, and business management via a science experiment with everyone's favorite ingredient — slime! This one's for you, Josh.",
+              "title": "Old People",
+              "description": "",
               "learningObjectives": [],
               "topics": {
                 "consumer_math": [],
-                "financial_literacy": ["Using a spreadsheet"]
+                "financial_literacy": []
               },
               "prevCCSS": [],
               "currCCSS": [],
@@ -340,10 +349,13 @@
             {
               "id": "6.4",
               "chapter": 6,
-              "title": "The Frugal Foodie (Serenity's Lesson)",
-              "description": "This lesson explores the connection between the financial and culinary industries via cooking everyday meals on an everyday budget. This one's for you, Serenity.",
+              "title": "Really Old People",
+              "description": "",
               "learningObjectives": [],
-              "topics": { "consumer_math": [], "financial_literacy": [] },
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -357,10 +369,13 @@
             {
               "id": "6.5",
               "chapter": 6,
-              "title": "Fantasy Finance (Noah's Lesson)",
-              "description": "This lesson explores the connection between the sports and financial industries (i.e. sports finance) via a group project that incorporates budgeting, data analysis, statistics, and decision-making. The best part... this project starts off with a game! This one's for you, mentee.",
+              "title": "Presentation",
+              "description": "",
               "learningObjectives": [],
-              "topics": { "consumer_math": [], "financial_literacy": [] },
+              "topics": {
+                "consumer_math": [],
+                "financial_literacy": []
+              },
               "prevCCSS": [],
               "currCCSS": [],
               "nextCCSS": [],
@@ -430,6 +445,230 @@
             "10 FLEX POS Systems",
             "10 FLEX ATMs"
           ],
+          "addOns": {
+            "userLimit": 250,
+            "teacherToolsLimit": 25,
+            "edTechLimit": "userLimit"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Industry Insights",
+      "id": "industry-insights",
+      "description": "A course that connects consumer math and business skills to various fields and industries.",
+      "imageUrl": "",
+      "publishDate": "2025-07-01T06:00:00.000Z",
+      "chapters": [
+        {
+          "id": 1,
+          "title": "All Lessons",
+          "description": "",
+          "difficulty": 0,
+          "topicsCount": 12,
+          "lessons": [
+            {
+              "id": 1,
+              "chapter": "1",
+              "title": "From Bots to Bucks (Connor's Lesson)",
+              "description": "This lesson explores the connection between the financial and engineering industries via robotics. Use robotics kits to build and upgrade the FLEX machines. This one's for you, Connor.",
+              "learningObjectives": [],
+              "topics": ["Robotics", "Algebra"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-1",
+              "prevLesson": "",
+              "nextLesson": 2,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 2,
+              "chapter": "1",
+              "title": "From Code to Cash (Nylah's Lesson)",
+              "description": "This lesson explores the connection between the financial and engineering industries via coding. Choose between block-based and text-based coding to program the FLEX systems using Python. This one's for you, Nylah.",
+              "learningObjectives": [],
+              "topics": ["Coding", "Algebra"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-2",
+              "prevLesson": 1,
+              "nextLesson": 3,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 3,
+              "chapter": "1",
+              "title": "Trade-Offs (Noah's Lesson)",
+              "description": "This lesson explores carpentry and electrical trades by building infra for the flex thingies",
+              "learningObjectives": [],
+              "topics": ["Trade Skills", "Arithmetic", "Geometry"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-3",
+              "prevLesson": 2,
+              "nextLesson": 4,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 4,
+              "chapter": "1",
+              "title": "The Economics of Slime (Joshua's Lesson)",
+              "description": "This lesson explores the financial connections between chemistry, entrepreneurship, and business management via a science experiment with everyone's favorite ingredient — slime! This one's for you, Josh.",
+              "learningObjectives": [],
+              "topics": ["Robotics", "Science", "Arithmetic", "Algebra"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-4",
+              "prevLesson": 3,
+              "nextLesson": 5,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 5,
+              "chapter": "1",
+              "title": "The Frugal Foodie (Serenity's Lesson)",
+              "description": "This lesson explores the finances behind the culinary industry from both a business and consumer perspective. Learn how to cook everyday meals on an everyday budget. This one's for you, Serenity.",
+              "learningObjectives": [],
+              "topics": ["Art & Design", "Food", "Arithmetic", "Algebra"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-5",
+              "prevLesson": 4,
+              "nextLesson": 6,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 6,
+              "chapter": "1",
+              "title": "Gamer's Guide to Grifting (Kaiser's Lesson)",
+              "description": "game making ft. phone repair...\nstep 1: make the game\nstep 2: test the game\nstep 3: you broke the phone, now fix it\nstep 4: put it all together and review ethical considerations",
+              "learningObjectives": [],
+              "topics": ["Coding", "Geometry"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-6",
+              "prevLesson": 5,
+              "nextLesson": 7,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 7,
+              "chapter": "1",
+              "title": "Beats by You (Aubree's Lesson)",
+              "description": "",
+              "learningObjectives": [],
+              "topics": ["Music", "Arithmetic"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-7",
+              "prevLesson": 6,
+              "nextLesson": 8,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 8,
+              "chapter": "1",
+              "title": "The Pop Tart Paradigm (Micah's Lesson)",
+              "description": "",
+              "learningObjectives": [],
+              "topics": ["Art & Design", "Food", "Arithmetic", "Algebra"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-8",
+              "prevLesson": 7,
+              "nextLesson": 9,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 9,
+              "chapter": "1",
+              "title": "Merch It (Londyn's Lesson)",
+              "description": "This lesson explores the finances behind entrepreneurship via art! With a goal of designing your own merch, Learn graphic design and apply those skills to apparel, rug tufting, phone case design, pottery, or makeup. This one's for you, Londyn.",
+              "learningObjectives": [],
+              "topics": ["Art & Design", "Geometry"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-9",
+              "prevLesson": 8,
+              "nextLesson": 10,
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            },
+            {
+              "id": 10,
+              "chapter": "1",
+              "title": "Fantasy Finance (Carter's Lesson)",
+              "description": "This lesson explores the connection between the sports and financial industries (i.e. sports finance) via a group project that incorporates budgeting, data analysis, statistics, and decision-making. The best part... this project starts off with a game! This one's for you, Carter.",
+              "learningObjectives": [],
+              "topics": ["Sports", "Statistics"],
+              "prevCCSS": [],
+              "currCCSS": [],
+              "nextCCSS": [],
+              "pathname": "/courses/common-cents/lesson-10",
+              "prevLesson": 9,
+              "nextLesson": "",
+              "isUnlocked": false,
+              "content": [],
+              "accommodations": []
+            }
+          ]
+        }
+      ],
+      "topicsCount": 9,
+      "pricing": [
+        {
+          "name": "Base",
+          "price": 49,
+          "description": "Perfect for an educator and their small group or homeschooling.",
+          "features": ["TBD"],
+          "addOns": {
+            "userLimit": 20,
+            "teacherToolsLimit": 3,
+            "edTechLimit": "userLimit"
+          }
+        },
+        {
+          "name": "Plus",
+          "price": 99,
+          "description": "Perfect for an educator, their colleagues, and their classroom.",
+          "features": ["TBD"],
+          "addOns": {
+            "userLimit": 50,
+            "teacherToolsLimit": 10,
+            "edTechLimit": "userLimit"
+          }
+        },
+        {
+          "name": "Pro",
+          "price": 199,
+          "description": "Perfect for an educator, their colleagues, and multiple classes or sections of students.",
+          "features": ["TBD"],
           "addOns": {
             "userLimit": 250,
             "teacherToolsLimit": 25,
