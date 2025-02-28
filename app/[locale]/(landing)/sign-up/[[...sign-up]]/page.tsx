@@ -33,15 +33,12 @@ import { useToast } from "@/hooks/use-toast";
 import { beginsWithVowel } from "@/utils/general";
 import { useSignUp } from "@clerk/nextjs";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MdRefresh } from "react-icons/md";
-import PlaceholderImage from "@/assets/images/placeholders/sign-in-placeholder-image.jpg";
 import { PasswordInput } from "@/components/ui/password-input";
-import { PostResponse } from "@/utils/api";
 
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -50,8 +47,6 @@ export default function SignUpPage() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [firstNamePlaceholder, setFirstNamePlaceholder] = useState("John");
-  const [lastNamePlaceholder, setLastNamePlaceholder] = useState("Doe");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [pendingVerification, setPendingVerification] = useState(false);
@@ -71,7 +66,6 @@ export default function SignUpPage() {
     "Aunt",
     "Uncle",
     "Older sibling",
-    "Older stepsibling",
     "Foster parent",
     "Adoptive parent",
     "Family member",
@@ -79,40 +73,23 @@ export default function SignUpPage() {
     "Caregiver",
   ];
 
-  const innovators: { firstName: string; lastName: string }[] = [
-    { firstName: "Benjamin", lastName: "Banneker" },
-    { firstName: "David", lastName: "Blackwell" },
-    { firstName: "Elbert Frank", lastName: "Cox" },
-    { firstName: "Mark", lastName: "Dean" },
-    { firstName: "Lonnie", lastName: "Johnson" },
-    { firstName: "John", lastName: "Urschel" },
-
-    { firstName: "Marjorie", lastName: "Lee Browne" },
-    { firstName: "Annie", lastName: "Easley" },
-    { firstName: "Euphemia", lastName: "Haynes" },
-    { firstName: "Fern", lastName: "Hunt" },
-    { firstName: "Mae", lastName: "Jemison" },
-    { firstName: "Katherine", lastName: "Johnson" },
-    { firstName: "Valerie", lastName: "Thomas" },
-  ];
-
   const router = useRouter();
 
   async function addMetadataToUser(userId: string) {
-    const body: any = new FormData();
+    const body: FormData = new FormData();
     await fetch(
       `/api/users/update?userId=${userId}&role=${role}&relation=${relation}`,
       { method: "POST", body }
     )
       .then((res) => res.json())
-      .then((json: PostResponse) => {
+      .then(() => {
         toast({
           variant: "default",
           title: "User successfully created! ✅",
           description: "Welcome to Dollar Sine! Let's get you set up.",
         });
       })
-      .catch((err) => {
+      .catch(() => {
         // console.error(err);
         toast({
           variant: "destructive",
@@ -163,39 +140,41 @@ export default function SignUpPage() {
   }
 
   async function resubmit() {
-    const toastSuccess = toast({
-      title: "Email sent! 👍🏿",
-      description: `We sent another code to ${emailAddress}!`,
-    });
+    const toastSuccess = () =>
+      toast({
+        title: "Email sent! 👍🏿",
+        description: `We sent another code to ${emailAddress}!`,
+      });
 
-    const toastFailure = toast({
-      variant: "destructive",
-      title: "Uh oh! Something went wrong.",
-      description: "Token expired. Please refresh your browser",
-      action: (
-        <ToastAction
-          altText="Refresh"
-          className="flex gap-2"
-          onClick={async () => location.reload()}
-        >
-          <MdRefresh />
-          Refresh
-        </ToastAction>
-      ),
-    });
+    const toastFailure = () =>
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Token expired. Please refresh your browser",
+        action: (
+          <ToastAction
+            altText="Refresh"
+            className="flex gap-2"
+            onClick={async () => location.reload()}
+          >
+            <MdRefresh />
+            Refresh
+          </ToastAction>
+        ),
+      });
 
     if (signUp !== undefined) {
       await signUp
         .prepareEmailAddressVerification({ strategy: "email_code" })
         .then(() => {
-          toastSuccess;
+          toastSuccess();
           setSeconds(60);
         })
         .catch(() => {
-          toastFailure;
+          toastFailure();
         });
     } else {
-      toastFailure;
+      toastFailure();
     }
   }
 
@@ -219,7 +198,7 @@ export default function SignUpPage() {
             const userId = completeSignUp.createdUserId as string;
             addMetadataToUser(userId);
           })
-          .catch((error: any) => {
+          .catch((error) => {
             console.error("Error updating user: ", error);
           });
 
@@ -230,16 +209,6 @@ export default function SignUpPage() {
       else setError(err.errors[0].message);
     }
   }
-
-  // Name Placeholders
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const randInt = Math.floor(Math.random() * innovators.length);
-      setFirstNamePlaceholder(innovators[randInt].firstName);
-      setLastNamePlaceholder(innovators[randInt].lastName);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Timer
   useEffect(() => {
@@ -299,7 +268,7 @@ export default function SignUpPage() {
                       onChange={(e) => setFirstName(e.target.value)}
                       id="firstname"
                       name="firstname"
-                      placeholder={firstNamePlaceholder}
+                      placeholder="John"
                       type="text"
                       autoCapitalize="on"
                       autoComplete="given-name"
@@ -313,7 +282,7 @@ export default function SignUpPage() {
                       onChange={(e) => setLastName(e.target.value)}
                       id="lastname"
                       name="lastname"
-                      placeholder={lastNamePlaceholder}
+                      placeholder="Doe"
                       type="text"
                       autoCapitalize="on"
                       autoComplete="family-name"

@@ -16,7 +16,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler } from "react";
 import { Loader2 } from "lucide-react";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { PostResponse, ProfileMetadata } from "@/utils/api";
@@ -30,9 +30,6 @@ export default function FinishProfileSetup() {
     setIsUpdatingProfile,
     profilePic,
   } = useOnboardingContext();
-  const { user, isLoaded } = useUser();
-  if (!user || !isLoaded) return;
-
   const [prefix, setPrefix] = useQueryState("prefix", {
     defaultValue: "",
   });
@@ -54,6 +51,9 @@ export default function FinishProfileSetup() {
   const [skinTone, setSkinTone] = useQueryState("skinTone", {
     defaultValue: "",
   });
+
+  const { user, isLoaded } = useUser();
+  if (!user || !isLoaded) return;
 
   const metadata = user.publicMetadata.profile as ProfileMetadata;
 

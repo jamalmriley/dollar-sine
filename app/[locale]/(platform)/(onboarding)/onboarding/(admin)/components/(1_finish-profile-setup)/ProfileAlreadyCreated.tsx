@@ -12,14 +12,12 @@ import {
 
 export default function ProfileAlreadyCreated() {
   const { user, isLoaded, isSignedIn } = useUser();
-  if (!isSignedIn || !isLoaded) return;
-
   const { isLoading, setIsLoading, lastUpdated } = useOnboardingContext();
   const [userData, setUserData] = useState<UserData>();
   const [toggle, setToggle] = useState(false);
 
   const getUser = async (): Promise<any> => {
-    const fetchedUser = await fetch(`/api/users/get?userId=${user.id}`, {
+    const fetchedUser = await fetch(`/api/users/get?userId=${user?.id}`, {
       method: "GET",
     })
       .then((res) => res.json())
@@ -43,7 +41,7 @@ export default function ProfileAlreadyCreated() {
         setUserData(userData);
         setIsLoading(false);
       } catch (error) {
-        // console.error(error);
+        console.error(error);
         setIsLoading(false);
       }
     };
@@ -51,6 +49,7 @@ export default function ProfileAlreadyCreated() {
     fetchAndSetUser();
   }, [lastUpdated]);
 
+  if (!isSignedIn || !isLoaded) return;
   return (
     <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
       {/* 

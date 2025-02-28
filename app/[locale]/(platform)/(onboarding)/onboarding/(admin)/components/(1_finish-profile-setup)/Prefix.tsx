@@ -30,7 +30,7 @@ export default function Prefix() {
     "isCustomPrefix",
     parseAsBoolean.withDefault(false)
   );
-  const [displayNameValue, setDisplayNameValue] = useQueryState("displayName", {
+  const [, setDisplayNameValue] = useQueryState("displayName", {
     defaultValue: "",
   });
 
@@ -78,7 +78,7 @@ export default function Prefix() {
           Select a prefix below.
         </span>
         <span className="text-xs font-medium text-muted-foreground mb-2">
-          Don't see one that fits you? Add your own!
+          Don&apos;t see one that fits you? Add your own!
         </span>
       </div>
 

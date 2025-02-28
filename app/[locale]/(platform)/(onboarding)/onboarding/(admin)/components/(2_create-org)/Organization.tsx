@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import CreateOrUpdateOrg from "./CreateOrUpdateOrg";
 import OrgAlreadyCreated from "./OrgAlreadyCreated";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
@@ -19,19 +18,10 @@ export default function Organization() {
   const { setOrgLogo, isUpdatingOrg, setIsUpdatingOrg } =
     useOnboardingContext();
 
-  const [orgName, setOrgName] = useQueryState("orgName", {
-    defaultValue: "",
-  });
-
-  const [orgAddress, setOrgAddress] = useQueryState("orgAddress", {
-    defaultValue: "",
-  });
-
-  const [orgSlug, setOrgSlug] = useQueryState("orgSlug", {
-    defaultValue: "",
-  });
-
-  const [is2FARequired, setIs2FARequired] = useQueryState(
+  const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
+  const [, setOrgAddress] = useQueryState("orgAddress", { defaultValue: "" });
+  const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
+  const [, setIs2FARequired] = useQueryState(
     "is2FARequired",
     parseAsBoolean.withDefault(false)
   );
@@ -99,7 +89,9 @@ export default function Organization() {
 }
 
 export const isCreateOrgCompleted = (): boolean => {
-  const { user } = useUser();
-  if (!user) return false;
-  return user.organizationMemberships.length > 0;
+  const result: boolean = true;
+  // TODO: Use server action to access public metadata.
+  // const user = currentUser();
+
+  return result;
 };

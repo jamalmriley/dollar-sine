@@ -17,19 +17,10 @@ export function OrgCard({
   toggle: boolean;
   orgData: OrgData;
 }) {
-  const [orgName, setOrgName] = useQueryState("orgName", {
-    defaultValue: "",
-  });
-
-  const [orgSlug, setOrgSlug] = useQueryState("orgSlug", {
-    defaultValue: "",
-  });
-
-  const [orgAddress, setOrgAddress] = useQueryState("orgAddress", {
-    defaultValue: "",
-  });
-
-  const [is2FARequired, setIs2FARequired] = useQueryState(
+  const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
+  const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
+  const [, setOrgAddress] = useQueryState("orgAddress", { defaultValue: "" });
+  const [, setIs2FARequired] = useQueryState(
     "is2FARequired",
     parseAsBoolean.withDefault(false)
   );
@@ -38,8 +29,8 @@ export function OrgCard({
     const separator = ",";
     const addressArr = address.split(separator);
 
-    let address1: string = addressArr[0].trim();
-    let address2: string = [...addressArr].slice(1).join(separator).trim();
+    const address1: string = addressArr[0].trim();
+    const address2: string = [...addressArr].slice(1).join(separator).trim();
 
     return { address1, address2 };
   }
@@ -215,7 +206,7 @@ export function OrgCardError({ toggle }: { toggle: boolean }) {
             </div>
 
             <span className="text-sm">
-              We couldn't load this organization's info.
+              We couldn&apos;t load this organization&apos;s info.
             </span>
           </div>
 

@@ -57,7 +57,7 @@ export default function CreateOrUpdateOrg() {
     text.replaceAll(" ", "-").toLowerCase();
 
   // TODO
-  const validate = (value: string) => {
+  /* const validate = (value: string) => {
     // ^               ->  Assert the start of the string
     // (?![-_])        ->  Negative lookahead to assert that the string does not start with a hyphen or underscore.
     // (?!.*[-_]$)     ->  Negative lookahead to assert that the string does not end with a hyphen or underscore.
@@ -65,7 +65,7 @@ export default function CreateOrUpdateOrg() {
     // $               ->  Assert the end of the string
     const pattern = /^(?![-_])(?!.*[-_]$)[a-zA-Z0-9-_]+$/;
     return pattern.test(value);
-  };
+  }; */
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     if (!isLoaded || !user) return;
@@ -105,7 +105,7 @@ export default function CreateOrUpdateOrg() {
         });
       })
       .catch((err) => {
-        // console.error(err);
+        console.error(err);
         setIsLoading(false);
 
         toast({
@@ -171,7 +171,7 @@ export default function CreateOrUpdateOrg() {
             id="org-id"
             value={orgSlug}
             onChange={(e) => {
-              const re = /^[a-zA-Z0-9_]+$/;
+              // const re = /^[a-zA-Z0-9_]+$/;
               setOrgSlug(e.target.value);
               setHasCustomOrgSlug(e.target.value !== "");
             }}

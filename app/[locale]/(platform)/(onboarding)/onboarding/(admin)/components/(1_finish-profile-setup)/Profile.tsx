@@ -4,7 +4,6 @@ import { useQueryState } from "nuqs";
 import { MdClose } from "react-icons/md";
 import FinishProfileSetup from "./FinishProfileSetup";
 import ProfileAlreadyCreated from "./ProfileAlreadyCreated";
-import { useUser } from "@clerk/nextjs";
 import {
   Card,
   CardContent,
@@ -12,34 +11,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ProfileMetadata } from "@/utils/api";
-import { isEmptyObject } from "@/utils/general";
+// import { ProfileMetadata } from "@/utils/api";
+// import { isEmptyObject } from "@/utils/general";
+// import { currentUser } from "@clerk/nextjs/server";
 
 export default function Profile() {
+  const [, setPrefix] = useQueryState("prefix", { defaultValue: "" });
+  const [, setDisplayName] = useQueryState("displayName", { defaultValue: "" });
+  const [, setDisplayNameFormat] = useQueryState("displayNameFormat", {
+    defaultValue: "",
+  });
+  const [, setJobTitle] = useQueryState("jobTitle", { defaultValue: "" });
+  const [, setPronouns] = useQueryState("pronouns", { defaultValue: "" });
+  const [, setSkinTone] = useQueryState("skinTone", { defaultValue: "" });
+
   const { isUpdatingProfile, setIsUpdatingProfile, setProfilePic } =
     useOnboardingContext();
-
-  const [prefix, setPrefix] = useQueryState("prefix", {
-    defaultValue: "",
-  });
-  const [displayName, setDisplayName] = useQueryState("displayName", {
-    defaultValue: "",
-  });
-  const [displayNameFormat, setDisplayNameFormat] = useQueryState(
-    "displayNameFormat",
-    {
-      defaultValue: "",
-    }
-  );
-  const [jobTitle, setJobTitle] = useQueryState("jobTitle", {
-    defaultValue: "",
-  });
-  const [pronouns, setPronouns] = useQueryState("pronouns", {
-    defaultValue: "",
-  });
-  const [skinTone, setSkinTone] = useQueryState("skinTone", {
-    defaultValue: "",
-  });
 
   const header = {
     title: isUpdatingProfile
@@ -105,21 +92,28 @@ export default function Profile() {
   );
 }
 
-export const isFinishProfileSetupCompleted = (): boolean => {
-  const { user, isLoaded } = useUser();
-  if (!user || !isLoaded) return false;
+/* export const isFinishProfileSetupCompleted = async (): Promise<boolean> => {
+  const res = await currentUser()
+    .then((user) => {
+      const metadata = user?.publicMetadata;
+      if (!user || !metadata || isEmptyObject(metadata)) return false;
 
-  const metadata = user.publicMetadata;
-  if (isEmptyObject(metadata)) return false;
+      const { prefix, displayName, jobTitle, pronouns, skinTone } =
+        metadata.profile as ProfileMetadata;
 
-  const { prefix, displayName, jobTitle, pronouns, skinTone } =
-    metadata.profile as ProfileMetadata;
+      return (
+        prefix !== "" &&
+        displayName !== "" &&
+        jobTitle !== "" &&
+        pronouns !== "" &&
+        skinTone !== ""
+      );
+    })
+    .catch((err) => {
+      console.error(err);
+      return false;
+    });
 
-  return (
-    prefix !== "" &&
-    displayName !== "" &&
-    jobTitle !== "" &&
-    pronouns !== "" &&
-    skinTone !== ""
-  );
-};
+  return res;
+}; */
+export const isFinishProfileSetupCompleted = () => true;

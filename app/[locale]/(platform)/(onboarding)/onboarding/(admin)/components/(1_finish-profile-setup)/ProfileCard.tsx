@@ -17,27 +17,14 @@ export function ProfileCard({
 }) {
   const metadata = userData.publicMetadata.profile as ProfileMetadata;
 
-  const [prefix, setPrefix] = useQueryState("prefix", {
+  const [, setPrefix] = useQueryState("prefix", { defaultValue: "" });
+  const [, setDisplayName] = useQueryState("displayName", { defaultValue: "" });
+  const [, setDisplayNameFormat] = useQueryState("displayNameFormat", {
     defaultValue: "",
   });
-  const [displayName, setDisplayName] = useQueryState("displayName", {
-    defaultValue: "",
-  });
-  const [displayNameFormat, setDisplayNameFormat] = useQueryState(
-    "displayNameFormat",
-    {
-      defaultValue: "",
-    }
-  );
-  const [jobTitle, setJobTitle] = useQueryState("jobTitle", {
-    defaultValue: "",
-  });
-  const [pronouns, setPronouns] = useQueryState("pronouns", {
-    defaultValue: "",
-  });
-  const [skinTone, setSkinTone] = useQueryState("skinTone", {
-    defaultValue: "",
-  });
+  const [, setJobTitle] = useQueryState("jobTitle", { defaultValue: "" });
+  const [, setPronouns] = useQueryState("pronouns", { defaultValue: "" });
+  const [, setSkinTone] = useQueryState("skinTone", { defaultValue: "" });
 
   const {
     setIsUpdatingProfile,
@@ -210,7 +197,9 @@ export function ProfileCardError({ toggle }: { toggle: boolean }) {
               <span className="text-lg font-bold">User not found</span>
             </div>
 
-            <span className="text-sm">We couldn't load this user's info.</span>
+            <span className="text-sm">
+              We couldn&apos;t load this user&apos;s info.
+            </span>
           </div>
 
           {/* User Expanded Details and Creation Date */}

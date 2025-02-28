@@ -103,7 +103,7 @@ export default function Pronouns() {
           Add your pronouns.
         </span>
         <span className="text-xs font-medium text-muted-foreground">
-          Choose as many as you'd like!
+          Choose as many as you&apos;d like!
         </span>
       </div>
 

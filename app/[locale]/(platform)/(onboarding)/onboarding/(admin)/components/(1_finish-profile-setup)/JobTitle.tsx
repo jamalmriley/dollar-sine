@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useActiveUserContext } from "@/contexts/active-user-context";
 import { useQueryState } from "nuqs";
 
 export default function JobTitle() {

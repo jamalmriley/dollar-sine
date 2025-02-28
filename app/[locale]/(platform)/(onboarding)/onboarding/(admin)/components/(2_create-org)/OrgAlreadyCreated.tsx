@@ -11,15 +11,13 @@ import { OrgCard, OrgCardError, OrgCardSkeleton } from "./OrgCard";
 export default function OrgAlreadyCreated() {
   const { user, isLoaded } = useUser();
   const { lastUpdated, isLoading, setIsLoading } = useOnboardingContext();
-  const organization = user?.organizationMemberships[0].organization;
-  if (!organization || !isLoaded) return false;
-
   const [toggle, setToggle] = useState(false);
   const [orgData, setOrgData] = useState<OrgData>();
+  const organization = user?.organizationMemberships[0].organization;
 
   const getOrg = async (): Promise<any> => {
     const fetchedOrg = await fetch(
-      `/api/organizations/get?organizationId=${organization.id}`,
+      `/api/organizations/get?organizationId=${organization?.id}`,
       {
         method: "GET",
       }
@@ -45,7 +43,7 @@ export default function OrgAlreadyCreated() {
         setOrgData(orgData);
         setIsLoading(false);
       } catch (error) {
-        // console.error(error);
+        console.error(error);
         setIsLoading(false);
       }
     };
@@ -53,6 +51,7 @@ export default function OrgAlreadyCreated() {
     fetchAndSetOrg();
   }, [lastUpdated]);
 
+  if (!organization || !isLoaded) return;
   return (
     <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
       {/*
