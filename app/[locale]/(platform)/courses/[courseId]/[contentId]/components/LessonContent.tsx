@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -50,7 +50,6 @@ export function LessonContent({
   lesson: any;
 }) {
   const { t } = useTranslation();
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const links = [
     {
@@ -98,18 +97,6 @@ export function LessonContent({
   const [open, setOpen] = useState<boolean>(false);
   const [currStep, setCurrStep] = useState<number>(0);
 
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  if (!isLoaded) {
-    return (
-      <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
-        <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
-        <p className="font-medium">Ultron was right too...</p>
-      </div>
-    );
-  }
   return (
     <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-givry-50 dark:bg-emerald-950 h-full">
       {/* Sidebar */}

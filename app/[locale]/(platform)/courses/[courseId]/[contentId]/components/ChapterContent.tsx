@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/tooltip";
 import { getStandard } from "@/data/standards";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlay } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
@@ -46,20 +45,7 @@ export default function ChapterContent({
   chapter: any;
 }) {
   const { t } = useTranslation();
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  if (!isLoaded) {
-    return (
-      <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
-        <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
-        <p className="font-medium">Ultron was right too...</p>
-      </div>
-    );
-  }
   return (
     <div className="page-container">
       <Breadcrumb className="mb-5">
