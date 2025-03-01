@@ -14,7 +14,6 @@ import { GiRunningShoe } from "react-icons/gi";
 import { TbZoomCheck } from "react-icons/tb";
 import { PiFlagCheckeredFill } from "react-icons/pi";
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
-import { FaToolbox } from "react-icons/fa";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -133,14 +132,6 @@ export function LessonContent({
               ))}
             </div>
           </div>
-
-          <SidebarLink
-            link={{
-              label: t("my-tools"),
-              href: "#",
-              icon: <FaToolbox className="sidebar-item" />,
-            }}
-          />
         </SidebarBody>
       </Sidebar>
 
@@ -210,7 +201,8 @@ export function LessonContent({
         {/* Interactive Area and Video */}
         <div className="flex flex-col-reverse md:flex-row grow gap-10">
           {/* Interactive Area */}
-          <div className="w-full h-full p-5 border border-default-color rounded-md flex flex-col justify-between">
+          <div className="w-full h-full p-5 border border-default-color rounded-md flex flex-col justify-between dark:bg-grid-white/[0.1] bg-grid-black/[0.1]">
+            {/* <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" /> */}
             <span className="h2">{links[currStep].label}</span>
             {/* Buttons */}
             <div
