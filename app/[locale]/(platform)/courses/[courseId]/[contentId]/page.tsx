@@ -6,7 +6,6 @@ import ChapterContent from "./components/ChapterContent";
 import { LessonContent } from "./components/LessonContent";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "@/app/i18n";
-import { currentUser } from "@clerk/nextjs/server";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 
@@ -16,11 +15,6 @@ const i18nNamespaces = ["platform-layout", "common-cents"];
 export default async function ContentPage({ params }: { params: any }) {
   const locale: string = params.locale;
   const { resources } = await initTranslations(locale, i18nNamespaces);
-
-  const user = await currentUser();
-  const firstName = user?.firstName;
-  const lastLetter = firstName?.charAt(firstName.length - 1);
-  const endsWithS: boolean = lastLetter?.toLowerCase() === "s";
 
   const [courseId, contentId] = [
     params.courseId, // (await params).courseId,

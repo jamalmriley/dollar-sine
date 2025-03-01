@@ -1,5 +1,5 @@
 import { db } from "@/utils/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 export type Pricing = {
@@ -24,7 +24,7 @@ export type CourseData = {
   pricing: Pricing[];
 };
 
-export async function GET(request: any) {
+export async function GET() {
   const q = query(
     collection(db, "courses")
     // where("publishDate", ">=", new Date()) // TODO

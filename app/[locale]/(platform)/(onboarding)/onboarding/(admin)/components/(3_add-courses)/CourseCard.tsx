@@ -7,12 +7,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-const planSchema = z.object({
-  // id: z.number(),
-  name: z.string(),
-  price: z.number(),
-});
-
 // const addOnSchema = z.object({
 //   name: z.string(),
 //   quantity: z.number(),
@@ -35,7 +29,7 @@ function addCourse(courses: Course[], course: Course): Course[] {
 // READ
 function findCourse(courses: Course[], id: string): number {
   for (let i = 0; i < courses.length; i++) {
-    let course = courses[i];
+    const course = courses[i];
     if (course.id === id) return i;
   }
   return -1;
@@ -43,7 +37,7 @@ function findCourse(courses: Course[], id: string): number {
 
 function findPlan(courses: Course[], planName: string): number {
   for (let i = 0; i < courses.length; i++) {
-    let plan = courses[i].plan;
+    const plan = courses[i].plan;
     if (plan === planName) return i;
   }
   return -1;

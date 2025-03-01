@@ -8,7 +8,6 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import LanguageToggle from "./LanguageToggle";
 import ModeToggle from "@/components/ModeToggle";
 import { useTranslation } from "react-i18next";
-import { Button } from "./ui/button";
 import { IoMenu } from "react-icons/io5";
 import {
   Drawer,

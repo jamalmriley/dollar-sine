@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from "react";
 export const BackgroundGradientAnimation = ({
   gradientBackgroundStart = "rgb(234, 255, 245)",
   gradientBackgroundEnd = "rgb(22, 219, 147)",
-  firstColor = "234, 255, 245",
-  secondColor = "221, 74, 255",
-  thirdColor = "100, 220, 255",
-  fourthColor = "200, 50, 50",
-  fifthColor = "180, 180, 50",
+  // firstColor = "234, 255, 245",
+  // secondColor = "221, 74, 255",
+  // thirdColor = "100, 220, 255",
+  // fourthColor = "200, 50, 50",
+  // fifthColor = "180, 180, 50",
   pointerColor = "46, 159, 255",
   size = "80%",
   blendingValue = "hard-light",
@@ -20,11 +20,11 @@ export const BackgroundGradientAnimation = ({
 }: {
   gradientBackgroundStart?: string;
   gradientBackgroundEnd?: string;
-  firstColor?: string;
-  secondColor?: string;
-  thirdColor?: string;
-  fourthColor?: string;
-  fifthColor?: string;
+  // firstColor?: string;
+  // secondColor?: string;
+  // thirdColor?: string;
+  // fourthColor?: string;
+  // fifthColor?: string;
   pointerColor?: string;
   size?: string;
   blendingValue?: string;

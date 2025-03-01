@@ -48,10 +48,10 @@ export default function Prompt2() {
               isSelected(option, currOptions) && "border-primary"
             }`}
             onClick={() => {
-              !isSelected(option, currOptions) &&
+              if (!isSelected(option, currOptions)) {
                 setCurrOptions([...currOptions, option]);
-              !isSelected(option, currOptions) &&
                 setSiblingCount(updateElement("1", i, siblingCount));
+              }
             }}
           >
             {isSelected(option, currOptions) && (

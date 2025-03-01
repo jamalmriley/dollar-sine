@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY as string);
+import Stripe from "stripe";
+
+if (process.env.STRIPE_SECRET_KEY === undefined)
+  throw new Error("STRIPE_SECRET_KEY is not defined.");
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(request: NextRequest) {
   try {

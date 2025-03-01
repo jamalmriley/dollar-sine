@@ -6,7 +6,6 @@ import {
   TrophyIcon,
   WalletIcon,
 } from "lucide-react";
-import UserCards from "./UserCards";
 import DownloadApp from "./DownloadApp";
 import Wallet from "./Wallet";
 import Integrations from "./Integrations";

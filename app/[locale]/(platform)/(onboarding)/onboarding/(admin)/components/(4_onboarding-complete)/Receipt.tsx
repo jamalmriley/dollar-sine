@@ -2,7 +2,6 @@ import StyledButton from "@/components/StyledButton";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdFileDownload } from "react-icons/md";
 

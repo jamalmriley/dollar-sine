@@ -103,15 +103,15 @@ export default function FileUpload() {
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
-      const file = acceptedFiles[0];
 
+      // const file = acceptedFiles[0];
       // await loadImage(file); // Add custom validation here if needed (e.g. checking aspect ratio)
       // await handleFileUpload(); // Validation passed
     },
     [handleFileUpload]
   );
 
-  const { getRootProps, getInputProps, accept } = fileProps(onDrop);
+  const { getRootProps, getInputProps } = fileProps(onDrop);
 
   return (
     <div className="flex flex-col">

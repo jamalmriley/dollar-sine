@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     .updateUserMetadata(userId, {
       publicMetadata: { onboardingLink },
     })
-    .then((user) => {
+    .then(() => {
       return {
         status: 200,
         success: true,

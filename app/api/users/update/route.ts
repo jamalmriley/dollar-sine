@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
 
   const update: PostResponse = await client.users
     .updateUserMetadata(userId, { publicMetadata })
-    .then((user) => {
+    .then(() => {
       try {
         // If the file is null, it will return as the string "null".
         // So it should only update the profile picture when it is an actual file.

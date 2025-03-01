@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
           role,
           // redirectUrl: `/sign-up?emailAddress=${emailAddress}`, // TODO
         })
-        .then((invitation) => {
+        .then(() => {
           // console.log(invitation);
           // const invitationId = invitation.id;
           return {
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         const emailAddress: string = user.emailAddress;
         const role: string = user.role;
 
-        const invite = await client.organizations
+        await client.organizations
           .createOrganizationInvitation({
             organizationId,
             inviterUserId,
@@ -73,8 +73,8 @@ export async function POST(request: NextRequest) {
             role: `org:${role.toLowerCase()}`,
             // redirectUrl: `/sign-up?emailAddress=${emailAddress}`, // TODO
           })
-          .then((invitation) => {
-            // console.log(invitation);
+          .then(() => {
+            // console.log(invitation); // requres .then((invitation) => {...
             // const invitationId = invitation.id;
             successEmails.push(emailAddress);
           })

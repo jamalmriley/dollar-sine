@@ -3,10 +3,8 @@
 import { AnimatedList } from "@/components/ui/animated-list";
 import { cn } from "@/lib/utils";
 import { IOS_APP_LINK } from "@/utils/app";
-import { truncateString } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useQueryState } from "nuqs";
 
 interface Item {
   name: string;
@@ -28,10 +26,7 @@ const Notification = ({ name, description, img, time }: Item) => {
         "dark:bg-black/30 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)]"
       )}
     >
-      <Link
-        href={IOS_APP_LINK}
-        target="_blank"
-      >
+      <Link href={IOS_APP_LINK} target="_blank">
         <div className="flex items-center gap-2">
           {/* Profile Picture */}
           <div className="flex size-8 min-w-8 min-h-8 items-center justify-center rounded-xl overflow-hidden">
@@ -54,9 +49,7 @@ const Notification = ({ name, description, img, time }: Item) => {
 };
 
 export function NotificationDemo({ className }: { className?: string }) {
-  const { user, isLoaded, isSignedIn } = useUser();
-  const [displayName] = useQueryState("displayName", { defaultValue: "" });
-  const name = displayName !== "" ? displayName : (user?.fullName as string);
+  const { user, isLoaded } = useUser();
 
   let notifications = [
     {
@@ -81,7 +74,7 @@ export function NotificationDemo({ className }: { className?: string }) {
 
   notifications = Array.from({ length: 6 }, () => notifications).flat();
 
-  if (!user || !isLoaded || !isSignedIn) return null;
+  if (!user || !isLoaded) return null;
   return (
     <div
       className={cn(

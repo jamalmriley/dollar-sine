@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-import { GetResponse, UserData } from "@/utils/api";
+import { GetResponse } from "@/utils/api";
 
 export async function GET(request: NextRequest) {
   const client = await clerkClient();

@@ -86,7 +86,8 @@ export function PaymentWindow() {
     return true;
   }; // Ensures that all selected courses have plans selected before purchase is allowed.
 
-  const [discountAmt, discountPercent] = [0, 0];
+  // const [discountAmt, discountPercent] = [0, 0];
+  const discountAmt = 0;
   const taxRate = 0.1;
   const taxAmt =
     taxRate * (getTotalAmount(selectedCourses, courses) - discountAmt);

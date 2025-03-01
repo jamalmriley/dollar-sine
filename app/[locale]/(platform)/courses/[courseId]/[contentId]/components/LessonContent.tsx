@@ -35,10 +35,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { HiOutlineInformationCircle } from "react-icons/hi2";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
-import CustomButton from "@/components/CustomButton";
 import StyledButton from "@/components/StyledButton";
 
 export function LessonContent({
@@ -106,12 +104,13 @@ export function LessonContent({
   }, []);
 
   if (!isLoaded) {
-    <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
-      <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
-      <p className="font-medium">Thanos was right...</p>
-    </div>;
+    return (
+      <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
+        <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
+        <p className="font-medium">Ultron was right too...</p>
+      </div>
+    );
   }
-
   return (
     <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-givry-50 dark:bg-emerald-950 h-full">
       {/* Sidebar */}
@@ -200,7 +199,7 @@ export function LessonContent({
               </TooltipTrigger>
               <TooltipContent className="flex flex-col max-w-80 p-3">
                 <span className="font-bold mb-1">
-                  What's this lesson about? 🤔
+                  What&apos;s this lesson about? 🤔
                 </span>
                 <span className="text-xs">{lesson.description}</span>
               </TooltipContent>

@@ -74,7 +74,7 @@ export default function StudentOnboardingPage() {
   return (
     <div className="flex flex-col justify-between h-full">
       <div className="page-container">
-        <h1 className="h1 mb-10">Let's get to know you a bit.</h1>
+        <h1 className="h1 mb-10">Let&apos;s get to know you a bit.</h1>
 
         <div className="flex justify-between gap-10">
           {/* Prompt */}

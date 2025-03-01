@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { dir } from "i18next";
 import { ClerkProvider } from "@clerk/nextjs";
-import Banner from "@/components/Banner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { bannerMessages } from "@/utils/banner-info";
+// import { bannerMessages } from "@/utils/banner-info";
 import { i18nConfig } from "@/i18nConfig";
 import "../globals.css";
 import { inter } from "../fonts";
@@ -49,14 +48,14 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const bannerObj = bannerMessages[bannerMessages.length - 1];
-  const [header, text, publishDate, buttonText, buttonHref] = [
-    bannerObj.header,
-    bannerObj.text,
-    bannerObj.publishDate,
-    bannerObj.buttonText,
-    bannerObj.buttonHref,
-  ];
+  // const bannerObj = bannerMessages[bannerMessages.length - 1];
+  // const [header, text, publishDate, buttonText, buttonHref] = [
+  //   bannerObj.header,
+  //   bannerObj.text,
+  //   bannerObj.publishDate,
+  //   bannerObj.buttonText,
+  //   bannerObj.buttonHref,
+  // ];
 
   const { resources } = await initTranslations(locale, i18nNamespaces);
 

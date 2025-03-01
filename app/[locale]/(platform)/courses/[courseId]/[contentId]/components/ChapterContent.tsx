@@ -1,7 +1,6 @@
 "use client";
 
 import CustomH1 from "@/components/CustomH1";
-import CustomButton from "@/components/CustomButton";
 import {
   Accordion,
   AccordionContent,
@@ -37,7 +36,7 @@ import { VscDebugRestart } from "react-icons/vsc";
 import StyledButton from "@/components/StyledButton";
 import Link from "next/link";
 
-export default async function ChapterContent({
+export default function ChapterContent({
   courseId,
   course,
   chapter,
@@ -54,12 +53,13 @@ export default async function ChapterContent({
   }, []);
 
   if (!isLoaded) {
-    <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
-      <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
-      <p className="font-medium">Thanos was right...</p>
-    </div>;
+    return (
+      <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
+        <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
+        <p className="font-medium">Ultron was right too...</p>
+      </div>
+    );
   }
-
   return (
     <div className="page-container">
       <Breadcrumb className="mb-5">

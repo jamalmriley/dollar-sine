@@ -152,7 +152,7 @@ export default function AddColleagues() {
               <CardHeader>
                 <CardTitle>Add a colleague one at a time.</CardTitle>
                 <CardDescription>
-                  Enter your colleague's email and select their role below.
+                  Enter your colleague&apos;s email and select their role below.
                 </CardDescription>
               </CardHeader>
               <CardContent className="w-full flex items-center gap-2">
@@ -253,7 +253,7 @@ export default function AddColleagues() {
         </div>
 
         <Button variant="link" className="text-muted-foreground p-0">
-          I'll do this later
+          I&apos;ll do this later
         </Button>
       </div>
 
@@ -265,7 +265,7 @@ export default function AddColleagues() {
     </div>
   );
 }
-export const isAddColleaguesCompleted = (): boolean => {
-  const { hasInvitedUsers } = useOnboardingContext();
-  return hasInvitedUsers;
-};
+// export const isAddColleaguesCompleted = (): boolean => {
+//   const { hasInvitedUsers } = useOnboardingContext();
+//   return hasInvitedUsers;
+// };

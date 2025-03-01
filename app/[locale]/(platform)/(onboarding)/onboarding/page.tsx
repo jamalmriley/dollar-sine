@@ -14,7 +14,7 @@ export default async function OnboardingPage() {
   const role = user?.publicMetadata.role;
 
   if (!role)
-    return <h1 className="h1 my-0 mx-auto">This user's role is not found.</h1>;
+    return <h1 className="h1 my-0 mx-auto">This user&apos;s role is not found.</h1>;
 
   return (
     <OnboardingContextProvider>

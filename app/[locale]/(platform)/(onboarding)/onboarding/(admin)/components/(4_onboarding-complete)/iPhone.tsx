@@ -1,4 +1,4 @@
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+// import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { NotificationDemo } from "./NotificationDemo";
 import StyledButton from "@/components/StyledButton";
 import Link from "next/link";

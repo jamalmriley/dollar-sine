@@ -104,8 +104,8 @@ export default function CreateOrUpdateOrg() {
           description: json.message.description,
         });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        console.error(error);
         setIsLoading(false);
 
         toast({

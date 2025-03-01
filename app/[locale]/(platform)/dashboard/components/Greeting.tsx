@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Greeting({
   name,
 }: {
-  name: String | null | undefined;
+  name: string | null | undefined;
 }) {
   const { t } = useTranslation();
   const [time, setTime] = useState(new Date());

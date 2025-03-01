@@ -27,7 +27,6 @@ export default function AdminOnboardingComplete() {
     setIsOnboardingComplete,
   } = useOnboardingContext();
   const { user, isLoaded } = useUser();
-  if (!user || !isLoaded) return;
 
   const [paymentIntent] = useQueryState("payment_intent", {
     defaultValue: "",
@@ -35,14 +34,15 @@ export default function AdminOnboardingComplete() {
 
   useEffect(() => {
     const completeAdminOnboarding = async (
-      userId: string,
+      userId: string | undefined,
       paymentIntent: string,
       locale: string
     ) => {
+      if (!userId) return;
       function formatConfirmationCode(code: string): string {
         const strStart = 3;
         const strLength = 6;
-        let first6Chars = code
+        const first6Chars = code
           .substring(strStart, strStart + strLength)
           .toUpperCase();
         return `C-${first6Chars}`;
@@ -77,10 +77,10 @@ export default function AdminOnboardingComplete() {
         });
     };
 
-    completeAdminOnboarding(user.id, paymentIntent, "en");
+    completeAdminOnboarding(user?.id, paymentIntent, "en");
   }, []);
 
-  if (!isOnboardingComplete) return;
+  if (!user || !isLoaded || !isOnboardingComplete) return;
   return (
     <div className="size-full flex flex-col justify-between items-center">
       <h1 className="h1 text-center">Your onboarding is complete!</h1>

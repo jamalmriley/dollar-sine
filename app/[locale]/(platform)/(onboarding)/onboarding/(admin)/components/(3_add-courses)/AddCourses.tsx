@@ -1,5 +1,5 @@
 import { CourseData } from "@/app/api/courses/route";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PaymentWindow } from "./PaymentWindow";
 import {
   Card,
@@ -49,7 +49,7 @@ export default function AddCourses() {
         setCourses(data);
         setIsLoading(false);
       } catch (error) {
-        // console.error(error);
+        console.error(error);
         setIsLoading(false);
       }
     };
