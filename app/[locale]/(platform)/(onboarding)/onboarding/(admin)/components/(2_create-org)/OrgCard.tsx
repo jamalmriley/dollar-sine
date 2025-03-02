@@ -4,6 +4,7 @@ import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { OrgData } from "@/utils/api";
 import { truncateString } from "@/utils/general";
 import { formatRelative } from "date-fns";
+import Image from "next/image";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { BsBuildingExclamation } from "react-icons/bs";
 import { IoMdLink } from "react-icons/io";
@@ -45,11 +46,17 @@ export function OrgCard({
         } flex gap-5 select-none`}
       >
         {/* Org Image */}
-        <img
-          src={orgData.imageUrl}
-          alt={orgData.name}
-          className="aspect-square h-full rounded-lg overflow-hidden"
-        />
+        <div className={`expandable-content ${toggle ? "size-32" : "size-24"}`}>
+          <Image
+            src={orgData.imageUrl}
+            width={0}
+            height={0}
+            sizes="100vw"
+            alt={orgData.name}
+            loading="eager"
+            className="w-full h-auto rounded-lg overflow-hidden"
+          />
+        </div>
 
         {/* Org Details */}
         <div className="flex grow flex-col justify-between">

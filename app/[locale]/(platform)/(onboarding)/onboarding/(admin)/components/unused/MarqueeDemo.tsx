@@ -3,6 +3,7 @@
 import Marquee from "@/components/ui/marquee";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
 import { useQueryState } from "nuqs";
 
 const ReviewCard = ({
@@ -25,7 +26,14 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <img className="rounded-full" width="32" height="32" alt="" src={img} />
+        <Image
+          src={img}
+          width={32}
+          height={32}
+          alt={displayName}
+          loading="eager"
+          className="rounded-full"
+        />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {displayName}
@@ -95,8 +103,8 @@ export function MarqueeDemo() {
           <ReviewCard key={i} {...review} />
         ))}
       </Marquee> */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-primary-foreground"/>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-primary-foreground"/>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-primary-foreground" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-primary-foreground" />
     </div>
   );
 }

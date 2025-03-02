@@ -4,6 +4,7 @@ import { AnimatedList } from "@/components/ui/animated-list";
 import { cn } from "@/lib/utils";
 import { IOS_APP_LINK } from "@/utils/app";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 
 interface Item {
@@ -30,7 +31,15 @@ const Notification = ({ name, description, img, time }: Item) => {
         <div className="flex items-center gap-2">
           {/* Profile Picture */}
           <div className="flex size-8 min-w-8 min-h-8 items-center justify-center rounded-xl overflow-hidden">
-            <img src={img} alt="" />
+            <Image
+              src={img}
+              width={0}
+              height={0}
+              sizes="100vw"
+              alt="Notification icon"
+              loading="eager"
+              className="w-full h-auto overflow-hidden"
+            />
           </div>
           {/* Notification Content */}
           <div className="w-full flex flex-col overflow-hidden">

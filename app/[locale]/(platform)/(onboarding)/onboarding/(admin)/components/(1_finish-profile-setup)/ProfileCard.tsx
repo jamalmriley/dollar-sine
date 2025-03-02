@@ -4,6 +4,7 @@ import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { ProfileMetadata, UserData } from "@/utils/api";
 import { EMOJIS, SkinTone } from "@/utils/emoji";
 import { formatRelative } from "date-fns";
+import Image from "next/image";
 import { useQueryState } from "nuqs";
 import { MdAlternateEmail, MdEdit, MdEmail, MdError } from "react-icons/md";
 import { TbUserExclamation } from "react-icons/tb";
@@ -41,11 +42,17 @@ export function ProfileCard({
         } flex gap-5 select-none`}
       >
         {/* User Image */}
-        <img
-          src={userData.imageUrl}
-          alt={userData.id}
-          className="aspect-square h-full rounded-lg overflow-hidden"
-        />
+        <div className={`expandable-content ${toggle ? "size-32" : "size-24"}`}>
+          <Image
+            src={userData.imageUrl}
+            width={0}
+            height={0}
+            sizes="100vw"
+            alt={userData.id}
+            loading="eager"
+            className="w-full h-auto rounded-lg overflow-hidden"
+          />
+        </div>
 
         {/* User Details */}
         <div className="flex grow flex-col justify-between">

@@ -2,6 +2,7 @@
 
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { imageProps, loadImage, MAX_FILE_SIZE } from "@/utils/image-upload";
+import Image from "next/image";
 import { useCallback } from "react";
 import { MdPhotoCamera } from "react-icons/md";
 
@@ -37,7 +38,14 @@ export default function OrgLogoUpload() {
         } rounded-md border overflow-hidden`}
       >
         {orgLogo ? (
-          <img src={URL.createObjectURL(orgLogo)} />
+          <Image
+            src={URL.createObjectURL(orgLogo)}
+            width={56}
+            height={56}
+            alt={orgLogo.name}
+            loading="eager"
+            className="overflow-hidden"
+          />
         ) : (
           <MdPhotoCamera className="size-full text-muted-foreground" />
         )}

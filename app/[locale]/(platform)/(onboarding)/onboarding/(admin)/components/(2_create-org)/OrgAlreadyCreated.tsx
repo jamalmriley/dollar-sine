@@ -13,9 +13,11 @@ export default function OrgAlreadyCreated() {
   const { lastUpdated, isLoading, setIsLoading } = useOnboardingContext();
   const [toggle, setToggle] = useState(false);
   const [orgData, setOrgData] = useState<OrgData>();
-  const organization = user?.organizationMemberships[0].organization;
 
   const getOrg = async (): Promise<any> => {
+    if (!user || user.organizationMemberships.length === 0) return {};
+
+    const organization = user.organizationMemberships[0].organization;
     const fetchedOrg = await fetch(
       `/api/organizations/get?organizationId=${organization?.id}`,
       {
@@ -51,7 +53,7 @@ export default function OrgAlreadyCreated() {
     fetchAndSetOrg();
   }, [lastUpdated]);
 
-  if (!organization || !isLoaded) return;
+  if (!user || user.organizationMemberships.length === 0 || !isLoaded) return;
   return (
     <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
       {/*

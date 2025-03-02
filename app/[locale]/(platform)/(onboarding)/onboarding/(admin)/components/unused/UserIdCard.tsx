@@ -3,6 +3,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { properString, truncateEmail } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
 import { useQueryState } from "nuqs";
 import { FaBuilding, FaKey } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -27,7 +28,14 @@ export default function UserIdCard() {
         {/* User Profile Picture */}
         <div className="size-14 min-w-14 min-h-14 rounded-full border-2 overflow-hidden">
           {user && user.fullName ? (
-            <img src={user?.imageUrl} alt={user?.fullName} />
+            <Image
+              src={user.imageUrl}
+              width={56}
+              height={56}
+              alt={user.fullName}
+              loading="eager"
+              className="overflow-hidden"
+            />
           ) : (
             <Skeleton />
           )}

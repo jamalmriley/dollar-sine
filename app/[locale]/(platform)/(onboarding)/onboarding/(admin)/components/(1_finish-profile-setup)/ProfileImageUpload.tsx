@@ -2,6 +2,7 @@
 
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { imageProps, loadImage, MAX_FILE_SIZE } from "@/utils/image-upload";
+import Image from "next/image";
 import { useCallback } from "react";
 import { MdPhotoCamera } from "react-icons/md";
 
@@ -39,7 +40,14 @@ export default function ProfileImageUpload() {
         } rounded-md border overflow-hidden`}
       >
         {profilePic ? (
-          <img src={URL.createObjectURL(profilePic)} />
+          <Image
+            src={URL.createObjectURL(profilePic)}
+            width={56}
+            height={56}
+            alt={profilePic.name}
+            loading="eager"
+            className="overflow-hidden"
+          />
         ) : (
           <MdPhotoCamera className="size-full text-muted-foreground" />
         )}
