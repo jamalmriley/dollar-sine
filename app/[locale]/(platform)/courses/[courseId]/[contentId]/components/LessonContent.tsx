@@ -1,19 +1,4 @@
-"use client";
-
-import { useState } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import Link from "next/link";
-import {
-  LuClipboardCheck,
-  LuGamepad2,
-  LuHeadphones,
-  LuPencilRuler,
-} from "react-icons/lu";
-import { MdOutlineQuiz } from "react-icons/md";
-import { GiRunningShoe } from "react-icons/gi";
-import { TbZoomCheck } from "react-icons/tb";
-import { PiFlagCheckeredFill } from "react-icons/pi";
-import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,201 +20,111 @@ import {
 } from "@/components/ui/tooltip";
 import { HiOutlineInformationCircle } from "react-icons/hi2";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTranslation } from "react-i18next";
-import StyledButton from "@/components/StyledButton";
+import LessonSidebar from "./LessonSidebar";
+import initTranslations from "@/app/i18n";
+import TranslationsProvider from "@/components/ui/translations-provider";
+import LessonWorkspace from "./LessonWorkspace";
 
-export function LessonContent({
+const i18nNamespaces = ["platform-layout"];
+
+export default async function LessonContent({
   courseId,
   lessonPrefix,
   lessons,
   lesson,
+  params: { locale },
 }: {
   courseId: any;
   lessonPrefix: any;
   lessons: any;
   lesson: any;
+  params: { locale: string };
 }) {
-  const { t } = useTranslation();
-
-  const links = [
-    {
-      // label: "Prereq Check",
-      label: t("intro"),
-      href: "#",
-      icon: <LuClipboardCheck className="sidebar-item" />,
-    },
-    {
-      label: t("lecture"),
-      href: "#",
-      icon: <LuHeadphones className="sidebar-item" />,
-    },
-    {
-      label: t("activity-1"),
-      href: "#",
-      icon: <LuPencilRuler className="sidebar-item" />,
-    },
-    {
-      label: t("checkpoint"),
-      href: "#",
-      icon: <TbZoomCheck className="sidebar-item" />,
-    },
-    {
-      label: t("activity-2"),
-      href: "#",
-      icon: <LuGamepad2 className="sidebar-item" />,
-    },
-    {
-      label: t("practice"),
-      href: "#",
-      icon: <GiRunningShoe className="sidebar-item" />,
-    },
-    {
-      label: t("quiz"),
-      href: "#",
-      icon: <MdOutlineQuiz className="sidebar-item" />,
-    },
-    {
-      label: t("wrapping-up"),
-      href: "#",
-      icon: <PiFlagCheckeredFill className="sidebar-item" />,
-    },
-  ];
-  const [open, setOpen] = useState<boolean>(false);
-  const [currStep, setCurrStep] = useState<number>(0);
+  const { t, resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
-    <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-givry-50 dark:bg-emerald-950 h-full">
-      {/* Sidebar */}
-      <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10 bg-givry-50 dark:bg-emerald-950">
-          <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-            <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, i) => (
-                <span
-                  key={i}
-                  className={`${
-                    i === currStep
-                      ? "text-primary"
-                      : "text-neutral-700 dark:text-emerald-100"
-                  }`}
-                  onClick={() => setCurrStep(i)}
-                >
-                  <SidebarLink link={link} />
-                </span>
-              ))}
-            </div>
-          </div>
-        </SidebarBody>
-      </Sidebar>
+    <TranslationsProvider
+      namespaces={i18nNamespaces}
+      locale={locale}
+      resources={resources}
+    >
+      <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-givry-50 dark:bg-emerald-950 h-full">
+        <LessonSidebar />
 
-      {/* Dashboard */}
-      <div className="flex flex-col h-full w-full justify-between grow p-10 gap-5 rounded-tl-2xl border-l border-default-color bg-[#fff] dark:bg-[#121212]">
-        {/* Breadcrumb and Title */}
-        <div className="flex flex-col">
-          <Breadcrumb className="mb-5">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/courses/common-cents">
-                  Common Cents
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href={`/courses/common-cents/chapter-${lessonPrefix}`}
-                >
-                  {t("chapter-number", { chapterId: lessonPrefix })}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center gap-1">
-                      {t("lesson-number", { lessonId: lesson.id })}
-                      <ChevronDown className="h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      {lessons.map((lesson: any) => (
-                        <DropdownMenuItem key={lesson.id}>
-                          <BreadcrumbLink
-                            href={`/courses/common-cents/lesson-${lesson.id}`}
-                          >
-                            {t("lesson-number", { lessonId: lesson.id })}
-                          </BreadcrumbLink>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+        {/* Dashboard */}
+        <div className="flex flex-col h-full w-full justify-between grow p-10 gap-5 rounded-tl-2xl border-l border-default-color bg-[#fff] dark:bg-[#121212]">
+          {/* Breadcrumb and Title */}
+          <div className="flex flex-col">
+            {/* TODO: Make anything that says "Common Cents" dynamic based on selected course. */}
+            <Breadcrumb className="mb-5">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/courses/common-cents">
+                    Common Cents
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    href={`/courses/common-cents/chapter-${lessonPrefix}`}
+                  >
+                    {t("chapter-number", { chapterId: lessonPrefix })}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="flex items-center gap-1">
+                        {t("lesson-number", { lessonId: lesson.id })}
+                        <ChevronDown className="h-4 w-4" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        {lessons.map((lesson: any) => (
+                          <DropdownMenuItem key={lesson.id}>
+                            <BreadcrumbLink
+                              href={`/courses/common-cents/lesson-${lesson.id}`}
+                            >
+                              {t("lesson-number", { lessonId: lesson.id })}
+                            </BreadcrumbLink>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
 
-          {/* Title */}
-          <div className="flex gap-3 items-center">
-            <h1 className="lesson-h1">
-              {t("lesson-number", { lessonId: lesson.id })}: {lesson.title}
-            </h1>
-            <Tooltip>
-              <TooltipTrigger>
-                <HiOutlineInformationCircle className="w-6 h-6 text-dodger-blue-500" />
-              </TooltipTrigger>
-              <TooltipContent className="flex flex-col max-w-80 p-3">
-                <span className="font-bold mb-1">
-                  What&apos;s this lesson about? 🤔
-                </span>
-                <span className="text-xs">{lesson.description}</span>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-
-        {/* Interactive Area and Video */}
-        <div className="flex flex-col-reverse md:flex-row grow gap-10">
-          {/* Interactive Area */}
-          <div className="w-full h-full p-5 border border-default-color rounded-md flex flex-col justify-between dark:bg-grid-white/[0.1] bg-grid-black/[0.1]">
-            {/* <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" /> */}
-            <span className="h2">{links[currStep].label}</span>
-            {/* Buttons */}
-            <div
-              className={`flex items-center ${
-                lesson.prevLesson === ""
-                  ? "justify-end"
-                  : lesson.nextLesson === ""
-                  ? "justify-start"
-                  : "justify-between"
-              }`}
-            >
-              {lesson.prevLesson != "" && (
-                <Link
-                  href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
-                  className="flex justify-center items-center gap-2"
-                >
-                  <StyledButton>
-                    <ArrowLeft />
-                    {t("previous-lesson", { lessonId: lesson.prevLesson })}
-                  </StyledButton>
-                </Link>
-              )}
-              {lesson.nextLesson !== "" && (
-                <Link
-                  href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
-                  className="flex justify-center items-center gap-2"
-                >
-                  <StyledButton>
-                    {t("next-lesson", { lessonId: lesson.nextLesson })}
-                    <ArrowRight />
-                  </StyledButton>
-                </Link>
-              )}
+            {/* Title */}
+            <div className="flex gap-3 items-center">
+              <h1 className="lesson-h1">
+                {t("lesson-number", { lessonId: lesson.id })}: {lesson.title}
+              </h1>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HiOutlineInformationCircle className="w-6 h-6 text-dodger-blue-500" />
+                </TooltipTrigger>
+                <TooltipContent className="flex flex-col max-w-80 p-3">
+                  <span className="font-bold mb-1">
+                    What&apos;s this lesson about? 🤔
+                  </span>
+                  <span className="text-xs">{lesson.description}</span>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
 
-          {/* Video */}
-          <Skeleton className="w-full md:w-1/3 h-full min-w-[312.1875px]" />
+          {/* Workspace and Video */}
+          <div className="flex flex-col-reverse md:flex-row grow gap-10">
+            {/* Workspace */}
+            <LessonWorkspace courseId={courseId} lesson={lesson} />
+
+            {/* Video */}
+            <Skeleton className="w-full md:w-1/3 h-full min-w-[312.1875px]" />
+          </div>
         </div>
       </div>
-    </div>
+    </TranslationsProvider>
   );
 }

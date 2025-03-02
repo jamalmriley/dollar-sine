@@ -11,36 +11,3 @@ export async function checkRole(roles: Roles[]): Promise<boolean> {
   }
   return false;
 }
-
-export const BASE_PUBLIC_METADATA = {
-  student: {},
-  guardian: {},
-  teacher: {
-    displayName: null,
-    role: "teacher",
-    jobTitle: "",
-    isOnboardingCompleted: false,
-    onboardingLink: "/onboarding",
-    organizations: [],
-    classes: [],
-    myCourses: [],
-    students: [],
-    profile: {
-      pronouns: null,
-    },
-  },
-  admin: {
-    displayName: null,
-    role: "admin",
-    jobTitle: "",
-    isOnboardingCompleted: false,
-    onboardingLink: "/onboarding",
-    organizations: [],
-    classes: [],
-    myCourses: [],
-    students: [],
-    profile: {
-      pronouns: null,
-    },
-  },
-};

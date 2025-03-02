@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import Loading from "@/app/[locale]/loading";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ChapterContent from "./components/ChapterContent";
-import { LessonContent } from "./components/LessonContent";
+import LessonContent from "./components/LessonContent";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "@/app/i18n";
 import { setTitle } from "@/utils/ui";
@@ -16,10 +16,7 @@ export default async function ContentPage({ params }: { params: any }) {
   const locale: string = params.locale;
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
-  const [courseId, contentId] = [
-    params.courseId, // (await params).courseId,
-    params.contentId, // (await params).contentId,
-  ];
+  const [courseId, contentId] = [params.courseId, params.contentId];
   const contentType = contentId.split("-")[0];
   const file = await fs.readFile(
     process.cwd() + "/data/content-data.json",
@@ -54,6 +51,7 @@ export default async function ContentPage({ params }: { params: any }) {
                 courseId={courseId}
                 course={course}
                 chapter={chapter}
+                params={params}
               />
             )}
 
@@ -64,6 +62,7 @@ export default async function ContentPage({ params }: { params: any }) {
                 lessonPrefix={lessonPrefix}
                 lessons={lessons}
                 lesson={lesson}
+                params={params}
               />
             )}
           </TooltipProvider>

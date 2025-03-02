@@ -219,22 +219,21 @@ export default function SignUpPage() {
   }, [seconds]);
 
   if (!isLoaded) return null;
-
   return (
     // <div className="page-container flex justify-center items-center">
     <div className="page-container flex justify-center items-center w-full md:p-0">
       {/* Left Side */}
-      <div className="hidden md:flex flex-col pl-10 w-1/2 h-full bg-gradient-to-r from-white via-white dark:from-woodsmoke-950 dark:via-woodsmoke-950 to-transparent text-antique-brass-950 dark:text-antique-brass-100 justify-center">
+      <div className="hidden md:flex flex-col pl-10 w-1/2 h-full bg-gradient-to-r from-givry-50 via-givry-from-givry-50 dark:from-woodsmoke-950 dark:via-woodsmoke-950 to-transparent text-antique-brass-950 dark:text-antique-brass-100 justify-center">
         <h1 className="h1 mb-3">
           {!pendingVerification
-            ? "Get started for free"
+            ? "Get started today"
             : `Check your email, ${firstName}!`}
         </h1>
-        <p className="subtitle text-antique-brass-800 dark:text-antique-brass-50">
+        <h2 className="subtitle text-antique-brass-800 dark:text-antique-brass-50">
           {!pendingVerification
-            ? "No credit card required"
+            ? "See what the hype is all about."
             : `We just sent a code to ${emailAddress}.`}
-        </p>
+        </h2>
       </div>
 
       {/* Right Side */}

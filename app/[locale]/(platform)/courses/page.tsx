@@ -104,7 +104,7 @@ export default async function AllCoursesPage({
                   <Image
                     // src={course.image}
                     src={placeholder}
-                    alt={`${course.title} Course Image`}
+                    alt={course.title}
                     className="object-cover"
                   />
 

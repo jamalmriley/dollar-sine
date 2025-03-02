@@ -10,6 +10,7 @@ const isPublicRoute = createRouteMatcher([
   "/:locale",
   "/:locale/about(.*)",
   "/:locale/support-us(.*)",
+  "/:locale/legal(.*)",
 ]);
 
 // const isL2Route = createRouteMatcher(["/admin(.*)"]); // Parents, Teachers, Admin, and Super Admin

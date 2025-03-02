@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
 import CustomH1 from "@/components/CustomH1";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,6 +20,7 @@ import initTranslations from "@/app/i18n";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import TranslationsProvider from "@/components/ui/translations-provider";
+import StyledButton from "@/components/StyledButton";
 
 export const metadata: Metadata = setTitle("My Courses");
 const i18nNamespaces = ["platform-layout"];
@@ -84,9 +84,9 @@ export default async function MyCoursesPage({
               isPaddingEnabled
             />
 
-            <Button variant="outline" asChild className="rounded-lg h-10">
-              <Link href={`/dashboard`}>{t("back-to-dashboard")}</Link>
-            </Button>
+            <Link href={`/dashboard`}>
+              <StyledButton>{t("back-to-dashboard")}</StyledButton>
+            </Link>
           </div>
         </div>
       </div>
