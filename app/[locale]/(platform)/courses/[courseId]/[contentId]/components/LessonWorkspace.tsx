@@ -1,61 +1,38 @@
 "use client";
 
-import StyledButton from "@/components/StyledButton";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { useLearningContext } from "@/contexts/learning-context";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function LessonWorkspace({
-  courseId,
-  lesson,
+  children,
 }: {
-  courseId: string;
-  lesson: any;
+  children: React.ReactNode;
 }) {
+  const { activityId, setActivityId } = useLearningContext();
+  const pathname = usePathname();
+  const router = useRouter();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const hash = window.location.hash || "#intro"; // TODO: Make hash based on where the user left off.
+    router.push(pathname + hash);
+    setActivityId(hash);
+  }, []);
+
   return (
-    <div className="w-full h-full p-5 border border-default-color rounded-md flex flex-col justify-between dark:bg-grid-white/[0.1] bg-grid-black/[0.1]">
-      {/* <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" /> */}
-      <span className="h2">
-        TODO: Create useLessonContext to allow for multiple client components to
-        access lesson's content state. And make prev/next buttons go from
-        activity to activity instead of lesson to lesson unless the prev/next
-        thing is a lesson. And make activities go to #activity but make it an
-        accessible param. And turn this into a canvas!
-      </span>
-      {/* Buttons */}
+    <div className="size-full relative">
+      {/* Content */}
       <div
-        className={`flex items-center ${
-          lesson.prevLesson === ""
-            ? "justify-end"
-            : lesson.nextLesson === ""
-            ? "justify-start"
-            : "justify-between"
-        }`}
+        className="size-full absolute top-0 left-0 p-5 border border-default-color rounded-xl flex flex-col justify-between dark:bg-grid-white/[0.1] bg-grid-black/[0.1]"
+        id={activityId}
       >
-        {lesson.prevLesson != "" && (
-          <Link
-            href={`/courses/${courseId}/lesson-${lesson.prevLesson}`}
-            className="flex justify-center items-center gap-2"
-          >
-            <StyledButton>
-              <ArrowLeft />
-              {t("previous-lesson", { lessonId: lesson.prevLesson })}
-            </StyledButton>
-          </Link>
-        )}
-        {lesson.nextLesson !== "" && (
-          <Link
-            href={`/courses/${courseId}/lesson-${lesson.nextLesson}`}
-            className="flex justify-center items-center gap-2"
-          >
-            <StyledButton>
-              {t("next-lesson", { lessonId: lesson.nextLesson })}
-              <ArrowRight />
-            </StyledButton>
-          </Link>
-        )}
+        <span className="h2">{t(activityId.substring(1))}</span>
       </div>
+
+      {/* Canvas */}
+      <div className="size-full absolute top-0 left-0">{children}</div>
     </div>
   );
 }

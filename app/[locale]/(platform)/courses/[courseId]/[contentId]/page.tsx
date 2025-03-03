@@ -8,6 +8,7 @@ import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "@/app/i18n";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
+import LearningContextProvider from "@/contexts/learning-context";
 
 export const metadata: Metadata = setTitle("Common Cents");
 const i18nNamespaces = ["platform-layout", "common-cents"];
@@ -34,40 +35,41 @@ export default async function ContentPage({ params }: { params: any }) {
   const lesson = lessons.filter(
     (lesson: any) => `lesson-${lesson.id}` === contentId
   )[0];
-  // console.log(lesson);
 
   return (
-    <div className="h-full">
-      <Suspense fallback={<Loading />}>
-        <TranslationsProvider
-          namespaces={i18nNamespaces}
-          locale={locale}
-          resources={resources}
-        >
-          <TooltipProvider>
-            {/* Chapter Content */}
-            {contentType === "chapter" && (
-              <ChapterContent
-                courseId={courseId}
-                course={course}
-                chapter={chapter}
-                params={params}
-              />
-            )}
+    <LearningContextProvider>
+      <div className="h-full">
+        <Suspense fallback={<Loading />}>
+          <TranslationsProvider
+            namespaces={i18nNamespaces}
+            locale={locale}
+            resources={resources}
+          >
+            <TooltipProvider>
+              {/* Chapter Content */}
+              {contentType === "chapter" && (
+                <ChapterContent
+                  courseId={courseId}
+                  course={course}
+                  chapter={chapter}
+                  params={params}
+                />
+              )}
 
-            {/* Lesson Content */}
-            {contentType === "lesson" && (
-              <LessonContent
-                courseId={courseId}
-                lessonPrefix={lessonPrefix}
-                lessons={lessons}
-                lesson={lesson}
-                params={params}
-              />
-            )}
-          </TooltipProvider>
-        </TranslationsProvider>
-      </Suspense>
-    </div>
+              {/* Lesson Content */}
+              {contentType === "lesson" && (
+                <LessonContent
+                  courseId={courseId}
+                  lessonPrefix={lessonPrefix}
+                  lessons={lessons}
+                  lesson={lesson}
+                  params={params}
+                />
+              )}
+            </TooltipProvider>
+          </TranslationsProvider>
+        </Suspense>
+      </div>
+    </LearningContextProvider>
   );
 }

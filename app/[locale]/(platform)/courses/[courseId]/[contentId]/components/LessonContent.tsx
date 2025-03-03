@@ -24,6 +24,7 @@ import LessonSidebar from "./LessonSidebar";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import LessonWorkspace from "./LessonWorkspace";
+import LessonCanvas from "./LessonCanvas";
 
 const i18nNamespaces = ["platform-layout"];
 
@@ -118,7 +119,9 @@ export default async function LessonContent({
           {/* Workspace and Video */}
           <div className="flex flex-col-reverse md:flex-row grow gap-10">
             {/* Workspace */}
-            <LessonWorkspace courseId={courseId} lesson={lesson} />
+            <LessonWorkspace>
+              <LessonCanvas courseId={courseId} lesson={lesson} />
+            </LessonWorkspace>
 
             {/* Video */}
             <Skeleton className="w-full md:w-1/3 h-full min-w-[312.1875px]" />
