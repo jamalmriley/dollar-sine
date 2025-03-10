@@ -3,12 +3,14 @@
 import { CourseData } from "@/app/api/courses/route";
 import { createContext, useContext, useState } from "react";
 
+type OnboardingStep = { step: number; isEditing: boolean };
+
 type OnboardingContext = {
-  isHeSelected: boolean;
+  isHeSelected: boolean; // TODO: remove?
   setIsHeSelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isSheSelected: boolean;
+  isSheSelected: boolean; // TODO: remove?
   setIsSheSelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isTheySelected: boolean;
+  isTheySelected: boolean; // TODO: remove?
   setIsTheySelected: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
@@ -26,7 +28,7 @@ type OnboardingContext = {
   setUsers: React.Dispatch<
     React.SetStateAction<{ emailAddress: string; role: string }[] | undefined>
   >;
-  hasInvitedUsers: boolean;
+  hasInvitedUsers: boolean; // TODO: remove?
   setHasInvitedUsers: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,8 +38,10 @@ type OnboardingContext = {
   setTransactionDate: React.Dispatch<React.SetStateAction<string>>;
   transactionCode: string;
   setTransactionCode: React.Dispatch<React.SetStateAction<string>>;
-  isOnboardingComplete: boolean;
+  isOnboardingComplete: boolean; // TODO: remove?
   setIsOnboardingComplete: React.Dispatch<React.SetStateAction<boolean>>;
+  currOnboardingStep: OnboardingStep;
+  setCurrOnboardingStep: React.Dispatch<React.SetStateAction<OnboardingStep>>;
 };
 
 export const OnboardingContext = createContext<OnboardingContext | null>(null);
@@ -67,6 +71,10 @@ export default function OnboardingContextProvider({
   const [transactionCode, setTransactionCode] = useState<string>("");
   const [isOnboardingComplete, setIsOnboardingComplete] =
     useState<boolean>(false);
+  const [currOnboardingStep, setCurrOnboardingStep] = useState<OnboardingStep>({
+    step: 1,
+    isEditing: false,
+  });
 
   return (
     <OnboardingContext.Provider
@@ -103,6 +111,8 @@ export default function OnboardingContextProvider({
         setTransactionCode,
         isOnboardingComplete,
         setIsOnboardingComplete,
+        currOnboardingStep,
+        setCurrOnboardingStep,
       }}
     >
       {children}

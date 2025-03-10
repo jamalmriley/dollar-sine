@@ -1,10 +1,13 @@
-export type SkinTone =
-  | "default"
-  | "light"
-  | "medium-light"
-  | "medium"
-  | "medium-dark"
-  | "dark";
+export const EMOJI_SKIN_TONES = [
+  "default",
+  "light",
+  "medium-light",
+  "medium",
+  "medium-dark",
+  "dark",
+] as const;
+
+export type EmojiSkinTone = (typeof EMOJI_SKIN_TONES)[number];
 
 type Emoji = {
   default: string;

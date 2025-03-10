@@ -8,10 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useQueryState } from "nuqs";
+import { EMOJI_SKIN_TONES, EmojiSkinTone } from "@/utils/emoji";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 
 export default function SkinTone() {
-  const skinTones = [
+  const skinTones: { label: EmojiSkinTone; icon: string }[] = [
     { label: "default", icon: "👋" },
     { label: "light", icon: "👋🏻" },
     { label: "medium-light", icon: "👋🏼" },
@@ -20,13 +21,14 @@ export default function SkinTone() {
     { label: "dark", icon: "👋🏿" },
   ];
 
-  const [skinTone, setSkinTone] = useQueryState("skinTone", {
-    defaultValue: "",
-  });
+  const [emojiSkinTone, setEmojiSkinTone] = useQueryState(
+    "emojiSkinTone",
+    parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
+  );
 
-  const findSkinTone = (skinTone: string) => {
+  const findSkinTone = (emojiSkinTone: EmojiSkinTone) => {
     for (const obj of skinTones) {
-      if (obj.label === skinTone) return obj;
+      if (obj.label === emojiSkinTone) return obj;
     }
     return skinTones[0];
   };
@@ -37,7 +39,7 @@ export default function SkinTone() {
       <div className="flex flex-col">
         <span
           className={`hidden md:block text-sm font-semibold ${
-            skinTone !== "" ? "text-muted-foreground line-through" : ""
+            emojiSkinTone ? "text-muted-foreground line-through" : ""
           }`}
         >
           Select your skin tone.
@@ -50,7 +52,11 @@ export default function SkinTone() {
       {/* Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">{findSkinTone(skinTone).icon}</Button>
+          <Button variant="outline">
+            {emojiSkinTone
+              ? findSkinTone(emojiSkinTone).icon
+              : skinTones[0].icon}
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {skinTones.map((obj, i) => (
@@ -58,7 +64,7 @@ export default function SkinTone() {
               {i !== 0 && <DropdownMenuSeparator />}
               <DropdownMenuItem
                 onClick={() => {
-                  setSkinTone(obj.label);
+                  setEmojiSkinTone(obj.label);
                 }}
               >
                 <span className="w-full text-center">{obj.icon}</span>

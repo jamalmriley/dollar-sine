@@ -7,47 +7,48 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import Organization, {
-  isCreateOrgCompleted,
-} from "./components/(2_create-org)/Organization";
+import Organization from "./components/(2_create-org)/Organization";
 import AddCourses from "./components/(3_add-courses)/AddCourses";
 import { Button } from "@/components/ui/button";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
-import { saveOnboardingProgress } from "@/utils/onboarding";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import Profile, {
-  isFinishProfileSetupCompleted,
-} from "./components/(1_finish-profile-setup)/Profile";
+import Profile from "./components/(1_finish-profile-setup)/Profile";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { updateUserMetadata } from "@/app/actions/onboarding";
+import { toast } from "@/hooks/use-toast";
+import { AdminMetadata } from "@/utils/user";
 
 export default function AdminOnboardingPage() {
+  const { user, isLoaded } = useUser();
+
   const pathname = usePathname();
   const { locale } = useParams();
   const searchParams = useSearchParams();
-  const { user, isLoaded } = useUser();
   const { setIsUpdatingProfile, setIsUpdatingOrg } = useOnboardingContext();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
 
+  const metadata = user?.publicMetadata as any as AdminMetadata;
+
   const prompts = [
     {
       id: "step-1",
       content: <Profile />,
-      isCompleted: isFinishProfileSetupCompleted(),
+      isCompleted: metadata.lastOnboardingStepCompleted >= 1,
     },
     {
       id: "step-2",
       content: <Organization />,
-      isCompleted: isCreateOrgCompleted(),
+      isCompleted: metadata.lastOnboardingStepCompleted >= 2,
     },
     {
       id: "step-3",
       content: <AddCourses />,
-      isCompleted: true,
+      isCompleted: false,
     },
   ];
 
@@ -56,12 +57,32 @@ export default function AdminOnboardingPage() {
     const timeoutId = setTimeout(() => {
       const isOnboardingCompleted = user?.publicMetadata.isOnboardingCompleted;
       if (user && !isOnboardingCompleted) {
-        const fullPathname = `/${locale}${pathname}${
+        const onboardingLink = `/${locale}${pathname}${
           searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
         }`;
-        const alteredFullPathname = fullPathname.replaceAll("&", ">"); // Replaces "&" with ">" so that the full pathname is saved to the user's metadata.
-        // console.log(fullPathname);
-        saveOnboardingProgress(user.id, alteredFullPathname);
+
+        const data: FormData = new FormData();
+        const publicMetadata = JSON.stringify({ onboardingLink });
+
+        data.append("userId", user.id);
+        data.append("publicMetadata", publicMetadata);
+        data.append("resTitle", "Onboarding progress successfully saved ✅");
+        data.append(
+          "resDesc",
+          "You can now refresh or exit the page if needed."
+        );
+
+        const saveOnboardingProgress = async () => {
+          const res = await updateUserMetadata(data);
+
+          toast({
+            variant: res.success ? "default" : "destructive",
+            title: res.message?.title,
+            description: res.message?.description,
+          });
+        };
+
+        saveOnboardingProgress();
       }
     }, 3000);
     return () => clearTimeout(timeoutId);

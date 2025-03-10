@@ -5,9 +5,10 @@ import { Button } from "./ui/button";
 import { IoMdClose } from "react-icons/io";
 import { CiBullhorn } from "react-icons/ci";
 import { useTranslation } from "react-i18next";
-import CustomButton from "./CustomButton";
 import { SignedIn } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
+import StyledButton from "./StyledButton";
+import Link from "next/link";
 
 export default function Banner({
   requiresSignIn,
@@ -135,20 +136,19 @@ export default function Banner({
           {buttonText !== undefined ? (
             <>
               {buttonHref !== undefined && (
-                <CustomButton
-                  text={t(buttonText)}
-                  href={buttonHref}
-                  className={`border ${bgTailwindProps} ${text2TailwindProps} ${borderTailwindProps} text-xs md:text-sm`}
-                />
+                <Link href={buttonHref}>
+                  <StyledButton>{t(buttonText)}</StyledButton>
+                </Link>
               )}
               {buttonAction !== undefined && (
-                <CustomButton
-                  text={t(buttonText)}
+                <StyledButton
                   onClick={async () => {
                     await buttonAction();
                   }}
                   className={`border ${bgTailwindProps} ${text2TailwindProps} ${borderTailwindProps} text-xs md:text-sm`}
-                />
+                >
+                  {t(buttonText)}
+                </StyledButton>
               )}
             </>
           ) : (

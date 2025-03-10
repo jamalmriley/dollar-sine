@@ -1,6 +1,6 @@
 "use client";
 
-import { generateDisplayName } from "@/utils/onboarding";
+import { generateDisplayName } from "@/utils/user";
 import { useUser } from "@clerk/nextjs";
 import { parseAsBoolean, useQueryState } from "nuqs";
 

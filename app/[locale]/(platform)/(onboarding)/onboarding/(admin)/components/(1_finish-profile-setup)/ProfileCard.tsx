@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { ProfileMetadata, UserData } from "@/utils/api";
-import { EMOJIS, SkinTone } from "@/utils/emoji";
+import { UserData } from "@/utils/api";
+import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
+import { AdminMetadata, PRONOUNS } from "@/utils/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
-import { useQueryState } from "nuqs";
+import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from "nuqs";
 import { MdAlternateEmail, MdEdit, MdEmail, MdError } from "react-icons/md";
 import { TbUserExclamation } from "react-icons/tb";
 
@@ -16,7 +17,22 @@ export function ProfileCard({
   toggle: boolean;
   userData: UserData;
 }) {
-  const metadata = userData.publicMetadata.profile as ProfileMetadata;
+  const {
+    setIsHeSelected,
+    setIsSheSelected,
+    setIsTheySelected,
+    setCurrOnboardingStep,
+  } = useOnboardingContext();
+
+  const metadata = userData.publicMetadata as any as AdminMetadata;
+  const {
+    prefix,
+    displayName,
+    displayNameFormat,
+    jobTitle,
+    pronouns,
+    emojiSkinTone,
+  } = metadata;
 
   const [, setPrefix] = useQueryState("prefix", { defaultValue: "" });
   const [, setDisplayName] = useQueryState("displayName", { defaultValue: "" });
@@ -24,15 +40,14 @@ export function ProfileCard({
     defaultValue: "",
   });
   const [, setJobTitle] = useQueryState("jobTitle", { defaultValue: "" });
-  const [, setPronouns] = useQueryState("pronouns", { defaultValue: "" });
-  const [, setSkinTone] = useQueryState("skinTone", { defaultValue: "" });
-
-  const {
-    setIsUpdatingProfile,
-    setIsHeSelected,
-    setIsSheSelected,
-    setIsTheySelected,
-  } = useOnboardingContext();
+  const [, setPronouns] = useQueryState(
+    "pronouns",
+    parseAsArrayOf(parseAsStringLiteral(PRONOUNS), "/")
+  );
+  const [, setEmojiSkinTone] = useQueryState(
+    "emojiSkinTone",
+    parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
+  );
 
   return (
     <div className="p-5 w-full">
@@ -61,7 +76,7 @@ export function ProfileCard({
             <div className="w-full flex justify-between items-center">
               <span className="text-lg font-bold">
                 {metadata.displayName}{" "}
-                {EMOJIS.handWave[metadata.skinTone as SkinTone]}
+                {EMOJIS.handWave[metadata.emojiSkinTone as EmojiSkinTone]}
               </span>
 
               <Button
@@ -69,24 +84,22 @@ export function ProfileCard({
                 size="icon"
                 className="rounded-full"
                 onClick={() => {
-                  const pronounsHelper = (pronouns: string) => {
-                    const arr = pronouns.split("/");
-
-                    for (const pronoun of arr) {
+                  const pronounHelper = () => {
+                    for (const pronoun of pronouns) {
                       if (pronoun === "he") setIsHeSelected(true);
-                      else if (pronoun === "she") setIsSheSelected(true);
-                      else if (pronoun === "they") setIsTheySelected(true);
+                      if (pronoun === "she") setIsSheSelected(true);
+                      if (pronoun === "they") setIsTheySelected(true);
                     }
                   };
-
-                  setIsUpdatingProfile(true);
-                  setPrefix(metadata.prefix);
-                  setDisplayName(metadata.displayName);
-                  setDisplayNameFormat(metadata.displayNameFormat);
-                  setJobTitle(metadata.jobTitle);
-                  setPronouns(metadata.pronouns);
-                  pronounsHelper(metadata.pronouns);
-                  setSkinTone(metadata.skinTone);
+                  setCurrOnboardingStep({ step: 1, isEditing: true });
+                  if (prefix !== undefined) setPrefix(prefix);
+                  if (displayName !== undefined) setDisplayName(displayName);
+                  if (displayNameFormat !== undefined)
+                    setDisplayNameFormat(displayNameFormat);
+                  if (jobTitle !== undefined) setJobTitle(jobTitle);
+                  pronounHelper();
+                  setPronouns(pronouns);
+                  setEmojiSkinTone(emojiSkinTone);
                 }}
               >
                 <span className="sr-only">Edit user</span>
@@ -94,7 +107,9 @@ export function ProfileCard({
               </Button>
             </div>
             <span className="text-sm">{metadata.jobTitle}</span>
-            <span className="text-sm">Pronouns: {metadata.pronouns}</span>
+            <span className="text-sm">
+              Pronouns: {metadata.pronouns.join("/")}
+            </span>
           </div>
 
           {/* User Expanded Details and Creation Date */}
