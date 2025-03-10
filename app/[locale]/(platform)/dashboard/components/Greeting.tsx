@@ -40,8 +40,11 @@ export default function Greeting({
     );
   }
   return (
-    <div>
-      <CustomH1 text={`${t(greeting, { name })} ${emoji}`} isPaddingEnabled />
+    <div className="flex gap-2.5">
+      <CustomH1 text={`${t(greeting, { name })}`} isPaddingEnabled />
+      <span className="hover:animate-hover-tada">
+        <CustomH1 text={emoji} isPaddingEnabled />
+      </span>
     </div>
   );
 }
