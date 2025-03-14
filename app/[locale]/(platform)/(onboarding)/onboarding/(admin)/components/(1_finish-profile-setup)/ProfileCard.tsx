@@ -1,21 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { UserData } from "@/utils/api";
 import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
-import { AdminMetadata, PRONOUNS } from "@/utils/user";
+import { AdminMetadata, PRONOUNS } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from "nuqs";
 import { MdAlternateEmail, MdEdit, MdEmail, MdError } from "react-icons/md";
 import { TbUserExclamation } from "react-icons/tb";
+import { User } from "@clerk/nextjs/server";
 
 export function ProfileCard({
   toggle,
   userData,
 }: {
   toggle: boolean;
-  userData: UserData;
+  userData: User;
 }) {
   const {
     setIsHeSelected,
@@ -23,16 +23,6 @@ export function ProfileCard({
     setIsTheySelected,
     setCurrOnboardingStep,
   } = useOnboardingContext();
-
-  const metadata = userData.publicMetadata as any as AdminMetadata;
-  const {
-    prefix,
-    displayName,
-    displayNameFormat,
-    jobTitle,
-    pronouns,
-    emojiSkinTone,
-  } = metadata;
 
   const [, setPrefix] = useQueryState("prefix", { defaultValue: "" });
   const [, setDisplayName] = useQueryState("displayName", { defaultValue: "" });
@@ -48,6 +38,17 @@ export function ProfileCard({
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
   );
+
+  const metadata = userData.publicMetadata as any as AdminMetadata;
+  if (!metadata) return;
+  const {
+    prefix,
+    displayName,
+    displayNameFormat,
+    jobTitle,
+    pronouns,
+    emojiSkinTone,
+  } = metadata;
 
   return (
     <div className="p-5 w-full">

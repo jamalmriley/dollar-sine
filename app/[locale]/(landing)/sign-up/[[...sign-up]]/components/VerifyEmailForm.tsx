@@ -14,7 +14,7 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import { toast } from "@/hooks/use-toast";
-import { AdminMetadata, PublicMetadata, TeacherMetadata } from "@/utils/user";
+import { AdminMetadata, PublicMetadata, TeacherMetadata } from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";
@@ -57,10 +57,7 @@ export default function VerifyEmailForm() {
         if (status === "complete") {
           setActive({ session: createdSessionId })
             .then(() => {
-              const data: FormData = new FormData();
-
               const userId = createdUserId as string;
-
               const coreMetadata: PublicMetadata = {
                 role,
                 isOnboardingCompleted: false,
@@ -92,12 +89,7 @@ export default function VerifyEmailForm() {
                   break;
               }
 
-              const publicMetadata = JSON.stringify(metadata);
-
-              data.append("userId", userId);
-              data.append("publicMetadata", publicMetadata);
-
-              updateUserMetadata(data);
+              updateUserMetadata(userId, metadata);
             })
             .catch(() => {
               toast({

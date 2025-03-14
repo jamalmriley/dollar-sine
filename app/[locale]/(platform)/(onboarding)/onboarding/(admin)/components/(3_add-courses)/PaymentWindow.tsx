@@ -28,8 +28,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
-import { courseSchema } from "./CourseCard";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { COURSE_SCHEMA } from "@/types/course";
+import { createPaymentIntent } from "@/app/actions/payment";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
 // Calling `loadStripe` outside of a component’s render avoids recreating the `Stripe` object on every render.
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
@@ -73,7 +75,7 @@ export function PaymentWindow() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [selectedCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsJson(courseSchema.parse))
+    parseAsArrayOf(parseAsJson(COURSE_SCHEMA.parse))
   );
 
   const isPlansSelected = (): boolean => {
@@ -125,7 +127,7 @@ export function PaymentWindow() {
           <DrawerTitle>{buyCourseTitle}</DrawerTitle>
           <DrawerDescription>{buyCourseDesc}</DrawerDescription>
         </DrawerHeader>
-        <div className="px-5 overflow-y-auto">
+        <div className="flex grow justify-center items-center px-5 overflow-y-auto">
           <Elements
             stripe={stripePromise}
             options={{
@@ -153,7 +155,7 @@ function PaymentForm({ amount }: { amount: number }) {
 
   const [selectedCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsJson(courseSchema.parse))
+    parseAsArrayOf(parseAsJson(COURSE_SCHEMA.parse))
   );
 
   const [discountAmt, discountPercent] = [0, 0];
@@ -164,13 +166,12 @@ function PaymentForm({ amount }: { amount: number }) {
     getTotalAmount(selectedCourses, courses) - discountAmt + taxAmt;
 
   useEffect(() => {
-    fetch("/api/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
+    (async () => {
+      await createPaymentIntent(convertToSubcurrency(amount)).then((res) => {
+        const clientSecret: string | null = res.data;
+        if (clientSecret) setClientSecret(clientSecret);
+      });
+    })();
   }, [amount]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -199,12 +200,9 @@ function PaymentForm({ amount }: { amount: number }) {
     setLoading(false);
   };
 
-  if (!clientSecret || !stripe || !elements) {
-    return <div>Loading...</div>;
-  }
-
+  if (!clientSecret || !stripe || !elements) return <LoadingIndicator />;
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="size-full flex flex-col">
       {clientSecret && <PaymentElement />}
       {errorMsg && <div>{errorMsg}</div>}
 
@@ -265,10 +263,12 @@ function PaymentForm({ amount }: { amount: number }) {
         </Accordion>
       )}
 
-      <Button className="w-full mt-5" disabled={!stripe || loading}>
-        {loading && <Loader2 className="animate-spin" />}
-        {!loading ? `Pay ${formatCurrency(amount, "USD")}` : "Processing..."}
-      </Button>
+      <div className="flex grow items-end mb-5">
+        <Button className="w-full mt-5" disabled={!stripe || loading}>
+          {loading && <Loader2 className="animate-spin" />}
+          {!loading ? `Pay ${formatCurrency(amount, "USD")}` : "Processing..."}
+        </Button>
+      </div>
     </form>
   );
 }

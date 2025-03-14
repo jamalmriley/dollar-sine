@@ -28,7 +28,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AdminMetadata, PRONOUNS } from "@/utils/user";
+import { AdminMetadata, PRONOUNS } from "@/types/user";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
@@ -84,9 +84,10 @@ export default function FinishProfile() {
         metadata.pronouns !== pronouns ||
         metadata.emojiSkinTone !== emojiSkinTone;
 
-  // isUpdating is true if you're editing and the lastCompletedStep >= the step you're on
   const isUpdating =
-    metadata.lastOnboardingStepCompleted >= 1 && currOnboardingStep.isEditing;
+    metadata.lastOnboardingStepCompleted >= 1 &&
+    currOnboardingStep.step === 1 &&
+    currOnboardingStep.isEditing;
 
   const header = {
     title: isUpdating
@@ -104,7 +105,6 @@ export default function FinishProfile() {
     setIsLoading(true);
 
     const userId = user.id;
-
     const metadata: AdminMetadata = {
       role: "admin",
       isOnboardingCompleted: false,
@@ -121,11 +121,7 @@ export default function FinishProfile() {
       jobTitle,
     };
 
-    const data: any = new FormData();
-    await data.append("userId", userId);
-    await data.append("publicMetadata", JSON.stringify(metadata));
-
-    await updateUserMetadata(data)
+    await updateUserMetadata(userId, metadata)
       .then(() => {
         setPrefix("");
         setDisplayName("");

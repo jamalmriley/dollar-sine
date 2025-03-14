@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { OrgData } from "@/utils/api";
 import { truncateString } from "@/utils/general";
+import { OrganizationMetadata } from "@/types/user";
+import { Organization } from "@clerk/nextjs/server";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsBoolean, useQueryState } from "nuqs";
@@ -13,10 +14,10 @@ import { TbAuth2Fa } from "react-icons/tb";
 
 export function OrgCard({
   toggle,
-  orgData,
+  org,
 }: {
   toggle: boolean;
-  orgData: OrgData;
+  org: Organization;
 }) {
   const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
   const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
@@ -36,8 +37,10 @@ export function OrgCard({
     return { address1, address2 };
   }
 
-  const { setIsUpdatingOrg } = useOnboardingContext();
+  const { setCurrOnboardingStep } = useOnboardingContext();
+  const metadata = org.publicMetadata as any as OrganizationMetadata;
 
+  if (!metadata) return;
   return (
     <div className="p-5 w-full">
       <div
@@ -48,11 +51,11 @@ export function OrgCard({
         {/* Org Image */}
         <div className={`expandable-content ${toggle ? "size-32" : "size-24"}`}>
           <Image
-            src={orgData.imageUrl}
+            src={org.imageUrl}
             width={0}
             height={0}
             sizes="100vw"
-            alt={orgData.name}
+            alt={org.name}
             loading="eager"
             className="w-full h-auto rounded-lg overflow-hidden"
           />
@@ -63,22 +66,18 @@ export function OrgCard({
           {/* Org Basic Details */}
           <div className="flex flex-col">
             <div className="w-full flex justify-between items-center">
-              <span className="text-lg font-bold">{orgData.name}</span>
+              <span className="text-lg font-bold">{org.name}</span>
 
               <Button
                 variant="ghost"
                 size="icon"
                 className="rounded-full"
                 onClick={() => {
-                  setIsUpdatingOrg(true);
-                  setOrgName(orgData.name);
-                  setOrgAddress(
-                    String(orgData.publicMetadata.organizationAddress)
-                  );
-                  setOrgSlug(orgData.slug);
-                  setIs2FARequired(
-                    Boolean(orgData.publicMetadata.is2FARequired)
-                  );
+                  setCurrOnboardingStep({ step: 2, isEditing: true });
+                  setOrgName(org.name);
+                  setOrgAddress(String(metadata.address));
+                  setOrgSlug(org.slug);
+                  setIs2FARequired(Boolean(metadata.is2FARequired));
                 }}
               >
                 <span className="sr-only">Edit organization</span>
@@ -87,15 +86,13 @@ export function OrgCard({
             </div>
             <span className="text-sm">
               {truncateString(
-                splitAddress(String(orgData.publicMetadata.organizationAddress))
-                  .address1,
+                splitAddress(String(metadata.address)).address1,
                 40
               )}
             </span>
             <span className="text-sm">
               {truncateString(
-                splitAddress(String(orgData.publicMetadata.organizationAddress))
-                  .address2,
+                splitAddress(String(metadata.address)).address2,
                 40
               )}
             </span>
@@ -111,14 +108,12 @@ export function OrgCard({
             >
               <span className="flex items-center text-xs text-muted-foreground hover:underline">
                 <IoMdLink className="size-5 mr-2" />
-                dollarsi.ne/{orgData.slug}
+                dollarsi.ne/{org.slug}
               </span>
               <span className="flex items-center text-xs text-muted-foreground">
                 <TbAuth2Fa className="size-5 mr-2" />
                 <span>
-                  {Boolean(orgData.publicMetadata.is2FARequired)
-                    ? "Enabled"
-                    : "Disabled"}
+                  {Boolean(metadata.is2FARequired) ? "Enabled" : "Disabled"}
                 </span>
               </span>
             </div>
@@ -127,7 +122,7 @@ export function OrgCard({
             <span className="text-xs text-muted-foreground">
               Organization created{" "}
               {formatRelative(
-                new Date(orgData.createdAt),
+                new Date(org.createdAt),
                 new Date()
                 // , { locale: es } // TODO: Add locale functionality
               )}

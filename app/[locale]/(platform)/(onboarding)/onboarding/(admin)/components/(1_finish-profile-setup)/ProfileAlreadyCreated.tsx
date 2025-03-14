@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { GetResponse, UserData } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -16,35 +15,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getUser } from "@/app/actions/onboarding";
+import { User } from "@clerk/nextjs/server";
 
 export default function ProfileAlreadyCreated() {
   const { user, isLoaded, isSignedIn } = useUser();
   const { isLoading, setIsLoading, lastUpdated } = useOnboardingContext();
-  const [userData, setUserData] = useState<UserData>();
+  const [userData, setUserData] = useState<User>();
   const [toggle, setToggle] = useState(false);
-
-  const getUser = async (): Promise<any> => {
-    const fetchedUser = await fetch(`/api/users/get?userId=${user?.id}`, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((json: GetResponse) => {
-        // console.log(json)
-        return json.data;
-      });
-    // .catch((err) => {
-    //   console.error(err);
-    //   return err;
-    // });
-
-    return fetchedUser;
-  };
 
   useEffect(() => {
     const fetchAndSetUser = async () => {
       setIsLoading(true);
       try {
-        const userData = await getUser();
+        const res = await getUser(user?.id);
+        const userData = JSON.parse(res.data) as User;
+
         setUserData(userData);
         setIsLoading(false);
       } catch (error) {
@@ -56,12 +42,12 @@ export default function ProfileAlreadyCreated() {
     fetchAndSetUser();
   }, [lastUpdated]);
 
-  if (!isSignedIn || !isLoaded) return;
-
   const header = {
     title: "You finished setting up your profile!",
     description: "View your profile's details below.",
   };
+
+  if (!isSignedIn || !isLoaded) return;
   return (
     <Card className="w-full h-full mx-10 max-w-lg">
       <CardHeader>
@@ -74,7 +60,6 @@ export default function ProfileAlreadyCreated() {
           </CardDescription>
         )}
       </CardHeader>
-
       <CardContent>
         <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
           {/* 

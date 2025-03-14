@@ -12,8 +12,10 @@ import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { format } from "date-fns";
-
-// TODO: Put button that makes onboarding status set to done
+import { updateUserMetadata } from "@/app/actions/onboarding";
+import { AdminMetadata } from "@/types/user";
+import { toast } from "@/hooks/use-toast";
+import { getPaymentIntent } from "@/app/actions/payment";
 
 export default function AdminOnboardingComplete() {
   const {
@@ -49,12 +51,9 @@ export default function AdminOnboardingComplete() {
       }
 
       // Get transaction info from the payment intent.
-      fetch(`/api/create-payment-intent?clientSecret=${paymentIntent}`, {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          const paymentIntent = data.paymentIntent;
+      await getPaymentIntent(paymentIntent).then((res) => {
+        const paymentIntent = res.data;
+        if (paymentIntent) {
           setTransactionTotal(paymentIntent.amount);
           setTransactionDate(
             format(
@@ -64,21 +63,34 @@ export default function AdminOnboardingComplete() {
             )
           );
           setTransactionCode(formatConfirmationCode(paymentIntent.id));
-        });
+        }
+      });
 
       // Update the user's onboarding status to complete.
       // TODO: Add locale functionality
-      fetch(`/api/onboarding-complete?user_id=${userId}&locale=${locale}`, {
-        method: "POST",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) setIsOnboardingComplete(data.success);
+      const metadata = {
+        isOnboardingCompleted: true,
+        onboardingLink: "/onboarding",
+        // courses: [] // TODO
+      } as AdminMetadata;
+
+      await updateUserMetadata(userId, metadata).then((res) => {
+        setIsOnboardingComplete(res.success);
+        toast({
+          variant: res.success ? "default" : "destructive",
+          title: res.message?.title,
+          description: res.message?.description,
         });
+      });
     };
 
     completeAdminOnboarding(user?.id, paymentIntent, "en");
-  }, []);
+  });
+
+  // TODO: Add confetti effect
+  // TODO: Send digital receipt via Resend
+  // TODO: Create downloadable PDF receipt
+  // TODO: Add course to user and to org (see line 74)
 
   if (!user || !isLoaded || !isOnboardingComplete) return;
   return (

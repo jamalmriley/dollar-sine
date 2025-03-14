@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { Pronoun, PRONOUNS } from "@/utils/user";
+import { Pronoun, PRONOUNS } from "@/types/user";
 import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from "nuqs";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 

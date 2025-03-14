@@ -1,6 +1,6 @@
 "use client";
 
-import { CourseData } from "@/app/api/courses/route";
+import { CourseData } from "@/types/course";
 import { createContext, useContext, useState } from "react";
 
 type OnboardingStep = { step: number; isEditing: boolean };

@@ -2,7 +2,7 @@ import { useOnboardingContext } from "@/contexts/onboarding-context";
 import FinishProfile from "./FinishProfile";
 import ProfileAlreadyCreated from "./ProfileAlreadyCreated";
 import { useUser } from "@clerk/nextjs";
-import { AdminMetadata } from "@/utils/user";
+import { AdminMetadata } from "@/types/user";
 
 export default function Profile() {
   const { user, isLoaded } = useUser();

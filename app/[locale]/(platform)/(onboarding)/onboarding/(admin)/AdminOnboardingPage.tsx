@@ -18,7 +18,7 @@ import Profile from "./components/(1_finish-profile-setup)/Profile";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { toast } from "@/hooks/use-toast";
-import { AdminMetadata } from "@/utils/user";
+import { AdminMetadata } from "@/types/user";
 
 export default function AdminOnboardingPage() {
   const { user, isLoaded } = useUser();
@@ -26,31 +26,12 @@ export default function AdminOnboardingPage() {
   const pathname = usePathname();
   const { locale } = useParams();
   const searchParams = useSearchParams();
-  const { setIsUpdatingProfile, setIsUpdatingOrg } = useOnboardingContext();
+  const { setIsUpdatingProfile, setIsUpdatingOrg, setCurrOnboardingStep } =
+    useOnboardingContext();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
-
-  const metadata = user?.publicMetadata as any as AdminMetadata;
-
-  const prompts = [
-    {
-      id: "step-1",
-      content: <Profile />,
-      isCompleted: metadata.lastOnboardingStepCompleted >= 1,
-    },
-    {
-      id: "step-2",
-      content: <Organization />,
-      isCompleted: metadata.lastOnboardingStepCompleted >= 2,
-    },
-    {
-      id: "step-3",
-      content: <AddCourses />,
-      isCompleted: false,
-    },
-  ];
 
   // Save the onboarding progress once the user stops typing for at least 3 seconds.
   useEffect(() => {
@@ -60,20 +41,10 @@ export default function AdminOnboardingPage() {
         const onboardingLink = `/${locale}${pathname}${
           searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
         }`;
-
-        const data: FormData = new FormData();
-        const publicMetadata = JSON.stringify({ onboardingLink });
-
-        data.append("userId", user.id);
-        data.append("publicMetadata", publicMetadata);
-        data.append("resTitle", "Onboarding progress successfully saved ✅");
-        data.append(
-          "resDesc",
-          "You can now refresh or exit the page if needed."
-        );
+        const metadata = { onboardingLink } as AdminMetadata;
 
         const saveOnboardingProgress = async () => {
-          const res = await updateUserMetadata(data);
+          const res = await updateUserMetadata(user.id, metadata);
 
           toast({
             variant: res.success ? "default" : "destructive",
@@ -125,6 +96,10 @@ export default function AdminOnboardingPage() {
 
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1);
+      setCurrOnboardingStep({
+        step: api.selectedScrollSnap() + 1,
+        isEditing: false,
+      });
       localStorage.setItem(
         "onboardingStep",
         String(api.selectedScrollSnap() + 1)
@@ -141,6 +116,26 @@ export default function AdminOnboardingPage() {
   }, [api]);
 
   if (!user || !isLoaded) return;
+
+  const metadata = user.publicMetadata as any as AdminMetadata;
+  const prompts = [
+    {
+      id: "step-1",
+      content: <Profile />,
+      isCompleted: metadata.lastOnboardingStepCompleted >= 1,
+    },
+    {
+      id: "step-2",
+      content: <Organization />,
+      isCompleted: metadata.lastOnboardingStepCompleted >= 2,
+    },
+    {
+      id: "step-3",
+      content: <AddCourses />,
+      isCompleted: false,
+    },
+  ];
+
   return (
     <div className="h-full flex flex-col justify-between items-center pt-10">
       {/* Carousel */}
@@ -185,7 +180,9 @@ export default function AdminOnboardingPage() {
           size="icon"
           className="rounded-full"
           onClick={scrollNext}
-          disabled={current === count || !prompts[current - 1].isCompleted}
+          disabled={
+            !metadata || current === count || !prompts[current - 1].isCompleted
+          }
         >
           <FaArrowRight />
         </Button>

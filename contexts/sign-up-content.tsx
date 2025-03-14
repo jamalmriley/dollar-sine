@@ -1,6 +1,6 @@
 "use client";
 
-import { Role } from "@/utils/user";
+import { Role } from "@/types/user";
 import { createContext, useContext, useState } from "react";
 
 type SignUpContext = {

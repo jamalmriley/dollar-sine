@@ -1,4 +1,3 @@
-import { CourseData } from "@/app/api/courses/route";
 import { useEffect } from "react";
 import { PaymentWindow } from "./PaymentWindow";
 import {
@@ -13,6 +12,8 @@ import CourseCard, { CourseCardSkeleton } from "./CourseCard";
 import NoCourses from "./NoCourses";
 import { useMediaQuery } from "usehooks-ts";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { CourseData } from "@/types/course";
+import { getCourses } from "@/app/actions/onboarding";
 
 export default function AddCourses() {
   const header = {
@@ -23,30 +24,14 @@ export default function AddCourses() {
   const { courses, setCourses, isLoading, setIsLoading, lastUpdated } =
     useOnboardingContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const getCourses = async (): Promise<any> => {
-    const courses = await fetch("/api/courses", {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        // console.log(json);
-        return json;
-      })
-      .catch((err) => {
-        console.error(err);
-        return err;
-      });
-
-    return courses;
-  };
 
   useEffect(() => {
     const fetchAndSetCourses = async () => {
       setIsLoading(true);
       try {
-        const courses = await getCourses();
-        const data: CourseData[] = courses.data;
-        setCourses(data);
+        const res = await getCourses();
+        const courseData = JSON.parse(res.data) as CourseData[];
+        setCourses(courseData);
         setIsLoading(false);
       } catch (error) {
         console.error(error);

@@ -1,25 +1,10 @@
 import { parseAsArrayOf, parseAsJson, useQueryState } from "nuqs";
 import { formatCurrency } from "@/utils/general";
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
-import { Pricing } from "@/app/api/courses/route";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-
-// const addOnSchema = z.object({
-//   name: z.string(),
-//   quantity: z.number(),
-// });
-
-export const courseSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  plan: z.string().optional(),
-  // addOns: z.array(addOnSchema), // TODO
-});
-
-type Course = z.infer<typeof courseSchema>;
+import { Course, COURSE_SCHEMA, Pricing } from "@/types/course";
 
 // CREATE
 function addCourse(courses: Course[], course: Course): Course[] {
@@ -84,7 +69,7 @@ export default function CourseCard({
   const searchParams = useSearchParams();
   const [selectedCourses, setSelectedCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsJson(courseSchema.parse))
+    parseAsArrayOf(parseAsJson(COURSE_SCHEMA.parse))
   );
   const isCourseSelected: boolean = selectedCourses
     ? findCourse(selectedCourses, id) !== -1

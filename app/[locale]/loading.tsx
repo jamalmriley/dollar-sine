@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import initTranslations from "../i18n";
+// import WaveLoader from "@/components/WaveLoader";
 
 // import { useEffect, useState } from "react";
 // import SyncLoader from "react-spinners/SyncLoader";
@@ -15,6 +16,7 @@ export default async function Loading() {
     <div className="page-container flex flex-col justify-center items-center gap-3 select-none">
       <h1 className="text-5xl font-extrabold">{t("loading")}...</h1>
       <p className="font-medium">Thanos was right...</p>
+      {/* <WaveLoader /> */}
     </div>
   );
 }

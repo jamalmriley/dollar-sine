@@ -2,47 +2,41 @@
 
 import { Button } from "@/components/ui/button";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { GetResponse, OrgData } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { OrgCard, OrgCardError, OrgCardSkeleton } from "./OrgCard";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getOrganization } from "@/app/actions/onboarding";
+import { Organization } from "@clerk/nextjs/server";
 
 export default function OrgAlreadyCreated() {
   const { user, isLoaded } = useUser();
   const { lastUpdated, isLoading, setIsLoading } = useOnboardingContext();
   const [toggle, setToggle] = useState(false);
-  const [orgData, setOrgData] = useState<OrgData>();
+  const [org, setOrg] = useState<Organization>();
 
-  const getOrg = async (): Promise<any> => {
-    if (!user || user.organizationMemberships.length === 0) return {};
+  const organization = user?.organizationMemberships[0].organization;
 
-    const organization = user.organizationMemberships[0].organization;
-    const fetchedOrg = await fetch(
-      `/api/organizations/get?organizationId=${organization?.id}`,
-      {
-        method: "GET",
-      }
-    )
-      .then((res) => res.json())
-      .then((json: GetResponse) => {
-        // console.log(json)
-        return json.data;
-      });
-    // .catch((err) => {
-    //   console.error(err);
-    //   return err;
-    // });
-
-    return fetchedOrg;
+  const header = {
+    title: "Organization successfully created!",
+    description: "View your organization's details below.",
   };
 
   useEffect(() => {
     const fetchAndSetOrg = async () => {
       setIsLoading(true);
       try {
-        const orgData = await getOrg();
-        setOrgData(orgData);
+        const res = await getOrganization(organization?.id);
+        const org = JSON.parse(res.data) as Organization;
+
+        setOrg(org);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -55,35 +49,49 @@ export default function OrgAlreadyCreated() {
 
   if (!user || user.organizationMemberships.length === 0 || !isLoaded) return;
   return (
-    <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
-      {/*
+    <Card className="w-full h-full mx-10 max-w-lg">
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle className="h2">{header.title}</CardTitle>
+        </div>
+        {header.description !== "" && (
+          <CardDescription className="subtitle">
+            {header.description}
+          </CardDescription>
+        )}
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
+          {/*
       If the org has loaded and there is data, display the OrgCard component.
       If the org has loaded and there is no data, display the OrgCardError component.
       If the org has not loaded yet, display the OrgCardSkeleton component.
       */}
-      {!isLoading ? (
-        orgData ? (
-          <OrgCard toggle={toggle} orgData={orgData} />
-        ) : (
-          <OrgCardError toggle={toggle} />
-        )
-      ) : (
-        <OrgCardSkeleton toggle={toggle} />
-      )}
+          {!isLoading ? (
+            org ? (
+              <OrgCard toggle={toggle} org={org} />
+            ) : (
+              <OrgCardError toggle={toggle} />
+            )
+          ) : (
+            <OrgCardSkeleton toggle={toggle} />
+          )}
 
-      <Button
-        variant="ghost"
-        className="bg-primary-foreground rounded-none border-t border-default-color"
-        onClick={() => setToggle((prev) => !prev)}
-      >
-        <span className="sr-only">
-          {toggle
-            ? "Show less organization details"
-            : "Show more organization details"}
-        </span>
-        {toggle ? <FaChevronUp /> : <FaChevronDown />}
-      </Button>
-    </div>
+          <Button
+            variant="ghost"
+            className="bg-primary-foreground rounded-none border-t border-default-color"
+            onClick={() => setToggle((prev) => !prev)}
+          >
+            <span className="sr-only">
+              {toggle
+                ? "Show less organization details"
+                : "Show more organization details"}
+            </span>
+            {toggle ? <FaChevronUp /> : <FaChevronDown />}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 /*

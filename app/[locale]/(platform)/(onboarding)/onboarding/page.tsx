@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import OnboardingContextProvider from "@/contexts/onboarding-context";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
-import { PublicMetadata } from "@/utils/user";
+import { PublicMetadata } from "@/types/user";
 
 export const metadata: Metadata = setTitle("Get started");
 
