@@ -1,8 +1,10 @@
 import StyledButton from "@/components/StyledButton";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
-import { FaCheckCircle } from "react-icons/fa";
+import confetti from "canvas-confetti";
+import { FaCheck } from "react-icons/fa";
 import { MdFileDownload } from "react-icons/md";
 
 export default function Receipt({
@@ -10,15 +12,22 @@ export default function Receipt({
   transactionDate,
   transactionCode,
 }: {
-  transactionTotal: string;
+  transactionTotal: number;
   transactionDate: string;
   transactionCode: string;
 }) {
   const { user, isLoaded, isSignedIn } = useUser();
+
   if (!user || !isLoaded || !isSignedIn) return;
   return (
     <div className="receipt">
-      <FaCheckCircle className="size-10 text-emerald-400" />
+      <Button
+        size="icon"
+        className="bg-emerald-400 rounded-full hover:animate-hover-tada shadow-none"
+        onClick={handleConfetti}
+      >
+        <FaCheck className="size-full" />
+      </Button>
 
       {/* Transaction Header */}
       <div className="text-center">
@@ -37,7 +46,7 @@ export default function Receipt({
         <div className="flex justify-between">
           <span className="text-muted-foreground">Purchase Total</span>
           <span className="font-semibold">
-            {formatCurrency(parseInt(transactionTotal) / 100)}
+            {formatCurrency(transactionTotal / 100)}
           </span>
         </div>
         <Separator />
@@ -66,4 +75,34 @@ export default function Receipt({
       </div>
     </div>
   );
+}
+
+export function handleConfetti() {
+  const end = Date.now() + 3 * 1000; // 3 seconds
+  const colors = ["#16db93", "#59c2ff"];
+
+  const frame = () => {
+    if (Date.now() > end) return;
+
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      startVelocity: 60,
+      origin: { x: 0, y: 0.5 },
+      colors: colors,
+    });
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      startVelocity: 60,
+      origin: { x: 1, y: 0.5 },
+      colors: colors,
+    });
+
+    requestAnimationFrame(frame);
+  };
+
+  frame();
 }

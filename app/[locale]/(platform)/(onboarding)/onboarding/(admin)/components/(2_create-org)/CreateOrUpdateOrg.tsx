@@ -32,10 +32,10 @@ import { AdminMetadata, OrganizationMetadata } from "@/types/user";
 import {
   ClerkErrorResponse,
   createOrganization,
-  Response,
   updateOrganization,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
+import { Response } from "@/types/general";
 
 export default function CreateOrUpdateOrg() {
   const {
@@ -121,16 +121,30 @@ export default function CreateOrUpdateOrg() {
     const body: any = new FormData();
     await body.append("image", orgLogo || null); // TODO: add this to server function
 
+    const getOrganizationIds = (): string[] => {
+      const result: string[] = [];
+      const orgMemberships = user.organizationMemberships;
+      if (!orgMemberships.length) return result;
+
+      for (const orgMembership of orgMemberships) {
+        result.push(orgMembership.organization.id);
+      }
+      return result;
+    };
+
+    const orgIds = getOrganizationIds();
+    const orgId = orgIds[0];
     const orgMetadata: OrganizationMetadata = {
       name: orgName,
       slug: orgSlug,
       address: orgAddress,
       is2FARequired,
-      courses: [],
+      courses: null,
     };
 
     async function handleResponse(res: Response) {
-      if (user && res.success) {
+      if (!user) return;
+      if (res.success) {
         setOrgName("");
         setOrgAddress("");
         setOrgSlug("");
@@ -155,7 +169,7 @@ export default function CreateOrUpdateOrg() {
           onboardingLink,
           pronouns,
           emojiSkinTone,
-          organizations: [orgMetadata],
+          organizations: orgIds,
           courses,
           classes,
         };
@@ -177,13 +191,18 @@ export default function CreateOrUpdateOrg() {
               description: error.long_message,
             });
           });
+      } else {
+        toast({
+          variant: "destructive",
+          title: res.message?.title,
+          description: res.message?.description,
+        });
       }
 
       setIsLoading(false);
     }
 
     if (isUpdating) {
-      const orgId = user.organizationMemberships[0].organization.id;
       await updateOrganization(orgId, orgMetadata).then((orgRes) => {
         handleResponse(orgRes);
       });

@@ -63,7 +63,7 @@ export default function VerifyEmailForm() {
                 isOnboardingCompleted: false,
                 lastOnboardingStepCompleted: 0,
                 onboardingLink: "/onboarding",
-                pronouns: [],
+                pronouns: "",
                 emojiSkinTone: "default",
                 organizations: [],
                 courses: [],
@@ -111,6 +111,7 @@ export default function VerifyEmailForm() {
             });
 
           router.push("/onboarding");
+          localStorage.setItem("onboardingStep", "1"); // Sets the onboarding step to 1 in case a previous user has signed up on the same device.
         } else {
           setFirstName("");
           setLastName("");

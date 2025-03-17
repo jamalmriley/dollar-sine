@@ -18,9 +18,11 @@ import { Organization } from "@clerk/nextjs/server";
 
 export default function OrgAlreadyCreated() {
   const { user, isLoaded } = useUser();
-  const { lastUpdated, isLoading, setIsLoading } = useOnboardingContext();
-  const [toggle, setToggle] = useState(false);
+  const { currOnboardingStep, lastUpdated, isLoading, setIsLoading } =
+    useOnboardingContext();
+  const [toggle, setToggle] = useState<boolean>(false);
   const [org, setOrg] = useState<Organization>();
+  const [hasViewed, setHasViewed] = useState<boolean>(false);
 
   const organization = user?.organizationMemberships[0].organization;
 
@@ -38,14 +40,15 @@ export default function OrgAlreadyCreated() {
 
         setOrg(org);
         setIsLoading(false);
+        setHasViewed(true);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
       }
     };
 
-    fetchAndSetOrg();
-  }, [lastUpdated]);
+    if (currOnboardingStep.step === 2 && !hasViewed) fetchAndSetOrg();
+  }, [currOnboardingStep.step, lastUpdated]);
 
   if (!user || user.organizationMemberships.length === 0 || !isLoaded) return;
   return (

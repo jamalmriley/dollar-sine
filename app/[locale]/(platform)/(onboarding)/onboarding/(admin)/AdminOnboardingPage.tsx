@@ -48,8 +48,12 @@ export default function AdminOnboardingPage() {
 
           toast({
             variant: res.success ? "default" : "destructive",
-            title: res.message?.title,
-            description: res.message?.description,
+            title: res.success
+              ? "Onboarding progress saved ✅"
+              : res.message?.title,
+            description: res.success
+              ? "You can now refresh or exit the page if needed."
+              : res.message?.description,
           });
         };
 
@@ -90,6 +94,10 @@ export default function AdminOnboardingPage() {
     if (initValue) {
       api.scrollTo(parseInt(initValue) - 1, true); // 0-based index
       setCurrent(parseInt(initValue)); // 1-based index
+      setCurrOnboardingStep({
+        step: parseInt(initValue),
+        isEditing: false,
+      });
     } else {
       setCurrent(api.selectedScrollSnap() + 1);
     }

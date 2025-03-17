@@ -27,11 +27,11 @@ export interface CourseData {
 //   quantity: z.number(),
 // });
 
-export const COURSE_SCHEMA = z.object({
+export const SELECTED_COURSE_SCHEMA = z.object({
   id: z.string(),
   title: z.string(),
   plan: z.string().optional(),
   // addOns: z.array(addOnSchema), // TODO
 });
 
-export type Course = z.infer<typeof COURSE_SCHEMA>;
+export type SelectedCourse = z.infer<typeof SELECTED_COURSE_SCHEMA>;

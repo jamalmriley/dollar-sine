@@ -1,4 +1,5 @@
 import { EmojiSkinTone } from "../utils/emoji";
+import { SelectedCourse } from "./course";
 
 export const ROLES = ["admin", "teacher", "guardian", "student", null] as const;
 export type Role = (typeof ROLES)[number];
@@ -32,6 +33,16 @@ export const PRONOUNS = [...EN_PRONOUNS, ...ES_PRONOUNS] as const;
 
 export type Pronoun = EnglishPronoun | SpanishPronoun;
 
+// TODO
+type Pronouns =
+  | "he/him/his"
+  | "he/she"
+  | "he/they"
+  | "she/her/hers"
+  | "she/they"
+  | "they/them/theirs"
+  | "I prefer not to say";
+
 export type GuardianType =
   | "Parent"
   | "Stepparent"
@@ -51,13 +62,6 @@ interface Class {
   classAdmins: string[];
 }
 
-interface Course {
-  courseId: string;
-  courseName: string;
-  packageType: string;
-  price: number;
-}
-
 interface TestScores {
   name: "i-Ready" | "MAP";
   overallScore: number;
@@ -68,16 +72,15 @@ interface TestScores {
 }
 
 // Metadata //
-
 export interface PublicMetadata {
   role: Role;
   isOnboardingCompleted: boolean;
   lastOnboardingStepCompleted: number;
   onboardingLink: string;
-  pronouns: Pronoun[];
+  pronouns: string;
   emojiSkinTone: EmojiSkinTone;
-  organizations: OrganizationMetadata[];
-  courses: Course[];
+  organizations: OrganizationId[];
+  courses: SelectedCourse[];
   classes: Class[] | null;
 }
 
@@ -116,16 +119,17 @@ export interface StudentMetadata extends PublicMetadata {
 }
 
 // Purchased courses go to org metadata, enrolled courses go to user metadata
+type OrganizationId = string;
+
 export interface OrganizationMetadata {
   name: string;
   slug: string;
   address: string;
   is2FARequired: boolean;
-  courses: Course[] | null;
+  courses: SelectedCourse[] | null;
 }
 
 // Classes //
-
 interface HasMetdataMethods {
   update(
     valuesToUpdate:
@@ -149,10 +153,10 @@ abstract class User implements HasMetdataMethods {
     protected isOnboardingCompleted: boolean,
     protected lastOnboardingStepCompleted: number,
     protected onboardingLink: string,
-    protected pronouns: Pronoun[],
+    protected pronouns: string,
     protected emojiSkinTone: EmojiSkinTone,
-    protected organizations: OrganizationMetadata[],
-    protected courses: Course[],
+    protected organizations: OrganizationId[],
+    protected courses: SelectedCourse[],
     protected classes: Class[] | null
   ) {}
   get isAdmin(): boolean {
@@ -178,10 +182,10 @@ class Admin extends User {
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
-    pronouns: Pronoun[],
+    pronouns: string,
     emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationMetadata[],
-    courses: Course[],
+    organizations: OrganizationId[],
+    courses: SelectedCourse[],
     classes: Class[] | null,
     private students: string[] | null,
     private displayName: string | null,
@@ -236,10 +240,10 @@ class Teacher extends User {
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
-    pronouns: Pronoun[],
+    pronouns: string,
     emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationMetadata[],
-    courses: Course[],
+    organizations: OrganizationId[],
+    courses: SelectedCourse[],
     classes: Class[] | null,
     private students: string[] | null,
     private displayName: string | null,
@@ -294,10 +298,10 @@ class Guardian extends User {
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
-    pronouns: Pronoun[],
+    pronouns: string,
     emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationMetadata[],
-    courses: Course[],
+    organizations: OrganizationId[],
+    courses: SelectedCourse[],
     classes: Class[] | null,
     private students: string[] | null
   ) {
@@ -344,10 +348,10 @@ class Student extends User {
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
-    pronouns: Pronoun[],
+    pronouns: string,
     emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationMetadata[],
-    courses: Course[],
+    organizations: OrganizationId[],
+    courses: SelectedCourse[],
     classes: Class[] | null,
     private gradeLevel: string | null,
     private track:
@@ -418,7 +422,7 @@ class Orgnanization implements HasMetdataMethods {
     protected slug: string,
     protected address: string,
     protected is2FARequired: boolean,
-    protected courses: Course[] | null
+    protected courses: SelectedCourse[] | null
   ) {}
 
   update(valuesToUpdate: OrganizationMetadata): void {

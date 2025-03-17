@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PaymentWindow } from "./PaymentWindow";
 import {
   Card,
@@ -21,9 +21,16 @@ export default function AddCourses() {
     description: "Select the courses you want to add for your organization.",
   };
 
-  const { courses, setCourses, isLoading, setIsLoading, lastUpdated } =
-    useOnboardingContext();
+  const {
+    courses,
+    setCourses,
+    isLoading,
+    setIsLoading,
+    currOnboardingStep,
+    lastUpdated,
+  } = useOnboardingContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [hasViewed, setHasViewed] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchAndSetCourses = async () => {
@@ -33,14 +40,14 @@ export default function AddCourses() {
         const courseData = JSON.parse(res.data) as CourseData[];
         setCourses(courseData);
         setIsLoading(false);
+        setHasViewed(true);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
       }
     };
-
-    fetchAndSetCourses();
-  }, [lastUpdated]);
+    if (currOnboardingStep.step === 3 && !hasViewed) fetchAndSetCourses();
+  }, [currOnboardingStep.step, lastUpdated]);
 
   return (
     <Card className="w-full h-full max-w-3xl mx-10">
@@ -60,7 +67,7 @@ export default function AddCourses() {
         If the courses have not loaded yet, display an array of CourseCardSkeleton component.
          */}
         {!isLoading ? (
-          courses.length > 0 ? (
+          courses.length ? (
             courses.map((course) => (
               <CourseCard
                 key={course.id}
@@ -73,11 +80,10 @@ export default function AddCourses() {
             ))
           ) : (
             <NoCourses />
-            // <CourseCardSkeleton />
           )
         ) : (
           <>
-            {Array(isDesktop ? 3 : 1)
+            {Array(isDesktop ? 2 : 1)
               .fill(0)
               .map((_, i) => (
                 <div key={i}>

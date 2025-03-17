@@ -10,15 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { Pronoun, PRONOUNS } from "@/types/user";
-import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function Pronouns() {
-  const [pronouns, setPronouns] = useQueryState(
-    "pronouns",
-    parseAsArrayOf(parseAsStringLiteral(PRONOUNS), "/")
-  );
+  const [pronouns, setPronouns] = useQueryState("pronouns", {
+    defaultValue: "",
+  });
 
   const [open, setOpen] = useState<boolean>(false);
   const {
@@ -33,9 +31,9 @@ export default function Pronouns() {
   type PronounObj = {
     checked: boolean;
     onCheckedChange: Dispatch<SetStateAction<boolean>>;
-    subjective: Pronoun;
-    objective: Pronoun;
-    possessive: Pronoun;
+    subjective: string;
+    objective: string;
+    possessive: string;
   };
 
   // TODO: Support Spanish pronouns
@@ -70,9 +68,24 @@ export default function Pronouns() {
     },
   ];
 
+  // Renders properly checked pronouns upon initial load.
+  useEffect(() => {
+    const pronounHelper = () => {
+      const splitPronouns = pronouns.split("/");
+      for (const pronoun of splitPronouns) {
+        if (pronoun === "he") setIsHeSelected(true);
+        if (pronoun === "she") setIsSheSelected(true);
+        if (pronoun === "they") setIsTheySelected(true);
+      }
+    };
+
+    pronounHelper();
+  }, []);
+
+  // Sets pronouns based on dropdown menu selections.
   useEffect(() => {
     const getPronouns = async () => {
-      const result: Pronoun[] = [];
+      const result: string[] = [];
       const arr = pronounsArr.filter((pronoun) => pronoun.checked);
       for (let i = 0; i < arr.length; i++) {
         const pronoun = arr[i];
@@ -87,7 +100,7 @@ export default function Pronouns() {
         }
       }
 
-      await setPronouns(result.length > 0 ? result : null);
+      if (result.length) await setPronouns(result.join("/"));
     };
 
     getPronouns();
@@ -113,7 +126,7 @@ export default function Pronouns() {
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
-            {pronouns && pronouns.length > 0 ? pronouns.join("/") : "Choose"}
+            {pronouns && pronouns.length > 0 ? pronouns : "Choose"}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

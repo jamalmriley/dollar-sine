@@ -12,6 +12,7 @@ import {
 import { db } from "@/utils/firebase";
 import { clerkClient } from "@clerk/nextjs/server";
 import { collection, getDocs, query } from "firebase/firestore";
+import { revalidatePath } from "next/cache";
 
 interface ClerkError {
   message: string;
@@ -116,6 +117,7 @@ export async function updateUserMetadata(
       };
     });
 
+  revalidatePath("/onboarding");
   return update;
 }
 
@@ -157,6 +159,7 @@ export async function createOrganization(
       };
     });
 
+  revalidatePath("/onboarding");
   return create;
 }
 
@@ -235,6 +238,7 @@ export async function updateOrganization(
       };
     });
 
+  revalidatePath("/onboarding");
   return update;
 }
 

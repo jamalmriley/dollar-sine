@@ -5,7 +5,7 @@ import JobTitle from "./JobTitle";
 import Pronouns from "./Pronouns";
 import SkinTone from "./SkinTone";
 import ProfileImageUpload from "./ProfileImageUpload";
-import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from "nuqs";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import {
   Accordion,
   AccordionContent,
@@ -60,10 +60,9 @@ export default function FinishProfile() {
   const [jobTitle, setJobTitle] = useQueryState("jobTitle", {
     defaultValue: "",
   });
-  const [pronouns, setPronouns] = useQueryState(
-    "pronouns",
-    parseAsArrayOf(parseAsStringLiteral(PRONOUNS), "/")
-  );
+  const [pronouns, setPronouns] = useQueryState("pronouns", {
+    defaultValue: "",
+  });
   const [emojiSkinTone, setEmojiSkinTone] = useQueryState(
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
@@ -81,13 +80,21 @@ export default function FinishProfile() {
         metadata.displayName !== displayName ||
         metadata.displayNameFormat !== displayNameFormat ||
         metadata.jobTitle !== jobTitle ||
-        metadata.pronouns !== pronouns ||
+        metadata.pronouns.toString() !== pronouns?.toString() ||
         metadata.emojiSkinTone !== emojiSkinTone;
 
   const isUpdating =
     metadata.lastOnboardingStepCompleted >= 1 &&
     currOnboardingStep.step === 1 &&
     currOnboardingStep.isEditing;
+
+  const hasEmptyField: boolean =
+    !prefix ||
+    !displayName ||
+    !displayNameFormat ||
+    !jobTitle ||
+    !pronouns ||
+    !emojiSkinTone;
 
   const header = {
     title: isUpdating
@@ -110,7 +117,7 @@ export default function FinishProfile() {
       isOnboardingCompleted: false,
       lastOnboardingStepCompleted: 1,
       onboardingLink: "/onboarding",
-      pronouns: pronouns || [],
+      pronouns,
       emojiSkinTone,
       organizations: [],
       courses: [],
@@ -127,7 +134,7 @@ export default function FinishProfile() {
         setDisplayName("");
         setDisplayNameFormat("");
         setJobTitle("");
-        setPronouns([]);
+        setPronouns("");
         setEmojiSkinTone("default");
         setIsLoading(false);
         setCurrOnboardingStep({ step: 1, isEditing: false });
@@ -177,7 +184,7 @@ export default function FinishProfile() {
                 setDisplayName("");
                 setDisplayNameFormat("");
                 setJobTitle("");
-                setPronouns(null);
+                setPronouns("");
                 setIsHeSelected(false);
                 setIsSheSelected(false);
                 setIsTheySelected(false);
@@ -217,28 +224,17 @@ export default function FinishProfile() {
                 isLoading &&
                 "disabled:pointer-events-auto cursor-progress hover:bg-primary"
               }`}
+              // If the user's profile is being updated, see if at least a new avatar has been uploaded.
+              // If so, the button should not be disabled.
+              // If not, make sure no text fields are blank and that there is at least one change to update.
               disabled={
                 isLoading ||
                 (isUpdating
                   ? profilePic
                     ? false
-                    : !prefix ||
-                      !displayName ||
-                      !displayNameFormat ||
-                      !jobTitle ||
-                      !pronouns ||
-                      !emojiSkinTone ||
-                      !hasProfileUpdated
-                  : !prefix ||
-                    !displayName ||
-                    !displayNameFormat ||
-                    !jobTitle ||
-                    !pronouns ||
-                    !emojiSkinTone)
+                    : hasEmptyField || !hasProfileUpdated
+                  : hasEmptyField)
               }
-              // If the user's profile is being updated, see if at least a new avatar has been uploaded.
-              // If so, the button should not be disabled.
-              // If not, make sure no text fields are blank and that there is at least one change to update.
             >
               {isLoading && <Loader2 className="animate-spin" />}
               {isUpdating
@@ -299,10 +295,7 @@ function FinishProfileMobile() {
   const [prefix] = useQueryState("prefix", { defaultValue: "" });
   const [displayName] = useQueryState("displayName", { defaultValue: "" });
   const [jobTitle] = useQueryState("jobTitle", { defaultValue: "" });
-  const [pronouns] = useQueryState(
-    "pronouns",
-    parseAsArrayOf(parseAsStringLiteral(PRONOUNS), "/")
-  );
+  const [pronouns] = useQueryState("pronouns", { defaultValue: "" });
   const [emojiSkinTone] = useQueryState("emojiSkinTone", { defaultValue: "" });
 
   const accordionItems = [

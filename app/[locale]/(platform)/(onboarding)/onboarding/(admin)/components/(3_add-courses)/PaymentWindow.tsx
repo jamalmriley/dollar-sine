@@ -29,9 +29,10 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { COURSE_SCHEMA } from "@/types/course";
+import { SELECTED_COURSE_SCHEMA } from "@/types/course";
 import { createPaymentIntent } from "@/app/actions/payment";
 import LoadingIndicator from "@/components/LoadingIndicator";
+import { MdError } from "react-icons/md";
 
 // Calling `loadStripe` outside of a component’s render avoids recreating the `Stripe` object on every render.
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
@@ -75,7 +76,7 @@ export function PaymentWindow() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [selectedCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsJson(COURSE_SCHEMA.parse))
+    parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
 
   const isPlansSelected = (): boolean => {
@@ -155,7 +156,7 @@ function PaymentForm({ amount }: { amount: number }) {
 
   const [selectedCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsJson(COURSE_SCHEMA.parse))
+    parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
 
   const [discountAmt, discountPercent] = [0, 0];
@@ -167,7 +168,10 @@ function PaymentForm({ amount }: { amount: number }) {
 
   useEffect(() => {
     (async () => {
-      await createPaymentIntent(convertToSubcurrency(amount)).then((res) => {
+      await createPaymentIntent(
+        convertToSubcurrency(amount),
+        selectedCourses
+      ).then((res) => {
         const clientSecret: string | null = res.data;
         if (clientSecret) setClientSecret(clientSecret);
       });
@@ -192,6 +196,7 @@ function PaymentForm({ amount }: { amount: number }) {
       elements,
       clientSecret,
       confirmParams: {
+        // TODO: Add receipt_email, save_payment_method, and shipping
         return_url: "http://localhost:3000/onboarding-complete",
       },
     });
@@ -202,15 +207,21 @@ function PaymentForm({ amount }: { amount: number }) {
 
   if (!clientSecret || !stripe || !elements) return <LoadingIndicator />;
   return (
-    <form onSubmit={handleSubmit} className="size-full flex flex-col">
+    <form onSubmit={handleSubmit} className="size-full flex flex-col gap-5">
       {clientSecret && <PaymentElement />}
-      {errorMsg && <div>{errorMsg}</div>}
+      {errorMsg && (
+        <div className="flex items-center p-3 gap-1 border rounded-lg border-destructive text-destructive text-sm">
+          <MdError />
+          {errorMsg}
+        </div>
+      )}
 
+      {/* Purchase Details */}
       {selectedCourses && (
         <Accordion
           type="single"
           collapsible
-          className="mt-5 px-5 border rounded-lg shadow-sm"
+          className="px-5 border rounded-lg shadow-sm"
         >
           <AccordionItem value="purchase-details" className="border-0">
             <AccordionTrigger className="text-base font-semibold">

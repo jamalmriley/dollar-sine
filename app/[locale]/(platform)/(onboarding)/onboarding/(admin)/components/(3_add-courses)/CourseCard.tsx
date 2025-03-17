@@ -4,15 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Course, COURSE_SCHEMA, Pricing } from "@/types/course";
+import {
+  SelectedCourse,
+  SELECTED_COURSE_SCHEMA,
+  Pricing,
+} from "@/types/course";
 
 // CREATE
-function addCourse(courses: Course[], course: Course): Course[] {
+function addCourse(
+  courses: SelectedCourse[],
+  course: SelectedCourse
+): SelectedCourse[] {
   return [...courses, course];
 }
 
 // READ
-function findCourse(courses: Course[], id: string): number {
+function findCourse(courses: SelectedCourse[], id: string): number {
   for (let i = 0; i < courses.length; i++) {
     const course = courses[i];
     if (course.id === id) return i;
@@ -20,7 +27,7 @@ function findCourse(courses: Course[], id: string): number {
   return -1;
 }
 
-function findPlan(courses: Course[], planName: string): number {
+function findPlan(courses: SelectedCourse[], planName: string): number {
   for (let i = 0; i < courses.length; i++) {
     const plan = courses[i].plan;
     if (plan === planName) return i;
@@ -30,11 +37,11 @@ function findPlan(courses: Course[], planName: string): number {
 
 // UPDATE
 function updateCourse(
-  courses: Course[],
+  courses: SelectedCourse[],
   id: string,
-  newCourse: Course
-): Course[] {
-  const result: Course[] = [];
+  newCourse: SelectedCourse
+): SelectedCourse[] {
+  const result: SelectedCourse[] = [];
 
   for (const course of courses) {
     if (course.id === id) result.push(newCourse);
@@ -44,8 +51,8 @@ function updateCourse(
 }
 
 // DELETE
-function removeCourse(courses: Course[], id: string): Course[] {
-  const result: Course[] = [];
+function removeCourse(courses: SelectedCourse[], id: string): SelectedCourse[] {
+  const result: SelectedCourse[] = [];
 
   for (const course of courses) {
     if (course.id !== id) result.push(course);
@@ -69,7 +76,7 @@ export default function CourseCard({
   const searchParams = useSearchParams();
   const [selectedCourses, setSelectedCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsJson(COURSE_SCHEMA.parse))
+    parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
   const isCourseSelected: boolean = selectedCourses
     ? findCourse(selectedCourses, id) !== -1
@@ -80,8 +87,8 @@ export default function CourseCard({
     const courses = searchParams.get("courses");
     if (courses) {
       const decoded = decodeURIComponent(courses);
-      const json = JSON.parse(decoded);
-      setSelectedCourses([json]);
+      const json = [JSON.parse(decoded)];
+      setSelectedCourses(json);
     }
   }, [searchParams]);
 
@@ -167,7 +174,7 @@ export default function CourseCard({
                   : ""
               }`}
               onClick={() => {
-                const newCourse: Course = {
+                const newCourse: SelectedCourse = {
                   id,
                   title,
                   plan: plan.name,
@@ -230,3 +237,5 @@ export function CourseCardSkeleton() {
     </div>
   );
 }
+
+('{"id":"common-cents","title":"Common Cents","plan":"Pro"},{"id":"industry-insights","title":"Industry Insights"}');

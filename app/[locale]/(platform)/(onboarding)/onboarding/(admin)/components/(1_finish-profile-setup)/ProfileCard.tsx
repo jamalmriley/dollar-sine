@@ -5,7 +5,7 @@ import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
 import { AdminMetadata, PRONOUNS } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
-import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from "nuqs";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { MdAlternateEmail, MdEdit, MdEmail, MdError } from "react-icons/md";
 import { TbUserExclamation } from "react-icons/tb";
 import { User } from "@clerk/nextjs/server";
@@ -30,10 +30,7 @@ export function ProfileCard({
     defaultValue: "",
   });
   const [, setJobTitle] = useQueryState("jobTitle", { defaultValue: "" });
-  const [, setPronouns] = useQueryState(
-    "pronouns",
-    parseAsArrayOf(parseAsStringLiteral(PRONOUNS), "/")
-  );
+  const [, setPronouns] = useQueryState("pronouns", { defaultValue: "" });
   const [, setEmojiSkinTone] = useQueryState(
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
@@ -86,7 +83,8 @@ export function ProfileCard({
                 className="rounded-full"
                 onClick={() => {
                   const pronounHelper = () => {
-                    for (const pronoun of pronouns) {
+                    const splitPronouns = pronouns.split("/");
+                    for (const pronoun of splitPronouns) {
                       if (pronoun === "he") setIsHeSelected(true);
                       if (pronoun === "she") setIsSheSelected(true);
                       if (pronoun === "they") setIsTheySelected(true);
@@ -108,9 +106,7 @@ export function ProfileCard({
               </Button>
             </div>
             <span className="text-sm">{metadata.jobTitle}</span>
-            <span className="text-sm">
-              Pronouns: {metadata.pronouns.join("/")}
-            </span>
+            <span className="text-sm">Pronouns: {metadata.pronouns}</span>
           </div>
 
           {/* User Expanded Details and Creation Date */}

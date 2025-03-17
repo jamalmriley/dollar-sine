@@ -24,16 +24,10 @@ type OnboardingContext = {
   setCourses: React.Dispatch<React.SetStateAction<CourseData[]>>;
   lastUpdated: string;
   setLastUpdated: React.Dispatch<React.SetStateAction<string>>;
-  users: { emailAddress: string; role: string }[] | undefined;
-  setUsers: React.Dispatch<
-    React.SetStateAction<{ emailAddress: string; role: string }[] | undefined>
-  >;
-  hasInvitedUsers: boolean; // TODO: remove?
-  setHasInvitedUsers: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  transactionTotal: string;
-  setTransactionTotal: React.Dispatch<React.SetStateAction<string>>;
+  transactionTotal: number;
+  setTransactionTotal: React.Dispatch<React.SetStateAction<number>>;
   transactionDate: string;
   setTransactionDate: React.Dispatch<React.SetStateAction<string>>;
   transactionCode: string;
@@ -60,13 +54,9 @@ export default function OnboardingContextProvider({
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("");
-  const [users, setUsers] = useState<
-    { emailAddress: string; role: string }[] | undefined
-  >();
-  const [hasInvitedUsers, setHasInvitedUsers] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [transactionTotal, setTransactionTotal] = useState<string>("");
+  const [transactionTotal, setTransactionTotal] = useState<number>(0);
   const [transactionDate, setTransactionDate] = useState<string>("");
   const [transactionCode, setTransactionCode] = useState<string>("");
   const [isOnboardingComplete, setIsOnboardingComplete] =
@@ -97,10 +87,6 @@ export default function OnboardingContextProvider({
         setCourses,
         lastUpdated,
         setLastUpdated,
-        users,
-        setUsers,
-        hasInvitedUsers,
-        setHasInvitedUsers,
         isLoading,
         setIsLoading,
         transactionTotal,

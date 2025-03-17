@@ -20,9 +20,11 @@ import { User } from "@clerk/nextjs/server";
 
 export default function ProfileAlreadyCreated() {
   const { user, isLoaded, isSignedIn } = useUser();
-  const { isLoading, setIsLoading, lastUpdated } = useOnboardingContext();
+  const { isLoading, setIsLoading, currOnboardingStep, lastUpdated } =
+    useOnboardingContext();
+  const [toggle, setToggle] = useState<boolean>(false);
   const [userData, setUserData] = useState<User>();
-  const [toggle, setToggle] = useState(false);
+  const [hasViewed, setHasViewed] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchAndSetUser = async () => {
@@ -33,14 +35,15 @@ export default function ProfileAlreadyCreated() {
 
         setUserData(userData);
         setIsLoading(false);
+        setHasViewed(true);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
       }
     };
 
-    fetchAndSetUser();
-  }, [lastUpdated]);
+    if (currOnboardingStep.step === 1 && !hasViewed) fetchAndSetUser();
+  }, [currOnboardingStep.step, lastUpdated]);
 
   const header = {
     title: "You finished setting up your profile!",
