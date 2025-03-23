@@ -3,7 +3,10 @@
 import { CourseData } from "@/types/course";
 import { createContext, useContext, useState } from "react";
 
-type OnboardingStep = { step: number; isEditing: boolean };
+type OnboardingStep = {
+  step: number;
+  isEditing: boolean;
+};
 
 type OnboardingContext = {
   isHeSelected: boolean; // TODO: remove?
@@ -20,6 +23,8 @@ type OnboardingContext = {
   setIsUpdatingProfile: React.Dispatch<React.SetStateAction<boolean>>;
   isUpdatingOrg: boolean;
   setIsUpdatingOrg: React.Dispatch<React.SetStateAction<boolean>>;
+  organizationId: string | undefined;
+  setOrganizationId: React.Dispatch<React.SetStateAction<string | undefined>>;
   courses: CourseData[];
   setCourses: React.Dispatch<React.SetStateAction<CourseData[]>>;
   lastUpdated: string;
@@ -52,6 +57,7 @@ export default function OnboardingContextProvider({
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
+  const [organizationId, setOrganizationId] = useState<string | undefined>();
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -83,6 +89,8 @@ export default function OnboardingContextProvider({
         setIsUpdatingProfile,
         isUpdatingOrg,
         setIsUpdatingOrg,
+        organizationId,
+        setOrganizationId,
         courses,
         setCourses,
         lastUpdated,

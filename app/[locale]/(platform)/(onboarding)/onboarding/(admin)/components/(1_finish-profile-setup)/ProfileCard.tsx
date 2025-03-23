@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
-import { AdminMetadata, PRONOUNS } from "@/types/user";
+import { AdminMetadata } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsStringLiteral, useQueryState } from "nuqs";

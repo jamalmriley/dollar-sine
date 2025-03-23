@@ -8,7 +8,7 @@ import { IOS_APP_LINK } from "@/utils/app";
 import StyledButton from "@/components/StyledButton";
 import { MdComputer, MdSmartphone } from "react-icons/md";
 import { useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { format } from "date-fns";
@@ -77,7 +77,7 @@ export default function AdminOnboardingComplete() {
           format(
             new Date(paymentIntentDetails.created * 1000),
             "MM/dd/yyyy 'at' h:mm a"
-            // , { locale: es } // TODO: Add locale functionality
+            // { locale } // TODO: Add locale functionality
           )
         );
         setTransactionCode(formatConfirmationCode(paymentIntentDetails.id));
@@ -93,7 +93,7 @@ export default function AdminOnboardingComplete() {
         role,
         isOnboardingCompleted: true,
         lastOnboardingStepCompleted: 3,
-        onboardingLink: "/onboarding",
+        onboardingLink: `/${locale}/onboarding`,
         pronouns,
         emojiSkinTone,
         organizations,

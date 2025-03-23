@@ -237,5 +237,3 @@ export function CourseCardSkeleton() {
     </div>
   );
 }
-
-('{"id":"common-cents","title":"Common Cents","plan":"Pro"},{"id":"industry-insights","title":"Industry Insights"}');

@@ -18,24 +18,30 @@ import { Organization } from "@clerk/nextjs/server";
 
 export default function OrgAlreadyCreated() {
   const { user, isLoaded } = useUser();
-  const { currOnboardingStep, lastUpdated, isLoading, setIsLoading } =
-    useOnboardingContext();
+  const {
+    currOnboardingStep,
+    lastUpdated,
+    organizationId,
+    isLoading,
+    setIsLoading,
+  } = useOnboardingContext();
   const [toggle, setToggle] = useState<boolean>(false);
   const [org, setOrg] = useState<Organization>();
   const [hasViewed, setHasViewed] = useState<boolean>(false);
-
-  const organization = user?.organizationMemberships[0].organization;
 
   const header = {
     title: "Organization successfully created!",
     description: "View your organization's details below.",
   };
 
+  const orgId =
+    organizationId || user?.organizationMemberships[0].organization.id;
+
   useEffect(() => {
     const fetchAndSetOrg = async () => {
       setIsLoading(true);
       try {
-        const res = await getOrganization(organization?.id);
+        const res = await getOrganization(orgId);
         const org = JSON.parse(res.data) as Organization;
 
         setOrg(org);
@@ -47,10 +53,10 @@ export default function OrgAlreadyCreated() {
       }
     };
 
-    if (currOnboardingStep.step === 2 && !hasViewed) fetchAndSetOrg();
+    if (currOnboardingStep.step === 2 && !hasViewed && orgId) fetchAndSetOrg();
   }, [currOnboardingStep.step, lastUpdated]);
 
-  if (!user || user.organizationMemberships.length === 0 || !isLoaded) return;
+  if (!user || !isLoaded || !orgId) return;
   return (
     <Card className="w-full h-full mx-10 max-w-lg">
       <CardHeader>
@@ -65,19 +71,12 @@ export default function OrgAlreadyCreated() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
-          {/*
-      If the org has loaded and there is data, display the OrgCard component.
-      If the org has loaded and there is no data, display the OrgCardError component.
-      If the org has not loaded yet, display the OrgCardSkeleton component.
-      */}
-          {!isLoading ? (
-            org ? (
-              <OrgCard toggle={toggle} org={org} />
-            ) : (
-              <OrgCardError toggle={toggle} />
-            )
-          ) : (
+          {isLoading ? (
             <OrgCardSkeleton toggle={toggle} />
+          ) : org ? (
+            <OrgCard toggle={toggle} org={org} />
+          ) : (
+            <OrgCardError toggle={toggle} />
           )}
 
           <Button

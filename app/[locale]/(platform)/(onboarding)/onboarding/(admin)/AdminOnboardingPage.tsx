@@ -16,9 +16,10 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import Profile from "./components/(1_finish-profile-setup)/Profile";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { updateUserMetadata } from "@/app/actions/onboarding";
+import { getUser, updateUserMetadata } from "@/app/actions/onboarding";
 import { toast } from "@/hooks/use-toast";
-import { AdminMetadata } from "@/types/user";
+import { PublicMetadata } from "@/types/user";
+import { User } from "@clerk/nextjs/server";
 
 export default function AdminOnboardingPage() {
   const { user, isLoaded } = useUser();
@@ -26,12 +27,14 @@ export default function AdminOnboardingPage() {
   const pathname = usePathname();
   const { locale } = useParams();
   const searchParams = useSearchParams();
-  const { setIsUpdatingProfile, setIsUpdatingOrg, setCurrOnboardingStep } =
-    useOnboardingContext();
+  const { lastUpdated, setCurrOnboardingStep } = useOnboardingContext();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
+  const [metadata, setMetadata] = useState<PublicMetadata>(
+    user?.publicMetadata as any as PublicMetadata
+  );
 
   // Save the onboarding progress once the user stops typing for at least 3 seconds.
   useEffect(() => {
@@ -41,7 +44,7 @@ export default function AdminOnboardingPage() {
         const onboardingLink = `/${locale}${pathname}${
           searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
         }`;
-        const metadata = { onboardingLink } as AdminMetadata;
+        const metadata = { onboardingLink } as PublicMetadata;
 
         const saveOnboardingProgress = async () => {
           const res = await updateUserMetadata(user.id, metadata);
@@ -64,7 +67,7 @@ export default function AdminOnboardingPage() {
   }, [searchParams]);
 
   // Determine the state of the carousel components based on the search params.
-  useEffect(() => {
+  /* useEffect(() => {
     const profileParams = [
       "prefix",
       "displayName",
@@ -82,7 +85,7 @@ export default function AdminOnboardingPage() {
       if (profileParams.indexOf(key) !== -1) setIsUpdatingProfile(true);
       if (orgParams.indexOf(key) !== -1) setIsUpdatingOrg(true);
     }
-  }, [searchParams]);
+  }, [searchParams]); */
 
   // Maintain the state of the custom carousel.
   useEffect(() => {
@@ -115,6 +118,22 @@ export default function AdminOnboardingPage() {
     });
   }, [api]);
 
+  // Update the user's metadata upon completion of each onboarding step to ensure that buttons work.
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getUser(user?.id);
+        const userData = JSON.parse(res.data) as User;
+        const publicMetadata = userData.publicMetadata as any as PublicMetadata;
+        setMetadata(publicMetadata);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUser();
+  }, [lastUpdated]);
+
   const scrollPrev = useCallback(() => {
     api?.scrollPrev();
   }, [api]);
@@ -125,7 +144,6 @@ export default function AdminOnboardingPage() {
 
   if (!user || !isLoaded) return;
 
-  const metadata = user.publicMetadata as any as AdminMetadata;
   const prompts = [
     {
       id: "step-1",

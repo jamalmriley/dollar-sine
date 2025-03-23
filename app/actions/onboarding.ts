@@ -138,13 +138,14 @@ export async function createOrganization(
       slug,
       publicMetadata,
     })
-    .then(() => {
+    .then((org) => {
       const [title, description] = ["Organization successfully created ✅", ""];
 
       return {
         status: 200,
         success: true,
         message: { title, description },
+        data: org.id,
       };
     })
     .catch((err: ClerkErrorResponse) => {
@@ -159,7 +160,6 @@ export async function createOrganization(
       };
     });
 
-  revalidatePath("/onboarding");
   return create;
 }
 
@@ -241,9 +241,6 @@ export async function updateOrganization(
   revalidatePath("/onboarding");
   return update;
 }
-
-// Add courses
-// when a user buys a course, add it to organization's metadata and update purchasing user's metadata
 
 // Read Courses
 export async function getCourses(): Promise<Response> {

@@ -65,19 +65,12 @@ export default function ProfileAlreadyCreated() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
-          {/* 
-          If the user has loaded and there is data, display the ProfileCard component.
-          If the user has loaded and there is no data, display the ProfileCardError component.
-          If the user has not loaded yet, display the ProfileCardSkeleton component.
-          */}
-          {!isLoading ? (
-            userData ? (
-              <ProfileCard toggle={toggle} userData={userData} />
-            ) : (
-              <ProfileCardError toggle={toggle} />
-            )
-          ) : (
+          {isLoading ? (
             <ProfileCardSkeleton toggle={toggle} />
+          ) : userData ? (
+            <ProfileCard toggle={toggle} userData={userData} />
+          ) : (
+            <ProfileCardError toggle={toggle} />
           )}
 
           <Button

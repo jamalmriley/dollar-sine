@@ -28,7 +28,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AdminMetadata, PRONOUNS } from "@/types/user";
+import { AdminMetadata } from "@/types/user";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
@@ -44,6 +44,7 @@ export default function FinishProfile() {
     setIsHeSelected,
     setIsSheSelected,
     setIsTheySelected,
+    setLastUpdated,
   } = useOnboardingContext();
   const [prefix, setPrefix] = useQueryState("prefix", {
     defaultValue: "",
@@ -138,6 +139,7 @@ export default function FinishProfile() {
         setEmojiSkinTone("default");
         setIsLoading(false);
         setCurrOnboardingStep({ step: 1, isEditing: false });
+        setLastUpdated(new Date().toString()); // Triggers Profile.tsx and ProfileAlreadyCreated.tsx to re-render.
 
         toast({
           variant: "default",
@@ -147,7 +149,6 @@ export default function FinishProfile() {
       })
       .catch(() => {
         setIsLoading(false);
-        setCurrOnboardingStep({ step: 1, isEditing: false });
 
         toast({
           variant: "destructive",

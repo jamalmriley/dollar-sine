@@ -28,7 +28,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MdClose } from "react-icons/md";
-import { AdminMetadata, OrganizationMetadata } from "@/types/user";
+import { OrganizationMetadata, PublicMetadata } from "@/types/user";
 import {
   ClerkErrorResponse,
   createOrganization,
@@ -45,6 +45,8 @@ export default function CreateOrUpdateOrg() {
     setOrgLogo,
     isLoading,
     setIsLoading,
+    setLastUpdated,
+    setOrganizationId,
   } = useOnboardingContext();
   const { user, isLoaded } = useUser();
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
@@ -81,8 +83,7 @@ export default function CreateOrUpdateOrg() {
           orgAddress ||
         Boolean(organization.publicMetadata.is2FARequired) !== is2FARequired;
 
-  if (!user || !isLoaded) return;
-  const userMetadata = user.publicMetadata as any as AdminMetadata;
+  const userMetadata = user?.publicMetadata as any as PublicMetadata;
 
   const isUpdating =
     userMetadata.lastOnboardingStepCompleted >= 2 &&
@@ -145,13 +146,6 @@ export default function CreateOrUpdateOrg() {
     async function handleResponse(res: Response) {
       if (!user) return;
       if (res.success) {
-        setOrgName("");
-        setOrgAddress("");
-        setOrgSlug("");
-        setOrgLogo(undefined);
-        setIs2FARequired(false);
-        setCurrOnboardingStep({ step: 2, isEditing: false });
-
         const userId = user.id;
         const {
           role,
@@ -162,20 +156,29 @@ export default function CreateOrUpdateOrg() {
           courses,
           classes,
         } = userMetadata;
-        const newMetadata: AdminMetadata = {
+        const newMetadata: PublicMetadata = {
           role,
           isOnboardingCompleted,
           lastOnboardingStepCompleted: 2,
           onboardingLink,
           pronouns,
           emojiSkinTone,
-          organizations: orgIds,
+          organizations: res.data ? [...orgIds, res.data] : orgIds,
           courses,
           classes,
         };
 
         updateUserMetadata(userId, newMetadata)
           .then(() => {
+            if (res.data) setOrganizationId(String(res.data));
+            setLastUpdated(new Date().toString()); // Triggers Organization.tsx and OrgAlreadyCreated.tsx to re-render.
+            setOrgName("");
+            setOrgAddress("");
+            setOrgSlug("");
+            setOrgLogo(undefined);
+            setIs2FARequired(false);
+            setCurrOnboardingStep({ step: 2, isEditing: false });
+
             toast({
               variant: res.success ? "default" : "destructive",
               title: res.message?.title,
@@ -223,6 +226,7 @@ export default function CreateOrUpdateOrg() {
     fetchPredictions();
   }, [orgAddress]);
 
+  if (!user || !isLoaded) return;
   return (
     <Card className="w-full h-full mx-10 max-w-3xl">
       <CardHeader>
