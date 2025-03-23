@@ -9,7 +9,7 @@ import { getFirestore } from "firebase/firestore";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAW-NHLlZlRhJ7zxWhFwiSsQHC9Nc62TC4",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "icarus-one.firebaseapp.com",
   projectId: "icarus-one",
   storageBucket: "icarus-one.firebasestorage.app",
