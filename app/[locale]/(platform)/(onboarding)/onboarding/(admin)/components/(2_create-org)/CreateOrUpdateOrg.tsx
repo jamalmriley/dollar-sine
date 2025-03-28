@@ -313,44 +313,46 @@ export default function CreateOrUpdateOrg() {
             <Label htmlFor="org-address" className="text-sm font-bold">
               Address
             </Label>
-            <Command className="border" id="org-address">
-              <CommandInput
-                placeholder="Search an address..."
-                value={orgAddress}
-                onValueChange={(e) => {
-                  setOrgAddress(e);
-                }}
-                onFocus={() => setShowPredictions(true)}
-                onBlur={() => setShowPredictions(false)}
-                autoComplete="street-address"
-              />
-              <CommandList>
-                {showPredictions && (
-                  <CommandEmpty>
-                    <span className="text-muted-foreground font-medium select-none">
-                      {orgAddress === ""
-                        ? "Start typing to search an address."
-                        : "No results found."}
-                    </span>
-                  </CommandEmpty>
-                )}
-                {predictions.length > 0 && showPredictions && (
-                  <CommandGroup heading="Suggestions">
-                    {predictions.map((prediction) => (
-                      <CommandItem
-                        key={prediction.place_id}
-                        onMouseDown={() => {
-                          setOrgAddress(prediction.description);
-                          setShowPredictions(false);
-                        }}
-                      >
-                        {prediction.description}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-              </CommandList>
-            </Command>
+            <div className="relative">
+              <Command className="border w-full" id="org-address">
+                <CommandInput
+                  placeholder="Search an address..."
+                  value={orgAddress}
+                  onValueChange={(e) => {
+                    setOrgAddress(e);
+                  }}
+                  onFocus={() => setShowPredictions(true)}
+                  onBlur={() => setShowPredictions(false)}
+                  autoComplete="street-address"
+                />
+                <CommandList className="absolute left-0 top-full w-full bg-primary-foreground border shadow-lg z-50">
+                  {showPredictions && (
+                    <CommandEmpty>
+                      <span className="text-muted-foreground font-medium select-none">
+                        {orgAddress === ""
+                          ? "Start typing to search an address."
+                          : "No results found."}
+                      </span>
+                    </CommandEmpty>
+                  )}
+                  {predictions.length > 0 && showPredictions && (
+                    <CommandGroup heading="Suggestions">
+                      {predictions.map((prediction) => (
+                        <CommandItem
+                          key={prediction.place_id}
+                          onMouseDown={() => {
+                            setOrgAddress(prediction.description);
+                            setShowPredictions(false);
+                          }}
+                        >
+                          {prediction.description}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                </CommandList>
+              </Command>
+            </div>
           </div>
 
           {/* Org Logo */}

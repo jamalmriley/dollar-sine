@@ -9,10 +9,12 @@ import { User } from "@clerk/nextjs/server";
 
 export default function Profile() {
   const { user, isLoaded } = useUser();
-  const { lastUpdated } = useOnboardingContext();
+  const { currOnboardingStep, lastUpdated } = useOnboardingContext();
+  const { step, isEditing } = currOnboardingStep;
 
+  const currStep = 1;
   const metadata = user?.publicMetadata as any as PublicMetadata;
-  const initIsCompleted = metadata.lastOnboardingStepCompleted >= 2;
+  const initIsCompleted = metadata.lastOnboardingStepCompleted >= currStep;
   const [isCompleted, setIsCompleted] = useState<boolean>(initIsCompleted);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function Profile() {
         const res = await getUser(user?.id);
         const userData = JSON.parse(res.data) as User;
         const publicMetadata = userData.publicMetadata as any as PublicMetadata;
-        setIsCompleted(publicMetadata.lastOnboardingStepCompleted >= 1);
+        setIsCompleted(publicMetadata.lastOnboardingStepCompleted >= currStep);
       } catch (error) {
         console.error(error);
       }
@@ -31,5 +33,13 @@ export default function Profile() {
   }, [lastUpdated]);
 
   if (!user || !isLoaded) return;
-  return <>{isCompleted ? <ProfileAlreadyCreated /> : <FinishProfile />}</>;
+  return (
+    <>
+      {!isCompleted || (step === 1 && isEditing) ? (
+        <FinishProfile />
+      ) : (
+        <ProfileAlreadyCreated />
+      )}
+    </>
+  );
 }
