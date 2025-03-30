@@ -99,8 +99,14 @@ export default function CreateOrUpdateOrg() {
       : "Enter your organization's details below.",
   };
 
-  const createOrgSlug = (text: string) =>
-    text.replaceAll(" ", "-").toLowerCase();
+  const autoCreateOrgSlug = (text: string): string =>
+    text
+      .normalize("NFD") // Normalize to decompose accented characters
+      .replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s-]/g, "") // Remove special characters except hyphens
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-") // Replace multiple consecutive hyphens with a single hyphen
+      .replace(/^-+|-+$/g, "") // Remove hyphens from start and end
+      .toLowerCase(); // Convert to lowercase
 
   // TODO
   /* const validate = (value: string) => {
@@ -272,11 +278,12 @@ export default function CreateOrUpdateOrg() {
               </Label>
               <Input
                 id="org-name"
+                placeholder="Ex: Stark Industries"
                 value={orgName}
                 onChange={(e) => {
                   setOrgName(e.target.value);
                   if (!hasCustomOrgSlug)
-                    setOrgSlug(createOrgSlug(e.target.value));
+                    setOrgSlug(autoCreateOrgSlug(e.target.value));
                 }}
                 className="w-full"
               />
@@ -290,6 +297,7 @@ export default function CreateOrUpdateOrg() {
               </Label>
               <Input
                 id="org-id"
+                placeholder="Ex: stark-industries"
                 value={orgSlug}
                 onChange={(e) => {
                   // const re = /^[a-zA-Z0-9_]+$/;
@@ -314,7 +322,7 @@ export default function CreateOrUpdateOrg() {
               Address
             </Label>
             <div className="relative">
-              <Command className="border w-full" id="org-address">
+              <Command className="w-full" id="org-address">
                 <CommandInput
                   placeholder="Search an address..."
                   value={orgAddress}
@@ -325,7 +333,11 @@ export default function CreateOrUpdateOrg() {
                   onBlur={() => setShowPredictions(false)}
                   autoComplete="street-address"
                 />
-                <CommandList className="absolute left-0 top-full w-full bg-primary-foreground border shadow-lg z-50">
+                <CommandList
+                  className={`absolute left-0 top-full w-full bg-primary-foreground rounded-b-md ${
+                    showPredictions && "border-b border-x"
+                  } shadow-lg z-50`}
+                >
                   {showPredictions && (
                     <CommandEmpty>
                       <span className="text-muted-foreground font-medium select-none">
