@@ -19,12 +19,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { HiOutlineInformationCircle } from "react-icons/hi2";
-import { Skeleton } from "@/components/ui/skeleton";
 import LessonSidebar from "./LessonSidebar";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import LessonWorkspace from "./LessonWorkspace";
 import LessonCanvas from "./LessonCanvas";
+import LessonVideo from "./LessonVideo";
 
 const i18nNamespaces = ["platform-layout"];
 
@@ -124,7 +124,7 @@ export default async function LessonContent({
             </LessonWorkspace>
 
             {/* Video */}
-            <Skeleton className="w-full md:w-1/3 h-full min-w-[312.1875px]" />
+            <LessonVideo />
           </div>
         </div>
       </div>

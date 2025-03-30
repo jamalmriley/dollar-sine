@@ -1,3 +1,4 @@
+import { withNextVideo } from "next-video/process";
 // next.config.mjs
 
 import autoCert from "anchor-pki/auto-cert/integrations/next";
@@ -22,4 +23,4 @@ const nextConfig = {
   },
 };
 
-export default withAutoCert(nextConfig);
+export default withNextVideo(withAutoCert(nextConfig));
