@@ -14,7 +14,7 @@ export async function createPaymentIntent(
     status: 422,
     success: false,
     message: {
-      title: "Missing required details",
+      title: "Missing required argument(s)",
       description:
         "A payment amount and course info are required to create a payment intent.",
     },
@@ -50,7 +50,7 @@ export async function getPaymentIntent(clientSecret: string) {
     status: 422,
     success: false,
     message: {
-      title: "Missing required amount",
+      title: "Missing required argument(s)",
       description: "A client secret is required to retrieve a payment intent.",
     },
   };
@@ -70,6 +70,32 @@ export async function getPaymentIntent(clientSecret: string) {
       title: `Payment intent retrieved ${
         paymentIntent ? "successfully" : "unsuccessfully"
       }`,
+      description: "",
+    },
+  };
+}
+
+export async function getCoupon(promoCode: string) {
+  const invalidRes: Response = {
+    status: 422,
+    success: false,
+    message: {
+      title: "Missing required argument(s)",
+      description: "The promo code ID is required.",
+    },
+  };
+  if (!promoCode === undefined) return invalidRes;
+
+  const coupon = await stripe.coupons.retrieve(promoCode).then((coupon) => {
+    return coupon;
+  });
+
+  return {
+    status: coupon ? 200 : 400,
+    success: Boolean(coupon),
+    data: coupon,
+    message: {
+      title: `Coupon retrieved ${coupon ? "successfully" : "unsuccessfully"}`,
       description: "",
     },
   };

@@ -116,20 +116,23 @@ export default function FinishProfile() {
     const metadata: AdminMetadata = {
       role: "admin",
       isOnboardingCompleted: false,
-      lastOnboardingStepCompleted: 1,
+      lastOnboardingStepCompleted: 1, // TODO: Do not override
       onboardingLink: "/onboarding",
       pronouns,
       emojiSkinTone,
-      organizations: [],
-      courses: [],
-      classes: null,
+      organizations: [], // TODO: Do not override
+      courses: [], // TODO: Do not override
+      classes: null, // TODO: Do not override
       displayName,
       displayNameFormat,
       prefix,
       jobTitle,
     };
 
-    await updateUserMetadata(userId, metadata)
+    const formData = new FormData();
+    if (profilePic) formData.append("profilePic", profilePic);
+
+    await updateUserMetadata(userId, metadata, formData)
       .then(() => {
         setPrefix("");
         setDisplayName("");

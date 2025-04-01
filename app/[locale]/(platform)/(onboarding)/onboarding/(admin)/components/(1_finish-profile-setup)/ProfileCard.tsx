@@ -63,7 +63,7 @@ export function ProfileCard({
             sizes="100vw"
             alt={userData.id}
             loading="eager"
-            className="w-full h-auto rounded-lg overflow-hidden"
+            className="w-full h-auto border border-default-color rounded-lg overflow-hidden"
           />
         </div>
 
@@ -204,7 +204,7 @@ export function ProfileCardError({ toggle }: { toggle: boolean }) {
         } flex gap-5 select-none`}
       >
         {/* User Image */}
-        <div className="aspect-square h-full rounded-lg overflow-hidden bg-primary-foreground">
+        <div className="aspect-square h-full rounded-lg border border-default-color overflow-hidden bg-primary-foreground">
           <TbUserExclamation className="w-3/4 h-full mx-auto" />
         </div>
 

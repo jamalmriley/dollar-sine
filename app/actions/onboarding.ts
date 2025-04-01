@@ -76,7 +76,8 @@ export async function updateUserMetadata(
     | TeacherMetadata
     | GuardianMetadata
     | StudentMetadata
-    | null
+    | null,
+  formData?: FormData
 ): Promise<Response> {
   const invalidRes: Response = {
     status: 422,
@@ -96,8 +97,14 @@ export async function updateUserMetadata(
       publicMetadata,
     })
     .then(() => {
-      const title = "Profile successfully updated ✅";
-      const description = "";
+      if (formData) {
+        const profilePic = formData.get("profilePic") as File;
+        if (profilePic) {
+          client.users.updateUserProfileImage(userId, { file: profilePic });
+        }
+      }
+
+      const [title, description] = ["Profile successfully updated ✅", ""];
 
       return {
         status: 200,
@@ -124,7 +131,8 @@ export async function updateUserMetadata(
 // Create organization
 export async function createOrganization(
   createdBy: string,
-  metadata: OrganizationMetadata
+  metadata: OrganizationMetadata,
+  formData?: FormData
 ): Promise<Response> {
   const client = await clerkClient();
   const { name, slug } = metadata;
@@ -139,6 +147,15 @@ export async function createOrganization(
       publicMetadata,
     })
     .then((org) => {
+      if (formData) {
+        const orgLogo = formData.get("orgLogo") as File;
+        if (orgLogo) {
+          client.organizations.updateOrganizationLogo(org.id, {
+            file: orgLogo,
+          });
+        }
+      }
+
       const [title, description] = ["Organization successfully created ✅", ""];
 
       return {
@@ -209,7 +226,8 @@ export async function getOrganization(
 // Update organization
 export async function updateOrganization(
   organizationId: string,
-  metadata: OrganizationMetadata
+  metadata: OrganizationMetadata,
+  formData?: FormData
 ): Promise<Response> {
   const client = await clerkClient();
   const { name, slug } = metadata;
@@ -218,6 +236,14 @@ export async function updateOrganization(
   const update: Response = await client.organizations
     .updateOrganization(organizationId, { name, slug, publicMetadata })
     .then(() => {
+      if (formData) {
+        const orgLogo = formData.get("orgLogo") as File;
+        if (orgLogo) {
+          client.organizations.updateOrganizationLogo(organizationId, {
+            file: orgLogo,
+          });
+        }
+      }
       const [title, description] = ["Organization successfully updated ✅", ""];
 
       return {

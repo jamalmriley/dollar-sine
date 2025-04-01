@@ -57,7 +57,7 @@ export function OrgCard({
             sizes="100vw"
             alt={org.name}
             loading="eager"
-            className="w-full h-auto rounded-lg overflow-hidden"
+            className="w-full h-auto border border-default-color rounded-lg overflow-hidden"
           />
         </div>
 
@@ -195,7 +195,7 @@ export function OrgCardError({ toggle }: { toggle: boolean }) {
         } flex gap-5 select-none`}
       >
         {/* Organization Image */}
-        <div className="aspect-square h-full rounded-lg overflow-hidden bg-primary-foreground">
+        <div className="aspect-square h-full border border-default-color rounded-lg overflow-hidden bg-primary-foreground">
           <BsBuildingExclamation className="w-3/4 h-full mx-auto" />
         </div>
 

@@ -108,17 +108,6 @@ export default function CreateOrUpdateOrg() {
       .replace(/^-+|-+$/g, "") // Remove hyphens from start and end
       .toLowerCase(); // Convert to lowercase
 
-  // TODO
-  /* const validate = (value: string) => {
-    // ^               ->  Assert the start of the string
-    // (?![-_])        ->  Negative lookahead to assert that the string does not start with a hyphen or underscore.
-    // (?!.*[-_]$)     ->  Negative lookahead to assert that the string does not end with a hyphen or underscore.
-    // [a-zA-Z0-9-_]+  ->  Allowable characters
-    // $               ->  Assert the end of the string
-    const pattern = /^(?![-_])(?!.*[-_]$)[a-zA-Z0-9-_]+$/;
-    return pattern.test(value);
-  }; */
-
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     if (!isLoaded || !user) return;
 
@@ -211,14 +200,19 @@ export default function CreateOrUpdateOrg() {
       setIsLoading(false);
     }
 
+    const formData = new FormData();
+    if (orgLogo) formData.append("orgLogo", orgLogo);
+
     if (isUpdating) {
-      await updateOrganization(orgId, orgMetadata).then((orgRes) => {
+      await updateOrganization(orgId, orgMetadata, formData).then((orgRes) => {
         handleResponse(orgRes);
       });
     } else {
-      await createOrganization(user.id, orgMetadata).then((orgRes) => {
-        handleResponse(orgRes);
-      });
+      await createOrganization(user.id, orgMetadata, formData).then(
+        (orgRes) => {
+          handleResponse(orgRes);
+        }
+      );
     }
   };
 
