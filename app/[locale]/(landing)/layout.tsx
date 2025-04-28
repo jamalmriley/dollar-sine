@@ -23,7 +23,8 @@ export default async function LandingLayout({
       resources={resources}
     >
       <SignUpContextProvider>
-        <div className="flex flex-col h-dvh w-full dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative">
+        {/* <div className="flex flex-col h-dvh w-full dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative"> */}
+        <div className="flex flex-col h-dvh w-full">
           <div className={`h-[${NAV_HEIGHT}px]`}>
             <LandingNavbar />
           </div>

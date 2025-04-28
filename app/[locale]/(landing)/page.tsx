@@ -1,6 +1,6 @@
 import initTranslations from "@/app/i18n";
-import Home3DCard from "@/components/Home3DCard";
 import TranslationsProvider from "@/components/ui/translations-provider";
+import { Header } from "./(home)/Header";
 
 const i18nNamespaces = ["home"];
 
@@ -17,8 +17,8 @@ export default async function HomePage({
       locale={locale}
       resources={resources}
     >
-      <main className="w-full h-full flex justify-center items-center">
-        <Home3DCard />
+      <main className="w-full h-full flex flex-col">
+        <Header />
       </main>
     </TranslationsProvider>
   );

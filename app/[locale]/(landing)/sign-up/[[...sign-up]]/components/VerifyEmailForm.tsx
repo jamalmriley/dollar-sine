@@ -60,6 +60,9 @@ export default function VerifyEmailForm() {
               const userId = createdUserId as string;
               const coreMetadata: PublicMetadata = {
                 role,
+                pronunciation: "",
+                currPronunciationOptions: [],
+                prevPronunciationOptions: [],
                 isOnboardingCompleted: false,
                 lastOnboardingStepCompleted: 0,
                 onboardingLink: "/onboarding",

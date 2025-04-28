@@ -144,6 +144,9 @@ export default function CreateOrUpdateOrg() {
         const userId = user.id;
         const {
           role,
+          pronunciation,
+          currPronunciationOptions,
+          prevPronunciationOptions,
           isOnboardingCompleted,
           onboardingLink,
           pronouns,
@@ -153,6 +156,9 @@ export default function CreateOrUpdateOrg() {
         } = userMetadata;
         const newMetadata: PublicMetadata = {
           role,
+          pronunciation,
+          currPronunciationOptions,
+          prevPronunciationOptions,
           isOnboardingCompleted,
           lastOnboardingStepCompleted: 2,
           onboardingLink,

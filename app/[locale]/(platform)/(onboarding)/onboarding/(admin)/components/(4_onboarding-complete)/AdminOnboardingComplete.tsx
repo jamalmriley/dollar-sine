@@ -86,11 +86,22 @@ export default function AdminOnboardingComplete() {
       // Update the user's onboarding status to complete.
       // TODO: Add locale functionality
       const publicMetadata = user?.publicMetadata as any as AdminMetadata;
-      const { role, pronouns, emojiSkinTone, organizations, classes } =
-        publicMetadata;
+      const {
+        role,
+        pronunciation,
+        currPronunciationOptions,
+        prevPronunciationOptions,
+        pronouns,
+        emojiSkinTone,
+        organizations,
+        classes,
+      } = publicMetadata;
 
       const userMetadata: AdminMetadata = {
         role,
+        pronunciation,
+        currPronunciationOptions,
+        prevPronunciationOptions,
         isOnboardingCompleted: true,
         lastOnboardingStepCompleted: 3,
         onboardingLink: `/${locale}/onboarding`,

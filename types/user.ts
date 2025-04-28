@@ -74,6 +74,9 @@ interface TestScores {
 // Metadata //
 export interface PublicMetadata {
   role: Role;
+  pronunciation: string | null;
+  currPronunciationOptions: string[];
+  prevPronunciationOptions: string[];
   isOnboardingCompleted: boolean;
   lastOnboardingStepCompleted: number;
   onboardingLink: string;
@@ -150,6 +153,9 @@ interface HasMetdataMethods {
 abstract class User implements HasMetdataMethods {
   constructor(
     protected role: Role,
+    protected pronunciation: string | null,
+    protected currPronunciationOptions: string[],
+    protected prevPronunciationOptions: string[],
     protected isOnboardingCompleted: boolean,
     protected lastOnboardingStepCompleted: number,
     protected onboardingLink: string,
@@ -179,6 +185,9 @@ abstract class User implements HasMetdataMethods {
 class Admin extends User {
   constructor(
     role: Role,
+    pronunciation: string | null,
+    currPronunciationOptions: string[],
+    prevPronunciationOptions: string[],
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
@@ -195,6 +204,9 @@ class Admin extends User {
   ) {
     super(
       role,
+      pronunciation,
+      currPronunciationOptions,
+      prevPronunciationOptions,
       isOnboardingCompleted,
       lastOnboardingStepCompleted,
       onboardingLink,
@@ -217,6 +229,9 @@ class Admin extends User {
   getDetails(): AdminMetadata {
     return {
       role: this.role,
+      pronunciation: this.pronunciation,
+      currPronunciationOptions: this.currPronunciationOptions,
+      prevPronunciationOptions: this.prevPronunciationOptions,
       isOnboardingCompleted: this.isOnboardingCompleted,
       lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
       onboardingLink: this.onboardingLink,
@@ -237,6 +252,9 @@ class Admin extends User {
 class Teacher extends User {
   constructor(
     role: Role,
+    pronunciation: string | null,
+    currPronunciationOptions: string[],
+    prevPronunciationOptions: string[],
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
@@ -253,6 +271,9 @@ class Teacher extends User {
   ) {
     super(
       role,
+      pronunciation,
+      currPronunciationOptions,
+      prevPronunciationOptions,
       isOnboardingCompleted,
       lastOnboardingStepCompleted,
       onboardingLink,
@@ -275,6 +296,9 @@ class Teacher extends User {
   getDetails(): TeacherMetadata {
     return {
       role: this.role,
+      pronunciation: this.pronunciation,
+      currPronunciationOptions: this.currPronunciationOptions,
+      prevPronunciationOptions: this.prevPronunciationOptions,
       isOnboardingCompleted: this.isOnboardingCompleted,
       lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
       onboardingLink: this.onboardingLink,
@@ -295,6 +319,9 @@ class Teacher extends User {
 class Guardian extends User {
   constructor(
     role: Role,
+    pronunciation: string | null,
+    currPronunciationOptions: string[],
+    prevPronunciationOptions: string[],
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
@@ -307,6 +334,9 @@ class Guardian extends User {
   ) {
     super(
       role,
+      pronunciation,
+      currPronunciationOptions,
+      prevPronunciationOptions,
       isOnboardingCompleted,
       lastOnboardingStepCompleted,
       onboardingLink,
@@ -329,6 +359,9 @@ class Guardian extends User {
   getDetails(): GuardianMetadata {
     return {
       role: this.role,
+      pronunciation: this.pronunciation,
+      currPronunciationOptions: this.currPronunciationOptions,
+      prevPronunciationOptions: this.prevPronunciationOptions,
       isOnboardingCompleted: this.isOnboardingCompleted,
       lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
       onboardingLink: this.onboardingLink,
@@ -345,6 +378,9 @@ class Guardian extends User {
 class Student extends User {
   constructor(
     role: Role,
+    pronunciation: string,
+    currPronunciationOptions: string[],
+    prevPronunciationOptions: string[],
     isOnboardingCompleted: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
@@ -371,6 +407,9 @@ class Student extends User {
   ) {
     super(
       role,
+      pronunciation,
+      currPronunciationOptions,
+      prevPronunciationOptions,
       isOnboardingCompleted,
       lastOnboardingStepCompleted,
       onboardingLink,
@@ -393,6 +432,9 @@ class Student extends User {
   getDetails(): StudentMetadata {
     return {
       role: this.role,
+      pronunciation: this.pronunciation,
+      currPronunciationOptions: this.currPronunciationOptions,
+      prevPronunciationOptions: this.prevPronunciationOptions,
       isOnboardingCompleted: this.isOnboardingCompleted,
       lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
       onboardingLink: this.onboardingLink,

@@ -90,7 +90,7 @@ body,
   }
 
   .footer-icon {
-    @apply text-xl text-antique-brass-600 dark:text-antique-brass-400 hover:scale-125 transform transition ease-in-out duration-200;
+    @apply text-xl text-woodsmoke-950 hover:scale-125 transform transition ease-in-out duration-200;
   }
 
   .footer-waves {

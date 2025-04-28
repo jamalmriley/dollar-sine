@@ -1,5 +1,7 @@
 "use server";
 
+import { clerkClient } from "@clerk/nextjs/server";
+import { GoogleGenAI } from "@google/genai";
 import { CourseData } from "@/types/course";
 import { Response } from "@/types/general";
 import {
@@ -10,9 +12,10 @@ import {
   TeacherMetadata,
 } from "@/types/user";
 import { db } from "@/utils/firebase";
-import { clerkClient } from "@clerk/nextjs/server";
 import { collection, getDocs, query } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
+import dotenv from "dotenv";
+dotenv.config();
 
 interface ClerkError {
   message: string;
@@ -26,6 +29,33 @@ export interface ClerkErrorResponse {
   errors: ClerkError[];
   meta: any;
   clerk_trace_id: string;
+}
+
+export async function getPronunciations(name: string): Promise<Response> {
+  const apiKey = process.env.GEMINI_API_KEY as string;
+  const ai = new GoogleGenAI({ apiKey });
+
+  const pronunciation: Response = await ai.models
+    .generateContent({
+      model: "gemini-2.0-flash",
+      contents: `Provide a comma-separated list of up to 3 unique pronunciation respellings for the name "${name}". Only provide the string and omit any additional text in the response, including any line breaks. Each comma should be followed by one space.`,
+    })
+    .then((res) => {
+      return {
+        status: 200,
+        success: true,
+        data: res.text ? res.text.replace(/\n/g, "") : undefined,
+      };
+    })
+    .catch((err) => {
+      console.error("error:", typeof err);
+      return {
+        status: 400,
+        success: false,
+      };
+    });
+
+  return pronunciation;
 }
 
 // Get user

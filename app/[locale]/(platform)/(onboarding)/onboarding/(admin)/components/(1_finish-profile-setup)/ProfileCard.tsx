@@ -6,9 +6,11 @@ import { AdminMetadata } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
-import { MdAlternateEmail, MdEdit, MdEmail, MdError } from "react-icons/md";
+import { MdEdit, MdEmail, MdError } from "react-icons/md";
+import { RiSpeakLine } from "react-icons/ri";
 import { TbUserExclamation } from "react-icons/tb";
 import { User } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 export function ProfileCard({
   toggle,
@@ -24,6 +26,9 @@ export function ProfileCard({
     setCurrOnboardingStep,
   } = useOnboardingContext();
 
+  const [, setPronunciation] = useQueryState("pronunciation", {
+    defaultValue: "",
+  });
   const [, setPrefix] = useQueryState("prefix", { defaultValue: "" });
   const [, setDisplayName] = useQueryState("displayName", { defaultValue: "" });
   const [, setDisplayNameFormat] = useQueryState("displayNameFormat", {
@@ -39,6 +44,7 @@ export function ProfileCard({
   const metadata = userData.publicMetadata as any as AdminMetadata;
   if (!metadata) return;
   const {
+    pronunciation,
     prefix,
     displayName,
     displayNameFormat,
@@ -91,11 +97,12 @@ export function ProfileCard({
                     }
                   };
                   setCurrOnboardingStep({ step: 1, isEditing: true });
-                  if (prefix !== undefined) setPrefix(prefix);
-                  if (displayName !== undefined) setDisplayName(displayName);
-                  if (displayNameFormat !== undefined)
+                  if (pronunciation) setPronunciation(pronunciation);
+                  if (prefix) setPrefix(prefix);
+                  if (displayName) setDisplayName(displayName);
+                  if (displayNameFormat)
                     setDisplayNameFormat(displayNameFormat);
-                  if (jobTitle !== undefined) setJobTitle(jobTitle);
+                  if (jobTitle) setJobTitle(jobTitle);
                   pronounHelper();
                   setPronouns(pronouns);
                   setEmojiSkinTone(emojiSkinTone);
@@ -106,7 +113,7 @@ export function ProfileCard({
               </Button>
             </div>
             <span className="text-sm">{metadata.jobTitle}</span>
-            <span className="text-sm">Pronouns: {metadata.pronouns}</span>
+            <span className="text-sm italic">{metadata.pronouns}</span>
           </div>
 
           {/* User Expanded Details and Creation Date */}
@@ -119,11 +126,15 @@ export function ProfileCard({
             >
               <span className="flex items-center text-xs text-muted-foreground hover:underline">
                 <MdEmail className="size-5 p-0.5 mr-2" />
-                <span>{userData.emailAddresses[0].emailAddress}</span>
+                <Link
+                  href={`mailto:${userData.emailAddresses[0].emailAddress}`}
+                >
+                  <span>{userData.emailAddresses[0].emailAddress}</span>
+                </Link>
               </span>
               <span className="flex items-center text-xs text-muted-foreground">
-                <MdAlternateEmail className="size-5 p-0.5 mr-2" />
-                <span>{userData.id}</span>
+                <RiSpeakLine className="size-5 p-0.5 mr-2" />
+                <span>Pronounces name {metadata.pronunciation}</span>
               </span>
             </div>
 

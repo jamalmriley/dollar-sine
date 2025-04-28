@@ -32,6 +32,7 @@ import { AdminMetadata } from "@/types/user";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
+import Pronunciation from "./Pronunciation";
 
 export default function FinishProfile() {
   const {
@@ -46,6 +47,9 @@ export default function FinishProfile() {
     setIsTheySelected,
     setLastUpdated,
   } = useOnboardingContext();
+  const [pronunciation, setPronunciation] = useQueryState("pronunciation", {
+    defaultValue: "",
+  });
   const [prefix, setPrefix] = useQueryState("prefix", {
     defaultValue: "",
   });
@@ -115,6 +119,9 @@ export default function FinishProfile() {
     const userId = user.id;
     const metadata: AdminMetadata = {
       role: "admin",
+      pronunciation,
+      currPronunciationOptions: [], // TODO: Do not override
+      prevPronunciationOptions: [], // TODO: Do not override
       isOnboardingCompleted: false,
       lastOnboardingStepCompleted: 1, // TODO: Do not override
       onboardingLink: "/onboarding",
@@ -134,6 +141,7 @@ export default function FinishProfile() {
 
     await updateUserMetadata(userId, metadata, formData)
       .then(() => {
+        setPronunciation("");
         setPrefix("");
         setDisplayName("");
         setDisplayNameFormat("");
@@ -184,6 +192,7 @@ export default function FinishProfile() {
               className="rounded-full size-5 lg:size-6"
               onClick={() => {
                 setCurrOnboardingStep({ step: 1, isEditing: false });
+                setPronunciation("");
                 setPrefix("");
                 setDisplayName("");
                 setDisplayNameFormat("");
@@ -261,6 +270,8 @@ function FinishProfileDesktop() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-1/2 flex flex-col gap-4">
+          <Pronunciation />
+          <Separator decorative />
           <Prefix />
           <Separator decorative />
           <DisplayName />
@@ -287,15 +298,16 @@ function FinishProfileDesktop() {
           <Pronouns />
           <Separator decorative />
           <SkinTone />
+          <Separator decorative />
+          <ProfileImageUpload />
         </div>
       </div>
-
-      <ProfileImageUpload />
     </div>
   );
 }
 
 function FinishProfileMobile() {
+  const [pronunciation] = useQueryState("pronunciation", { defaultValue: "" });
   const [prefix] = useQueryState("prefix", { defaultValue: "" });
   const [displayName] = useQueryState("displayName", { defaultValue: "" });
   const [jobTitle] = useQueryState("jobTitle", { defaultValue: "" });
@@ -303,6 +315,12 @@ function FinishProfileMobile() {
   const [emojiSkinTone] = useQueryState("emojiSkinTone", { defaultValue: "" });
 
   const accordionItems = [
+    {
+      trigger: "Tell us how to say your name.",
+      value: "pronunciation",
+      content: <Pronunciation />,
+      isCompleted: pronunciation !== "",
+    },
     {
       trigger: "Select a prefix below.",
       value: "prefix",

@@ -125,8 +125,11 @@ export default function Pronouns() {
       {/* Dropdown */}
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">
-            {pronouns && pronouns.length > 0 ? pronouns : "Choose"}
+          <Button
+            variant="outline"
+            className={pronouns === "" ? "text-muted-foreground" : ""}
+          >
+            {pronouns !== "" ? pronouns : "Choose"}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
