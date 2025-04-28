@@ -5,7 +5,7 @@ import JobTitle from "./JobTitle";
 import Pronouns from "./Pronouns";
 import SkinTone from "./SkinTone";
 import ProfileImageUpload from "./ProfileImageUpload";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import {
   Accordion,
   AccordionContent,
@@ -53,6 +53,14 @@ export default function FinishProfile() {
   const [prefix, setPrefix] = useQueryState("prefix", {
     defaultValue: "",
   });
+  const [isPrefixIncluded, setIsPrefixIncluded] = useQueryState(
+    "isPrefixIncluded",
+    parseAsBoolean.withDefault(true)
+  );
+  const [isCustomPrefix, setIsCustomPrefix] = useQueryState(
+    "isCustomPrefix",
+    parseAsBoolean.withDefault(false)
+  );
   const [displayName, setDisplayName] = useQueryState("displayName", {
     defaultValue: "",
   });
@@ -133,6 +141,8 @@ export default function FinishProfile() {
       displayName,
       displayNameFormat,
       prefix,
+      isPrefixIncluded,
+      isCustomPrefix,
       jobTitle,
     };
 
@@ -143,6 +153,8 @@ export default function FinishProfile() {
       .then(() => {
         setPronunciation("");
         setPrefix("");
+        setIsPrefixIncluded(true);
+        setIsCustomPrefix(false);
         setDisplayName("");
         setDisplayNameFormat("");
         setJobTitle("");
@@ -194,6 +206,8 @@ export default function FinishProfile() {
                 setCurrOnboardingStep({ step: 1, isEditing: false });
                 setPronunciation("");
                 setPrefix("");
+                setIsPrefixIncluded(true);
+                setIsCustomPrefix(false);
                 setDisplayName("");
                 setDisplayNameFormat("");
                 setJobTitle("");

@@ -5,7 +5,7 @@ import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
 import { AdminMetadata } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import { MdEdit, MdEmail, MdError } from "react-icons/md";
 import { RiSpeakLine } from "react-icons/ri";
 import { TbUserExclamation } from "react-icons/tb";
@@ -30,6 +30,14 @@ export function ProfileCard({
     defaultValue: "",
   });
   const [, setPrefix] = useQueryState("prefix", { defaultValue: "" });
+  const [, setIsPrefixIncluded] = useQueryState(
+    "isPrefixIncluded",
+    parseAsBoolean.withDefault(true)
+  );
+  const [, setIsCustomPrefix] = useQueryState(
+    "isCustomPrefix",
+    parseAsBoolean.withDefault(false)
+  );
   const [, setDisplayName] = useQueryState("displayName", { defaultValue: "" });
   const [, setDisplayNameFormat] = useQueryState("displayNameFormat", {
     defaultValue: "",
@@ -46,6 +54,8 @@ export function ProfileCard({
   const {
     pronunciation,
     prefix,
+    isPrefixIncluded,
+    isCustomPrefix,
     displayName,
     displayNameFormat,
     jobTitle,
@@ -99,6 +109,10 @@ export function ProfileCard({
                   setCurrOnboardingStep({ step: 1, isEditing: true });
                   if (pronunciation) setPronunciation(pronunciation);
                   if (prefix) setPrefix(prefix);
+                  if (typeof isPrefixIncluded === "boolean")
+                    setIsPrefixIncluded(isPrefixIncluded);
+                  if (typeof isCustomPrefix === "boolean")
+                    setIsCustomPrefix(isCustomPrefix);
                   if (displayName) setDisplayName(displayName);
                   if (displayNameFormat)
                     setDisplayNameFormat(displayNameFormat);

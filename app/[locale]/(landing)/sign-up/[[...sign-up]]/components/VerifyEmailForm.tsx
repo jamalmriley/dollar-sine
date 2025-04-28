@@ -77,16 +77,11 @@ export default function VerifyEmailForm() {
 
               switch (role) {
                 case "admin":
-                  metadata = {
-                    ...coreMetadata,
-                  };
+                  metadata = { ...coreMetadata };
                   break;
                 case "teacher":
-                  metadata = {
-                    ...coreMetadata,
-                  };
+                  metadata = { ...coreMetadata };
                   break;
-
                 default:
                   metadata = null;
                   break;

@@ -92,6 +92,8 @@ export interface AdminMetadata extends PublicMetadata {
   displayName?: string | null;
   displayNameFormat?: string | null;
   prefix?: string | null;
+  isPrefixIncluded?: boolean | null;
+  isCustomPrefix?: boolean | null;
   jobTitle?: string | null;
 }
 
@@ -100,6 +102,8 @@ export interface TeacherMetadata extends PublicMetadata {
   displayName?: string | null;
   displayNameFormat?: string | null;
   prefix?: string | null;
+  isPrefixIncluded?: boolean | null;
+  isCustomPrefix?: boolean | null;
   jobTitle?: string | null;
 }
 
