@@ -28,7 +28,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MdClose } from "react-icons/md";
-import { OrganizationMetadata, PublicMetadata } from "@/types/user";
+import { OrganizationMetadata, UserMetadata } from "@/types/user";
 import {
   ClerkErrorResponse,
   createOrganization,
@@ -83,7 +83,7 @@ export default function CreateOrUpdateOrg() {
           orgAddress ||
         Boolean(organization.publicMetadata.is2FARequired) !== is2FARequired;
 
-  const userMetadata = user?.publicMetadata as any as PublicMetadata;
+  const userMetadata = user?.publicMetadata as any as UserMetadata;
 
   const isUpdating =
     userMetadata.lastOnboardingStepCompleted >= 2 &&
@@ -154,7 +154,7 @@ export default function CreateOrUpdateOrg() {
           courses,
           classes,
         } = userMetadata;
-        const newMetadata: PublicMetadata = {
+        const newMetadata: UserMetadata = {
           role,
           pronunciation,
           currPronunciationOptions,

@@ -1,4 +1,4 @@
-import { PublicMetadata } from "@/types/user";
+import { UserMetadata } from "@/types/user";
 import CreateOrUpdateOrg from "./CreateOrUpdateOrg";
 import OrgAlreadyCreated from "./OrgAlreadyCreated";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
@@ -13,7 +13,7 @@ export default function Organization() {
   const { step, isEditing } = currOnboardingStep;
 
   const currStep = 2;
-  const metadata = user?.publicMetadata as any as PublicMetadata;
+  const metadata = user?.publicMetadata as any as UserMetadata;
   const initIsCompleted = metadata.lastOnboardingStepCompleted >= currStep;
   const [isCompleted, setIsCompleted] = useState<boolean>(initIsCompleted);
 
@@ -22,7 +22,7 @@ export default function Organization() {
       try {
         const res = await getUser(user?.id);
         const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as PublicMetadata;
+        const publicMetadata = userData.publicMetadata as any as UserMetadata;
         setIsCompleted(publicMetadata.lastOnboardingStepCompleted >= currStep);
       } catch (error) {
         console.error(error);

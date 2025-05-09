@@ -72,7 +72,7 @@ interface TestScores {
 }
 
 // Metadata //
-export interface PublicMetadata {
+export interface UserMetadata {
   role: Role;
   pronunciation: string | null;
   currPronunciationOptions: string[];
@@ -87,7 +87,7 @@ export interface PublicMetadata {
   classes: Class[] | null;
 }
 
-export interface AdminMetadata extends PublicMetadata {
+export interface AdminMetadata extends UserMetadata {
   students?: string[] | null;
   displayName?: string | null;
   displayNameFormat?: string | null;
@@ -97,7 +97,7 @@ export interface AdminMetadata extends PublicMetadata {
   jobTitle?: string | null;
 }
 
-export interface TeacherMetadata extends PublicMetadata {
+export interface TeacherMetadata extends UserMetadata {
   students?: string[] | null;
   displayName?: string | null;
   displayNameFormat?: string | null;
@@ -107,11 +107,11 @@ export interface TeacherMetadata extends PublicMetadata {
   jobTitle?: string | null;
 }
 
-export interface GuardianMetadata extends PublicMetadata {
+export interface GuardianMetadata extends UserMetadata {
   students?: string[] | null;
 }
 
-export interface StudentMetadata extends PublicMetadata {
+export interface StudentMetadata extends UserMetadata {
   gradeLevel?: string | null;
   track?: "Above grade level" | "At grade level" | "Below grade level" | null;
   tools?: string[] | null;

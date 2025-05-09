@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import OnboardingContextProvider from "@/contexts/onboarding-context";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
-import { PublicMetadata } from "@/types/user";
+import { UserMetadata } from "@/types/user";
 
 export const metadata: Metadata = setTitle("Get started");
 
@@ -14,7 +14,7 @@ export default async function OnboardingPage() {
   const user = await currentUser();
   if (!user) return <>not signed in</>;
 
-  const publicMetadata = user.publicMetadata as any as PublicMetadata;
+  const publicMetadata = user.publicMetadata as any as UserMetadata;
   const { role } = publicMetadata;
 
   if (!role)

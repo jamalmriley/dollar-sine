@@ -2,6 +2,7 @@
 
 import {
   ClerkErrorResponse,
+  getPronunciations,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -14,11 +15,11 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import { toast } from "@/hooks/use-toast";
-import { AdminMetadata, PublicMetadata, TeacherMetadata } from "@/types/user";
+import { AdminMetadata, UserMetadata, TeacherMetadata } from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MdRefresh } from "react-icons/md";
 
@@ -45,6 +46,33 @@ export default function VerifyEmailForm() {
   const router = useRouter();
   const { t } = useTranslation();
 
+  const [isLoadingPronunciationOptions, setIsLoadingPronunciationOptions] =
+    useState<boolean>(false);
+  const [pronunciationOptions, setPronunciationOptions] = useState<
+    string[] | undefined
+  >();
+
+  // Pronunciations
+  useEffect(() => {
+    (async function () {
+      setIsLoadingPronunciationOptions(true);
+      await getPronunciations(
+        String(`${signUp?.firstName} ${signUp?.lastName}`.trim())
+      ).then((res) => {
+        setPronunciationOptions(res.data.split(", "));
+        setIsLoadingPronunciationOptions(false);
+      });
+    })();
+  }, []);
+
+  // Timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) setSeconds((seconds) => seconds - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [seconds]);
+
   async function handleVerifyEmail(e: React.FormEvent) {
     e.preventDefault();
     if (!isLoaded) return;
@@ -58,10 +86,10 @@ export default function VerifyEmailForm() {
           setActive({ session: createdSessionId })
             .then(() => {
               const userId = createdUserId as string;
-              const coreMetadata: PublicMetadata = {
+              const coreMetadata: UserMetadata = {
                 role,
                 pronunciation: "",
-                currPronunciationOptions: [],
+                currPronunciationOptions: pronunciationOptions || [],
                 prevPronunciationOptions: [],
                 isOnboardingCompleted: false,
                 lastOnboardingStepCompleted: 0,
@@ -168,14 +196,6 @@ export default function VerifyEmailForm() {
     }
   }
 
-  // Timer
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) setSeconds((seconds) => seconds - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [seconds]);
-
   return (
     <form onSubmit={handleVerifyEmail} className="flex flex-col gap-5 w-full">
       {/* OTP */}
@@ -215,6 +235,7 @@ export default function VerifyEmailForm() {
       <Button
         type="submit"
         className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100"
+        disabled={isLoadingPronunciationOptions}
       >
         {t("sign-up:verify-email")}
       </Button>

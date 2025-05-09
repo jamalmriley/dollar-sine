@@ -31,14 +31,23 @@ export interface ClerkErrorResponse {
   clerk_trace_id: string;
 }
 
-export async function getPronunciations(name: string): Promise<Response> {
+export async function getPronunciations(
+  name: string,
+  valuesToIgnore?: string[]
+): Promise<Response> {
   const apiKey = process.env.GEMINI_API_KEY as string;
   const ai = new GoogleGenAI({ apiKey });
 
   const pronunciation: Response = await ai.models
     .generateContent({
       model: "gemini-2.0-flash",
-      contents: `Provide a comma-separated list of up to 3 unique pronunciation respellings for the name "${name}". Only provide the string and omit any additional text in the response, including any line breaks. Each comma should be followed by one space.`,
+      contents: `Provide a comma-separated list of up to 3 unique pronunciation respellings for the name "${name}". Only provide the string and omit any additional text in the response, including any line breaks. Each comma should be followed by one space, and each syllable should either be fully uppercase or fully lowercase. For example, a valid pronunciation respelling for "Jamal Riley" is "juh-MAHL RY-lee", where each syllable (i.e juh, MAHL, RY, lee) is spelled as it sounds and is either fully uppercase or fully lowercase. An example of an invalid pronunciation respelling for "Jamal Riley" is "Juh-MAHL RY-lee". While each syllable (i.e Juh, MAHL, RY, lee) is spelled as it sounds, one of the syllables (i.e. "Juh") is not fully uppercase or lowercase.${
+        valuesToIgnore &&
+        valuesToIgnore.length > 0 &&
+        ` If possible, do not return the following values as a part of the list: ${valuesToIgnore.join(
+          ", "
+        )}`
+      }`,
     })
     .then((res) => {
       return {

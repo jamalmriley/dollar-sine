@@ -151,6 +151,22 @@ export const convertToSubcurrency = (amount: number, factor: number = 100) => {
   return Math.round(amount * factor);
 };
 
+export const getUniqueArr = (arr: any[]): any[] => {
+  if (arr.length <= 1) return arr;
+
+  const uniqueValues = new Set();
+  const result = [];
+
+  for (const val of arr) {
+    if (!uniqueValues.has(val)) {
+      uniqueValues.add(val);
+      result.push(val);
+    }
+  }
+
+  return result;
+};
+
 export const removeElementFromArr = (
   arr: string[],
   target: string
