@@ -2,12 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ——————————— BASE ——————————— */
-html,
-body,
-:root {
-  height: 100%;
-}
+/* ===================== */
+/* 1. BASE LAYER         */
+/* ===================== */
 
 @layer base {
   :root {
@@ -64,31 +61,26 @@ body,
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
+
+  html,
+  body,
+  :root {
+    height: 100%;
+  }
 }
 
-/* —————————— LAYOUT —————————— */
-@layer base {
-  ::-webkit-scrollbar {
-    @apply size-1.5;
-  }
+/* ===================== */
+/* 2. COMPONENTS LAYER   */
+/* ===================== */
 
-  ::-webkit-scrollbar-track {
-    @apply bg-primary-foreground rounded-full;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-emerald-400 rounded-full;
-  }
-
+@layer components {
   .site-container {
     @apply flex flex-col h-full;
   }
@@ -101,34 +93,22 @@ body,
     @apply flex grow shrink basis-auto;
   }
 
-  .footer-icon {
-    @apply text-xl text-woodsmoke-950 hover:scale-125 transform transition ease-in-out duration-200;
+  .scrollbar-custom {
+    @apply overflow-auto;
   }
 
-  .footer-waves {
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    transform: rotate(180deg);
+  .scrollbar-custom::-webkit-scrollbar {
+    @apply size-1.5;
   }
 
-  .footer-waves svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
+  .scrollbar-custom::-webkit-scrollbar-track {
+    @apply bg-primary-foreground rounded-full;
   }
 
-  .platform-footer-waves .shape-fill {
-    @apply fill-emerald-200;
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-emerald-400 rounded-full;
   }
 
-  .landing-footer-waves .shape-fill {
-    @apply fill-antique-brass-200 dark:fill-woodsmoke-950;
-  }
-}
-
-/* —————————— MODULE —————————— */
-@layer base {
   .border-default-color {
     @apply border-black dark:border-inherit;
   }
@@ -238,6 +218,95 @@ body,
     margin-left: 0.25em;
   }
 
+  .dropzone-border {
+    /* background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='white' stroke-width='2' stroke-dasharray='9%2c 14%2c 11' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); */
+    /* border-radius: 10px; */
+    @apply border-4 border-dashed border-muted-foreground;
+  }
+
+  .receipt {
+    @apply w-80 h-full flex flex-col justify-around items-center p-5 overflow-hidden;
+    filter: drop-shadow(0 1px rgba(0, 0, 0));
+  }
+
+  .receipt::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    @apply bg-primary-foreground rounded-t-xl border border-default-color pointer-events-none;
+    --mask: conic-gradient(
+        from -45deg at bottom,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      50%/2rem 100%;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+  }
+
+  .h1 {
+    @apply text-2xl md:text-3xl lg:text-5xl font-extrabold select-none;
+  }
+
+  .h2 {
+    @apply text-xl lg:text-2xl font-bold select-none;
+  }
+
+  .h3 {
+    @apply text-base md:text-lg font-medium text-muted-foreground select-none;
+  }
+
+  .subtitle {
+    @apply text-base md:text-lg font-medium mb-5 text-muted-foreground select-none;
+  }
+
+  .text-2xs {
+    @apply text-[0.625rem] leading-3;
+  }
+
+  .text-3xs {
+    @apply text-[0.5rem] leading-[0.5rem];
+  }
+
+  .lesson-h1 {
+    @apply text-xl md:text-3xl font-extrabold select-none;
+  }
+
+  .lesson-subtitle {
+    @apply font-medium mt-1 mb-5 text-gray-500 select-none;
+  }
+
+  .label {
+    @apply text-sm font-bold;
+  }
+
+  .footer-icon {
+    @apply text-xl text-woodsmoke-950 hover:scale-125 transform transition ease-in-out duration-200;
+  }
+
+  .footer-waves {
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+  }
+
+  .footer-waves svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+  }
+
+  .platform-footer-waves .shape-fill {
+    @apply fill-emerald-200;
+  }
+
+  .landing-footer-waves .shape-fill {
+    @apply fill-antique-brass-200 dark:fill-woodsmoke-950;
+  }
+
   .expandable-content {
     @apply transition-all ease-in-out duration-500;
   }
@@ -301,117 +370,8 @@ body,
   .highlighted-hits {
     @apply bg-selective-yellow-200 dark:bg-selective-yellow-300;
   }
-
-  .dropzone-border {
-    /* background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='white' stroke-width='2' stroke-dasharray='9%2c 14%2c 11' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); */
-    /* border-radius: 10px; */
-    @apply border-4 border-dashed border-muted-foreground;
-  }
-
-  .receipt {
-    @apply w-80 h-full flex flex-col justify-around items-center p-5 overflow-hidden;
-    filter: drop-shadow(0 1px rgba(0, 0, 0));
-  }
-
-  .receipt::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    @apply bg-primary-foreground rounded-t-xl border border-default-color pointer-events-none;
-    --mask: conic-gradient(
-        from -45deg at bottom,
-        #0000,
-        #000 1deg 89deg,
-        #0000 90deg
-      )
-      50%/2rem 100%;
-    -webkit-mask: var(--mask);
-    mask: var(--mask);
-  }
-
-  .custom-shape-divider-top-1733810752 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-  }
-
-  .custom-shape-divider-top-1733810752 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 100px;
-  }
-
-  .custom-shape-divider-top-1733810752 .shape-fill {
-    @apply fill-antique-brass-100;
-  }
-
-  .custom-shape-divider-bottom-1733811252 {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    transform: rotate(180deg);
-  }
-
-  .custom-shape-divider-bottom-1733811252 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 31px;
-    transform: rotateY(180deg);
-  }
-
-  .custom-shape-divider-bottom-1733811252 .shape-fill {
-    @apply fill-woodsmoke-950;
-  }
 }
 
-/* —————————— STATES —————————— */
-@layer base {
-}
-
-/* —————————— THEMES —————————— */
-@layer base {
-  .h1 {
-    @apply text-2xl md:text-3xl lg:text-5xl font-extrabold select-none;
-  }
-
-  .h2 {
-    @apply text-xl lg:text-2xl font-bold select-none;
-  }
-
-  .h3 {
-    @apply text-base md:text-lg font-medium text-muted-foreground select-none;
-  }
-
-  .subtitle {
-    @apply text-base md:text-lg font-medium mb-5 text-muted-foreground select-none;
-  }
-
-  .text-2xs {
-    @apply text-[0.625rem] leading-3;
-  }
-
-  .text-3xs {
-    @apply text-[0.5rem] leading-[0.5rem];
-  }
-
-  .lesson-h1 {
-    @apply text-xl md:text-3xl font-extrabold select-none;
-  }
-
-  .lesson-subtitle {
-    @apply font-medium mt-1 mb-5 text-gray-500 select-none;
-  }
-
-  .label {
-    @apply text-sm font-bold;
-  }
-}
+/* ===================== */
+/* 3. UTILITIES LAYER    */
+/* ===================== */

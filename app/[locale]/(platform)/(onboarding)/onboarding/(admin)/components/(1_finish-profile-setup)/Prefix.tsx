@@ -83,7 +83,7 @@ export default function Prefix() {
       </div>
 
       {/* Buttons */}
-      <div className="h-12 flex items-center overflow-x-scroll">
+      <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
         {prefixes.map((prfx) => (
           <div key={prfx} className="whitespace-nowrap px-2">
             <button

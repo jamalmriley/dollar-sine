@@ -92,7 +92,7 @@ export default function Pronunciation() {
 
       {/* Pronounciation Options */}
       {isLoading ? (
-        <div className="h-12 flex items-center overflow-x-scroll">
+        <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
           {Array(4)
             .fill(0)
             .map((_, i) => (
@@ -102,7 +102,7 @@ export default function Pronunciation() {
             ))}
         </div>
       ) : metadata ? (
-        <div className="h-12 flex items-center overflow-x-scroll">
+        <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
           {metadata.currPronunciationOptions.map((option, i) => (
             <div key={i} className="whitespace-nowrap px-2">
               <button
