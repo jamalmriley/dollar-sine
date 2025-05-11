@@ -232,6 +232,10 @@ export default function CreateOrUpdateOrg() {
     fetchPredictions();
   }, [orgAddress]);
 
+  useEffect(() => {
+    if (isUpdating) setHasCustomOrgSlug(true);
+  }, []);
+
   if (!user || !isLoaded) return;
   return (
     <Card className="w-full h-full mx-10 max-w-3xl">

@@ -127,19 +127,22 @@ export default function FinishProfile() {
     setIsLoading(true);
 
     const userId = user.id;
-    const metadata: AdminMetadata = {
+    const updatedMetadata: AdminMetadata = {
       role: "admin",
       pronunciation,
-      currPronunciationOptions: [], // TODO: Do not override
-      prevPronunciationOptions: [], // TODO: Do not override
+      currPronunciationOptions: metadata.currPronunciationOptions,
+      prevPronunciationOptions: metadata.prevPronunciationOptions,
       isOnboardingCompleted: false,
-      lastOnboardingStepCompleted: 1, // TODO: Do not override
+      lastOnboardingStepCompleted: Math.max(
+        1,
+        metadata.lastOnboardingStepCompleted
+      ),
       onboardingLink: "/onboarding",
       pronouns,
       emojiSkinTone,
-      organizations: [], // TODO: Do not override
-      courses: [], // TODO: Do not override
-      classes: null, // TODO: Do not override
+      organizations: metadata.organizations,
+      courses: metadata.courses,
+      classes: metadata.classes,
       displayName,
       displayNameFormat,
       prefix,
@@ -151,7 +154,7 @@ export default function FinishProfile() {
     const formData = new FormData();
     if (profilePic) formData.append("profilePic", profilePic);
 
-    await updateUserMetadata(userId, metadata, formData)
+    await updateUserMetadata(userId, updatedMetadata, formData)
       .then(() => {
         setPronunciation("");
         setPrefix("");

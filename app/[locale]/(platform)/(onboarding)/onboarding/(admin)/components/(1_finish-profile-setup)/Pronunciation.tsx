@@ -92,7 +92,7 @@ export default function Pronunciation() {
 
       {/* Pronounciation Options */}
       {isLoading ? (
-        <div>
+        <div className="h-12 flex items-center overflow-x-scroll">
           {Array(4)
             .fill(0)
             .map((_, i) => (

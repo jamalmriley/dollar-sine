@@ -59,7 +59,10 @@ export default function ProfileImageUpload() {
         </p>
 
         <p className="text-xs text-muted-foreground">
-          Accepted types: .jpg, .jpeg, .png, .heic ({MAX_FILE_SIZE} MB max)
+          Accepted types: .jpg, .jpeg, .png, .heic
+        </p>
+        <p className="text-xs text-muted-foreground">
+          ({MAX_FILE_SIZE} MB max)
         </p>
       </div>
     </div>
