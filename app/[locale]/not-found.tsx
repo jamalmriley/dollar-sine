@@ -7,7 +7,7 @@ export const metadata: Metadata = setTitle("Uh-oh");
 export default function NotFound() {
   return (
     <main className="flex justify-center items-center">
-      <h1 className="h1">It's not you. It's us.</h1>
+      <h1 className="h1">It&apos;s not you. It&apos;s us.</h1>
       <Link href={"/"}>
         <StyledButton>Back to dashboard</StyledButton>
       </Link>

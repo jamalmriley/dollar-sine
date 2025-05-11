@@ -9,12 +9,21 @@ import initTranslations from "@/app/i18n";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import LearningContextProvider from "@/contexts/learning-context";
+import { redirect } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const metadata: Metadata = setTitle("Common Cents");
 const i18nNamespaces = ["platform-layout", "common-cents"];
 
 export default async function ContentPage({ params }: { params: any }) {
   const locale: string = params.locale;
+  const user = await currentUser();
+
+  if (!user)
+    redirect(
+      `/sign-in?redirect_url=/${locale}/courses/${params.courseId}/${params.contentId}`
+    );
+
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
   const [courseId, contentId] = [params.courseId, params.contentId];

@@ -33,14 +33,19 @@ import { setTitle } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import StyledButton from "@/components/StyledButton";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = setTitle("Common Cents");
 const i18nNamespaces = ["platform-layout", "common-cents"];
 
 export default async function CoursePage({ params }: { params: any }) {
   const locale: string = params.locale;
-  const { t, resources } = await initTranslations(locale, i18nNamespaces);
+  const user = await currentUser();
 
+  if (!user) redirect(`/sign-in?redirect_url=/${locale}/courses/${params.courseId}`);
+
+  const { t, resources } = await initTranslations(locale, i18nNamespaces);
   const svgArr = [Chapter1, Chapter2, Chapter3, Chapter4, Chapter5, Chapter6];
   // const courseId = (await params).courseId;
   const courseId: string = params.courseId;

@@ -8,6 +8,7 @@ import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
 import StyledButton from "@/components/StyledButton";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = setTitle("Dashboard");
 const i18nNamespaces = ["dashboard", "platform-layout"];
@@ -19,7 +20,9 @@ export default async function DashboardPage({
 }) {
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
   const user = await currentUser();
-  const firstName = user?.firstName;
+  if (!user) redirect(`/sign-in?redirect_url=/${locale}/dashboard`);
+
+  const firstName = user.firstName;
 
   return (
     <TranslationsProvider

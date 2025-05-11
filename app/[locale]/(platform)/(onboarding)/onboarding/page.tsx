@@ -11,12 +11,17 @@ import StyledButton from "@/components/StyledButton";
 import GeneralErrorLogo from "@/assets/images/logos/dollar_sine/ds_logo_error_general.png";
 import Image from "next/image";
 import LoadingIndicator from "@/components/LoadingIndicator";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = setTitle("Get started");
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const user = await currentUser();
-  if (!user) return; // TODO: Redirect to sign-in
+  if (!user) redirect(`/sign-in?redirect_url=/${locale}/onboarding`);
 
   const publicMetadata = user.publicMetadata as any as UserMetadata;
   const { role } = publicMetadata;
@@ -32,8 +37,10 @@ export default async function OnboardingPage() {
       <div className="size-full page-container flex flex-col items-center gap-10">
         <Image src={GeneralErrorLogo} alt="Error" width={368} />
         <div className="max-w-[420px]">
-          <h1 className="h2">There's an issue with your account.</h1>
-          <h2 className="h3 mb-5">It's not you, {user.firstName}. It's us.</h2>
+          <h1 className="h2">There&apos;s an issue with your account.</h1>
+          <h2 className="h3 mb-5">
+            It&apos;s not you, {user.firstName}. It&apos;s us.
+          </h2>
           <p>
             Something with your sign-up process went wrong. Try refreshing the
             page, and if the issue persists, please contact support.

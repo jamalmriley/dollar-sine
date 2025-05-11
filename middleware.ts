@@ -13,12 +13,12 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // Only protect routes that are NOT public
-  if (!isPublicRoute(req)) await auth.protect();
-
   // Do NOT localize API routes
   const path = req.nextUrl.pathname;
   if (path.includes("/api")) return;
+
+  // Only protect routes that are NOT public
+  if (!isPublicRoute(req)) await auth.protect();
 
   return i18nRouter(req, i18nConfig);
 });

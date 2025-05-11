@@ -27,6 +27,8 @@ import initTranslations from "@/app/i18n";
 import { Metadata } from "next";
 import { setTitle } from "@/utils/ui";
 import StyledButton from "@/components/StyledButton";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = setTitle("All Courses");
 const i18nNamespaces = ["platform-layout"];
@@ -36,6 +38,9 @@ export default async function AllCoursesPage({
 }: {
   params: { locale: string };
 }) {
+  const user = await currentUser();
+  if (!user) redirect(`/sign-in?redirect_url=/${locale}/courses`);
+
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
 
   const file = await fs.readFile(

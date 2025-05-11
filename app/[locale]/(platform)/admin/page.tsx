@@ -2,6 +2,7 @@ import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { checkRole } from "@/utils/roles";
 import { setTitle } from "@/utils/ui";
+import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -13,6 +14,9 @@ export default async function AdminPage({
 }: {
   params: { locale: string };
 }) {
+  const user = await currentUser();
+  if (!user) redirect(`/sign-in?redirect_url=/${locale}/admin`);
+
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
   const isAdmin = await checkRole(["admin", "super_admin"]);
 

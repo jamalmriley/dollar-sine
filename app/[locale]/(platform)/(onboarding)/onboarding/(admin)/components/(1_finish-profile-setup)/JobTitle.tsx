@@ -28,7 +28,7 @@ export default function JobTitle() {
       <Input
         id="job-title"
         name="job-title"
-        placeholder="(e.g. 8th grade teacher)"
+        placeholder="(e.g. Middle school math teacher)"
         type="text"
         autoComplete="organization-title"
         required

@@ -21,6 +21,7 @@ import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import StyledButton from "@/components/StyledButton";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = setTitle("My Courses");
 const i18nNamespaces = ["platform-layout"];
@@ -32,9 +33,10 @@ export default async function MyCoursesPage({
 }) {
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
   const user = await currentUser();
-  const name = user?.firstName;
-  // const lastLetter = name?.charAt(name.length - 1);
-  // const endsWithS: boolean = lastLetter?.toLowerCase() === "s";
+  if (!user) redirect(`/sign-in?redirect_url=/${locale}/courses/enrolled`);
+  const name = user.firstName;
+  // const lastLetter = name.charAt(name.length - 1);
+  // const endsWithS: boolean = lastLetter.toLowerCase() === "s";
 
   return (
     <TranslationsProvider
