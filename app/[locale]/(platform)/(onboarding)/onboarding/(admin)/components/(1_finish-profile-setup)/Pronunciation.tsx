@@ -102,9 +102,9 @@ export default function Pronunciation() {
             ))}
         </div>
       ) : metadata ? (
-        <div>
+        <div className="h-12 flex items-center overflow-x-scroll">
           {metadata.currPronunciationOptions.map((option, i) => (
-            <div key={i} className="inline-flex p-2">
+            <div key={i} className="whitespace-nowrap px-2">
               <button
                 className={`chip ${
                   option === pronunciation ? "border-default-color" : ""
@@ -119,7 +119,7 @@ export default function Pronunciation() {
             </div>
           ))}
 
-          <span className="inline-flex p-2">
+          <span className="whitespace-nowrap px-2">
             <button
               className={`chip flex items-center gap-2 ${
                 pronunciation === "none" ? "border-default-color" : ""

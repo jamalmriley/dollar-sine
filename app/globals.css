@@ -77,6 +77,18 @@ body,
 
 /* —————————— LAYOUT —————————— */
 @layer base {
+  ::-webkit-scrollbar {
+    @apply size-1.5;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-primary-foreground rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-emerald-400 rounded-full;
+  }
+
   .site-container {
     @apply flex flex-col h-full;
   }

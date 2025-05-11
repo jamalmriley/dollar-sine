@@ -83,9 +83,9 @@ export default function Prefix() {
       </div>
 
       {/* Buttons */}
-      <div>
+      <div className="h-12 flex items-center overflow-x-scroll">
         {prefixes.map((prfx) => (
-          <div key={prfx} className="inline-block p-2">
+          <div key={prfx} className="whitespace-nowrap px-2">
             <button
               className={`chip ${
                 prfx === prefix ? "border-default-color" : ""
@@ -111,7 +111,7 @@ export default function Prefix() {
             </button>
           </div>
         ))}
-        <span className={`p-2 ${isCustomPrefix ? "inline-block" : ""}`}>
+        <span className={`whitespace-nowrap px-2`}>
           <button
             className={
               isCustomPrefix

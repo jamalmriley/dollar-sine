@@ -89,7 +89,8 @@ export default function FinishProfile() {
   const hasProfileUpdated: boolean =
     !user || isEmptyObject(metadata)
       ? false
-      : metadata.prefix !== prefix ||
+      : metadata.pronunciation !== pronunciation ||
+        metadata.prefix !== prefix ||
         metadata.displayName !== displayName ||
         metadata.displayNameFormat !== displayNameFormat ||
         metadata.jobTitle !== jobTitle ||
@@ -102,6 +103,7 @@ export default function FinishProfile() {
     currOnboardingStep.isEditing;
 
   const hasEmptyField: boolean =
+    !pronunciation ||
     !prefix ||
     !displayName ||
     !displayNameFormat ||
