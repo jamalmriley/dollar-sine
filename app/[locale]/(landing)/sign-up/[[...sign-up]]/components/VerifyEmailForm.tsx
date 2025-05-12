@@ -115,6 +115,7 @@ export default function VerifyEmailForm() {
                   break;
               }
 
+              fetch("/api/resend/send", { method: "POST" });
               updateUserMetadata(userId, metadata);
             })
             .catch(() => {
@@ -246,8 +247,8 @@ export default function VerifyEmailForm() {
           {seconds === 0
             ? t("sign-up:resend-code")
             : seconds === 1
-            ? t("sign-up:resend-code-singular", { seconds })
-            : t("sign-up:resend-code-plural", { seconds })}
+              ? t("sign-up:resend-code-singular", { seconds })
+              : t("sign-up:resend-code-plural", { seconds })}
         </span>
       </Button>
     </form>
