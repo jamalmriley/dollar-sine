@@ -81,6 +81,7 @@ export interface UserMetadata {
   lastOnboardingStepCompleted: number;
   onboardingLink: string;
   pronouns: string;
+  hasCustomPronouns: boolean;
   emojiSkinTone: EmojiSkinTone;
   organizations: OrganizationId[];
   courses: SelectedCourse[];
@@ -146,12 +147,6 @@ interface HasMetdataMethods {
       | StudentMetadata
       | OrganizationMetadata
   ): void;
-  getDetails():
-    | AdminMetadata
-    | TeacherMetadata
-    | GuardianMetadata
-    | StudentMetadata
-    | OrganizationMetadata;
 }
 
 abstract class User implements HasMetdataMethods {
@@ -164,6 +159,7 @@ abstract class User implements HasMetdataMethods {
     protected lastOnboardingStepCompleted: number,
     protected onboardingLink: string,
     protected pronouns: string,
+    protected hasCustomPronouns: boolean,
     protected emojiSkinTone: EmojiSkinTone,
     protected organizations: OrganizationId[],
     protected courses: SelectedCourse[],
@@ -179,11 +175,6 @@ abstract class User implements HasMetdataMethods {
       | GuardianMetadata
       | StudentMetadata
   ): void;
-  abstract getDetails():
-    | AdminMetadata
-    | TeacherMetadata
-    | GuardianMetadata
-    | StudentMetadata;
 }
 
 class Admin extends User {
@@ -196,6 +187,7 @@ class Admin extends User {
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
+    hasCustomPronouns: boolean,
     emojiSkinTone: EmojiSkinTone,
     organizations: OrganizationId[],
     courses: SelectedCourse[],
@@ -215,6 +207,7 @@ class Admin extends User {
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
+      hasCustomPronouns,
       emojiSkinTone,
       organizations,
       courses,
@@ -229,28 +222,6 @@ class Admin extends User {
       }
     });
   }
-
-  getDetails(): AdminMetadata {
-    return {
-      role: this.role,
-      pronunciation: this.pronunciation,
-      currPronunciationOptions: this.currPronunciationOptions,
-      prevPronunciationOptions: this.prevPronunciationOptions,
-      isOnboardingCompleted: this.isOnboardingCompleted,
-      lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
-      onboardingLink: this.onboardingLink,
-      pronouns: this.pronouns,
-      emojiSkinTone: this.emojiSkinTone,
-      organizations: this.organizations,
-      courses: this.courses,
-      classes: this.classes,
-      students: this.students,
-      displayName: this.displayName,
-      displayNameFormat: this.displayNameFormat,
-      prefix: this.prefix,
-      jobTitle: this.jobTitle,
-    };
-  }
 }
 
 class Teacher extends User {
@@ -263,6 +234,7 @@ class Teacher extends User {
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
+    hasCustomPronouns: boolean,
     emojiSkinTone: EmojiSkinTone,
     organizations: OrganizationId[],
     courses: SelectedCourse[],
@@ -282,6 +254,7 @@ class Teacher extends User {
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
+      hasCustomPronouns,
       emojiSkinTone,
       organizations,
       courses,
@@ -296,28 +269,6 @@ class Teacher extends User {
       }
     });
   }
-
-  getDetails(): TeacherMetadata {
-    return {
-      role: this.role,
-      pronunciation: this.pronunciation,
-      currPronunciationOptions: this.currPronunciationOptions,
-      prevPronunciationOptions: this.prevPronunciationOptions,
-      isOnboardingCompleted: this.isOnboardingCompleted,
-      lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
-      onboardingLink: this.onboardingLink,
-      pronouns: this.pronouns,
-      emojiSkinTone: this.emojiSkinTone,
-      organizations: this.organizations,
-      courses: this.courses,
-      classes: this.classes,
-      students: this.students,
-      displayName: this.displayName,
-      displayNameFormat: this.displayNameFormat,
-      prefix: this.prefix,
-      jobTitle: this.jobTitle,
-    };
-  }
 }
 
 class Guardian extends User {
@@ -330,6 +281,7 @@ class Guardian extends User {
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
+    hasCustomPronouns: boolean,
     emojiSkinTone: EmojiSkinTone,
     organizations: OrganizationId[],
     courses: SelectedCourse[],
@@ -345,6 +297,7 @@ class Guardian extends User {
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
+      hasCustomPronouns,
       emojiSkinTone,
       organizations,
       courses,
@@ -359,24 +312,6 @@ class Guardian extends User {
       }
     });
   }
-
-  getDetails(): GuardianMetadata {
-    return {
-      role: this.role,
-      pronunciation: this.pronunciation,
-      currPronunciationOptions: this.currPronunciationOptions,
-      prevPronunciationOptions: this.prevPronunciationOptions,
-      isOnboardingCompleted: this.isOnboardingCompleted,
-      lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
-      onboardingLink: this.onboardingLink,
-      pronouns: this.pronouns,
-      emojiSkinTone: this.emojiSkinTone,
-      organizations: this.organizations,
-      courses: this.courses,
-      classes: this.classes,
-      students: this.students,
-    };
-  }
 }
 
 class Student extends User {
@@ -389,6 +324,7 @@ class Student extends User {
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
+    hasCustomPronouns: boolean,
     emojiSkinTone: EmojiSkinTone,
     organizations: OrganizationId[],
     courses: SelectedCourse[],
@@ -418,6 +354,7 @@ class Student extends User {
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
+      hasCustomPronouns,
       emojiSkinTone,
       organizations,
       courses,
@@ -431,34 +368,6 @@ class Student extends User {
         (this as any)[key] = valuesToUpdate[key as keyof StudentMetadata];
       }
     });
-  }
-
-  getDetails(): StudentMetadata {
-    return {
-      role: this.role,
-      pronunciation: this.pronunciation,
-      currPronunciationOptions: this.currPronunciationOptions,
-      prevPronunciationOptions: this.prevPronunciationOptions,
-      isOnboardingCompleted: this.isOnboardingCompleted,
-      lastOnboardingStepCompleted: this.lastOnboardingStepCompleted,
-      onboardingLink: this.onboardingLink,
-      pronouns: this.pronouns,
-      emojiSkinTone: this.emojiSkinTone,
-      organizations: this.organizations,
-      courses: this.courses,
-      classes: this.classes,
-      gradeLevel: this.gradeLevel,
-      track: this.track,
-      tools: this.tools,
-      testScores: this.testScores,
-      livesWith: this.livesWith,
-      pets: this.pets,
-      methodOfTransportation: this.methodOfTransportation,
-      interests: this.interests,
-      spendingCategories: this.spendingCategories,
-      savingsGoals: this.savingsGoals,
-      summary: this.summary,
-    };
   }
 }
 
@@ -477,15 +386,5 @@ class Orgnanization implements HasMetdataMethods {
         (this as any)[key] = valuesToUpdate[key as keyof OrganizationMetadata];
       }
     });
-  }
-
-  getDetails(): OrganizationMetadata {
-    return {
-      name: this.name,
-      slug: this.slug,
-      address: this.address,
-      is2FARequired: this.is2FARequired,
-      courses: this.courses,
-    };
   }
 }

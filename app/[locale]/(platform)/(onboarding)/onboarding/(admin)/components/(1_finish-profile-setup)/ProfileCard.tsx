@@ -44,6 +44,10 @@ export function ProfileCard({
   });
   const [, setJobTitle] = useQueryState("jobTitle", { defaultValue: "" });
   const [, setPronouns] = useQueryState("pronouns", { defaultValue: "" });
+  const [, setHasCustomPronouns] = useQueryState(
+    "hasCustomPronouns",
+    parseAsBoolean.withDefault(false)
+  );
   const [, setEmojiSkinTone] = useQueryState(
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
@@ -60,6 +64,7 @@ export function ProfileCard({
     displayNameFormat,
     jobTitle,
     pronouns,
+    hasCustomPronouns,
     emojiSkinTone,
   } = metadata;
 
@@ -119,6 +124,7 @@ export function ProfileCard({
                   if (jobTitle) setJobTitle(jobTitle);
                   pronounHelper();
                   setPronouns(pronouns);
+                  setHasCustomPronouns(false);
                   setEmojiSkinTone(emojiSkinTone);
                 }}
               >

@@ -15,6 +15,12 @@ type OnboardingContext = {
   setIsSheSelected: React.Dispatch<React.SetStateAction<boolean>>;
   isTheySelected: boolean; // TODO: remove?
   setIsTheySelected: React.Dispatch<React.SetStateAction<boolean>>;
+  isEySelected: boolean; // TODO: remove?
+  setIsEySelected: React.Dispatch<React.SetStateAction<boolean>>;
+  isXeSelected: boolean; // TODO: remove?
+  setIsXeSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  isZeSelected: boolean; // TODO: remove?
+  setIsZeSelected: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
   orgLogo: File | undefined;
@@ -53,6 +59,10 @@ export default function OnboardingContextProvider({
   const [isHeSelected, setIsHeSelected] = useState<boolean>(false);
   const [isSheSelected, setIsSheSelected] = useState<boolean>(false);
   const [isTheySelected, setIsTheySelected] = useState<boolean>(false);
+  const [isEySelected, setIsEySelected] = useState<boolean>(false);
+  const [isXeSelected, setIsXeSelected] = useState<boolean>(false);
+  const [isZeSelected, setIsZeSelected] = useState<boolean>(false);
+
   const [profilePic, setProfilePic] = useState<File | undefined>();
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
@@ -81,6 +91,12 @@ export default function OnboardingContextProvider({
         setIsSheSelected,
         isTheySelected,
         setIsTheySelected,
+        isEySelected,
+        setIsEySelected,
+        isXeSelected,
+        setIsXeSelected,
+        isZeSelected,
+        setIsZeSelected,
         profilePic,
         setProfilePic,
         orgLogo,

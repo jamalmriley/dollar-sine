@@ -149,7 +149,9 @@ export default function CreateOrUpdateOrg() {
           prevPronunciationOptions,
           isOnboardingCompleted,
           onboardingLink,
+          lastOnboardingStepCompleted,
           pronouns,
+          hasCustomPronouns,
           emojiSkinTone,
           courses,
           classes,
@@ -160,9 +162,10 @@ export default function CreateOrUpdateOrg() {
           currPronunciationOptions,
           prevPronunciationOptions,
           isOnboardingCompleted,
-          lastOnboardingStepCompleted: 2,
+          lastOnboardingStepCompleted: Math.max(lastOnboardingStepCompleted, 2),
           onboardingLink,
           pronouns,
+          hasCustomPronouns,
           emojiSkinTone,
           organizations: res.data ? [...orgIds, res.data] : orgIds,
           courses,
@@ -419,8 +422,8 @@ export default function CreateOrUpdateOrg() {
                   ? "Updating organization..."
                   : "Update organization"
                 : isLoading
-                ? "Creating organization..."
-                : "Create organization"}
+                  ? "Creating organization..."
+                  : "Create organization"}
             </Button>
           </div>
         </form>

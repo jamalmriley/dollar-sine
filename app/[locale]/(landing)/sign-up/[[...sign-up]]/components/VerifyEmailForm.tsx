@@ -95,6 +95,7 @@ export default function VerifyEmailForm() {
                 lastOnboardingStepCompleted: 0,
                 onboardingLink: "/onboarding",
                 pronouns: "",
+                hasCustomPronouns: false,
                 emojiSkinTone: "default",
                 organizations: [],
                 courses: [],

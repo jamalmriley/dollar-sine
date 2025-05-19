@@ -76,6 +76,12 @@ export default function FinishProfile() {
   const [pronouns, setPronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
+
+  const [hasCustomPronouns, setHasCustomPronouns] = useQueryState(
+    "hasCustomPronouns",
+    parseAsBoolean.withDefault(false)
+  );
+
   const [emojiSkinTone, setEmojiSkinTone] = useQueryState(
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
@@ -139,6 +145,7 @@ export default function FinishProfile() {
       ),
       onboardingLink: "/onboarding",
       pronouns,
+      hasCustomPronouns,
       emojiSkinTone,
       organizations: metadata.organizations,
       courses: metadata.courses,
@@ -164,6 +171,7 @@ export default function FinishProfile() {
         setDisplayNameFormat("");
         setJobTitle("");
         setPronouns("");
+        setHasCustomPronouns(false);
         setEmojiSkinTone("default");
         setIsLoading(false);
         setCurrOnboardingStep({ step: 1, isEditing: false });
@@ -217,6 +225,7 @@ export default function FinishProfile() {
                 setDisplayNameFormat("");
                 setJobTitle("");
                 setPronouns("");
+                setHasCustomPronouns(false);
                 setIsHeSelected(false);
                 setIsSheSelected(false);
                 setIsTheySelected(false);
@@ -274,8 +283,8 @@ export default function FinishProfile() {
                   ? "Updating your profile..."
                   : "Update profile"
                 : isLoading
-                ? "Updating your profile..."
-                : "Finish your profile"}
+                  ? "Updating your profile..."
+                  : "Finish your profile"}
             </Button>
           </div>
         </form>
