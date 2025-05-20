@@ -21,6 +21,8 @@ type OnboardingContext = {
   setIsXeSelected: React.Dispatch<React.SetStateAction<boolean>>;
   isZeSelected: boolean; // TODO: remove?
   setIsZeSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  preferNotToSay: boolean; // TODO: remove?
+  setPreferNotToSay: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
   orgLogo: File | undefined;
@@ -62,6 +64,7 @@ export default function OnboardingContextProvider({
   const [isEySelected, setIsEySelected] = useState<boolean>(false);
   const [isXeSelected, setIsXeSelected] = useState<boolean>(false);
   const [isZeSelected, setIsZeSelected] = useState<boolean>(false);
+  const [preferNotToSay, setPreferNotToSay] = useState<boolean>(false);
 
   const [profilePic, setProfilePic] = useState<File | undefined>();
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
@@ -97,6 +100,8 @@ export default function OnboardingContextProvider({
         setIsXeSelected,
         isZeSelected,
         setIsZeSelected,
+        preferNotToSay,
+        setPreferNotToSay,
         profilePic,
         setProfilePic,
         orgLogo,

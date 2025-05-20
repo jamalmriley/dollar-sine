@@ -47,7 +47,6 @@ export default function Pronouns() {
   const [subjectivePronoun, setSubjectivePronoun] = useState<string>("");
   const [objectivePronoun, setObjectivePronoun] = useState<string>("");
   const [possessivePronoun, setPossessivePronoun] = useState<string>("");
-  const [preferNotToSay, setPreferNotToSay] = useState<boolean>(false);
 
   const {
     isHeSelected,
@@ -62,6 +61,8 @@ export default function Pronouns() {
     setIsXeSelected,
     isZeSelected,
     setIsZeSelected,
+    preferNotToSay,
+    setPreferNotToSay,
   } = useOnboardingContext();
 
   type PronounObj = {
@@ -137,11 +138,14 @@ export default function Pronouns() {
     const pronounHelper = () => {
       const splitPronouns = pronouns.split("/");
       for (const pronoun of splitPronouns) {
-        if (pronoun === "he") setIsHeSelected(true);
-        if (pronoun === "she") setIsSheSelected(true);
-        if (pronoun === "they") setIsTheySelected(true);
-        if (pronoun === "xe") setIsXeSelected(true);
-        if (pronoun === "ze") setIsZeSelected(true);
+        if (!hasCustomPronouns) {
+          if (pronoun === "he") setIsHeSelected(true);
+          if (pronoun === "she") setIsSheSelected(true);
+          if (pronoun === "they") setIsTheySelected(true);
+          if (pronoun === "ey") setIsEySelected(true);
+          if (pronoun === "xe") setIsXeSelected(true);
+          if (pronoun === "ze") setIsZeSelected(true);
+        }
       }
     };
 

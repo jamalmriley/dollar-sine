@@ -23,6 +23,10 @@ export function ProfileCard({
     setIsHeSelected,
     setIsSheSelected,
     setIsTheySelected,
+    setIsEySelected,
+    setIsXeSelected,
+    setIsZeSelected,
+    setPreferNotToSay,
     setCurrOnboardingStep,
   } = useOnboardingContext();
 
@@ -105,10 +109,18 @@ export function ProfileCard({
                 onClick={() => {
                   const pronounHelper = () => {
                     const splitPronouns = pronouns.split("/");
+
+                    setPreferNotToSay(splitPronouns[0] === "Prefer not to say");
+
                     for (const pronoun of splitPronouns) {
-                      if (pronoun === "he") setIsHeSelected(true);
-                      if (pronoun === "she") setIsSheSelected(true);
-                      if (pronoun === "they") setIsTheySelected(true);
+                      if (!hasCustomPronouns) {
+                        if (pronoun === "he") setIsHeSelected(true);
+                        if (pronoun === "she") setIsSheSelected(true);
+                        if (pronoun === "they") setIsTheySelected(true);
+                        if (pronoun === "ey") setIsEySelected(true);
+                        if (pronoun === "xe") setIsXeSelected(true);
+                        if (pronoun === "ze") setIsZeSelected(true);
+                      }
                     }
                   };
                   setCurrOnboardingStep({ step: 1, isEditing: true });
@@ -124,7 +136,7 @@ export function ProfileCard({
                   if (jobTitle) setJobTitle(jobTitle);
                   pronounHelper();
                   setPronouns(pronouns);
-                  setHasCustomPronouns(false);
+                  setHasCustomPronouns(hasCustomPronouns);
                   setEmojiSkinTone(emojiSkinTone);
                 }}
               >

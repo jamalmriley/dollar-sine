@@ -88,18 +88,9 @@ export interface UserMetadata {
   classes: Class[] | null;
 }
 
-export interface AdminMetadata extends UserMetadata {
-  students?: string[] | null;
-  displayName?: string | null;
-  displayNameFormat?: string | null;
-  prefix?: string | null;
-  isPrefixIncluded?: boolean | null;
-  isCustomPrefix?: boolean | null;
-  jobTitle?: string | null;
-}
+export interface AdminMetadata extends TeacherMetadata {}
 
-export interface TeacherMetadata extends UserMetadata {
-  students?: string[] | null;
+export interface TeacherMetadata extends GuardianMetadata {
   displayName?: string | null;
   displayNameFormat?: string | null;
   prefix?: string | null;

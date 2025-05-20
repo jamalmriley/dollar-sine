@@ -45,7 +45,11 @@ export default function FinishProfile() {
     setIsHeSelected,
     setIsSheSelected,
     setIsTheySelected,
+    setIsEySelected,
+    setIsXeSelected,
+    setIsZeSelected,
     setLastUpdated,
+    setPreferNotToSay,
   } = useOnboardingContext();
   const [pronunciation, setPronunciation] = useQueryState("pronunciation", {
     defaultValue: "",
@@ -229,6 +233,10 @@ export default function FinishProfile() {
                 setIsHeSelected(false);
                 setIsSheSelected(false);
                 setIsTheySelected(false);
+                setIsEySelected(false);
+                setIsXeSelected(false);
+                setIsZeSelected(false);
+                setPreferNotToSay(false);
                 setEmojiSkinTone("default");
                 setProfilePic(undefined);
               }}
