@@ -7,3 +7,8 @@ export interface Response {
     description: string;
   };
 }
+
+export interface Prompt {
+  id: string;
+  content: JSX.Element | undefined;
+}

@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
-import Prefix from "./Prefix";
-import DisplayName from "./DisplayName";
-import JobTitle from "./JobTitle";
-import Pronouns from "./Pronouns";
-import SkinTone from "./SkinTone";
-import ProfileImageUpload from "./ProfileImageUpload";
+import Prefix from "../../../components/Prefix";
+import DisplayName from "../../../components/DisplayName";
+import JobTitle from "../../../components/JobTitle";
+import Pronouns from "../../../components/Pronouns";
+import SkinTone from "../../../components/SkinTone";
+import ProfileImageUpload from "../../../components/ProfileImageUpload";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import {
   Accordion,
@@ -28,13 +28,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AdminMetadata } from "@/types/user";
+import { TeacherMetadata } from "@/types/user";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
-import Pronunciation from "./Pronunciation";
+import Pronunciation from "../../../components/Pronunciation";
 
-export default function FinishProfile() {
+export default function TeacherFinishProfile() {
   const {
     isLoading,
     setIsLoading,
@@ -94,7 +94,7 @@ export default function FinishProfile() {
   const { user, isLoaded } = useUser();
   if (!user || !isLoaded) return;
 
-  const metadata = user.publicMetadata as any as AdminMetadata;
+  const metadata = user.publicMetadata as any as TeacherMetadata;
 
   const hasProfileUpdated: boolean =
     !user || isEmptyObject(metadata)
@@ -137,8 +137,8 @@ export default function FinishProfile() {
     setIsLoading(true);
 
     const userId = user.id;
-    const updatedMetadata: AdminMetadata = {
-      role: "admin",
+    const updatedMetadata: TeacherMetadata = {
+      role: "teacher",
       pronunciation,
       currPronunciationOptions: metadata.currPronunciationOptions,
       prevPronunciationOptions: metadata.prevPronunciationOptions,
@@ -259,11 +259,11 @@ export default function FinishProfile() {
           className="w-full h-full flex flex-col gap-5"
         >
           <div className="hidden md:block">
-            <FinishProfileDesktop />
+            <TeacherFinishProfileDesktop />
           </div>
 
           <div className="block md:hidden">
-            <FinishProfileMobile />
+            <TeacherFinishProfileMobile />
           </div>
 
           <div className="flex grow items-end">
@@ -301,7 +301,7 @@ export default function FinishProfile() {
   );
 }
 
-function FinishProfileDesktop() {
+function TeacherFinishProfileDesktop() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row gap-4">
@@ -342,7 +342,7 @@ function FinishProfileDesktop() {
   );
 }
 
-function FinishProfileMobile() {
+function TeacherFinishProfileMobile() {
   const [pronunciation] = useQueryState("pronunciation", { defaultValue: "" });
   const [prefix] = useQueryState("prefix", { defaultValue: "" });
   const [displayName] = useQueryState("displayName", { defaultValue: "" });
@@ -379,7 +379,7 @@ function FinishProfileMobile() {
       trigger: "Add your pronouns.",
       value: "pronouns",
       content: <Pronouns />,
-      isCompleted: pronouns && pronouns.length > 0,
+      isCompleted: pronouns !== "",
     },
     {
       trigger: "Select your skin tone.",

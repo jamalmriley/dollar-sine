@@ -61,10 +61,10 @@ export default async function OnboardingPage({
   return (
     <OnboardingContextProvider>
       <div className="size-full">
-        {role === "student" && <StudentOnboardingPage />}
-        {role === "guardian" && <GuardianOnboardingPage />}
-        {role === "teacher" && <TeacherOnboardingPage />}
         {role === "admin" && <AdminOnboardingPage />}
+        {role === "teacher" && <TeacherOnboardingPage />}
+        {role === "guardian" && <GuardianOnboardingPage />}
+        {role === "student" && <StudentOnboardingPage />}
       </div>
     </OnboardingContextProvider>
   );

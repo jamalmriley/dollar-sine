@@ -4,10 +4,10 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import {
-  ProfileCard,
-  ProfileCardError,
-  ProfileCardSkeleton,
-} from "./ProfileCard";
+  AdminProfileCard,
+  AdminProfileCardError,
+  AdminProfileCardSkeleton,
+} from "./AdminProfileCard";
 import {
   Card,
   CardContent,
@@ -18,7 +18,7 @@ import {
 import { getUser } from "@/app/actions/onboarding";
 import { User } from "@clerk/nextjs/server";
 
-export default function ProfileAlreadyCreated() {
+export default function AdminProfileAlreadyCreated() {
   const { user, isLoaded, isSignedIn } = useUser();
   const { isLoading, setIsLoading, currOnboardingStep, lastUpdated } =
     useOnboardingContext();
@@ -66,11 +66,11 @@ export default function ProfileAlreadyCreated() {
       <CardContent>
         <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
           {isLoading ? (
-            <ProfileCardSkeleton toggle={toggle} />
+            <AdminProfileCardSkeleton toggle={toggle} />
           ) : userData ? (
-            <ProfileCard toggle={toggle} userData={userData} />
+            <AdminProfileCard toggle={toggle} userData={userData} />
           ) : (
-            <ProfileCardError toggle={toggle} />
+            <AdminProfileCardError toggle={toggle} />
           )}
 
           <Button

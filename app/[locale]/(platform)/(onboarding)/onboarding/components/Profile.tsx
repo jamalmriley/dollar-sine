@@ -1,13 +1,17 @@
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import FinishProfile from "./FinishProfile";
-import ProfileAlreadyCreated from "./ProfileAlreadyCreated";
 import { useUser } from "@clerk/nextjs";
 import { UserMetadata } from "@/types/user";
 import { useEffect, useState } from "react";
 import { getUser } from "@/app/actions/onboarding";
 import { User } from "@clerk/nextjs/server";
 
-export default function Profile() {
+export default function Profile({
+  component1,
+  component2,
+}: {
+  component1: JSX.Element | undefined;
+  component2: JSX.Element | undefined;
+}) {
   const { user, isLoaded } = useUser();
   const { currOnboardingStep, lastUpdated } = useOnboardingContext();
   const { step, isEditing } = currOnboardingStep;
@@ -34,12 +38,6 @@ export default function Profile() {
 
   if (!user || !isLoaded) return;
   return (
-    <>
-      {!isCompleted || (step === 1 && isEditing) ? (
-        <FinishProfile />
-      ) : (
-        <ProfileAlreadyCreated />
-      )}
-    </>
+    <>{!isCompleted || (step === 1 && isEditing) ? component1 : component2}</>
   );
 }
