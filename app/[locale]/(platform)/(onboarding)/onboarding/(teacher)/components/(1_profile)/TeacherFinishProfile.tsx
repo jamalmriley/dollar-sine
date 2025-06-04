@@ -154,6 +154,7 @@ export default function TeacherFinishProfile() {
       organizations: metadata.organizations,
       courses: metadata.courses,
       classes: metadata.classes,
+      invitations: metadata.invitations,
       displayName,
       displayNameFormat,
       prefix,

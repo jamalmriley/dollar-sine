@@ -124,7 +124,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
   return (
     <div className="h-full flex flex-col justify-between items-center pt-10">
       {/* Carousel */}
-      <Carousel setApi={setApi} opts={{ watchDrag: false }} className="w-full">
+      <Carousel setApi={setApi} opts={{ watchDrag: false }} className="w-full flex grow">
         <CarouselContent>
           {prompts.map((prompt) => (
             <CarouselItem
@@ -138,7 +138,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
       </Carousel>
 
       {/* Buttons and Indicators */}
-      <div className="flex gap-5 items-center mt-5">
+      <div className="flex gap-5 items-center py-5">
         <Button
           variant="ghost"
           size="icon"

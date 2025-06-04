@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getOrganization } from "@/app/actions/onboarding";
+import { getOrganizationById } from "@/app/actions/onboarding";
 import { Organization } from "@clerk/nextjs/server";
 
 export default function OrgAlreadyCreated() {
@@ -41,7 +41,7 @@ export default function OrgAlreadyCreated() {
     const fetchAndSetOrg = async () => {
       setIsLoading(true);
       try {
-        const res = await getOrganization(orgId);
+        const res = await getOrganizationById(orgId);
         const org = JSON.parse(res.data) as Organization;
 
         setOrg(org);

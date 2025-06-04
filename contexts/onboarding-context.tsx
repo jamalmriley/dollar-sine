@@ -25,6 +25,8 @@ type OnboardingContext = {
   setPreferNotToSay: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
+  showOrgResults: boolean;
+  setShowOrgResults: React.Dispatch<React.SetStateAction<boolean>>;
   orgLogo: File | undefined;
   setOrgLogo: React.Dispatch<React.SetStateAction<File | undefined>>;
   isUpdatingProfile: boolean;
@@ -33,6 +35,8 @@ type OnboardingContext = {
   setIsUpdatingOrg: React.Dispatch<React.SetStateAction<boolean>>;
   organizationId: string | undefined;
   setOrganizationId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  orgSearch: string;
+  setOrgSearch: React.Dispatch<React.SetStateAction<string>>;
   courses: CourseData[];
   setCourses: React.Dispatch<React.SetStateAction<CourseData[]>>;
   lastUpdated: string;
@@ -67,10 +71,12 @@ export default function OnboardingContextProvider({
   const [preferNotToSay, setPreferNotToSay] = useState<boolean>(false);
 
   const [profilePic, setProfilePic] = useState<File | undefined>();
+  const [showOrgResults, setShowOrgResults] = useState<boolean>(false);
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
   const [organizationId, setOrganizationId] = useState<string | undefined>();
+  const [orgSearch, setOrgSearch] = useState<string>("");
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -104,6 +110,8 @@ export default function OnboardingContextProvider({
         setPreferNotToSay,
         profilePic,
         setProfilePic,
+        showOrgResults,
+        setShowOrgResults,
         orgLogo,
         setOrgLogo,
         isUpdatingProfile,
@@ -112,6 +120,8 @@ export default function OnboardingContextProvider({
         setIsUpdatingOrg,
         organizationId,
         setOrganizationId,
+        orgSearch,
+        setOrgSearch,
         courses,
         setCourses,
         lastUpdated,

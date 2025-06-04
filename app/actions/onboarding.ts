@@ -10,9 +10,10 @@ import {
   OrganizationMetadata,
   StudentMetadata,
   TeacherMetadata,
+  UserMetadata,
 } from "@/types/user";
 import { db } from "@/utils/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
 import dotenv from "dotenv";
 dotenv.config();
@@ -115,6 +116,7 @@ export async function updateUserMetadata(
     | TeacherMetadata
     | GuardianMetadata
     | StudentMetadata
+    // | UserMetadata
     | null,
   formData?: FormData
 ): Promise<Response> {
@@ -195,6 +197,12 @@ export async function createOrganization(
         }
       }
 
+      const { membersCount } = org;
+      setDoc(doc(db, "organizations", `${org.id}`), {
+        ...org,
+        membersCount: membersCount || null, // Firebase doesn't allow undefined values.
+      });
+
       const [title, description] = ["Organization successfully created ✅", ""];
 
       return {
@@ -220,7 +228,7 @@ export async function createOrganization(
 }
 
 // Get organization
-export async function getOrganization(
+export async function getOrganizationById(
   organizationId: string | undefined
 ): Promise<Response> {
   const invalidRes: Response = {
@@ -229,7 +237,7 @@ export async function getOrganization(
     message: {
       title: "Missing required organization ID",
       description:
-        "An organization ID is required to retrieve the user's profile.",
+        "An organization ID is required to retrieve the organization's data.",
     },
   };
   if (!organizationId) return invalidRes;
@@ -238,6 +246,48 @@ export async function getOrganization(
 
   const org: Response = await client.organizations
     .getOrganization({ organizationId })
+    .then((org) => {
+      const data = JSON.stringify(org);
+      return {
+        status: 200,
+        success: true,
+        data,
+      };
+    })
+    .catch((err: ClerkErrorResponse) => {
+      const error = err.errors[0];
+      return {
+        status: 400,
+        success: false,
+        data: {},
+        message: {
+          title: error.message,
+          description: error.long_message,
+        },
+      };
+    });
+
+  return org;
+}
+
+export async function getOrganizationBySlug(
+  slug: string | undefined
+): Promise<Response> {
+  const invalidRes: Response = {
+    status: 422,
+    success: false,
+    message: {
+      title: "Missing required organization slug",
+      description:
+        "An organization slug is required to retrieve the organization's data.",
+    },
+  };
+  if (!slug) return invalidRes;
+
+  const client = await clerkClient();
+
+  const org: Response = await client.organizations
+    .getOrganization({ slug })
     .then((org) => {
       const data = JSON.stringify(org);
       return {
@@ -274,7 +324,7 @@ export async function updateOrganization(
 
   const update: Response = await client.organizations
     .updateOrganization(organizationId, { name, slug, publicMetadata })
-    .then(() => {
+    .then((org) => {
       if (formData) {
         const orgLogo = formData.get("orgLogo") as File;
         if (orgLogo) {
@@ -283,6 +333,13 @@ export async function updateOrganization(
           });
         }
       }
+
+      const { membersCount } = org;
+      setDoc(doc(db, "organizations", `${org.id}`), {
+        ...org,
+        membersCount: membersCount || null, // Firebase doesn't allow undefined values.
+      });
+
       const [title, description] = ["Organization successfully updated ✅", ""];
 
       return {
@@ -305,6 +362,60 @@ export async function updateOrganization(
 
   revalidatePath("/onboarding");
   return update;
+}
+
+// Request to join or cancel joining organization
+export async function sendRequestToOrganization(
+  userId: string,
+  userMetadata: UserMetadata,
+  organizationId: string,
+  organizationMetadata: OrganizationMetadata,
+  requestType: "join" | "cancel"
+): Promise<Response> {
+  const responses: Response[] = [];
+
+  await updateUserMetadata(userId, userMetadata).then((res) => {
+    responses.push(res);
+  });
+
+  await updateOrganization(organizationId, organizationMetadata).then((res) => {
+    responses.push(res);
+  });
+
+  const successCount = responses.filter((res) => res.success).length; // Should be 0, 1, or 2
+  switch (successCount) {
+    case 0:
+      return {
+        status: 400,
+        success: false,
+        message: {
+          title: `Error ${requestType === "join" ? "requesting" : "canceling request"} to join`,
+          description: responses
+            .map((res) => res.message?.description)
+            .join(" "),
+        },
+      };
+    case 1:
+      return responses.filter((res) => !res.success)[0];
+    case 2:
+      return {
+        status: 200,
+        success: true,
+        message: {
+          title: `Join request ${requestType === "join" ? "sent" : "canceled"} successfully! ✅`,
+          description: "",
+        },
+      };
+    default:
+      return {
+        status: 500,
+        success: false,
+        message: {
+          title: "Internal Server Error",
+          description: "Something went wrong. Please try again.",
+        },
+      };
+  }
 }
 
 // Read Courses

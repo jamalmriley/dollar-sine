@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { truncateString } from "@/utils/general";
-import { OrganizationMetadata } from "@/types/user";
+import { ORG_CATEGORIES, OrganizationMetadata } from "@/types/user";
 import { Organization } from "@clerk/nextjs/server";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
@@ -10,7 +10,7 @@ import { parseAsBoolean, useQueryState } from "nuqs";
 import { BsBuildingExclamation } from "react-icons/bs";
 import { IoMdLink } from "react-icons/io";
 import { MdEdit, MdError } from "react-icons/md";
-import { TbAuth2Fa } from "react-icons/tb";
+import { FaBuilding } from "react-icons/fa6";
 
 export function OrgCard({
   toggle,
@@ -22,8 +22,13 @@ export function OrgCard({
   const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
   const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   const [, setOrgAddress] = useQueryState("orgAddress", { defaultValue: "" });
-  const [, setIs2FARequired] = useQueryState(
-    "is2FARequired",
+  const [, setOrgCategory] = useQueryState("orgCategory", { defaultValue: "" });
+  const [, setIsCustomOrgCategory] = useQueryState(
+    "isCustomOrgCategory",
+    parseAsBoolean.withDefault(false)
+  );
+  const [, setIsTeacherPurchasingEnabled] = useQueryState(
+    "isTeacherPurchasingEnabled",
     parseAsBoolean.withDefault(false)
   );
 
@@ -73,11 +78,23 @@ export function OrgCard({
                 size="icon"
                 className="rounded-full"
                 onClick={() => {
+                  // A helper function to return whether or not the category is a listed organization category.
+                  const helper = (str: string): boolean => {
+                    for (const category of ORG_CATEGORIES) {
+                      if (str === category) return false;
+                    }
+                    return true;
+                  };
+
                   setCurrOnboardingStep({ step: 2, isEditing: true });
                   setOrgName(org.name);
-                  setOrgAddress(String(metadata.address));
                   setOrgSlug(org.slug);
-                  setIs2FARequired(Boolean(metadata.is2FARequired));
+                  setOrgAddress(String(metadata.address));
+                  setOrgCategory(metadata.category);
+                  setIsCustomOrgCategory(helper(metadata.category));
+                  setIsTeacherPurchasingEnabled(
+                    Boolean(metadata.isTeacherPurchasingEnabled)
+                  );
                 }}
               >
                 <span className="sr-only">Edit organization</span>
@@ -106,15 +123,13 @@ export function OrgCard({
                 toggle ? "h-10" : "h-0"
               }`}
             >
+              <span className="flex items-center text-xs text-muted-foreground">
+                <FaBuilding className="size-5 mr-2 py-0.5" />
+                <span>{metadata.category}</span>
+              </span>
               <span className="flex items-center text-xs text-muted-foreground hover:underline">
                 <IoMdLink className="size-5 mr-2" />
                 dollarsi.ne/{org.slug}
-              </span>
-              <span className="flex items-center text-xs text-muted-foreground">
-                <TbAuth2Fa className="size-5 mr-2" />
-                <span>
-                  {Boolean(metadata.is2FARequired) ? "Enabled" : "Disabled"}
-                </span>
               </span>
             </div>
 

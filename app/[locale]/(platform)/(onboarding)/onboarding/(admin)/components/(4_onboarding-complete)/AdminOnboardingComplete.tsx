@@ -13,7 +13,7 @@ import { useUser } from "@clerk/nextjs";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { format } from "date-fns";
 import {
-  getOrganization,
+  getOrganizationById,
   updateOrganization,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
@@ -96,6 +96,7 @@ export default function AdminOnboardingComplete() {
         emojiSkinTone,
         organizations,
         classes,
+        invitations,
       } = publicMetadata;
 
       const userMetadata: AdminMetadata = {
@@ -112,13 +113,14 @@ export default function AdminOnboardingComplete() {
         organizations,
         courses: selectedCourses,
         classes,
+        invitations,
       };
 
       await updateUserMetadata(userId, userMetadata).then(() => {
         const orgId = user?.organizationMemberships[0].organization
           .id as string;
 
-        getOrganization(orgId).then((res) => {
+        getOrganizationById(orgId).then((res) => {
           const organization = JSON.parse(res.data) as Organization;
           const orgMetadata =
             organization.publicMetadata as any as OrganizationMetadata;

@@ -209,7 +209,7 @@ async function updateSearch(fileName: string, subcollection: string) {
         console.error("Error updating lesson:", error);
       });
 
-    await setDoc(doc(db, "global-search", `${courseId}-lesson-${lessonId}`), {
+    await setDoc(doc(db, "lessons-global-search", `${courseId}-lesson-${lessonId}`), {
       courseName,
       courseId,
       lessonId,

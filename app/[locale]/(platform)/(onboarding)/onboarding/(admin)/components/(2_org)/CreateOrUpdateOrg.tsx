@@ -28,7 +28,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MdClose } from "react-icons/md";
-import { OrganizationMetadata, UserMetadata } from "@/types/user";
+import {
+  ORG_CATEGORIES,
+  OrganizationMetadata,
+  UserMetadata,
+} from "@/types/user";
 import {
   ClerkErrorResponse,
   createOrganization,
@@ -61,14 +65,24 @@ export default function CreateOrUpdateOrg() {
     defaultValue: "",
   });
 
+  const [orgCategory, setOrgCategory] = useQueryState("orgCategory", {
+    defaultValue: "",
+  });
+
+  const [isCustomOrgCategory, setIsCustomOrgCategory] = useQueryState(
+    "isCustomOrgCategory",
+    parseAsBoolean.withDefault(false)
+  );
+
   const [orgAddress, setOrgAddress] = useQueryState("orgAddress", {
     defaultValue: "",
   });
 
-  const [is2FARequired, setIs2FARequired] = useQueryState(
-    "is2FARequired",
-    parseAsBoolean.withDefault(false)
-  );
+  const [isTeacherPurchasingEnabled, setIsTeacherPurchasingEnabled] =
+    useQueryState(
+      "isTeacherPurchasingEnabled",
+      parseAsBoolean.withDefault(false)
+    );
 
   const organization =
     user && user.organizationMemberships.length > 0
@@ -81,7 +95,8 @@ export default function CreateOrUpdateOrg() {
         organization.slug !== orgSlug ||
         String(organization.publicMetadata.organizationAddress) !==
           orgAddress ||
-        Boolean(organization.publicMetadata.is2FARequired) !== is2FARequired;
+        Boolean(organization.publicMetadata.isTeacherPurchasingEnabled) !==
+          isTeacherPurchasingEnabled;
 
   const userMetadata = user?.publicMetadata as any as UserMetadata;
 
@@ -134,8 +149,10 @@ export default function CreateOrUpdateOrg() {
       name: orgName,
       slug: orgSlug,
       address: orgAddress,
-      is2FARequired,
+      category: orgCategory,
+      isTeacherPurchasingEnabled,
       courses: null,
+      invitations: null,
     };
 
     async function handleResponse(res: Response) {
@@ -155,6 +172,7 @@ export default function CreateOrUpdateOrg() {
           emojiSkinTone,
           courses,
           classes,
+          invitations,
         } = userMetadata;
         const newMetadata: UserMetadata = {
           role,
@@ -170,6 +188,7 @@ export default function CreateOrUpdateOrg() {
           organizations: res.data ? [...orgIds, res.data] : orgIds,
           courses,
           classes,
+          invitations,
         };
 
         updateUserMetadata(userId, newMetadata)
@@ -177,10 +196,11 @@ export default function CreateOrUpdateOrg() {
             if (res.data) setOrganizationId(String(res.data));
             setLastUpdated(new Date().toString()); // Triggers Organization.tsx and OrgAlreadyCreated.tsx to re-render.
             setOrgName("");
-            setOrgAddress("");
             setOrgSlug("");
+            setOrgAddress("");
+            setOrgCategory("");
             setOrgLogo(undefined);
-            setIs2FARequired(false);
+            setIsTeacherPurchasingEnabled(false);
             setCurrOnboardingStep({ step: 2, isEditing: false });
 
             toast({
@@ -228,7 +248,6 @@ export default function CreateOrUpdateOrg() {
   useEffect(() => {
     const fetchPredictions = async () => {
       const predictions = await autocomplete(orgAddress);
-      // console.log(predictions); // {description: string}[]
       setPredictions(predictions ?? []);
     };
 
@@ -253,10 +272,11 @@ export default function CreateOrUpdateOrg() {
               onClick={() => {
                 setCurrOnboardingStep({ step: 2, isEditing: false });
                 setOrgName("");
-                setOrgAddress("");
                 setOrgSlug("");
+                setOrgAddress("");
+                setOrgCategory("");
                 setOrgLogo(undefined);
-                setIs2FARequired(false);
+                setIsTeacherPurchasingEnabled(false);
               }}
             >
               <span className="sr-only">Cancel updating my organization</span>
@@ -323,54 +343,108 @@ export default function CreateOrUpdateOrg() {
             </div>
           </div>
 
-          {/* Org Address */}
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="org-address" className="text-sm font-bold">
-              Address
-            </Label>
-            <div className="relative">
-              <Command className="w-full" id="org-address">
-                <CommandInput
-                  placeholder="Search an address..."
-                  value={orgAddress}
-                  onValueChange={(e) => {
-                    setOrgAddress(e);
-                  }}
-                  onFocus={() => setShowPredictions(true)}
-                  onBlur={() => setShowPredictions(false)}
-                  autoComplete="street-address"
-                />
-                <CommandList
-                  className={`absolute left-0 top-full w-full bg-primary-foreground rounded-b-md ${
-                    showPredictions && "border-b border-x"
-                  } shadow-lg z-50`}
-                >
-                  {showPredictions && (
-                    <CommandEmpty>
-                      <span className="text-muted-foreground font-medium select-none">
-                        {orgAddress === ""
-                          ? "Start typing to search an address."
-                          : "No results found."}
-                      </span>
-                    </CommandEmpty>
-                  )}
-                  {predictions.length > 0 && showPredictions && (
-                    <CommandGroup heading="Suggestions">
-                      {predictions.map((prediction) => (
-                        <CommandItem
-                          key={prediction.place_id}
-                          onMouseDown={() => {
-                            setOrgAddress(prediction.description);
-                            setShowPredictions(false);
-                          }}
-                        >
-                          {prediction.description}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  )}
-                </CommandList>
-              </Command>
+          {/* Org Address and Org Category */}
+          <div className="flex gap-5">
+            {/* Org Address */}
+            <div className="grid gap-2 w-full">
+              <Label htmlFor="org-address" className="text-sm font-bold">
+                Organization Address
+              </Label>
+              <div className="relative">
+                <Command className="w-full" id="org-address">
+                  <CommandInput
+                    placeholder="Search an address..."
+                    value={orgAddress}
+                    onValueChange={(e) => {
+                      setOrgAddress(e);
+                    }}
+                    onFocus={() => setShowPredictions(true)}
+                    onBlur={() => setShowPredictions(false)}
+                    autoComplete="street-address"
+                  />
+                  <CommandList
+                    className={`absolute left-0 top-full w-full bg-primary-foreground rounded-b-md ${
+                      showPredictions && "border-b border-x"
+                    } shadow-lg z-50`}
+                  >
+                    {showPredictions && (
+                      <CommandEmpty>
+                        <span className="text-muted-foreground font-medium select-none">
+                          {orgAddress === ""
+                            ? "Start typing to search an address."
+                            : "No results found."}
+                        </span>
+                      </CommandEmpty>
+                    )}
+                    {predictions.length > 0 && showPredictions && (
+                      <CommandGroup heading="Suggestions">
+                        {predictions.map((prediction) => (
+                          <CommandItem
+                            key={prediction.place_id}
+                            onMouseDown={() => {
+                              setOrgAddress(prediction.description);
+                              setShowPredictions(false);
+                            }}
+                          >
+                            {prediction.description}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    )}
+                  </CommandList>
+                </Command>
+              </div>
+            </div>
+
+            {/* Org Category */}
+            <div className="grid gap-2 w-full">
+              <Label htmlFor="org-category" className="text-sm font-bold">
+                Which category best describes your organization?
+              </Label>
+              <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
+                {ORG_CATEGORIES.map((category) => (
+                  <div key={category} className="whitespace-nowrap px-2">
+                    <button
+                      className={`chip ${
+                        category === orgCategory ? "border-default-color" : ""
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsCustomOrgCategory(false);
+                        setOrgCategory(category);
+                      }}
+                    >
+                      {category}
+                    </button>
+                  </div>
+                ))}
+                <span className={`whitespace-nowrap px-2`}>
+                  <button
+                    className={
+                      isCustomOrgCategory
+                        ? "chip-no-animation border-primary rounded-r-none border-r-0 pr-2"
+                        : "chip"
+                    }
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsCustomOrgCategory(true);
+                      setOrgCategory("");
+                    }}
+                  >
+                    <span>Other{isCustomOrgCategory && ":"}</span>
+                  </button>
+                  <input
+                    className={
+                      isCustomOrgCategory
+                        ? "border border-primary rounded-full rounded-l-none border-l-0 text-xs py-1 max-w-24"
+                        : "hidden"
+                    }
+                    value={orgCategory}
+                    placeholder="Please specify"
+                    onChange={(e) => setOrgCategory(e.target.value)}
+                  />
+                </span>
+              </div>
             </div>
           </div>
 
@@ -380,19 +454,21 @@ export default function CreateOrUpdateOrg() {
           {/* Settings */}
           <div className="w-full flex justify-between items-center border p-3 rounded-md">
             <div className="flex flex-col gap-0.5">
-              <Label htmlFor="2fa" className="text-sm font-bold">
-                Two-factor authentication
+              <Label
+                htmlFor="isTeacherPurchasingEnabled"
+                className="text-sm font-bold"
+              >
+                Allow teachers to purchase courses.
               </Label>
               <span className="text-xs text-muted-foreground">
-                Require two-factor authentication (2FA) for users in your
-                organization.
+                Payment methods and info are not shared across users.
               </span>
             </div>
             <Switch
-              id="2fa"
-              checked={is2FARequired}
+              id="isTeacherPurchasingEnabled"
+              checked={isTeacherPurchasingEnabled}
               onClick={() => {
-                setIs2FARequired((prev) => !prev);
+                setIsTeacherPurchasingEnabled((prev) => !prev);
               }}
             />
           </div>

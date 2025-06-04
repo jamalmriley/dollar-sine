@@ -129,6 +129,10 @@
     @apply bg-secondary text-xs uppercase font-bold rounded-full flex border border-default-color px-2 py-1 items-center;
   }
 
+  .pending {
+    @apply flex justify-center items-center py-1 px-2 bg-selective-yellow-200 text-primary text-xs rounded-full;
+  }
+
   .star {
     @apply h-4 w-4;
   }
@@ -314,7 +318,7 @@
   /* Algolia Inline Search */
 
   .ais-InstantSearch-inline {
-    @apply max-w-48 w-full overflow-hidden;
+    @apply max-w-72 w-full overflow-hidden;
   }
 
   .inline-search-box {
@@ -330,11 +334,11 @@
   }
 
   .ais-Hits-list-inline {
-    @apply w-full md:max-w-48 flex overflow-x-scroll gap-3 p-3 fixed shadow-md border-x border-b bg-white z-50 dark:bg-neutral-800;
+    @apply w-full md:max-w-72 flex flex-col fixed shadow-sm border-x border-b bg-white z-50 dark:bg-neutral-800;
   }
 
   .ais-Hits-item-inline {
-    @apply chip;
+    @apply w-full;
   }
 
   .ais-Hits-item-inline-disabled {

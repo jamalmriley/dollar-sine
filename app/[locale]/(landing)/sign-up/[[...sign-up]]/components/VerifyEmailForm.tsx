@@ -100,6 +100,7 @@ export default function VerifyEmailForm() {
                 organizations: [],
                 courses: [],
                 classes: null,
+                invitations: null,
               };
 
               let metadata: AdminMetadata | TeacherMetadata | null;

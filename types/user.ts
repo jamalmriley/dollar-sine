@@ -4,6 +4,22 @@ import { SelectedCourse } from "./course";
 export const ROLES = ["admin", "teacher", "guardian", "student", null] as const;
 export type Role = (typeof ROLES)[number];
 
+export const ORG_CATEGORIES = [
+  "School",
+  "After-school program provider",
+  "Childcare provider",
+  "Community center",
+  "Education company",
+  "Library",
+  "Nonprofit organization",
+  "Park district",
+  "Recreation center",
+  "Religious organization",
+  "Tutoring center",
+] as const;
+
+export type OrgCategory = (typeof ORG_CATEGORIES)[number];
+
 export const EN_PRONOUNS = [
   "he",
   "him",
@@ -56,6 +72,14 @@ export type GuardianType =
   | "Guardian"
   | "Caregiver";
 
+export type Status = "Rejected" | "Pending" | "Accepted";
+
+export interface UserInvitation {
+  createdAt: Date;
+  status: Status;
+  organizationId: string;
+}
+
 interface Class {
   id: string;
   name: string;
@@ -86,6 +110,7 @@ export interface UserMetadata {
   organizations: OrganizationId[];
   courses: SelectedCourse[];
   classes: Class[] | null;
+  invitations: UserInvitation[] | null;
 }
 
 export interface AdminMetadata extends TeacherMetadata {}
@@ -120,12 +145,20 @@ export interface StudentMetadata extends UserMetadata {
 // Purchased courses go to org metadata, enrolled courses go to user metadata
 type OrganizationId = string;
 
+export interface OrganizationInvitation {
+  createdAt: Date;
+  status: Status;
+  userId: string;
+}
+
 export interface OrganizationMetadata {
   name: string;
   slug: string;
   address: string;
-  is2FARequired: boolean;
+  category: string;
+  isTeacherPurchasingEnabled: boolean;
   courses: SelectedCourse[] | null;
+  invitations: OrganizationInvitation[] | null;
 }
 
 // Classes //
@@ -367,7 +400,7 @@ class Orgnanization implements HasMetdataMethods {
     protected name: string,
     protected slug: string,
     protected address: string,
-    protected is2FARequired: boolean,
+    protected isTeacherPurchasingEnabled: boolean,
     protected courses: SelectedCourse[] | null
   ) {}
 
