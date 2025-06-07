@@ -4,11 +4,6 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import {
-  AdminProfileCard,
-  AdminProfileCardError,
-  AdminProfileCardSkeleton,
-} from "./AdminProfileCard";
-import {
   Card,
   CardContent,
   CardDescription,
@@ -17,8 +12,13 @@ import {
 } from "@/components/ui/card";
 import { getUser } from "@/app/actions/onboarding";
 import { User } from "@clerk/nextjs/server";
+import {
+  ProfileCard,
+  ProfileCardError,
+  ProfileCardSkeleton,
+} from "./ProfileCard";
 
-export default function AdminProfileAlreadyCreated() {
+export default function ProfileAlreadyCreated() {
   const { user, isLoaded, isSignedIn } = useUser();
   const { isLoading, setIsLoading, currOnboardingStep, lastUpdated } =
     useOnboardingContext();
@@ -52,39 +52,41 @@ export default function AdminProfileAlreadyCreated() {
 
   if (!isSignedIn || !isLoaded) return;
   return (
-    <Card className="w-full h-full mx-10 max-w-lg">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="h2">{header.title}</CardTitle>
-        </div>
-        {header.description !== "" && (
-          <CardDescription className="subtitle">
-            {header.description}
-          </CardDescription>
-        )}
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
-          {isLoading ? (
-            <AdminProfileCardSkeleton toggle={toggle} />
-          ) : userData ? (
-            <AdminProfileCard toggle={toggle} userData={userData} />
-          ) : (
-            <AdminProfileCardError toggle={toggle} />
+    <div className="size-full flex justify-center">
+      <Card className="mx-10 max-w-lg">
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="h2">{header.title}</CardTitle>
+          </div>
+          {header.description !== "" && (
+            <CardDescription className="subtitle">
+              {header.description}
+            </CardDescription>
           )}
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
+            {isLoading ? (
+              <ProfileCardSkeleton toggle={toggle} />
+            ) : userData ? (
+              <ProfileCard toggle={toggle} userData={userData} />
+            ) : (
+              <ProfileCardError toggle={toggle} />
+            )}
 
-          <Button
-            variant="ghost"
-            className="bg-primary-foreground rounded-none border-t border-default-color"
-            onClick={() => setToggle((prev) => !prev)}
-          >
-            <span className="sr-only">
-              {toggle ? "Show less user details" : "Show more user details"}
-            </span>
-            {toggle ? <FaChevronUp /> : <FaChevronDown />}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+            <Button
+              variant="ghost"
+              className="bg-primary-foreground rounded-none border-t border-default-color"
+              onClick={() => setToggle((prev) => !prev)}
+            >
+              <span className="sr-only">
+                {toggle ? "Show less user details" : "Show more user details"}
+              </span>
+              {toggle ? <FaChevronUp /> : <FaChevronDown />}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
-import Prefix from "../../../components/Prefix";
-import DisplayName from "../../../components/DisplayName";
-import JobTitle from "../../../components/JobTitle";
-import Pronouns from "../../../components/Pronouns";
-import SkinTone from "../../../components/SkinTone";
-import ProfileImageUpload from "../../../components/ProfileImageUpload";
+import Prefix from "./Prefix";
+import DisplayName from "./DisplayName";
+import JobTitle from "./JobTitle";
+import Pronouns from "./Pronouns";
+import SkinTone from "./SkinTone";
+import ProfileImageUpload from "./ProfileImageUpload";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import {
   Accordion,
@@ -28,13 +28,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TeacherMetadata } from "@/types/user";
+import { AdminMetadata, TeacherMetadata } from "@/types/user";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
-import Pronunciation from "../../../components/Pronunciation";
+import Pronunciation from "./Pronunciation";
 
-export default function TeacherFinishProfile() {
+export default function FinishProfile() {
   const {
     isLoading,
     setIsLoading,
@@ -94,7 +94,9 @@ export default function TeacherFinishProfile() {
   const { user, isLoaded } = useUser();
   if (!user || !isLoaded) return;
 
-  const metadata = user.publicMetadata as any as TeacherMetadata;
+  const metadata = user.publicMetadata as any as
+    | AdminMetadata
+    | TeacherMetadata;
 
   const hasProfileUpdated: boolean =
     !user || isEmptyObject(metadata)
@@ -137,8 +139,10 @@ export default function TeacherFinishProfile() {
     setIsLoading(true);
 
     const userId = user.id;
-    const updatedMetadata: TeacherMetadata = {
-      role: "teacher",
+
+    // const updatedGuardianMetadata: GuardianMetadata = {}
+    const updatedTeacherMetadata: TeacherMetadata = {
+      role: metadata.role,
       pronunciation,
       currPronunciationOptions: metadata.currPronunciationOptions,
       prevPronunciationOptions: metadata.prevPronunciationOptions,
@@ -162,6 +166,20 @@ export default function TeacherFinishProfile() {
       isCustomPrefix,
       jobTitle,
     };
+    const updatedAdminMetadata: AdminMetadata = { ...updatedTeacherMetadata };
+
+    let updatedMetadata: AdminMetadata | TeacherMetadata;
+
+    switch (metadata.role) {
+      case "admin":
+        updatedMetadata = updatedAdminMetadata;
+        break;
+      case "teacher":
+        updatedMetadata = updatedTeacherMetadata;
+        break;
+      default:
+        updatedMetadata = updatedTeacherMetadata;
+    }
 
     const formData = new FormData();
     if (profilePic) formData.append("profilePic", profilePic);
@@ -211,98 +229,100 @@ export default function TeacherFinishProfile() {
   };
 
   return (
-    <Card className="w-full h-full mx-10 max-w-3xl">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="h2">{header.title}</CardTitle>
-          {isUpdating && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full size-5 lg:size-6"
-              onClick={() => {
-                setCurrOnboardingStep({ step: 1, isEditing: false });
-                setPronunciation("");
-                setPrefix("");
-                setIsPrefixIncluded(true);
-                setIsCustomPrefix(false);
-                setDisplayName("");
-                setDisplayNameFormat("");
-                setJobTitle("");
-                setPronouns("");
-                setHasCustomPronouns(false);
-                setIsHeSelected(false);
-                setIsSheSelected(false);
-                setIsTheySelected(false);
-                setIsEySelected(false);
-                setIsXeSelected(false);
-                setIsZeSelected(false);
-                setPreferNotToSay(false);
-                setEmojiSkinTone("default");
-                setProfilePic(undefined);
-              }}
-            >
-              <span className="sr-only">Cancel updating my profile</span>
-              <MdClose />
-            </Button>
+    <div className="size-full flex justify-center">
+      <Card className="mx-10 max-w-3xl">
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="h2">{header.title}</CardTitle>
+            {isUpdating && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full size-5 lg:size-6"
+                onClick={() => {
+                  setCurrOnboardingStep({ step: 1, isEditing: false });
+                  setPronunciation("");
+                  setPrefix("");
+                  setIsPrefixIncluded(true);
+                  setIsCustomPrefix(false);
+                  setDisplayName("");
+                  setDisplayNameFormat("");
+                  setJobTitle("");
+                  setPronouns("");
+                  setHasCustomPronouns(false);
+                  setIsHeSelected(false);
+                  setIsSheSelected(false);
+                  setIsTheySelected(false);
+                  setIsEySelected(false);
+                  setIsXeSelected(false);
+                  setIsZeSelected(false);
+                  setPreferNotToSay(false);
+                  setEmojiSkinTone("default");
+                  setProfilePic(undefined);
+                }}
+              >
+                <span className="sr-only">Cancel updating my profile</span>
+                <MdClose />
+              </Button>
+            )}
+          </div>
+          {header.description !== "" && (
+            <CardDescription className="subtitle">
+              {header.description}
+            </CardDescription>
           )}
-        </div>
-        {header.description !== "" && (
-          <CardDescription className="subtitle">
-            {header.description}
-          </CardDescription>
-        )}
-      </CardHeader>
+        </CardHeader>
 
-      <CardContent>
-        <form
-          onSubmit={handleSubmit}
-          className="w-full h-full flex flex-col gap-5"
-        >
-          <div className="hidden md:block">
-            <TeacherFinishProfileDesktop />
-          </div>
+        <CardContent>
+          <form
+            onSubmit={handleSubmit}
+            className="w-full h-full flex flex-col gap-5"
+          >
+            <div className="hidden md:block">
+              <FinishProfileDesktop />
+            </div>
 
-          <div className="block md:hidden">
-            <TeacherFinishProfileMobile />
-          </div>
+            <div className="block md:hidden">
+              <FinishProfileMobile />
+            </div>
 
-          <div className="flex grow items-end">
-            <Button
-              type="submit"
-              className={`w-full ${
-                isLoading &&
-                "disabled:pointer-events-auto cursor-progress hover:bg-primary"
-              }`}
-              // If the user's profile is being updated, see if at least a new avatar has been uploaded.
-              // If so, the button should not be disabled.
-              // If not, make sure no text fields are blank and that there is at least one change to update.
-              disabled={
-                isLoading ||
-                (isUpdating
-                  ? profilePic
-                    ? false
-                    : hasEmptyField || !hasProfileUpdated
-                  : hasEmptyField)
-              }
-            >
-              {isLoading && <Loader2 className="animate-spin" />}
-              {isUpdating
-                ? isLoading
-                  ? "Updating your profile..."
-                  : "Update profile"
-                : isLoading
-                  ? "Updating your profile..."
-                  : "Finish your profile"}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+            <div className="flex grow items-end">
+              <Button
+                type="submit"
+                className={`w-full ${
+                  isLoading &&
+                  "disabled:pointer-events-auto cursor-progress hover:bg-primary"
+                }`}
+                // If the user's profile is being updated, see if at least a new avatar has been uploaded.
+                // If so, the button should not be disabled.
+                // If not, make sure no text fields are blank and that there is at least one change to update.
+                disabled={
+                  isLoading ||
+                  (isUpdating
+                    ? profilePic
+                      ? false
+                      : hasEmptyField || !hasProfileUpdated
+                    : hasEmptyField)
+                }
+              >
+                {isLoading && <Loader2 className="animate-spin" />}
+                {isUpdating
+                  ? isLoading
+                    ? "Updating your profile..."
+                    : "Update profile"
+                  : isLoading
+                    ? "Updating your profile..."
+                    : "Finish your profile"}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
-function TeacherFinishProfileDesktop() {
+function FinishProfileDesktop() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row gap-4">
@@ -343,7 +363,7 @@ function TeacherFinishProfileDesktop() {
   );
 }
 
-function TeacherFinishProfileMobile() {
+function FinishProfileMobile() {
   const [pronunciation] = useQueryState("pronunciation", { defaultValue: "" });
   const [prefix] = useQueryState("prefix", { defaultValue: "" });
   const [displayName] = useQueryState("displayName", { defaultValue: "" });

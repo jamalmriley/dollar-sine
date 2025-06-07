@@ -1,31 +1,26 @@
 "use client";
 
 import OnboardingCarousel from "../components/OnboardingCarousel";
-import Profile from "../components/Profile";
-import AdminFinishProfile from "./components/(1_profile)/AdminFinishProfile";
-import AdminProfileAlreadyCreated from "./components/(1_profile)/AdminProfileAlreadyCreated";
-import Organization from "./components/(2_org)/Organization";
+import Profile from "../components/profile/Profile";
 import AddCourses from "./components/(3_courses)/AddCourses";
+import FinishProfile from "../components/profile/FinishProfile";
+import ProfileAlreadyCreated from "../components/profile/ProfileAlreadyCreated";
+import CreateOrJoinOrg from "../components/organization/CreateOrJoinOrg";
+import { Prompt } from "@/types/general";
 
 export default function AdminOnboardingPage() {
-  const prompts = [
+  const prompts: Prompt[] = [
     {
       id: "step-1",
       content: (
         <Profile
-          component1={<AdminFinishProfile />}
-          component2={<AdminProfileAlreadyCreated />}
+          component1={<FinishProfile />}
+          component2={<ProfileAlreadyCreated />}
         />
       ),
     },
-    {
-      id: "step-2",
-      content: <Organization />,
-    },
-    {
-      id: "step-3",
-      content: <AddCourses />,
-    },
+    { id: "step-2", content: <CreateOrJoinOrg /> },
+    { id: "step-3", content: <AddCourses /> },
   ];
 
   return <OnboardingCarousel prompts={prompts} />;

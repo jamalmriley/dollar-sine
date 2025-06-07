@@ -201,8 +201,10 @@ export default function JoinOrg() {
       metadata.invitations.length === 0 ? (
         // Request to join
         <div className="flex flex-col">
-          <div className="flex justify-between">
-            <OrgSearch />
+          <div className="flex justify-between gap-5">
+            <span className="w-72">
+              <OrgSearch />
+            </span>
             <Button
               className=""
               onClick={handleRequestToJoin}
@@ -224,7 +226,6 @@ export default function JoinOrg() {
 
 function OrgSearch() {
   const { showOrgResults, orgSearch, setOrgSearch } = useOnboardingContext();
-  const [orgSlug] = useQueryState("orgSlug", { defaultValue: "" });
 
   return (
     <InstantSearch
@@ -262,7 +263,7 @@ function ControlledSearchBox({
 }) {
   const { orgSearch, setOrgSearch, setShowOrgResults } = useOnboardingContext();
   const { query, refine } = useSearchBox();
-  const [orgSlug, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
+  const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Keep Algolia's internal state in sync with `value` prop
@@ -282,7 +283,7 @@ function ControlledSearchBox({
         onFocus={() => setShowOrgResults(true)}
         onBlur={() => setShowOrgResults(false)}
         placeholder="Search for an organization..."
-        className={`border p-2 rounded-lg text-xs ${orgSlug !== "" && "focus:rounded-b-none"}`}
+        className={`border p-2 rounded-lg text-xs ${orgSearch !== "" && "focus:rounded-b-none"}`}
       />
 
       {orgSearch !== "" && (
@@ -427,11 +428,11 @@ function ViewOrEditRequestToJoin() {
     const orgMetadata = findOrg(targetOrgId)
       ?.publicMetadata as any as OrganizationMetadata;
 
-    const updatedUserInvitations = userMetadata.invitations
-      ? userMetadata.invitations?.filter(
-          (invitation) => invitation.organizationId !== targetOrgId
-        )
-      : null;
+    // const updatedUserInvitations = userMetadata.invitations
+    //   ? userMetadata.invitations?.filter(
+    //       (invitation) => invitation.organizationId !== targetOrgId
+    //     )
+    //   : null;
 
     const updatedOrgInvitations = orgMetadata.invitations
       ? orgMetadata.invitations?.filter(
@@ -441,8 +442,8 @@ function ViewOrEditRequestToJoin() {
 
     const newUserMetadata: UserMetadata = {
       ...userMetadata,
-      lastOnboardingStepCompleted: 2,
-      invitations: updatedUserInvitations,
+      lastOnboardingStepCompleted: 1,
+      invitations: null,
     };
 
     const newOrgMetadata: OrganizationMetadata = {

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
-import { TeacherMetadata } from "@/types/user";
+import { AdminMetadata, TeacherMetadata } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
@@ -12,7 +12,7 @@ import { TbUserExclamation } from "react-icons/tb";
 import { User } from "@clerk/nextjs/server";
 import Link from "next/link";
 
-export function TeacherProfileCard({
+export function ProfileCard({
   toggle,
   userData,
 }: {
@@ -57,7 +57,9 @@ export function TeacherProfileCard({
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
   );
 
-  const metadata = userData.publicMetadata as any as TeacherMetadata;
+  const metadata = userData.publicMetadata as any as
+    | AdminMetadata
+    | TeacherMetadata;
   if (!metadata) return;
   const {
     pronunciation,
@@ -186,7 +188,7 @@ export function TeacherProfileCard({
   );
 }
 
-export function TeacherProfileCardSkeleton({ toggle }: { toggle: boolean }) {
+export function ProfileCardSkeleton({ toggle }: { toggle: boolean }) {
   return (
     <div className="p-5 w-full">
       <div
@@ -237,7 +239,7 @@ export function TeacherProfileCardSkeleton({ toggle }: { toggle: boolean }) {
   );
 }
 
-export function TeacherProfileCardError({ toggle }: { toggle: boolean }) {
+export function ProfileCardError({ toggle }: { toggle: boolean }) {
   const { setLastUpdated } = useOnboardingContext();
   return (
     <div className="p-5 w-full">
