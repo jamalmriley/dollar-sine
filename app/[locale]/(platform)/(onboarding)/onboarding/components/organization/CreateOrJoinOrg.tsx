@@ -85,7 +85,7 @@ export default function CreateOrJoinOrg() {
         </CardHeader>
         <CardContent>
           <Tabs value={tab} onValueChange={setTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 select-none">
+            <TabsList className="grid w-72 grid-cols-2 select-none mx-auto">
               <TabsTrigger value="create" disabled={hasInvitations}>
                 Create
               </TabsTrigger>
