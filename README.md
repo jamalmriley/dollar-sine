@@ -2,12 +2,15 @@
 
 Welcome! This is the codebase for the Dollar Sine app.
 
-Get the app itself:
+Get the app:
 
-- Web: [dollarsine.org](https://dollarsine.org)
+- Web: [dollarsine.app](https://dollarsine.app)
 - iOS: Coming soon!
+- Android: Coming soon!
 
 ## Development
+
+This section is under construction!
 
 ## License
 

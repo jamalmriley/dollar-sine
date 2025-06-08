@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import {
   OrganizationInvitation,
   OrganizationMetadata,
-  Status,
   UserInvitation,
   UserMetadata,
 } from "@/types/user";
@@ -72,21 +71,23 @@ function RequestToJoin() {
     if (!user) return;
     await setIsLoading(true);
 
-    const userMetadata = user.publicMetadata as any as UserMetadata;
-    const res = await getOrganizationBySlug(orgSlug);
-    const org = JSON.parse(res.data) as Organization;
+    const userRes = await getUser(user?.id);
+    const userData = JSON.parse(userRes.data) as User;
+    const userMetadata = userData.publicMetadata as any as UserMetadata;
+
+    const orgRes = await getOrganizationBySlug(orgSlug);
+    const org = JSON.parse(orgRes.data) as Organization;
     const orgMetadata = org.publicMetadata as any as OrganizationMetadata;
-    const [createdAt, status]: [Date, Status] = [new Date(), "Pending"];
 
     const userInvitation: UserInvitation = {
-      createdAt,
-      status,
+      createdAt: new Date(),
+      status: "Pending",
       organizationId: org.id,
     };
 
     const orgInvitation: OrganizationInvitation = {
-      createdAt,
-      status,
+      createdAt: new Date(),
+      status: "Pending",
       userId: user.id,
     };
 
@@ -114,8 +115,9 @@ function RequestToJoin() {
     )
       .then(() => {
         setOrgSlug("");
-        setIsLoading(false);
+        // setIsLoading(false); // setLastUpdated will trigger a useEffect which will later change isLoading to false.
         setHasInvitations(true);
+        setLastUpdated(new Date().toString());
       })
       .catch((err) => {
         console.error(err);
@@ -130,7 +132,6 @@ function RequestToJoin() {
           <OrgSearch />
         </span>
         <Button
-          className=""
           onClick={() => handleRequestToJoin(orgSlug)}
           disabled={orgSlug === "" || isLoading}
         >
@@ -173,7 +174,9 @@ function ViewOrEditRequestToJoin() {
   async function handleCancelRequestToJoin(targetOrgId: string) {
     if (!user) return;
 
-    const userMetadata = user.publicMetadata as any as UserMetadata;
+    const userRes = await getUser(user?.id);
+    const userData = JSON.parse(userRes.data) as User;
+    const userMetadata = userData.publicMetadata as any as UserMetadata;
     const orgMetadata = findOrg(targetOrgId)
       ?.publicMetadata as any as OrganizationMetadata;
 
@@ -281,7 +284,11 @@ function ViewOrEditRequestToJoin() {
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className={item.invitation.status.toLowerCase()}>
+                  <span
+                    className={
+                      item.invitation.status === "Pending" ? "pending" : ""
+                    }
+                  >
                     {item.invitation.status}
                   </span>
                 </TableCell>
