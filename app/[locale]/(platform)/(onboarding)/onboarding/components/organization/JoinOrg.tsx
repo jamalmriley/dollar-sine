@@ -50,9 +50,8 @@ const searchClient = algoliasearch(
 
 export default function JoinOrg() {
   const {
-    currOnboardingStep,
-    setCurrOnboardingStep,
-    orgSearch,
+    hasInvitations,
+    setHasInvitations,
     setIsLoading,
     lastUpdated,
     setLastUpdated,
@@ -60,12 +59,6 @@ export default function JoinOrg() {
   const { user, isLoaded } = useUser();
   const [orgSlug, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   const [org, setOrg] = useState<Organization>();
-
-  const { step, isEditing } = currOnboardingStep;
-  const currStep = 2;
-  const metadata = user?.publicMetadata as any as UserMetadata;
-  const initIsCompleted = metadata.lastOnboardingStepCompleted >= currStep;
-  const [isCompleted, setIsCompleted] = useState<boolean>(initIsCompleted);
   const [createdAt, status]: [Date, Status] = [new Date(), "Pending"];
 
   const handleRequestToJoin = async () => {
@@ -110,29 +103,10 @@ export default function JoinOrg() {
       newOrgMetadata,
       "join"
     )
-      .then((res) => {
+      .then(() => {
         setOrgSlug("");
         setIsLoading(false);
-        setCurrOnboardingStep({ step: 2, isEditing: false });
         setLastUpdated(new Date().toString()); // Triggers Profile.tsx and JoinOrg.tsx to re-render.
-
-        toast({
-          variant: res.success ? "default" : "destructive",
-          title: res.message?.title,
-          description: res.message?.description,
-          action: (
-            <ToastAction
-              altText={res.success ? "Dismiss" : "Try again"}
-              className="flex gap-2"
-              onClick={() => {
-                if (!res.success) handleRequestToJoin();
-              }}
-            >
-              <MdRefresh />
-              Try again
-            </ToastAction>
-          ),
-        });
       })
       .catch((err) => {
         console.error(err);
@@ -173,7 +147,7 @@ export default function JoinOrg() {
       }
     };
 
-    fetchAndSetOrg();
+    if (orgSlug !== "") fetchAndSetOrg();
   }, [orgSlug]);
 
   // Fetch step completion status
@@ -183,22 +157,25 @@ export default function JoinOrg() {
         const res = await getUser(user?.id);
         const userData = JSON.parse(res.data) as User;
         const publicMetadata = userData.publicMetadata as any as UserMetadata;
-        setIsCompleted(publicMetadata.lastOnboardingStepCompleted >= currStep);
+        setHasInvitations(
+          publicMetadata.invitations !== null &&
+            publicMetadata.invitations.length > 0
+        );
       } catch (error) {
         console.error(error);
       }
     };
 
-    if (!isCompleted) fetchUser();
+    fetchUser();
   }, [lastUpdated]);
 
   if (!user || !isLoaded) return;
   return (
     <div className="pt-5">
-      {!isCompleted ||
-      (step === 2 && isEditing) ||
-      !metadata.invitations ||
-      metadata.invitations.length === 0 ? (
+      {hasInvitations ? (
+        // View or edit request to join
+        <ViewOrEditRequestToJoin />
+      ) : (
         // Request to join
         <div className="flex flex-col">
           <div className="flex justify-between gap-5">
@@ -208,7 +185,7 @@ export default function JoinOrg() {
             <Button
               className=""
               onClick={handleRequestToJoin}
-              disabled={orgSlug === "" || orgSearch === ""}
+              disabled={orgSlug === ""}
             >
               Request to join
             </Button>
@@ -216,9 +193,6 @@ export default function JoinOrg() {
 
           {/* TODO: Possibly add a "Skip this step" button with a "link" variant */}
         </div>
-      ) : (
-        // View or edit request to join
-        <ViewOrEditRequestToJoin />
       )}
     </div>
   );
@@ -406,33 +380,37 @@ function NoResults() {
 }
 
 function ViewOrEditRequestToJoin() {
-  const { isLoading, setIsLoading, setCurrOnboardingStep, setLastUpdated } =
+  type InvitationListItem = {
+    organization: Organization;
+    invitation: UserInvitation;
+  };
+
+  const { isLoading, setIsLoading, lastUpdated, setLastUpdated } =
     useOnboardingContext();
   const { user, isLoaded } = useUser();
-  const [orgs, setOrgs] = useState<Organization[]>();
-  const metadata = user?.publicMetadata as any as UserMetadata;
-  const invitations = metadata.invitations;
+  const [invitationItems, setInvitationItems] =
+    useState<InvitationListItem[]>();
 
   function findOrg(orgId: string) {
-    if (!orgs) return undefined;
-    for (const org of orgs) {
-      if (org.id === orgId) return org;
+    if (!invitationItems) return undefined;
+    for (const item of invitationItems) {
+      if (item.organization.id === orgId) return item.organization;
     }
     return undefined;
   }
 
-  const handleCancelRequestToJoin = async (targetOrgId: string) => {
+  async function handleCancelRequestToJoin(targetOrgId: string) {
     if (!user) return;
 
     const userMetadata = user.publicMetadata as any as UserMetadata;
     const orgMetadata = findOrg(targetOrgId)
       ?.publicMetadata as any as OrganizationMetadata;
 
-    // const updatedUserInvitations = userMetadata.invitations
-    //   ? userMetadata.invitations?.filter(
-    //       (invitation) => invitation.organizationId !== targetOrgId
-    //     )
-    //   : null;
+    const updatedUserInvitations = userMetadata.invitations
+      ? userMetadata.invitations?.filter(
+          (invitation) => invitation.organizationId !== targetOrgId
+        )
+      : null;
 
     const updatedOrgInvitations = orgMetadata.invitations
       ? orgMetadata.invitations?.filter(
@@ -443,7 +421,7 @@ function ViewOrEditRequestToJoin() {
     const newUserMetadata: UserMetadata = {
       ...userMetadata,
       lastOnboardingStepCompleted: 1,
-      invitations: null,
+      invitations: updatedUserInvitations,
     };
 
     const newOrgMetadata: OrganizationMetadata = {
@@ -460,28 +438,9 @@ function ViewOrEditRequestToJoin() {
       newOrgMetadata,
       "cancel"
     )
-      .then((res) => {
+      .then(() => {
         setIsLoading(false);
-        setCurrOnboardingStep({ step: 2, isEditing: true }); // TODO: Do we need this?
         setLastUpdated(new Date().toString()); // Triggers Profile.tsx and JoinOrg.tsx to re-render.
-
-        toast({
-          variant: res.success ? "default" : "destructive",
-          title: res.message?.title,
-          description: res.message?.description,
-          action: (
-            <ToastAction
-              altText={res.success ? "Dismiss" : "Try again"}
-              className="flex gap-2"
-              onClick={() => {
-                if (!res.success) handleCancelRequestToJoin(targetOrgId);
-              }}
-            >
-              <MdRefresh />
-              Try again
-            </ToastAction>
-          ),
-        });
       })
       .catch((err) => {
         console.error(err);
@@ -504,22 +463,28 @@ function ViewOrEditRequestToJoin() {
           ),
         });
       });
-  };
+  }
 
   // Fetch organization info for invitations
   useEffect(() => {
     const fetchAndSetOrgs = async () => {
+      const metadata = user?.publicMetadata as any as UserMetadata;
+      const invitations = metadata.invitations;
+
       setIsLoading(true);
-      if (!invitations) return;
+      if (!invitations) {
+        setIsLoading(false);
+        return;
+      }
       try {
-        const result = [];
+        const result: InvitationListItem[] = [];
         for (const invitation of invitations) {
           const res = await getOrganizationById(invitation.organizationId);
-          const org = JSON.parse(res.data) as Organization;
-          result.push(org);
+          const organization = JSON.parse(res.data) as Organization;
+          result.push({ organization, invitation });
         }
 
-        setOrgs(result);
+        setInvitationItems(result);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -528,39 +493,40 @@ function ViewOrEditRequestToJoin() {
     };
 
     fetchAndSetOrgs();
-  }, []);
+  }, [lastUpdated]);
 
   if (!user || !isLoaded) return;
   return (
     <div className="flex flex-col">
       {/* TODO: Add a loading UI for table  */}
-      {(!orgs || !invitations) && <>Loading...</>}
-      {orgs && invitations && (
+      {isLoading ? (
+        <>Loading...</>
+      ) : invitationItems ? (
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="text-center">Organization</TableHead>
-              <TableHead>Request sent</TableHead>
+              <TableHead className="text-center">Request sent</TableHead>
               <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invitations?.map((invitation, i) => (
+            {invitationItems?.map((item, i) => (
               <TableRow key={i}>
                 <TableCell className="text-center font-medium">
-                  {findOrg(invitation.organizationId)?.name}
+                  {findOrg(item.invitation.organizationId)?.name}
                 </TableCell>
                 <TableCell>
                   {formatRelative(
-                    new Date(invitation.createdAt),
+                    new Date(item.invitation.createdAt),
                     new Date()
                     // , { locale: es } // TODO: Add locale functionality
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className={invitation.status.toLowerCase()}>
-                    {invitation.status}
+                  <span className={item.invitation.status.toLowerCase()}>
+                    {item.invitation.status}
                   </span>
                 </TableCell>
                 <TableCell className="text-center">
@@ -569,7 +535,7 @@ function ViewOrEditRequestToJoin() {
                     size="icon"
                     className="rounded-full"
                     onClick={() => {
-                      handleCancelRequestToJoin(invitation.organizationId);
+                      handleCancelRequestToJoin(item.invitation.organizationId);
                     }}
                     disabled={isLoading}
                   >
@@ -580,6 +546,8 @@ function ViewOrEditRequestToJoin() {
             ))}
           </TableBody>
         </Table>
+      ) : (
+        <>error loading invitations</>
       )}
     </div>
   );

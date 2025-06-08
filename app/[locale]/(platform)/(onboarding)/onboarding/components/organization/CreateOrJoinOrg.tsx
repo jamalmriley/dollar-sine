@@ -16,7 +16,8 @@ import CreateOrg from "./CreateOrg";
 import JoinOrg from "./JoinOrg";
 
 export default function CreateOrJoinOrg() {
-  const { currOnboardingStep, setCurrOnboardingStep } = useOnboardingContext();
+  const { currOnboardingStep, setCurrOnboardingStep, hasInvitations } =
+    useOnboardingContext();
   const { user, isLoaded } = useUser();
   const userMetadata = user?.publicMetadata as any as UserMetadata;
 
@@ -84,8 +85,10 @@ export default function CreateOrJoinOrg() {
         </CardHeader>
         <CardContent>
           <Tabs value={tab} onValueChange={setTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="create">Create</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 select-none">
+              <TabsTrigger value="create" disabled={hasInvitations}>
+                Create
+              </TabsTrigger>
               <TabsTrigger value="join">Join</TabsTrigger>
             </TabsList>
             <TabsContent value="create">

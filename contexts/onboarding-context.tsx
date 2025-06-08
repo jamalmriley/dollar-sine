@@ -37,6 +37,8 @@ type OnboardingContext = {
   setOrganizationId: React.Dispatch<React.SetStateAction<string | undefined>>;
   orgSearch: string;
   setOrgSearch: React.Dispatch<React.SetStateAction<string>>;
+  hasInvitations: boolean;
+  setHasInvitations: React.Dispatch<React.SetStateAction<boolean>>;
   courses: CourseData[];
   setCourses: React.Dispatch<React.SetStateAction<CourseData[]>>;
   lastUpdated: string;
@@ -77,6 +79,8 @@ export default function OnboardingContextProvider({
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
   const [organizationId, setOrganizationId] = useState<string | undefined>();
   const [orgSearch, setOrgSearch] = useState<string>("");
+  const [hasInvitations, setHasInvitations] = useState<boolean>(false);
+
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -122,6 +126,8 @@ export default function OnboardingContextProvider({
         setOrganizationId,
         orgSearch,
         setOrgSearch,
+        hasInvitations,
+        setHasInvitations,
         courses,
         setCourses,
         lastUpdated,
