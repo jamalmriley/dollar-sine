@@ -5,7 +5,7 @@ import HighFive from "@/assets/svg/undraw_high-five_w86k.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { IOS_APP_LINK } from "@/utils/app";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import { MdComputer, MdSmartphone } from "react-icons/md";
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
@@ -41,7 +41,7 @@ export default function AdminOnboardingComplete() {
     defaultValue: "",
   });
 
-  let selectedCourses: SelectedCourse[];
+  let activeCourses: SelectedCourse[];
 
   useEffect(() => {
     const formatConfirmationCode = (code: string): string => {
@@ -69,7 +69,7 @@ export default function AdminOnboardingComplete() {
 
       if (paymentIntentDetails) {
         const metadata = paymentIntentDetails.metadata;
-        selectedCourses = JSON.parse(
+        activeCourses = JSON.parse(
           metadata.courses
         ) as any as SelectedCourse[];
         setTransactionTotal(paymentIntentDetails.amount);
@@ -111,7 +111,7 @@ export default function AdminOnboardingComplete() {
         hasCustomPronouns,
         emojiSkinTone,
         organizations,
-        courses: selectedCourses,
+        courses: activeCourses,
         classes,
         invitations,
       };
@@ -126,7 +126,7 @@ export default function AdminOnboardingComplete() {
             organization.publicMetadata as any as OrganizationMetadata;
           const newOrgMetadata: OrganizationMetadata = {
             ...orgMetadata,
-            courses: selectedCourses,
+            courses: activeCourses,
           };
 
           updateOrganization(orgId, newOrgMetadata).then((res) => {

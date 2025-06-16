@@ -29,7 +29,7 @@ import { getStandard } from "@/data/standards";
 import { ChevronDown } from "lucide-react";
 import { FaPlay } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import Link from "next/link";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";

@@ -6,7 +6,7 @@ import CourseTile from "@/components/CourseTile";
 import { Skeleton } from "@/components/ui/skeleton";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

@@ -1,4 +1,4 @@
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import Link from "next/link";

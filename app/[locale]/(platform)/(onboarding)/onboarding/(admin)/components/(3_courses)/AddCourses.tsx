@@ -4,15 +4,14 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import CourseCard, { CourseCardSkeleton } from "./CourseCard";
+import { CourseCard, CourseCardSkeleton } from "./CourseCard";
 import NoCourses from "./NoCourses";
 import { useMediaQuery } from "usehooks-ts";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { CourseData } from "@/types/course";
+import { Course } from "@/types/course";
 import { getCourses } from "@/app/actions/onboarding";
 
 export default function AddCourses() {
@@ -22,6 +21,7 @@ export default function AddCourses() {
   };
 
   const {
+    activeCourse,
     courses,
     setCourses,
     isLoading,
@@ -37,7 +37,7 @@ export default function AddCourses() {
       setIsLoading(true);
       try {
         const res = await getCourses();
-        const courseData = JSON.parse(res.data) as CourseData[];
+        const courseData = JSON.parse(res.data) as Course[];
         setCourses(courseData);
         setIsLoading(false);
         setHasViewed(true);
@@ -52,7 +52,10 @@ export default function AddCourses() {
   return (
     <Card className="w-full h-full max-w-3xl mx-10">
       <CardHeader>
-        <CardTitle className="h2">{header.title}</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="h2">{header.title}</CardTitle>
+          <PaymentWindow />
+        </div>
         {header.description !== "" && (
           <CardDescription className="subtitle">
             {header.description}
@@ -68,16 +71,31 @@ export default function AddCourses() {
          */}
         {!isLoading ? (
           courses.length ? (
-            courses.map((course) => (
-              <CourseCard
-                key={course.id}
-                id={course.id}
-                title={course.title}
-                description={course.description}
-                pricing={course.pricing}
-                imageUrl={course.imageUrl}
-              />
-            ))
+            !activeCourse ? (
+              courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  id={course.id}
+                  title={course.title}
+                  description={course.description}
+                  pricing={course.pricing}
+                  imageUrl={course.imageUrl}
+                />
+              ))
+            ) : (
+              courses
+                .filter((course) => course.id === activeCourse.id)
+                .map((course) => (
+                  <CourseCard
+                    key={course.id}
+                    id={course.id}
+                    title={course.title}
+                    description={course.description}
+                    pricing={course.pricing}
+                    imageUrl={course.imageUrl}
+                  />
+                ))
+            )
           ) : (
             <NoCourses />
           )
@@ -93,10 +111,6 @@ export default function AddCourses() {
           </>
         )}
       </CardContent>
-
-      <CardFooter>
-        <PaymentWindow />
-      </CardFooter>
     </Card>
   );
 }

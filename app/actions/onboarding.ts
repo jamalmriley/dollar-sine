@@ -2,7 +2,7 @@
 
 import { clerkClient } from "@clerk/nextjs/server";
 import { GoogleGenAI } from "@google/genai";
-import { CourseData } from "@/types/course";
+import { Course } from "@/types/course";
 import { Response } from "@/types/general";
 import {
   AdminMetadata,
@@ -425,12 +425,12 @@ export async function getCourses(): Promise<Response> {
     // where("publishDate", ">=", new Date()) // TODO
   );
 
-  const result: CourseData[] = [];
+  const result: Course[] = [];
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-    const data = doc.data() as CourseData;
+    const data = doc.data() as Course;
     result.push(data);
   });
 

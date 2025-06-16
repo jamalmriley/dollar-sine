@@ -12,7 +12,7 @@ export interface Pricing {
   };
 }
 
-export interface CourseData {
+export interface Course {
   description: string;
   id: string;
   imageUrl: string;

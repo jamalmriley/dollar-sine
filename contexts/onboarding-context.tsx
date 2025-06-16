@@ -1,6 +1,6 @@
 "use client";
 
-import { CourseData } from "@/types/course";
+import { SelectedCourse, Course } from "@/types/course";
 import { createContext, useContext, useState } from "react";
 
 type OnboardingStep = {
@@ -39,8 +39,12 @@ type OnboardingContext = {
   setOrgSearch: React.Dispatch<React.SetStateAction<string>>;
   hasInvitations: boolean;
   setHasInvitations: React.Dispatch<React.SetStateAction<boolean>>;
-  courses: CourseData[];
-  setCourses: React.Dispatch<React.SetStateAction<CourseData[]>>;
+  courses: Course[];
+  setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+  activeCourse: SelectedCourse | undefined;
+  setActiveCourse: React.Dispatch<
+    React.SetStateAction<SelectedCourse | undefined>
+  >;
   lastUpdated: string;
   setLastUpdated: React.Dispatch<React.SetStateAction<string>>;
   isLoading: boolean;
@@ -81,7 +85,8 @@ export default function OnboardingContextProvider({
   const [orgSearch, setOrgSearch] = useState<string>("");
   const [hasInvitations, setHasInvitations] = useState<boolean>(false);
 
-  const [courses, setCourses] = useState<CourseData[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [activeCourse, setActiveCourse] = useState<SelectedCourse>();
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -130,6 +135,8 @@ export default function OnboardingContextProvider({
         setHasInvitations,
         courses,
         setCourses,
+        activeCourse,
+        setActiveCourse,
         lastUpdated,
         setLastUpdated,
         isLoading,

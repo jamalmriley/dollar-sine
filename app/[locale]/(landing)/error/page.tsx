@@ -1,4 +1,4 @@
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import { setTitle } from "@/utils/ui";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { Metadata } from "next";

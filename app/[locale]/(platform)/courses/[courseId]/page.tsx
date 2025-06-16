@@ -32,7 +32,7 @@ import { Metadata } from "next";
 import { setTitle } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 

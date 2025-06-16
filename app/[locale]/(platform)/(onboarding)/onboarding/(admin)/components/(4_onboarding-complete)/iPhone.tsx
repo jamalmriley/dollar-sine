@@ -1,6 +1,6 @@
 // import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { NotificationDemo } from "./NotificationDemo";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import Link from "next/link";
 import { IOS_APP_LINK } from "@/utils/app";
 import { MdComputer, MdSmartphone } from "react-icons/md";

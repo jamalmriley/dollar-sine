@@ -7,8 +7,8 @@ import { CiBullhorn } from "react-icons/ci";
 import { useTranslation } from "react-i18next";
 import { SignedIn } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-import StyledButton from "./StyledButton";
 import Link from "next/link";
+import { StyledButton } from "@/components/StyledButtons";
 
 export default function Banner({
   requiresSignIn,
@@ -145,7 +145,7 @@ export default function Banner({
                   onClick={async () => {
                     await buttonAction();
                   }}
-                  className={`border ${bgTailwindProps} ${text2TailwindProps} ${borderTailwindProps} text-xs md:text-sm`}
+                  // className={`border ${bgTailwindProps} ${text2TailwindProps} ${borderTailwindProps} text-xs md:text-sm`}
                 >
                   {t(buttonText)}
                 </StyledButton>

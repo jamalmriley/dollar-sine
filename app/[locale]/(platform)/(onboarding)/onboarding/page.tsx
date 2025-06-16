@@ -7,7 +7,7 @@ import OnboardingContextProvider from "@/contexts/onboarding-context";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import { UserMetadata } from "@/types/user";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import GeneralErrorLogo from "@/assets/images/logos/dollar_sine/ds_logo_error_general.png";
 import Image from "next/image";
 import LoadingIndicator from "@/components/LoadingIndicator";

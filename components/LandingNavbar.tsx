@@ -20,7 +20,7 @@ import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
 import { FullLogo, SquareLogo } from "@/components/Logo";
 import StyledUserButton from "./StyledUserButton";
-import StyledButton from "./StyledButton";
+import { StyledButton } from "./StyledButtons";
 
 export default function LandingNavbar() {
   const { t } = useTranslation();
@@ -95,7 +95,7 @@ export default function LandingNavbar() {
           <div className="md:hidden">
             <Drawer closeThreshold={0.5} direction="bottom">
               <DrawerTrigger asChild>
-                <StyledButton variant="outline" size="icon">
+                <StyledButton size="icon">
                   <IoMenu className="size-9" />
                   <span className="sr-only">Toggle menu</span>
                 </StyledButton>

@@ -20,7 +20,7 @@ import initTranslations from "@/app/i18n";
 import { setTitle } from "@/utils/ui";
 import { Metadata } from "next";
 import TranslationsProvider from "@/components/ui/translations-provider";
-import StyledButton from "@/components/StyledButton";
+import { StyledButton } from "@/components/StyledButtons";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = setTitle("My Courses");

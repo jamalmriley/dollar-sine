@@ -33,6 +33,7 @@ import { SELECTED_COURSE_SCHEMA } from "@/types/course";
 import { createPaymentIntent } from "@/app/actions/payment";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { MdError } from "react-icons/md";
+import { LuShoppingBasket } from "react-icons/lu";
 
 // Calling `loadStripe` outside of a component’s render avoids recreating the `Stripe` object on every render.
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
@@ -74,15 +75,15 @@ export function PaymentWindow() {
   const { courses } = useOnboardingContext();
   const [open, setOpen] = useState<boolean>(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [selectedCourses] = useQueryState(
+  const [coursesToBuy] = useQueryState(
     "courses",
     parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
 
   const isPlansSelected = (): boolean => {
-    if (!selectedCourses) return false;
+    if (!coursesToBuy) return false;
 
-    for (const course of selectedCourses) {
+    for (const course of coursesToBuy) {
       const plan = course.plan;
       if (!plan) return false;
     }
@@ -93,15 +94,13 @@ export function PaymentWindow() {
   const discountAmt = 0;
   const taxRate = 0.1;
   const taxAmt =
-    taxRate * (getTotalAmount(selectedCourses, courses) - discountAmt);
+    taxRate * (getTotalAmount(coursesToBuy, courses) - discountAmt);
   const grandTotal =
-    getTotalAmount(selectedCourses, courses) - discountAmt + taxAmt;
+    getTotalAmount(coursesToBuy, courses) - discountAmt + taxAmt;
 
-  const buyCourseTitle: string = selectedCourses
+  const buyCourseTitle: string = coursesToBuy
     ? `Buy ${
-        selectedCourses.length === 1
-          ? "course"
-          : `${selectedCourses.length} courses`
+        coursesToBuy.length === 1 ? "course" : `${coursesToBuy.length} courses`
       }`
     : "Buy";
   const buyCourseDesc: string =
@@ -114,14 +113,22 @@ export function PaymentWindow() {
       direction={isDesktop ? "right" : "bottom"}
     >
       <DrawerTrigger asChild>
-        {selectedCourses && (
+        <div className="relative">
           <Button
-            className="w-[420px] md:w-[600px] mx-auto"
-            disabled={selectedCourses.length === 0 || !isPlansSelected()}
+            variant="ghost"
+            size="icon"
+            className={`rounded-full size-5 lg:size-6 ${!coursesToBuy && "disabled:pointer-events-auto select-none"}`}
+            disabled={!coursesToBuy}
           >
-            {buyCourseTitle}
+            <span className="sr-only">Shopping cart</span>
+            <LuShoppingBasket />
           </Button>
-        )}
+          {coursesToBuy && (
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center size-4 text-2xs font-bold text-black bg-selective-yellow-300 rounded-full translate-x-1/2 -translate-y-1/2">
+              {coursesToBuy.length}
+            </span>
+          )}
+        </div>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
