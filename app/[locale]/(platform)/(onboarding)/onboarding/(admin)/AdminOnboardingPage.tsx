@@ -2,7 +2,7 @@
 
 import OnboardingCarousel from "../components/OnboardingCarousel";
 import Profile from "../components/profile/Profile";
-import AddCourses from "./components/(3_courses)/AddCourses";
+import AddCourses from "../components/courses/AddCourses";
 import FinishProfile from "../components/profile/FinishProfile";
 import ProfileAlreadyCreated from "../components/profile/ProfileAlreadyCreated";
 import CreateOrJoinOrg from "../components/organization/CreateOrJoinOrg";

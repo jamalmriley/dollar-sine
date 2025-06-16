@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -35,6 +34,7 @@ import {
 import { Response } from "@/types/general";
 import { User } from "@clerk/nextjs/server";
 import OrgAlreadyCreated from "./OrgAlreadyCreated";
+import { StyledButton } from "@/components/StyledButtons";
 
 export default function CreateOrg() {
   const { user, isLoaded } = useUser();
@@ -65,7 +65,7 @@ export default function CreateOrg() {
   return (
     <>
       {!isCompleted || (step === 2 && isEditing) ? (
-        <CreateOrgComponent />
+        <CreateOrgForm />
       ) : (
         <OrgAlreadyCreated />
       )}
@@ -73,7 +73,7 @@ export default function CreateOrg() {
   );
 }
 
-function CreateOrgComponent() {
+function CreateOrgForm() {
   const {
     currOnboardingStep,
     setCurrOnboardingStep,
@@ -220,10 +220,11 @@ function CreateOrgComponent() {
             setLastUpdated(new Date().toString()); // Triggers Organization.tsx and OrgAlreadyCreated.tsx to re-render.
             setOrgName("");
             setOrgSlug("");
-            setOrgAddress("");
             setOrgCategory("");
-            setOrgLogo(undefined);
+            setIsCustomOrgCategory(false);
+            setOrgAddress("");
             setIsTeacherPurchasingEnabled(false);
+            setOrgLogo(undefined);
             setCurrOnboardingStep({ step: 2, isEditing: false });
 
             toast({
@@ -464,7 +465,7 @@ function CreateOrgComponent() {
       </div>
 
       <div className="flex grow items-end">
-        <Button
+        <StyledButton
           type="submit"
           className={`w-full ${
             isLoading &&
@@ -490,7 +491,7 @@ function CreateOrgComponent() {
             : isLoading
               ? "Creating organization..."
               : "Create organization"}
-        </Button>
+        </StyledButton>
       </div>
     </form>
   );

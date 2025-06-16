@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { PaymentWindow } from "./PaymentWindow";
 import {
   Card,
   CardContent,
@@ -7,12 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CourseCard, CourseCardSkeleton } from "./CourseCard";
-import NoCourses from "./NoCourses";
 import { useMediaQuery } from "usehooks-ts";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { Course } from "@/types/course";
 import { getCourses } from "@/app/actions/onboarding";
+import { PaymentWindow } from "./PaymentWindow";
+import { CourseCard, CourseCardSkeleton } from "./CourseCard";
+import NoCourses from "./NoCourses";
 
 export default function AddCourses() {
   const header = {
@@ -50,7 +50,8 @@ export default function AddCourses() {
   }, [currOnboardingStep.step, lastUpdated]);
 
   return (
-    <Card className="w-full h-full max-w-3xl mx-10">
+    // <Card className="w-full h-fit max-w-2xl mx-10">
+    <Card className="h-fit max-w-2xl mx-10">
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="h2">{header.title}</CardTitle>

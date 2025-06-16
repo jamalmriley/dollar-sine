@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { StyledDropdownButton } from "@/components/StyledButtons";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -87,19 +87,18 @@ export default function DisplayName() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
+              <StyledDropdownButton
                 className={`max-w-40 ${
                   displayNameFormat === ""
                     ? "text-muted-foreground"
                     : displayNameFormat === "First Initial & Last Name" ||
-                      displayNameFormat === "First Name & Last Initial"
-                    ? "text-xs"
-                    : ""
+                        displayNameFormat === "First Name & Last Initial"
+                      ? "text-xs"
+                      : ""
                 }`}
               >
                 {displayNameFormat || "Choose"}
-              </Button>
+              </StyledDropdownButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>Display Name Format</DropdownMenuLabel>

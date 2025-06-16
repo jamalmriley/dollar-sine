@@ -6,13 +6,6 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { OrgCard, OrgCardError, OrgCardSkeleton } from "./OrgCard";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { getOrganizationById } from "@/app/actions/onboarding";
 import { Organization } from "@clerk/nextjs/server";
 
@@ -58,42 +51,28 @@ export default function OrgAlreadyCreated() {
 
   if (!user || !isLoaded || !orgId) return;
   return (
-    <Card className="w-full h-full mx-10 max-w-lg">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="h2">{header.title}</CardTitle>
-        </div>
-        {header.description !== "" && (
-          <CardDescription className="subtitle">
-            {header.description}
-          </CardDescription>
-        )}
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
-          {isLoading ? (
-            <OrgCardSkeleton toggle={toggle} />
-          ) : org ? (
-            <OrgCard toggle={toggle} org={org} />
-          ) : (
-            <OrgCardError toggle={toggle} />
-          )}
+    <div className="w-full h-full max-w-lg flex flex-col border border-default-color rounded-lg overflow-hidden">
+      {isLoading ? (
+        <OrgCardSkeleton toggle={toggle} />
+      ) : org ? (
+        <OrgCard toggle={toggle} org={org} />
+      ) : (
+        <OrgCardError toggle={toggle} />
+      )}
 
-          <Button
-            variant="ghost"
-            className="bg-primary-foreground rounded-none border-t border-default-color"
-            onClick={() => setToggle((prev) => !prev)}
-          >
-            <span className="sr-only">
-              {toggle
-                ? "Show less organization details"
-                : "Show more organization details"}
-            </span>
-            {toggle ? <FaChevronUp /> : <FaChevronDown />}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      <Button
+        variant="ghost"
+        className="bg-primary-foreground rounded-none border-t border-default-color"
+        onClick={() => setToggle((prev) => !prev)}
+      >
+        <span className="sr-only">
+          {toggle
+            ? "Show less organization details"
+            : "Show more organization details"}
+        </span>
+        {toggle ? <FaChevronUp /> : <FaChevronDown />}
+      </Button>
+    </div>
   );
 }
 /*

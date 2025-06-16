@@ -53,7 +53,7 @@ export default function ProfileAlreadyCreated() {
   if (!isSignedIn || !isLoaded) return;
   return (
     <div className="size-full flex justify-center">
-      <Card className="mx-10 max-w-lg">
+      <Card className="h-fit max-w-lg mx-10">
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle className="h2">{header.title}</CardTitle>

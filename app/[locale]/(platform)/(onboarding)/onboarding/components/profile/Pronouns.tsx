@@ -1,5 +1,6 @@
 "use client";
 
+import { StyledButton, StyledDropdownButton } from "@/components/StyledButtons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -229,12 +230,11 @@ export default function Pronouns() {
         {/* To activate the Dialog component from within a Dropdown Menu, you must encase the Dropdown Menu component in the Dialog component. */}
         <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
+            <StyledDropdownButton
               className={pronouns === "" ? "text-muted-foreground" : ""}
             >
               {pronouns !== "" ? pronouns : "Choose"}
-            </Button>
+            </StyledDropdownButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {/* Custom Pronoun (if added) */}
@@ -435,7 +435,7 @@ export default function Pronouns() {
           </form>
           <DialogFooter>
             <DialogClose asChild>
-              <Button
+              <StyledButton
                 type="submit"
                 className="w-full"
                 onClick={() => {
@@ -458,7 +458,7 @@ export default function Pronouns() {
                 }
               >
                 Done
-              </Button>
+              </StyledButton>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

@@ -8,8 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { StyledDropdownIconButton } from "./StyledButtons";
 
 export default function ModeToggle() {
   const { setTheme } = useTheme();
@@ -18,22 +18,11 @@ export default function ModeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="relative inline-block group border-0"
-        >
-          {/* Back */}
-          <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 group-hover:-translate-x-0 group-hover:-translate-y-0 rounded-md bg-black/75 dark:bg-emerald-400" />
-          {/* Front */}
-          <span className="absolute inset-0 w-full h-full rounded-md border border-default-color bg-primary-foreground group-hover:bg-emerald-100 group-hover:border-emerald-950" />
-          {/* Text */}
-          <span className="relative group-hover:text-emerald-950">
-            <Sun className="size-5 mx-auto rotate-0 scale-100 transition-all dark:-rotate-90 dark:hidden" />
-            <Moon className="size-5 mx-auto rotate-90 hidden transition-all dark:rotate-0 dark:block" />
-            <span className="sr-only">Toggle theme</span>
-          </span>
-        </Button>
+        <StyledDropdownIconButton>
+          <Sun className="size-5 mx-auto rotate-0 scale-100 transition-all dark:-rotate-90 dark:hidden" />
+          <Moon className="size-5 mx-auto rotate-90 hidden transition-all dark:rotate-0 dark:block" />
+          <span className="sr-only">Toggle theme</span>
+        </StyledDropdownIconButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>

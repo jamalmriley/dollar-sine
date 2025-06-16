@@ -3,10 +3,10 @@
 import OnboardingCarousel from "../components/OnboardingCarousel";
 import Profile from "../components/profile/Profile";
 import CreateOrJoinOrg from "../components/organization/CreateOrJoinOrg";
-import AddCourses from "./components/(3_courses)/AddCourses";
 import FinishProfile from "../components/profile/FinishProfile";
 import ProfileAlreadyCreated from "../components/profile/ProfileAlreadyCreated";
 import { Prompt } from "@/types/general";
+import AddCourses from "../components/courses/AddCourses";
 
 export default function TeacherOnboardingPage() {
   const prompts: Prompt[] = [

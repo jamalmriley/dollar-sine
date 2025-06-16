@@ -29,6 +29,7 @@ import { FaTrashCan } from "react-icons/fa6";
 import { Loader2Icon } from "lucide-react";
 import { IoIosSend } from "react-icons/io";
 import { OrgSearch } from "./OrgSearch";
+import { StyledButton } from "@/components/StyledButtons";
 
 export default function JoinOrg() {
   const { hasInvitations, setHasInvitations } = useOnboardingContext();
@@ -55,9 +56,7 @@ export default function JoinOrg() {
 
   if (!user || !isLoaded) return;
   return (
-    <div className="pt-5">
-      {hasInvitations ? <ViewOrEditRequestToJoin /> : <RequestToJoin />}
-    </div>
+    <>{hasInvitations ? <ViewOrEditRequestToJoin /> : <RequestToJoin />}</>
   );
 }
 
@@ -131,13 +130,13 @@ function RequestToJoin() {
         <span className="w-64">
           <OrgSearch />
         </span>
-        <Button
+        <StyledButton
           onClick={() => handleRequestToJoin(orgSlug)}
           disabled={orgSlug === "" || isLoading}
         >
           {isLoading ? <Loader2Icon className="animate-spin" /> : <IoIosSend />}
           Request to join
-        </Button>
+        </StyledButton>
       </div>
 
       {/* TODO: Possibly add a "Skip this step" button with a "link" variant */}

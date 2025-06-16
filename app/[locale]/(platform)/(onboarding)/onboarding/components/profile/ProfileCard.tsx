@@ -98,11 +98,13 @@ export function ProfileCard({
         <div className="flex grow flex-col justify-between">
           {/* User Basic Details */}
           <div className="flex flex-col">
-            <div className="w-full flex justify-between items-center">
-              <span className="text-lg font-bold">
-                {metadata.displayName}{" "}
-                {EMOJIS.handWave[metadata.emojiSkinTone as EmojiSkinTone]}
-              </span>
+            <div className="w-full flex justify-between items-center text-lg font-bold">
+              <div className="flex gap-1.5">
+                <span>{metadata.displayName}</span>
+                <span className="hover:animate-hover-tada">
+                  {EMOJIS.handWave[metadata.emojiSkinTone as EmojiSkinTone]}
+                </span>
+              </div>
 
               <Button
                 variant="ghost"

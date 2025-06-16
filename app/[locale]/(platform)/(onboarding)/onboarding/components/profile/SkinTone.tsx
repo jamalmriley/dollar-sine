@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { StyledDropdownIconButton } from "@/components/StyledButtons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,11 +52,11 @@ export default function SkinTone() {
       {/* Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">
+          <StyledDropdownIconButton>
             {emojiSkinTone
               ? findSkinTone(emojiSkinTone).icon
               : skinTones[0].icon}
-          </Button>
+          </StyledDropdownIconButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {skinTones.map((obj, i) => (
