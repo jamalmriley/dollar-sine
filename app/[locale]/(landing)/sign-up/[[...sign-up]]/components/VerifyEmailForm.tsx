@@ -91,7 +91,7 @@ export default function VerifyEmailForm() {
                 pronunciation: "",
                 currPronunciationOptions: pronunciationOptions || [],
                 prevPronunciationOptions: [],
-                isOnboardingCompleted: false,
+                isOnboardingComplete: false,
                 lastOnboardingStepCompleted: 0,
                 onboardingLink: "/onboarding",
                 pronouns: "",
@@ -117,7 +117,7 @@ export default function VerifyEmailForm() {
                   break;
               }
 
-              fetch("/api/resend/send", { method: "POST" });
+              fetch("/api/resend/new-user", { method: "POST" });
               updateUserMetadata(userId, metadata);
             })
             .catch(() => {

@@ -101,7 +101,7 @@ export interface UserMetadata {
   pronunciation: string | null;
   currPronunciationOptions: string[];
   prevPronunciationOptions: string[];
-  isOnboardingCompleted: boolean;
+  isOnboardingComplete: boolean;
   lastOnboardingStepCompleted: number;
   onboardingLink: string;
   pronouns: string;
@@ -179,7 +179,7 @@ abstract class User implements HasMetdataMethods {
     protected pronunciation: string | null,
     protected currPronunciationOptions: string[],
     protected prevPronunciationOptions: string[],
-    protected isOnboardingCompleted: boolean,
+    protected isOnboardingComplete: boolean,
     protected lastOnboardingStepCompleted: number,
     protected onboardingLink: string,
     protected pronouns: string,
@@ -207,7 +207,7 @@ class Admin extends User {
     pronunciation: string | null,
     currPronunciationOptions: string[],
     prevPronunciationOptions: string[],
-    isOnboardingCompleted: boolean,
+    isOnboardingComplete: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
@@ -227,7 +227,7 @@ class Admin extends User {
       pronunciation,
       currPronunciationOptions,
       prevPronunciationOptions,
-      isOnboardingCompleted,
+      isOnboardingComplete,
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
@@ -254,7 +254,7 @@ class Teacher extends User {
     pronunciation: string | null,
     currPronunciationOptions: string[],
     prevPronunciationOptions: string[],
-    isOnboardingCompleted: boolean,
+    isOnboardingComplete: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
@@ -274,7 +274,7 @@ class Teacher extends User {
       pronunciation,
       currPronunciationOptions,
       prevPronunciationOptions,
-      isOnboardingCompleted,
+      isOnboardingComplete,
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
@@ -301,7 +301,7 @@ class Guardian extends User {
     pronunciation: string | null,
     currPronunciationOptions: string[],
     prevPronunciationOptions: string[],
-    isOnboardingCompleted: boolean,
+    isOnboardingComplete: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
@@ -317,7 +317,7 @@ class Guardian extends User {
       pronunciation,
       currPronunciationOptions,
       prevPronunciationOptions,
-      isOnboardingCompleted,
+      isOnboardingComplete,
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,
@@ -344,7 +344,7 @@ class Student extends User {
     pronunciation: string,
     currPronunciationOptions: string[],
     prevPronunciationOptions: string[],
-    isOnboardingCompleted: boolean,
+    isOnboardingComplete: boolean,
     lastOnboardingStepCompleted: number,
     onboardingLink: string,
     pronouns: string,
@@ -374,7 +374,7 @@ class Student extends User {
       pronunciation,
       currPronunciationOptions,
       prevPronunciationOptions,
-      isOnboardingCompleted,
+      isOnboardingComplete,
       lastOnboardingStepCompleted,
       onboardingLink,
       pronouns,

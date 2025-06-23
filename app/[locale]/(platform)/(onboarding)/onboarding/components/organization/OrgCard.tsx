@@ -11,6 +11,7 @@ import { BsBuildingExclamation } from "react-icons/bs";
 import { IoMdLink } from "react-icons/io";
 import { MdEdit, MdError } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa6";
+import { StyledDestructiveButton } from "@/components/StyledButtons";
 
 export function OrgCard({
   toggle,
@@ -241,16 +242,13 @@ export function OrgCardError({ toggle }: { toggle: boolean }) {
               </span>
             </div>
 
-            <Button
-              size="sm"
-              variant="destructive"
+            <StyledDestructiveButton
               onClick={() => {
-                const value = new Date().toString();
-                setLastUpdated(value);
+                setLastUpdated(new Date().toString());
               }}
             >
               Try again
-            </Button>
+            </StyledDestructiveButton>
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
 import Pronunciation from "./Pronunciation";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledActionButton } from "@/components/StyledButtons";
 
 export default function FinishProfile() {
   const {
@@ -147,7 +147,7 @@ export default function FinishProfile() {
       pronunciation,
       currPronunciationOptions: metadata.currPronunciationOptions,
       prevPronunciationOptions: metadata.prevPronunciationOptions,
-      isOnboardingCompleted: false,
+      isOnboardingComplete: false,
       lastOnboardingStepCompleted: Math.max(
         1,
         metadata.lastOnboardingStepCompleted
@@ -288,7 +288,7 @@ export default function FinishProfile() {
             </div>
 
             <div className="flex grow items-end">
-              <StyledButton
+              <StyledActionButton
                 type="submit"
                 className={`w-full ${
                   isLoading &&
@@ -314,7 +314,7 @@ export default function FinishProfile() {
                   : isLoading
                     ? "Updating your profile..."
                     : "Finish your profile"}
-              </StyledButton>
+              </StyledActionButton>
             </div>
           </form>
         </CardContent>

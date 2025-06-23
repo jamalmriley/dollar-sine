@@ -1,7 +1,3 @@
-import StudentOnboardingPage from "./(student)/StudentOnboardingPage";
-import GuardianOnboardingPage from "./(guardian)/GuardianOnboardingPage";
-import TeacherOnboardingPage from "./(teacher)/TeacherOnboardingPage";
-import AdminOnboardingPage from "./(admin)/AdminOnboardingPage";
 import { currentUser } from "@clerk/nextjs/server";
 import OnboardingContextProvider from "@/contexts/onboarding-context";
 import { setTitle } from "@/utils/ui";
@@ -12,6 +8,10 @@ import GeneralErrorLogo from "@/assets/images/logos/dollar_sine/ds_logo_error_ge
 import Image from "next/image";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { redirect } from "next/navigation";
+import TeacherOnboarding from "./(pages)/TeacherOnboarding";
+import AdminOnboarding from "./(pages)/AdminOnboarding";
+import GuardianOnboarding from "./(pages)/GuardianOnboarding";
+import StudentOnboarding from "./(pages)/(student)/StudentOnboarding";
 
 export const metadata: Metadata = setTitle("Get started");
 
@@ -61,10 +61,10 @@ export default async function OnboardingPage({
   return (
     <OnboardingContextProvider>
       <div className="size-full">
-        {role === "admin" && <AdminOnboardingPage />}
-        {role === "teacher" && <TeacherOnboardingPage />}
-        {role === "guardian" && <GuardianOnboardingPage />}
-        {role === "student" && <StudentOnboardingPage />}
+        {role === "admin" && <AdminOnboarding />}
+        {role === "teacher" && <TeacherOnboarding />}
+        {role === "guardian" && <GuardianOnboarding />}
+        {role === "student" && <StudentOnboarding />}
       </div>
     </OnboardingContextProvider>
   );

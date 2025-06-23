@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { StyledIconDestructiveButton } from "@/components/StyledButtons";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { VscDebugRestart } from "react-icons/vsc";
 
 export default function NoCourses() {
   const { setLastUpdated } = useOnboardingContext();
@@ -26,15 +27,15 @@ export default function NoCourses() {
               <p className="text-xs font-bold text-white">Error Code</p>
               <h1 className="text-lg font-extrabold text-white">500</h1>
             </div>
-            <Button
+            <StyledIconDestructiveButton
               className="h-7 rounded-full"
               onClick={() => {
                 const value = new Date().toString();
                 setLastUpdated(value);
               }}
             >
-              <span className="text-xs">Try again</span>
-            </Button>
+              <VscDebugRestart />
+            </StyledIconDestructiveButton>
           </div>
         </div>
       </div>

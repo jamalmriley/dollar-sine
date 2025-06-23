@@ -1,6 +1,9 @@
 "use client";
 
-import { StyledButton, StyledDropdownButton } from "@/components/StyledButtons";
+import {
+  StyledActionButton,
+  StyledDropdownButton,
+} from "@/components/StyledButtons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -435,7 +438,7 @@ export default function Pronouns() {
           </form>
           <DialogFooter>
             <DialogClose asChild>
-              <StyledButton
+              <StyledActionButton
                 type="submit"
                 className="w-full"
                 onClick={() => {
@@ -458,7 +461,7 @@ export default function Pronouns() {
                 }
               >
                 Done
-              </StyledButton>
+              </StyledActionButton>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

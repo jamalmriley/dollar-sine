@@ -37,8 +37,8 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
   // Save the onboarding progress once the user stops typing for at least 3 seconds.
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const isOnboardingCompleted = user?.publicMetadata.isOnboardingCompleted;
-      if (user && !isOnboardingCompleted) {
+      const isOnboardingComplete = user?.publicMetadata.isOnboardingComplete;
+      if (user && !isOnboardingComplete) {
         const onboardingLink = `/${locale}${pathname}${
           searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
         }`;
@@ -153,8 +153,8 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
             key={i}
             className={`transform ease-out duration-500 ${
               i + 1 === current
-                ? "w-5 bg-emerald-400"
-                : "w-2 bg-muted-foreground/30"
+                ? "w-5 bg-emerald-400 border border-default-color"
+                : "w-2 bg-muted-foreground/30 border border-muted-foreground/30"
             } h-2 rounded-full`}
           />
         ))}

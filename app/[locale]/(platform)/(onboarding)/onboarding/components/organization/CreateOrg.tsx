@@ -34,7 +34,7 @@ import {
 import { Response } from "@/types/general";
 import { User } from "@clerk/nextjs/server";
 import OrgAlreadyCreated from "./OrgAlreadyCreated";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledActionButton } from "@/components/StyledButtons";
 
 export default function CreateOrg() {
   const { user, isLoaded } = useUser();
@@ -187,7 +187,7 @@ function CreateOrgForm() {
           pronunciation,
           currPronunciationOptions,
           prevPronunciationOptions,
-          isOnboardingCompleted,
+          isOnboardingComplete,
           onboardingLink,
           lastOnboardingStepCompleted,
           pronouns,
@@ -202,7 +202,7 @@ function CreateOrgForm() {
           pronunciation,
           currPronunciationOptions,
           prevPronunciationOptions,
-          isOnboardingCompleted,
+          isOnboardingComplete,
           lastOnboardingStepCompleted: Math.max(lastOnboardingStepCompleted, 2),
           onboardingLink,
           pronouns,
@@ -465,7 +465,7 @@ function CreateOrgForm() {
       </div>
 
       <div className="flex grow items-end">
-        <StyledButton
+        <StyledActionButton
           type="submit"
           className={`w-full ${
             isLoading &&
@@ -476,8 +476,12 @@ function CreateOrgForm() {
             (isUpdating
               ? orgLogo
                 ? false
-                : !orgName || !orgAddress || !orgSlug || !hasOrgUpdated
-              : !orgName || !orgAddress || !orgSlug)
+                : !orgName ||
+                  !orgAddress ||
+                  !orgSlug ||
+                  !orgCategory ||
+                  !hasOrgUpdated
+              : !orgName || !orgAddress || !orgCategory || !orgSlug)
           }
           // If the organization information is being updated, see if at least a new logo has been uploaded.
           // If so, the button should not be disabled.
@@ -491,7 +495,7 @@ function CreateOrgForm() {
             : isLoading
               ? "Creating organization..."
               : "Create organization"}
-        </StyledButton>
+        </StyledActionButton>
       </div>
     </form>
   );

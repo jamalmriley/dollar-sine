@@ -11,6 +11,7 @@ import { RiSpeakLine } from "react-icons/ri";
 import { TbUserExclamation } from "react-icons/tb";
 import { User } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { StyledDestructiveButton } from "@/components/StyledButtons";
 
 export function ProfileCard({
   toggle,
@@ -282,16 +283,13 @@ export function ProfileCardError({ toggle }: { toggle: boolean }) {
               </span>
             </div>
 
-            <Button
-              size="sm"
-              variant="destructive"
+            <StyledDestructiveButton
               onClick={() => {
-                const value = new Date().toString();
-                setLastUpdated(value);
+                setLastUpdated(new Date().toString());
               }}
             >
               Try again
-            </Button>
+            </StyledDestructiveButton>
           </div>
         </div>
       </div>

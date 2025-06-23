@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+type PublishDate = { seconds: number; nanoseconds: number };
+
 export interface Pricing {
   name: string;
   price: number;
@@ -16,7 +18,7 @@ export interface Course {
   description: string;
   id: string;
   imageUrl: string;
-  publishDate: { seconds: number; nanoseconds: number };
+  publishDate: PublishDate;
   title: string;
   topicsCount: number;
   pricing: Pricing[];

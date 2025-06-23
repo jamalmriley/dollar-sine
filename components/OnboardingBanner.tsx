@@ -6,8 +6,8 @@ import { useUser } from "@clerk/nextjs";
 
 export default function OnboardingBanner() {
   const { isLoaded, isSignedIn, user } = useUser();
-  const isOnboardingCompleted = user?.publicMetadata
-    .isOnboardingCompleted as boolean;
+  const isOnboardingComplete = user?.publicMetadata
+    .isOnboardingComplete as boolean;
   const onboardingLink = user?.publicMetadata.onboardingLink as string;
 
   if (!isLoaded || !isSignedIn) return null;
@@ -15,7 +15,7 @@ export default function OnboardingBanner() {
   return (
     <Banner
       requiresSignIn={true}
-      renderCondition={!isOnboardingCompleted}
+      renderCondition={!isOnboardingComplete}
       type="default"
       icon={<FaClipboardList className="w-full h-full" />}
       header="banner:onboarding-banner-header"

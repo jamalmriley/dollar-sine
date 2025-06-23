@@ -48,12 +48,12 @@ export default async function Footer() {
           {t("footer_created-with")}{" "}
           <span>
             <span className="sr-only">code</span>
-            <FaCode className="footer-icon" />
+            <FaCode className="text-lg text-woodsmoke-950 hover:animate-hover-tada" />
           </span>{" "}
           {`${t("footer_and")} `}
           <span>
             <span className="sr-only">love</span>
-            <FaHeart className="footer-icon" />
+            <FaHeart className="text-lg text-woodsmoke-950 hover:animate-hover-tada" />
           </span>
           .
         </span>

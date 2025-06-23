@@ -22,11 +22,6 @@ export default function OrgAlreadyCreated() {
   const [org, setOrg] = useState<Organization>();
   const [hasViewed, setHasViewed] = useState<boolean>(false);
 
-  const header = {
-    title: "Organization successfully created!",
-    description: "View your organization's details below.",
-  };
-
   const orgId =
     organizationId || user?.organizationMemberships[0].organization.id;
 

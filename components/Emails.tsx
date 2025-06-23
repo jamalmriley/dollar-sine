@@ -5,9 +5,7 @@ interface EmailProps {
 export const WelcomeEmail: React.FC<Readonly<EmailProps>> = ({ firstName }) => (
   <div>
     {/* Preheader (limit to 75 characters) */}
-    <div className="hidden overflow-hidden leading-none opacity-0 max-h-0 max-w-0">
-      3 tips, 2 tools, and 1 heartfelt hello
-    </div>
+    <div className="hidden">3 tips, 2 tools, and 1 heartfelt hello</div>
     <p>Welcome, {firstName}!</p>
     <br />
     <br />
@@ -33,5 +31,15 @@ export const WelcomeEmail: React.FC<Readonly<EmailProps>> = ({ firstName }) => (
       Whether you're just starting out or already on your way, Dollar Sine is
       your new financial home base.
     </p>
+  </div>
+);
+
+export const OnboardingCompletedEmail: React.FC<Readonly<EmailProps>> = ({
+  firstName,
+}) => (
+  <div>
+    {/* Preheader (limit to 75 characters) */}
+    <div className="hidden">Okay, I see you, {firstName}!</div>
+    <p>You finished your onboarding, {firstName}!</p>
   </div>
 );

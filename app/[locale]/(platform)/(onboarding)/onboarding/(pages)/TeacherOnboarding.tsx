@@ -6,9 +6,9 @@ import CreateOrJoinOrg from "../components/organization/CreateOrJoinOrg";
 import FinishProfile from "../components/profile/FinishProfile";
 import ProfileAlreadyCreated from "../components/profile/ProfileAlreadyCreated";
 import { Prompt } from "@/types/general";
-import AddCourses from "../components/courses/AddCourses";
+import Courses from "../components/courses/Courses";
 
-export default function TeacherOnboardingPage() {
+export default function TeacherOnboarding() {
   const prompts: Prompt[] = [
     {
       id: "step-1",
@@ -20,7 +20,7 @@ export default function TeacherOnboardingPage() {
       ),
     },
     { id: "step-2", content: <CreateOrJoinOrg /> },
-    { id: "step-3", content: <AddCourses /> },
+    { id: "step-3", content: <Courses /> },
   ];
 
   return <OnboardingCarousel prompts={prompts} />;

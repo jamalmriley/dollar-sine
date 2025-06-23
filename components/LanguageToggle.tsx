@@ -10,8 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ReactCountryFlag from "react-country-flag";
-import { StyledDropdownIconButton } from "./StyledButtons";
+import { StyledDropdownIconButtonNoText } from "./StyledButtons";
+import { allCountryFlags, SquareFlag } from "react-square-flags";
+import Image from "next/image";
 
 export default function LanguageToggle() {
   const { t } = useTranslation();
@@ -46,31 +47,29 @@ export default function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <StyledDropdownIconButton>
+        <StyledDropdownIconButtonNoText>
           {currentLocale === "en" && (
-            <ReactCountryFlag
-              className="emojiFlag"
-              countryCode="US"
-              style={{
-                fontSize: "1.25rem",
-                lineHeight: "1.25rem",
-              }}
-              aria-label="English (US)"
+            <Image
+              src="https://kapowaz.github.io/square-flags/flags/us.svg"
+              alt="English"
+              width="36"
+              height="36"
+              className="size-full"
             />
+            // <SquareFlag flag={allCountryFlags["us"]} />
           )}
           {currentLocale === "es" && (
-            <ReactCountryFlag
-              className="emojiFlag"
-              countryCode="MX"
-              style={{
-                fontSize: "1.25rem",
-                lineHeight: "1.25rem",
-              }}
-              aria-label="Spanish"
+            <Image
+              src="https://kapowaz.github.io/square-flags/flags/language/es.svg"
+              alt="Spanish"
+              width="36"
+              height="36"
+              className="size-full"
             />
+            // <SquareFlag flag={allCountryFlags["es"]} className="size-full" />
           )}
           <span className="sr-only">Toggle language</span>
-        </StyledDropdownIconButton>
+        </StyledDropdownIconButtonNoText>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {supportedLangs.map((language) => (

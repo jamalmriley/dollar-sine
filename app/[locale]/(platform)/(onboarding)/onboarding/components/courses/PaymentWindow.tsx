@@ -80,16 +80,6 @@ export function PaymentWindow() {
     parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
 
-  const isPlansSelected = (): boolean => {
-    if (!coursesToBuy) return false;
-
-    for (const course of coursesToBuy) {
-      const plan = course.plan;
-      if (!plan) return false;
-    }
-    return true;
-  }; // Ensures that all selected courses have plans selected before purchase is allowed.
-
   // const [discountAmt, discountPercent] = [0, 0];
   const discountAmt = 0;
   const taxRate = 0.1;

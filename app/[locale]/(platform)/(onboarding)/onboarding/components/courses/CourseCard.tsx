@@ -1,39 +1,37 @@
 import { parseAsArrayOf, parseAsJson, useQueryState } from "nuqs";
 import { formatCurrency } from "@/utils/general";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Pricing,
-  SELECTED_COURSE_SCHEMA,
-  SelectedCourse,
-} from "@/types/course";
+import { Course, SELECTED_COURSE_SCHEMA, SelectedCourse } from "@/types/course";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import {
-  StyledButton,
+  StyledActionButton,
   StyledDestructiveButton,
   StyledIconButton,
 } from "@/components/StyledButtons";
-import { FiPlus } from "react-icons/fi";
+import { FiExternalLink, FiPlus } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
+import { useState } from "react";
+import Link from "next/link";
 
 export function CourseCard({
-  id,
-  title,
-  description,
-  pricing,
-  imageUrl,
+  course,
+  canPurchaseCourses,
+  isAlreadyPurchased,
+  selectedPlan,
 }: {
-  id: string;
-  title: string;
-  description?: string;
-  pricing: Pricing[];
-  imageUrl: string;
+  course: Course;
+  canPurchaseCourses: boolean;
+  isAlreadyPurchased: boolean;
+  selectedPlan: string;
 }): JSX.Element {
   const { activeCourse, setActiveCourse } = useOnboardingContext();
   const [coursesToBuy, setCoursesToBuy] = useQueryState(
     "courses",
     parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
-  const isActiveCourse: boolean = activeCourse?.id === id;
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isActiveCourse: boolean = activeCourse?.id === course.id;
   const isCourseInCart = (targetId: string): boolean => {
     if (!coursesToBuy) return false;
     for (const course of coursesToBuy) {
@@ -47,8 +45,8 @@ export function CourseCard({
       (coursesToBuy !== null &&
         activeCourse !== undefined &&
         activeCourse.plan === undefined &&
-        getCourse(id) !== -1 &&
-        coursesToBuy[getCourse(id)].plan === planName)
+        getCourse(course.id) !== -1 &&
+        coursesToBuy[getCourse(course.id)].plan === planName)
     );
   };
   // Disable button if there is no plan selected or if the course is in the cart and a different plan isn't selected.
@@ -56,8 +54,8 @@ export function CourseCard({
     !activeCourse?.plan ||
     (coursesToBuy !== null &&
       activeCourse !== undefined &&
-      getCourse(id) !== -1 &&
-      coursesToBuy[getCourse(id)].plan === activeCourse.plan);
+      getCourse(course.id) !== -1 &&
+      coursesToBuy[getCourse(course.id)].plan === activeCourse.plan);
 
   function getCourse(targetId: string) {
     if (!coursesToBuy) return -1;
@@ -88,64 +86,95 @@ export function CourseCard({
     return result;
   }
 
+  function handleAddToCart() {
+    if (activeCourse) {
+      if (coursesToBuy) {
+        const newCourses = updateCourses(activeCourse, coursesToBuy);
+        setCoursesToBuy(newCourses);
+      } else setCoursesToBuy([activeCourse]);
+      setActiveCourse(undefined);
+    }
+  }
+
   return (
-    <div className="flex border border-default-color rounded-lg overflow-hidden expandable-content">
-      {/* CourseTile */}
-      <div
-        className={`w-48 min-w-48 aspect-[9/16] rounded-none bg-scroll flex flex-col justify-between ${
-          isActiveCourse &&
-          "rounded-r-lg border-r border-default-color overflow-hidden"
-        }`}
-        style={{
-          backgroundImage: `url(${
-            imageUrl === ""
-              ? "https://media.gettyimages.com/id/1472479627/video/classroom-learning-and-african-child-writing-notes-for-language-education-and-kindergarten.jpg?s=640x640&k=20&c=76xVk7jUdO531yG9MF-7E07eVNB06glfupkkBlKPwf8="
-              : ""
-          })`,
-        }}
-      >
-        <div className="h-1/2 flex flex-col justify-start p-3 bg-gradient-to-b from-black/50 to-transparent">
-          <h1 className="text-lg font-extrabold text-white">{title}</h1>
-          <p className="text-2xs text-white">{description}</p>
-        </div>
+    <div className="flex border border-default-color bg-primary-foreground rounded-lg overflow-hidden expandable-content">
+      {/* Tile */}
+      <div className="w-48 min-w-48 aspect-[9/16] rounded-none relative">
+        {/* Course Tile */}
+        <div
+          className={`size-full absolute flex flex-col justify-between bg-scroll ${
+            isActiveCourse &&
+            "rounded-r-lg border-r border-default-color overflow-hidden"
+          }`}
+          style={{
+            backgroundImage: `url(${
+              course.imageUrl === ""
+                ? "https://media.gettyimages.com/id/1472479627/video/classroom-learning-and-african-child-writing-notes-for-language-education-and-kindergarten.jpg?s=640x640&k=20&c=76xVk7jUdO531yG9MF-7E07eVNB06glfupkkBlKPwf8="
+                : ""
+            })`,
+          }}
+        >
+          <div className="h-1/2 flex flex-col justify-start p-3 bg-gradient-to-b from-black/50 to-transparent">
+            <h1 className="text-lg font-extrabold text-white">
+              {course.title}
+            </h1>
+            <p className="text-2xs text-white">{course.description}</p>
+          </div>
 
-        <div className="h-1/2 flex flex-col justify-end p-3 bg-gradient-to-t from-black/50 to-transparent">
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-xs font-bold text-white">From</p>
-              <h1 className="text-lg font-extrabold text-white">
-                {formatCurrency(pricing[0].price, "USD")}
-              </h1>
-            </div>
-            <StyledIconButton
-              toggle={isActiveCourse}
-              variant={!isActiveCourse ? "default" : "destructive"}
-              onClick={() => {
-                setActiveCourse(!isActiveCourse ? { id, title } : undefined);
-              }}
-            >
-              <span className="sr-only">
-                {isCourseInCart(id)
-                  ? isActiveCourse
-                    ? "Cancel updating course selection"
-                    : "Update course selection"
-                  : isActiveCourse
-                    ? "Deselect course"
-                    : "Select course"}
-              </span>
-
-              {isCourseInCart(id) ? (
-                isActiveCourse ? (
-                  <FiPlus className="rotate-45" />
-                ) : (
-                  <MdEdit />
-                )
+          <div className="h-1/2 flex flex-col justify-end p-3 bg-gradient-to-t from-black/50 to-transparent">
+            <div className="h-11 flex justify-between items-center">
+              <div>
+                <p className="text-xs font-bold text-white">
+                  {isAlreadyPurchased ? `${selectedPlan} Plan`.trim() : "From"}
+                </p>
+                <h1 className="text-lg font-extrabold text-white">
+                  {isAlreadyPurchased
+                    ? `${course.topicsCount} topic${course.topicsCount !== 1 ? "s" : ""}`
+                    : formatCurrency(course.pricing[0].price, "USD")}
+                </h1>
+              </div>
+              {isAlreadyPurchased ? (
+                <Link href={`/explore#${course.id}`} target="_blank">
+                  <StyledIconButton>
+                    <FiExternalLink />
+                  </StyledIconButton>
+                </Link>
               ) : (
-                <FiPlus
-                  className={`transition ease-in-out duration-200 ${isActiveCourse ? "rotate-45" : "rotate-0"}`}
-                />
+                <StyledIconButton
+                  toggle={isActiveCourse}
+                  variant={!isActiveCourse ? "default" : "destructive"}
+                  onClick={() => {
+                    setActiveCourse(
+                      !isActiveCourse
+                        ? { id: course.id, title: course.title }
+                        : undefined
+                    );
+                  }}
+                >
+                  <span className="sr-only">
+                    {isCourseInCart(course.id)
+                      ? isActiveCourse
+                        ? "Cancel updating course selection"
+                        : "Update course selection"
+                      : isActiveCourse
+                        ? "Deselect course"
+                        : "Select course"}
+                  </span>
+
+                  {isCourseInCart(course.id) ? (
+                    isActiveCourse ? (
+                      <FiPlus className="rotate-45" />
+                    ) : (
+                      <MdEdit />
+                    )
+                  ) : (
+                    <FiPlus
+                      className={`transition ease-in-out duration-200 ${isActiveCourse ? "rotate-45" : "rotate-0"}`}
+                    />
+                  )}
+                </StyledIconButton>
               )}
-            </StyledIconButton>
+            </div>
           </div>
         </div>
       </div>
@@ -153,27 +182,33 @@ export function CourseCard({
       {/* Plans */}
       <div
         className={`${
-          isActiveCourse ? "w-[228px] md:w-[408px] p-5" : "w-0 p-0"
-        } expandable-content overflow-hidden flex flex-col gap-5`}
+          isActiveCourse ? "w-[228px] md:w-[408px] px-5 pt-3" : "w-0 p-0"
+        } expandable-content overflow-hidden bg-primary-foreground`}
       >
-        {isActiveCourse && (
-          <>
-            {pricing.map((plan, i) => (
+        <div className="h-full flex flex-col justify-between">
+          <div className="flex flex-col gap-5">
+            {course.pricing.map((plan, i) => (
               <button
                 key={i}
-                className={`w-full p-3 border rounded-lg hover:scale-105 transform transition ease-in-out duration-200 min-w-40 overflow-hidden ${
-                  isButtonHighlighted(plan.name) &&
-                  "border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 text-emerald-950 dark:text-emerald-50"
+                className={`w-full p-3 border rounded-lg hover:scale-105 disabled:scale-100 transform transition ease-in-out duration-200 min-w-40 overflow-hidden ${
+                  isButtonHighlighted(plan.name)
+                    ? "border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 text-emerald-950 dark:text-emerald-50"
+                    : "bg-woodsmoke-50 dark:bg-woodsmoke-950"
                 }`}
                 onClick={() => {
-                  setActiveCourse({ id, title, plan: plan.name });
+                  setActiveCourse({
+                    id: course.id,
+                    title: course.title,
+                    plan: plan.name,
+                  });
                 }}
+                disabled={isLoading || isButtonDisabled}
               >
                 <div className="flex justify-between items-center">
                   <div className="md:w-2/3 flex flex-col text-left">
-                    <p className="text-xs md:text-sm font-bold">{`${plan.name} Package`}</p>
+                    <p className="text-xs md:text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis">{`${plan.name} Package`}</p>
                     <p
-                      className={`text-2xs hidden md:block ${
+                      className={`text-2xs hidden md:block whitespace-nowrap overflow-hidden text-ellipsis ${
                         isButtonHighlighted(plan.name)
                           ? "text-emerald-800 dark:text-emerald-100"
                           : "text-muted-foreground"
@@ -186,48 +221,38 @@ export function CourseCard({
                 </div>
               </button>
             ))}
+          </div>
 
-            <div className="flex gap-5 w-full">
-              <StyledButton
+          {/* Height and margin are set to align with icon button. */}
+          <div className="h-11 flex items-center gap-5 w-full mb-3">
+            <StyledActionButton
+              className="flex-1"
+              onClick={() => {
+                if (canPurchaseCourses) handleAddToCart();
+              }}
+              disabled={isLoading || isButtonDisabled}
+            >
+              {isCourseInCart(course.id) ? "Update cart" : "Add to cart"}
+            </StyledActionButton>
+
+            {isCourseInCart(course.id) && (
+              <StyledDestructiveButton
                 className="flex-1"
                 onClick={() => {
-                  if (activeCourse) {
-                    if (coursesToBuy) {
-                      const newCourses = updateCourses(
-                        activeCourse,
-                        coursesToBuy
-                      );
-                      setCoursesToBuy(newCourses);
-                    } else setCoursesToBuy([activeCourse]);
+                  if (coursesToBuy) {
+                    const newCourses = coursesToBuy.filter(
+                      (crs) => crs.id !== course.id
+                    );
+                    setCoursesToBuy(newCourses.length > 0 ? newCourses : null);
                     setActiveCourse(undefined);
                   }
                 }}
-                disabled={isButtonDisabled}
               >
-                {isCourseInCart(id) ? "Update cart" : "Add to cart"}
-              </StyledButton>
-
-              {isCourseInCart(id) && (
-                <StyledDestructiveButton
-                  className="flex-1"
-                  onClick={() => {
-                    if (coursesToBuy) {
-                      const newCourses = coursesToBuy.filter(
-                        (course) => course.id !== id
-                      );
-                      setCoursesToBuy(
-                        newCourses.length > 0 ? newCourses : null
-                      );
-                      setActiveCourse(undefined);
-                    }
-                  }}
-                >
-                  Remove from cart
-                </StyledDestructiveButton>
-              )}
-            </div>
-          </>
-        )}
+                Remove from cart
+              </StyledDestructiveButton>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -256,7 +281,7 @@ export function CourseCardSkeleton() {
             </div>
 
             {/* Button */}
-            <Skeleton className="h-7 w-[55.26px] rounded-full" />
+            <Skeleton className="size-9 rounded-md" />
           </div>
         </div>
       </Skeleton>

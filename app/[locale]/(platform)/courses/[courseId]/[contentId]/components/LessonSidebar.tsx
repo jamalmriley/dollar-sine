@@ -66,7 +66,7 @@ export default function LessonSidebar() {
 
   return (
     <Sidebar open={open} setOpen={setOpen}>
-      <SidebarBody className="justify-between gap-10 bg-givry-50 dark:bg-emerald-950">
+      <SidebarBody className="justify-between gap-10 bg-dodger-blue-50 dark:bg-emerald-950">
         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <div className="mt-8 flex flex-col gap-2">
             {sidebarLinks.map((link, i) => (
