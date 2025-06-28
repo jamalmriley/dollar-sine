@@ -197,7 +197,7 @@ function NoResults() {
 
   return (
     <div className="ais-Hits-list-inline flex-row justify-center text-xs text-muted-foreground p-3">
-      No results for "{indexUiState.query}"
+      No results for &quot;{indexUiState.query}&quot;
     </div>
   );
 }

@@ -40,8 +40,7 @@ import {
 
 export default function CreateOrg() {
   const { user, isLoaded } = useUser();
-  const { currOnboardingStep, lastUpdated, userMetadata } =
-    useOnboardingContext();
+  const { currOnboardingStep, userMetadata } = useOnboardingContext();
   const { step, isEditing } = currOnboardingStep;
   const currStep = 2;
 

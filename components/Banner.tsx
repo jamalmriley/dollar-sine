@@ -47,7 +47,6 @@ export default function Banner({
     text2TailwindProps,
     iconBgTailwindProps,
     iconTextTailwindProps,
-    borderTailwindProps,
   ] =
     type === "warning"
       ? [

@@ -106,11 +106,9 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
     api?.scrollNext();
   }, [api]);
 
-  if (!user) return;
-  const id = organizationId || user.organizationMemberships[0].organization.id;
+  const id = organizationId || user?.organizationMemberships[0].organization.id;
   useUserData(lastUpdated, isInitRender);
   useOrganizationData("id", id, lastUpdated);
-
   if (!user || !isLoaded || !userMetadata) return;
   return (
     <div className="h-full flex flex-col justify-between items-center pt-10">

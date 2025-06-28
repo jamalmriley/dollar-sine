@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StyledDropdownIconButtonNoText } from "./StyledButtons";
-import { allCountryFlags, SquareFlag } from "react-square-flags";
 import Image from "next/image";
 
 export default function LanguageToggle() {

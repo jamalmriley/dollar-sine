@@ -28,7 +28,7 @@ export const WelcomeEmail: React.FC<Readonly<EmailProps>> = ({ firstName }) => (
     <h1>And 1 heartfelt hello 👋🏿</h1>
     <p>
       You&apos;re not just a username to us — you’re part of something bigger.
-      Whether you're just starting out or already on your way, Dollar Sine is
+      Whether you&apos;re just starting out or already on your way, Dollar Sine is
       your new financial home base.
     </p>
   </div>

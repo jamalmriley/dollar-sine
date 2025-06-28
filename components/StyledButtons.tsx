@@ -75,7 +75,6 @@ export function StyledDestructiveButton({ ...props }: StyledButtonProps) {
 
 export function StyledIconButton({
   toggle = false,
-  className,
   children,
   ...props
 }: StyledToggleButtonProps) {

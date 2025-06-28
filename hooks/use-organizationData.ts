@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 export function useOrganizationData(
   orgIdentifierType: "id" | "slug",
-  orgIdentifier: string,
+  orgIdentifier: string | undefined,
   lastUpdated: string
 ) {
   const { setIsInitRender, setIsLoading, setOrg, setHasOrg } =
