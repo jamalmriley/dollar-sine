@@ -1,6 +1,8 @@
 "use client";
 
 import { SelectedCourse, Course } from "@/types/course";
+import { UserMetadata } from "@/types/user";
+import { Organization, User } from "@clerk/nextjs/server";
 import { createContext, useContext, useState } from "react";
 
 type OnboardingStep = {
@@ -9,6 +11,14 @@ type OnboardingStep = {
 };
 
 type OnboardingContext = {
+  isInitRender: boolean;
+  setIsInitRender: React.Dispatch<React.SetStateAction<boolean>>;
+  userData: User | undefined;
+  setUserData: React.Dispatch<React.SetStateAction<User | undefined>>;
+  userMetadata: UserMetadata | undefined;
+  setUserMetadata: React.Dispatch<
+    React.SetStateAction<UserMetadata | undefined>
+  >;
   isHeSelected: boolean; // TODO: remove?
   setIsHeSelected: React.Dispatch<React.SetStateAction<boolean>>;
   isSheSelected: boolean; // TODO: remove?
@@ -25,6 +35,8 @@ type OnboardingContext = {
   setPreferNotToSay: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
+  org: Organization | undefined;
+  setOrg: React.Dispatch<React.SetStateAction<Organization | undefined>>;
   showOrgResults: boolean;
   setShowOrgResults: React.Dispatch<React.SetStateAction<boolean>>;
   orgLogo: File | undefined;
@@ -37,10 +49,18 @@ type OnboardingContext = {
   setOrganizationId: React.Dispatch<React.SetStateAction<string | undefined>>;
   orgSearch: string;
   setOrgSearch: React.Dispatch<React.SetStateAction<string>>;
+  hasOrg: boolean;
+  setHasOrg: React.Dispatch<React.SetStateAction<boolean>>;
   hasInvitations: boolean;
   setHasInvitations: React.Dispatch<React.SetStateAction<boolean>>;
   courses: Course[];
   setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+  purchasedCourses: SelectedCourse[] | undefined;
+  setPurchasedCourses: React.Dispatch<
+    React.SetStateAction<SelectedCourse[] | undefined>
+  >;
+  canPurchaseCourses: boolean;
+  setCanPurchaseCourses: React.Dispatch<React.SetStateAction<boolean>>;
   activeCourse: SelectedCourse | undefined;
   setActiveCourse: React.Dispatch<
     React.SetStateAction<SelectedCourse | undefined>
@@ -68,6 +88,10 @@ export default function OnboardingContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [isInitRender, setIsInitRender] = useState<boolean>(true);
+  const [userData, setUserData] = useState<User | undefined>();
+  const [userMetadata, setUserMetadata] = useState<UserMetadata | undefined>();
+
   const [isHeSelected, setIsHeSelected] = useState<boolean>(false);
   const [isSheSelected, setIsSheSelected] = useState<boolean>(false);
   const [isTheySelected, setIsTheySelected] = useState<boolean>(false);
@@ -75,17 +99,23 @@ export default function OnboardingContextProvider({
   const [isXeSelected, setIsXeSelected] = useState<boolean>(false);
   const [isZeSelected, setIsZeSelected] = useState<boolean>(false);
   const [preferNotToSay, setPreferNotToSay] = useState<boolean>(false);
-
   const [profilePic, setProfilePic] = useState<File | undefined>();
+
+  const [org, setOrg] = useState<Organization>();
   const [showOrgResults, setShowOrgResults] = useState<boolean>(false);
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
   const [organizationId, setOrganizationId] = useState<string | undefined>();
   const [orgSearch, setOrgSearch] = useState<string>("");
+  const [hasOrg, setHasOrg] = useState<boolean>(false);
   const [hasInvitations, setHasInvitations] = useState<boolean>(false);
 
   const [courses, setCourses] = useState<Course[]>([]);
+  const [purchasedCourses, setPurchasedCourses] = useState<
+    SelectedCourse[] | undefined
+  >([]);
+  const [canPurchaseCourses, setCanPurchaseCourses] = useState<boolean>(false);
   const [activeCourse, setActiveCourse] = useState<SelectedCourse>();
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -103,6 +133,12 @@ export default function OnboardingContextProvider({
   return (
     <OnboardingContext.Provider
       value={{
+        isInitRender,
+        setIsInitRender,
+        userData,
+        setUserData,
+        userMetadata,
+        setUserMetadata,
         isHeSelected,
         setIsHeSelected,
         isSheSelected,
@@ -119,6 +155,8 @@ export default function OnboardingContextProvider({
         setPreferNotToSay,
         profilePic,
         setProfilePic,
+        org,
+        setOrg,
         showOrgResults,
         setShowOrgResults,
         orgLogo,
@@ -131,10 +169,16 @@ export default function OnboardingContextProvider({
         setOrganizationId,
         orgSearch,
         setOrgSearch,
+        hasOrg,
+        setHasOrg,
         hasInvitations,
         setHasInvitations,
         courses,
         setCourses,
+        purchasedCourses,
+        setPurchasedCourses,
+        canPurchaseCourses,
+        setCanPurchaseCourses,
         activeCourse,
         setActiveCourse,
         lastUpdated,

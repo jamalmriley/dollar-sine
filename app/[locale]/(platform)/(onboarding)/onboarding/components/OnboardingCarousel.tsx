@@ -13,32 +13,35 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { getUser, updateUserMetadata } from "@/app/actions/onboarding";
+import { updateUserMetadata } from "@/app/actions/onboarding";
 import { toast } from "@/hooks/use-toast";
 import { UserMetadata } from "@/types/user";
-import { User } from "@clerk/nextjs/server";
 import { Prompt } from "@/types/general";
+import { useUserData } from "@/hooks/use-userData";
+import { useOrganizationData } from "@/hooks/use-organizationData";
 
 export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
-  const { user, isLoaded } = useUser();
-
+  const {
+    isInitRender,
+    organizationId,
+    userMetadata,
+    lastUpdated,
+    setCurrOnboardingStep,
+  } = useOnboardingContext();
   const pathname = usePathname();
   const { locale } = useParams();
   const searchParams = useSearchParams();
-  const { lastUpdated, setCurrOnboardingStep } = useOnboardingContext();
+  const { user, isLoaded } = useUser();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
-  const [metadata, setMetadata] = useState<UserMetadata>(
-    user?.publicMetadata as any as UserMetadata
-  );
 
   // Save the onboarding progress once the user stops typing for at least 3 seconds.
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const isOnboardingComplete = user?.publicMetadata.isOnboardingComplete;
-      if (user && !isOnboardingComplete) {
+      const isOnboardingCompleted = user?.publicMetadata.isOnboardingCompleted;
+      if (user && !isOnboardingCompleted) {
         const onboardingLink = `/${locale}${pathname}${
           searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
         }`;
@@ -95,22 +98,6 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
     });
   }, [api]);
 
-  // Update the user's metadata upon completion of each onboarding step to ensure that buttons work.
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await getUser(user?.id);
-        const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as UserMetadata;
-        setMetadata(publicMetadata);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUser();
-  }, [lastUpdated]);
-
   const scrollPrev = useCallback(() => {
     api?.scrollPrev();
   }, [api]);
@@ -119,12 +106,20 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
     api?.scrollNext();
   }, [api]);
 
-  if (!user || !isLoaded) return;
+  if (!user) return;
+  const id = organizationId || user.organizationMemberships[0].organization.id;
+  useUserData(lastUpdated, isInitRender);
+  useOrganizationData("id", id, lastUpdated);
 
+  if (!user || !isLoaded || !userMetadata) return;
   return (
     <div className="h-full flex flex-col justify-between items-center pt-10">
       {/* Carousel */}
-      <Carousel setApi={setApi} opts={{ watchDrag: false }} className="w-full flex grow">
+      <Carousel
+        setApi={setApi}
+        opts={{ watchDrag: false }}
+        className="w-full flex grow"
+      >
         <CarouselContent>
           {prompts.map((prompt) => (
             <CarouselItem
@@ -164,9 +159,9 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
           className="rounded-full"
           onClick={scrollNext}
           disabled={
-            !metadata ||
+            !userMetadata ||
             current === count ||
-            !Boolean(metadata.lastOnboardingStepCompleted >= current)
+            !Boolean(userMetadata.lastOnboardingStepCompleted >= current)
           }
         >
           <FaArrowRight />

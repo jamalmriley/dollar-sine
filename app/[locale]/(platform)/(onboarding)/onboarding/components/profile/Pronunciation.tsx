@@ -2,50 +2,42 @@
 
 import {
   getPronunciations,
-  getUser,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { UserMetadata } from "@/types/user";
 import { getUniqueArr } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/server";
 import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
 import { FaArrowRotateRight } from "react-icons/fa6";
 
 export default function Pronunciation() {
+  const { isLoading, userMetadata } = useOnboardingContext();
   const { user, isLoaded } = useUser();
   const [pronunciation, setPronunciation] = useQueryState("pronunciation", {
     defaultValue: "",
   });
-  const { isLoading, setIsLoading } = useOnboardingContext();
-  const [lastUpdated, setLastUpdated] = useState<string>("");
-  const [userData, setUserData] = useState<User>();
-  const metadata = userData?.publicMetadata as any as UserMetadata;
 
   async function getMorePronunciations() {
-    if (!user) return;
+    if (!user || !userMetadata) return;
 
-    setLastUpdated(new Date().toString());
     await getPronunciations(
       String(user.fullName),
-      metadata.currPronunciationOptions
+      userMetadata.currPronunciationOptions
     )
       .then((res) => {
         const [prev, curr] = [
-          metadata.currPronunciationOptions,
+          userMetadata.currPronunciationOptions,
           res.data.split(", "),
         ];
 
         const prevPronunciationOptions = getUniqueArr([
-          ...metadata.prevPronunciationOptions,
+          ...userMetadata.prevPronunciationOptions,
           ...prev,
         ]); // Updates the previous pronunciation options with the newly added options while ensuring uniqueness (i.e. no duplicate values)
 
         updateUserMetadata(user.id, {
-          ...metadata,
+          ...userMetadata,
           currPronunciationOptions: curr,
           prevPronunciationOptions,
         });
@@ -54,24 +46,6 @@ export default function Pronunciation() {
         console.error(err);
       });
   }
-
-  useEffect(() => {
-    const fetchAndSetUser = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getUser(user?.id);
-        const userData = JSON.parse(res.data) as User;
-
-        setUserData(userData);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchAndSetUser();
-  }, [lastUpdated]);
 
   if (!user || !isLoaded) return;
   return (
@@ -101,9 +75,9 @@ export default function Pronunciation() {
               </span>
             ))}
         </div>
-      ) : metadata ? (
+      ) : userMetadata ? (
         <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
-          {metadata.currPronunciationOptions.map((option, i) => (
+          {userMetadata.currPronunciationOptions.map((option, i) => (
             <div key={i} className="whitespace-nowrap px-2">
               <button
                 className={`chip ${

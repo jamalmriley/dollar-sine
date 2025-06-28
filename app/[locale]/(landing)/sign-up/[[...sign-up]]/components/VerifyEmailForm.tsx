@@ -140,7 +140,11 @@ export default function VerifyEmailForm() {
             });
 
           router.push("/onboarding");
-          localStorage.setItem("onboardingStep", "1"); // Sets the onboarding step to 1 in case a previous user has signed up on the same device.
+
+          // Resets some local storage items in case a previous user has signed up on the same device.
+          if (role === "admin") localStorage.setItem("createOrJoin", "create");
+          else localStorage.setItem("createOrJoin", "join");
+          localStorage.setItem("onboardingStep", "1");
         } else {
           setFirstName("");
           setLastName("");

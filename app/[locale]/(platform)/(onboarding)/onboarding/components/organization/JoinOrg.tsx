@@ -32,27 +32,11 @@ import { OrgSearch } from "./OrgSearch";
 import { StyledActionButton } from "@/components/StyledButtons";
 
 export default function JoinOrg() {
-  const { hasInvitations, setHasInvitations } = useOnboardingContext();
+  const { userMetadata } = useOnboardingContext();
   const { user, isLoaded } = useUser();
-
-  // Fetch step completion status
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await getUser(user?.id);
-        const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as UserMetadata;
-        setHasInvitations(
-          publicMetadata.invitations !== null &&
-            publicMetadata.invitations.length > 0
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const hasInvitations = userMetadata
+    ? userMetadata.invitations !== null && userMetadata.invitations.length > 0
+    : false;
 
   if (!user || !isLoaded) return;
   return (
@@ -114,9 +98,8 @@ function RequestToJoin() {
     )
       .then(() => {
         setOrgSlug("");
-        // setIsLoading(false); // setLastUpdated will trigger a useEffect which will later change isLoading to false.
         setHasInvitations(true);
-        setLastUpdated(new Date().toString());
+        setLastUpdated(new Date().toString()); // Triggers re-render and a useEffect which will later change isLoading to false.
       })
       .catch((err) => {
         console.error(err);
@@ -180,7 +163,7 @@ function ViewOrEditRequestToJoin() {
       ?.publicMetadata as any as OrganizationMetadata;
 
     const updatedUserInvitations = userMetadata.invitations
-      ? userMetadata.invitations?.filter(
+      ? userMetadata.invitations.filter(
           (invitation) => invitation.organizationId !== targetOrgId
         )
       : null;
@@ -212,8 +195,11 @@ function ViewOrEditRequestToJoin() {
       "cancel"
     )
       .then(() => {
-        setLastUpdated(new Date().toString());
         setOrgSearch("");
+        setHasInvitations(
+          updatedOrgInvitations ? updatedOrgInvitations.length > 0 : false
+        );
+        setLastUpdated(new Date().toString()); // Triggers re-render.
       })
       .catch((err) => {
         console.error(err);
@@ -242,7 +228,6 @@ function ViewOrEditRequestToJoin() {
         }
 
         setInvitationItems(result);
-        setHasInvitations(invitations !== null && invitations.length > 0);
         setIsLoading(false);
       } catch (error) {
         console.error(error);

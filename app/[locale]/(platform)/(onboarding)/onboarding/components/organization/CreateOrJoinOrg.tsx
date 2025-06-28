@@ -7,15 +7,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { UserMetadata } from "@/types/user";
 import { useUser } from "@clerk/nextjs";
 import { MdClose } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import CreateOrg from "./CreateOrg";
 import JoinOrg from "./JoinOrg";
-import { getUser } from "@/app/actions/onboarding";
-import { User } from "@clerk/nextjs/server";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
 export default function CreateOrJoinOrg() {
@@ -23,8 +20,9 @@ export default function CreateOrJoinOrg() {
     currOnboardingStep,
     setCurrOnboardingStep,
     hasInvitations,
-    lastUpdated,
+    hasOrg,
     setOrgLogo,
+    userMetadata,
   } = useOnboardingContext();
   const { user, isLoaded } = useUser();
 
@@ -40,44 +38,8 @@ export default function CreateOrJoinOrg() {
     "isTeacherPurchasingEnabled",
     parseAsBoolean.withDefault(false)
   );
-
-  const userMetadata = user?.publicMetadata as any as UserMetadata;
-
-  const [tab, setTab] = useState(
-    userMetadata.role === "admin" ? "create" : "join"
-  );
-
+  const [tab, setTab] = useState<string>("create");
   const currStep = 2;
-  const metadata = user?.publicMetadata as any as UserMetadata;
-  const initIsCompleted = metadata.lastOnboardingStepCompleted >= currStep;
-  const [isCompleted, setIsCompleted] = useState<boolean>(initIsCompleted);
-
-  const isUpdating =
-    userMetadata.lastOnboardingStepCompleted >= 2 &&
-    currOnboardingStep.step === 2 &&
-    currOnboardingStep.isEditing;
-
-  const createHeader = {
-    title: isUpdating
-      ? "Update your organization."
-      : isCompleted
-        ? "Organization successfully created!"
-        : "Create your organization.",
-    description: isUpdating
-      ? "Need to make a quick edit? Update your organization's details below."
-      : isCompleted
-        ? "View your organization's details below."
-        : "Enter your organization's details below.",
-  };
-
-  const joinHeader = {
-    title: isUpdating
-      ? "Update your join request."
-      : "Request to join an organization.",
-    description: isUpdating
-      ? "Need to make a quick edit? Update your request to join an organization below."
-      : "Search an organization to request joining it.",
-  };
 
   function handleCancelForm(): void {
     setOrgName("");
@@ -91,21 +53,42 @@ export default function CreateOrJoinOrg() {
   }
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await getUser(user?.id);
-        const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as UserMetadata;
-        setIsCompleted(publicMetadata.lastOnboardingStepCompleted >= currStep);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    const stored = localStorage.getItem("createOrJoin");
+    if (stored) {
+      setTab(stored);
+    } else if (userMetadata?.role) {
+      setTab(userMetadata.role === "admin" ? "create" : "join");
+    }
+  }, [userMetadata]);
 
-    if (!isCompleted) fetchUser();
-  }, [lastUpdated]);
+  if (!user || !isLoaded || !userMetadata) return;
+  // Variables dependent on userMetadata go below the if guard.
+  const isCompleted = userMetadata.lastOnboardingStepCompleted >= currStep;
+  const isUpdating =
+    userMetadata.lastOnboardingStepCompleted >= currStep &&
+    currOnboardingStep.step === currStep &&
+    currOnboardingStep.isEditing;
+  const createHeader = {
+    title: isUpdating
+      ? "Update your organization."
+      : isCompleted
+        ? "Organization successfully created!"
+        : "Create your organization.",
+    description: isUpdating
+      ? "Need to make a quick edit? Update your organization's details below."
+      : isCompleted
+        ? "View your organization's details below."
+        : "Enter your organization's details below.",
+  };
+  const joinHeader = {
+    title: isUpdating
+      ? "Update your join request."
+      : "Request to join an organization.",
+    description: isUpdating
+      ? "Need to make a quick edit? Update your request to join an organization below."
+      : "Search an organization to request joining it.",
+  };
 
-  if (!user || !isLoaded) return;
   return (
     <div className="size-full flex justify-center">
       <Card
@@ -134,12 +117,19 @@ export default function CreateOrJoinOrg() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs value={tab} onValueChange={setTab} className="w-full">
+          <Tabs
+            value={tab}
+            onValueChange={(val) => {
+              setTab(val);
+              localStorage.setItem("createOrJoin", val);
+            }}
+            className="w-full"
+          >
             <TabsList className="grid w-72 grid-cols-2 select-none mx-auto mb-5">
               <TabsTrigger
                 value="create"
-                disabled={hasInvitations}
                 className={`${tab === "create" && "border-r border-default-color"}`}
+                disabled={hasInvitations}
               >
                 Create
               </TabsTrigger>
@@ -147,6 +137,7 @@ export default function CreateOrJoinOrg() {
                 value="join"
                 className={`${tab === "join" && "border-l border-default-color"}`}
                 onClick={() => handleCancelForm()}
+                disabled={hasOrg}
               >
                 Join
               </TabsTrigger>

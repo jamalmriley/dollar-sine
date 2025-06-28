@@ -30,8 +30,7 @@ export default function NoCourses() {
             <StyledIconDestructiveButton
               className="h-7 rounded-full"
               onClick={() => {
-                const value = new Date().toString();
-                setLastUpdated(value);
+                setLastUpdated(new Date().toString()); // Triggers re-render.
               }}
             >
               <VscDebugRestart />

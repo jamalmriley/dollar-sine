@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,49 +9,32 @@ import {
 } from "@/components/ui/card";
 import { useMediaQuery } from "usehooks-ts";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { Course, SelectedCourse } from "@/types/course";
-import {
-  getCourses,
-  getOrganizationById,
-  updateUserMetadata,
-} from "@/app/actions/onboarding";
+import { updateUserMetadata } from "@/app/actions/onboarding";
 import { PaymentWindow } from "./PaymentWindow";
 import { CourseCard, CourseCardSkeleton } from "./CourseCard";
 import NoCourses from "./NoCourses";
 import { useUser } from "@clerk/nextjs";
-import {
-  OrganizationMetadata,
-  TeacherMetadata,
-  UserMetadata,
-} from "@/types/user";
-import { Organization } from "@clerk/nextjs/server";
+import { TeacherMetadata } from "@/types/user";
 import { StyledActionButton } from "@/components/StyledButtons";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useCourseData } from "@/hooks/use-courseData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Courses() {
   const {
     activeCourse,
+    canPurchaseCourses,
     courses,
-    setCourses,
-    currOnboardingStep,
     isLoading,
-    setIsLoading,
-    lastUpdated,
+    purchasedCourses,
     setLastUpdated,
     setIsOnboardingComplete,
   } = useOnboardingContext();
   const router = useRouter();
   const { user, isLoaded } = useUser();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [hasViewed, setHasViewed] = useState<boolean>(false);
-  const [canPurchaseCourses, setCanPurchaseCourses] = useState<boolean>(false);
-  const [purchasedCourses, setPurchasedCourses] = useState<
-    SelectedCourse[] | null
-  >([]);
   const [isLocalLoading, setIsLocalLoading] = useState<boolean>(false);
-
-  const metadata = user?.publicMetadata as any as UserMetadata;
   const header = {
     title: canPurchaseCourses ? "Browse and add courses." : "Review courses.",
     description: canPurchaseCourses
@@ -59,24 +42,23 @@ export default function Courses() {
       : "Below are the courses added to your organization.",
   };
 
-  const isCoursePurchased = (targetId: string): boolean => {
+  function isCoursePurchased(targetId: string): boolean {
     if (!purchasedCourses) return false;
 
     for (const course of purchasedCourses) {
       if (course.id === targetId) return true;
     }
     return false;
-  };
-  const findSelectedPlan = (targetId: string): string => {
+  }
+  function findSelectedPlan(targetId: string): string {
     if (!purchasedCourses) return "";
 
     for (const course of purchasedCourses) {
       if (course.id === targetId && course.plan) return course.plan;
     }
     return "";
-  };
-
-  async function handleNonAdminCompleteOnboarding() {
+  }
+  async function handleNonPurchaseCompleteOnboarding() {
     if (!user) return;
     const publicMetadata = user.publicMetadata as any as TeacherMetadata;
     const userMetadata: TeacherMetadata = {
@@ -90,68 +72,34 @@ export default function Courses() {
     await updateUserMetadata(user.id, userMetadata).then(() => {
       setIsOnboardingComplete(true);
       setIsLocalLoading(false);
-      setLastUpdated(new Date().toString());
+      setLastUpdated(new Date().toString()); // Triggers re-render.
       router.push("/onboarding-complete");
     });
   }
 
-  useEffect(() => {
-    const fetchAndSetCourses = async () => {
-      setIsLoading(true);
-      try {
-        await getCourses()
-          .then((res) => {
-            const courseData = JSON.parse(res.data) as Course[];
-            setCourses(courseData);
-          })
-          .then(() => {
-            const id = metadata.invitations
-              ? metadata.invitations[0].organizationId
-              : null;
-
-            if (!id) return;
-            getOrganizationById(id).then((res) => {
-              const organization = JSON.parse(res.data) as Organization;
-              const orgMetadata =
-                organization.publicMetadata as any as OrganizationMetadata;
-              setPurchasedCourses(orgMetadata.courses);
-
-              // Only allow purchasing if teacher purchasing is enabled and the user's invite is no longer pending.
-              setCanPurchaseCourses(
-                orgMetadata.isTeacherPurchasingEnabled &&
-                  orgMetadata.invitations !== null &&
-                  orgMetadata.invitations.filter(
-                    (invitation) =>
-                      invitation.userId === user?.id &&
-                      invitation.status !== "Accepted"
-                  ).length === 0
-              );
-              setIsLoading(false);
-              setHasViewed(true);
-            });
-          });
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-    if (currOnboardingStep.step === 3 && !hasViewed) fetchAndSetCourses();
-  }, [currOnboardingStep.step, lastUpdated]);
-
+  useCourseData();
   if (!user || !isLoaded) return;
+
   return (
     // <Card className="w-full h-fit max-w-2xl mx-10">
     <Card className="h-fit max-w-2xl mx-10">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="h2">{header.title}</CardTitle>
+          {isLoading ? (
+            <Skeleton className="w-1/2 h-5 lg:h-6" />
+          ) : (
+            <CardTitle className="h2">{header.title}</CardTitle>
+          )}
           {canPurchaseCourses && <PaymentWindow />}
         </div>
-        {header.description !== "" && (
-          <CardDescription className="subtitle">
-            {header.description}
-          </CardDescription>
-        )}
+        {header.description !== "" &&
+          (isLoading ? (
+            <Skeleton className="w-5/6 h-4 md:h-5 mb-5" />
+          ) : (
+            <CardDescription className="subtitle">
+              {header.description}
+            </CardDescription>
+          ))}
       </CardHeader>
 
       <CardContent className="flex justify-center gap-5 overflow-x-auto">
@@ -196,18 +144,20 @@ export default function Courses() {
           </>
         )}
       </CardContent>
-      <CardFooter className="flex grow">
-        <StyledActionButton
-          className={`w-full ${
-            isLocalLoading && "disabled:cursor-progress hover:bg-primary"
-          }`}
-          onClick={handleNonAdminCompleteOnboarding}
-          disabled={isLocalLoading}
-        >
-          {isLocalLoading && <Loader2 className="animate-spin" />}
-          Done
-        </StyledActionButton>
-      </CardFooter>
+      {!isLoading && !canPurchaseCourses && (
+        <CardFooter className="flex grow">
+          <StyledActionButton
+            className={`w-full ${
+              isLocalLoading && "disabled:cursor-progress hover:bg-primary"
+            }`}
+            onClick={handleNonPurchaseCompleteOnboarding}
+            disabled={isLocalLoading}
+          >
+            {isLocalLoading && <Loader2 className="animate-spin" />}
+            Done
+          </StyledActionButton>
+        </CardFooter>
+      )}
     </Card>
   );
 }

@@ -244,7 +244,7 @@ export function OrgCardError({ toggle }: { toggle: boolean }) {
 
             <StyledDestructiveButton
               onClick={() => {
-                setLastUpdated(new Date().toString());
+                setLastUpdated(new Date().toString()); // Triggers re-render.
               }}
             >
               Try again

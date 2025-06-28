@@ -199,7 +199,7 @@ export default function FinishProfile() {
         setEmojiSkinTone("default");
         setIsLoading(false);
         setCurrOnboardingStep({ step: 1, isEditing: false });
-        setLastUpdated(new Date().toString()); // Triggers Profile.tsx and ProfileAlreadyCreated.tsx to re-render.
+        setLastUpdated(new Date().toString()); // Triggers re-render.
 
         toast({
           variant: "default",

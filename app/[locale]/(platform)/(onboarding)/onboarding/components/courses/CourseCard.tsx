@@ -30,7 +30,7 @@ export function CourseCard({
     parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading] = useState<boolean>(false);
   const isActiveCourse: boolean = activeCourse?.id === course.id;
   const isCourseInCart = (targetId: string): boolean => {
     if (!coursesToBuy) return false;
@@ -202,7 +202,7 @@ export function CourseCard({
                     plan: plan.name,
                   });
                 }}
-                disabled={isLoading || isButtonDisabled}
+                disabled={isLoading}
               >
                 <div className="flex justify-between items-center">
                   <div className="md:w-2/3 flex flex-col text-left">

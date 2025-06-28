@@ -13,7 +13,14 @@ import {
   UserMetadata,
 } from "@/types/user";
 import { db } from "@/utils/firebase";
-import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import { revalidatePath } from "next/cache";
 import dotenv from "dotenv";
 dotenv.config();
@@ -227,7 +234,7 @@ export async function createOrganization(
   return create;
 }
 
-// Get organization
+// Read organization
 export async function getOrganizationById(
   organizationId: string | undefined
 ): Promise<Response> {
@@ -362,6 +369,52 @@ export async function updateOrganization(
 
   revalidatePath("/onboarding");
   return update;
+}
+
+// Delete organization
+export async function deleteOrganization(
+  organizationId: string
+): Promise<Response> {
+  const invalidRes: Response = {
+    status: 422,
+    success: false,
+    message: {
+      title: "Missing required organization ID",
+      description: "An organization ID is required to delete an organization.",
+    },
+  };
+  if (!organizationId) return invalidRes;
+
+  const client = await clerkClient();
+  const [title, description] = ["Organization successfully deleted ✅", ""];
+
+  const org = await client.organizations
+    .deleteOrganization(organizationId)
+    .then((org) => {
+      deleteDoc(doc(db, "organizations", `${org.id}`));
+
+      const data = JSON.stringify(org);
+      return {
+        status: 200,
+        success: true,
+        data,
+        message: { title, description },
+      };
+    })
+    .catch((err: ClerkErrorResponse) => {
+      const error = err.errors[0];
+      return {
+        status: 400,
+        success: false,
+        data: {},
+        message: {
+          title: error.message,
+          description: error.long_message,
+        },
+      };
+    });
+
+  return org;
 }
 
 // Request to join or cancel joining organization

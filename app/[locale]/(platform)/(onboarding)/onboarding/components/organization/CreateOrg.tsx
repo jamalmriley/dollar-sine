@@ -27,44 +27,30 @@ import {
 import {
   ClerkErrorResponse,
   createOrganization,
-  getUser,
+  deleteOrganization,
   updateOrganization,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { Response } from "@/types/general";
-import { User } from "@clerk/nextjs/server";
 import OrgAlreadyCreated from "./OrgAlreadyCreated";
-import { StyledActionButton } from "@/components/StyledButtons";
+import {
+  StyledActionButton,
+  StyledDestructiveButton,
+} from "@/components/StyledButtons";
 
 export default function CreateOrg() {
   const { user, isLoaded } = useUser();
-  const { currOnboardingStep, lastUpdated } = useOnboardingContext();
+  const { currOnboardingStep, lastUpdated, userMetadata } =
+    useOnboardingContext();
   const { step, isEditing } = currOnboardingStep;
-
   const currStep = 2;
-  const metadata = user?.publicMetadata as any as UserMetadata;
-  const initIsCompleted = metadata.lastOnboardingStepCompleted >= currStep;
-  const [isCompleted, setIsCompleted] = useState<boolean>(initIsCompleted);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await getUser(user?.id);
-        const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as UserMetadata;
-        setIsCompleted(publicMetadata.lastOnboardingStepCompleted >= currStep);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (!isCompleted) fetchUser();
-  }, [lastUpdated]);
-
-  if (!user || !isLoaded) return;
+  if (!user || !isLoaded || !userMetadata) return;
+  // Variables dependent on userMetadata go below the if guard.
+  const isCompleted = userMetadata.lastOnboardingStepCompleted >= currStep;
   return (
     <>
-      {!isCompleted || (step === 2 && isEditing) ? (
+      {!isCompleted || (step === currStep && isEditing) ? (
         <CreateOrgForm />
       ) : (
         <OrgAlreadyCreated />
@@ -82,7 +68,10 @@ function CreateOrgForm() {
     isLoading,
     setIsLoading,
     setLastUpdated,
+    setHasOrg,
+    setOrg,
     setOrganizationId,
+    userMetadata,
   } = useOnboardingContext();
   const { user, isLoaded } = useUser();
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
@@ -130,13 +119,6 @@ function CreateOrgForm() {
         Boolean(organization.publicMetadata.isTeacherPurchasingEnabled) !==
           isTeacherPurchasingEnabled;
 
-  const userMetadata = user?.publicMetadata as any as UserMetadata;
-
-  const isUpdating =
-    userMetadata.lastOnboardingStepCompleted >= 2 &&
-    currOnboardingStep.step === 2 &&
-    currOnboardingStep.isEditing;
-
   const autoCreateOrgSlug = (text: string): string =>
     text
       .normalize("NFD") // Normalize to decompose accented characters
@@ -146,25 +128,26 @@ function CreateOrgForm() {
       .replace(/^-+|-+$/g, "") // Remove hyphens from start and end
       .toLowerCase(); // Convert to lowercase
 
+  const getOrganizationIds = (): string[] => {
+    if (!user) return [];
+    const result: string[] = [];
+    const orgMemberships = user.organizationMemberships;
+    if (!orgMemberships.length) return result;
+
+    for (const orgMembership of orgMemberships) {
+      result.push(orgMembership.organization.id);
+    }
+    return result;
+  };
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    if (!isLoaded || !user) return;
+    if (!user || !isLoaded) return;
 
     e.preventDefault();
     setIsLoading(true);
 
     const body: any = new FormData();
     await body.append("image", orgLogo || null); // TODO: add this to server function
-
-    const getOrganizationIds = (): string[] => {
-      const result: string[] = [];
-      const orgMemberships = user.organizationMemberships;
-      if (!orgMemberships.length) return result;
-
-      for (const orgMembership of orgMemberships) {
-        result.push(orgMembership.organization.id);
-      }
-      return result;
-    };
 
     const orgIds = getOrganizationIds();
     const orgId = orgIds[0];
@@ -179,45 +162,20 @@ function CreateOrgForm() {
     };
 
     async function handleResponse(res: Response) {
-      if (!user) return;
+      if (!user || !userMetadata) return;
       if (res.success) {
         const userId = user.id;
-        const {
-          role,
-          pronunciation,
-          currPronunciationOptions,
-          prevPronunciationOptions,
-          isOnboardingComplete,
-          onboardingLink,
-          lastOnboardingStepCompleted,
-          pronouns,
-          hasCustomPronouns,
-          emojiSkinTone,
-          courses,
-          classes,
-          invitations,
-        } = userMetadata;
+        const { lastOnboardingStepCompleted } = userMetadata;
         const newMetadata: UserMetadata = {
-          role,
-          pronunciation,
-          currPronunciationOptions,
-          prevPronunciationOptions,
-          isOnboardingComplete,
+          ...userMetadata,
           lastOnboardingStepCompleted: Math.max(lastOnboardingStepCompleted, 2),
-          onboardingLink,
-          pronouns,
-          hasCustomPronouns,
-          emojiSkinTone,
           organizations: res.data ? [...orgIds, res.data] : orgIds,
-          courses,
-          classes,
-          invitations,
         };
 
         updateUserMetadata(userId, newMetadata)
           .then(() => {
             if (res.data) setOrganizationId(String(res.data));
-            setLastUpdated(new Date().toString()); // Triggers Organization.tsx and OrgAlreadyCreated.tsx to re-render.
+            setLastUpdated(new Date().toString()); // Triggers re-render.
             setOrgName("");
             setOrgSlug("");
             setOrgCategory("");
@@ -269,6 +227,63 @@ function CreateOrgForm() {
     }
   };
 
+  const handleDeleteOrganization = async () => {
+    if (!user || !userMetadata) return;
+    const orgIds = getOrganizationIds();
+    const orgId = orgIds[0];
+
+    await setIsLoading(true);
+    await deleteOrganization(orgId).then((res) => {
+      if (res.success) {
+        const userId = user.id;
+        const { organizations } = userMetadata;
+        const newMetadata: UserMetadata = {
+          ...userMetadata,
+          lastOnboardingStepCompleted: 1,
+          organizations: organizations.filter((org) => org !== orgId),
+        };
+
+        updateUserMetadata(userId, newMetadata)
+          .then(() => {
+            setHasOrg(false);
+            setOrg(undefined);
+            setLastUpdated(new Date().toString()); // Triggers re-render.
+            setOrgName("");
+            setOrgSlug("");
+            setOrgCategory("");
+            setIsCustomOrgCategory(false);
+            setOrgAddress("");
+            setIsTeacherPurchasingEnabled(false);
+            setOrgLogo(undefined);
+            setCurrOnboardingStep({ step: 2, isEditing: false });
+
+            toast({
+              variant: res.success ? "default" : "destructive",
+              title: res.message?.title,
+              description: res.message?.description,
+            });
+          })
+          .catch((err: ClerkErrorResponse) => {
+            const error = err.errors[0];
+
+            toast({
+              variant: "destructive",
+              title: error.message,
+              description: error.long_message,
+            });
+          });
+      } else {
+        toast({
+          variant: "destructive",
+          title: res.message?.title,
+          description: res.message?.description,
+        });
+      }
+
+      setIsLoading(false);
+    });
+  };
+
   useEffect(() => {
     const fetchPredictions = async () => {
       const predictions = await autocomplete(orgAddress);
@@ -280,9 +295,15 @@ function CreateOrgForm() {
 
   useEffect(() => {
     if (isUpdating) setHasCustomOrgSlug(true);
-  }, []);
+  });
 
-  if (!user || !isLoaded) return;
+  if (!user || !isLoaded || !userMetadata) return;
+  // Variables dependent on userMetadata go below the if guard.
+
+  const isUpdating =
+    userMetadata.lastOnboardingStepCompleted >= 2 &&
+    currOnboardingStep.step === 2 &&
+    currOnboardingStep.isEditing;
   return (
     <form onSubmit={handleSubmit} className="w-full h-full flex flex-col gap-5">
       {/* Org Name and Org ID */}
@@ -387,7 +408,10 @@ function CreateOrgForm() {
 
         {/* Org Category */}
         <div className="grid gap-2 w-full">
-          <Label htmlFor="org-category" className="text-sm font-bold">
+          <Label
+            htmlFor="org-category"
+            className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis"
+          >
             Which category best describes your organization?
           </Label>
           <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
@@ -464,13 +488,10 @@ function CreateOrgForm() {
         />
       </div>
 
-      <div className="flex grow items-end">
+      <div className="flex grow items-end gap-5">
         <StyledActionButton
           type="submit"
-          className={`w-full ${
-            isLoading &&
-            "disabled:pointer-events-auto cursor-progress hover:bg-primary"
-          }`}
+          className={`w-full ${isLoading && "cursor-progress"}`}
           disabled={
             isLoading ||
             (isUpdating
@@ -496,6 +517,18 @@ function CreateOrgForm() {
               ? "Creating organization..."
               : "Create organization"}
         </StyledActionButton>
+        {isUpdating && (
+          <StyledDestructiveButton
+            className="w-full"
+            onClick={(e) => {
+              e.preventDefault();
+              handleDeleteOrganization();
+            }}
+            disabled={isLoading}
+          >
+            Delete organization
+          </StyledDestructiveButton>
+        )}
       </div>
     </form>
   );
