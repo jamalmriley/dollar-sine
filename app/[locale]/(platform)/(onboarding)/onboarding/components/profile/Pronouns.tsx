@@ -4,7 +4,6 @@ import {
   StyledActionButton,
   StyledDropdownButton,
 } from "@/components/StyledButtons";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -351,9 +350,12 @@ export default function Pronouns() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
 
-            <Button className="w-full" onClick={() => setOpen(false)}>
+            <StyledActionButton
+              className="w-full"
+              onClick={() => setOpen(false)}
+            >
               Done
-            </Button>
+            </StyledActionButton>
           </DropdownMenuContent>
         </DropdownMenu>
 

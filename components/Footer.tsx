@@ -42,7 +42,7 @@ export default async function Footer() {
   return (
     <div className="flex flex-col">
       {/* Content */}
-      <div className="flex gap-3 w-full px-10 py-5 bg-emerald-400 text-woodsmoke-950 flex-col-reverse md:flex-row items-center md:justify-between">
+      <div className="flex gap-3 w-full px-10 py-5 bg-emerald-400 text-woodsmoke-950 flex-col-reverse border-t border-default-color md:flex-row items-center md:justify-between">
         {/* Credit */}
         <span className="flex gap-1.5 items-center text-sm font-bold select-none">
           {t("footer_created-with")}{" "}

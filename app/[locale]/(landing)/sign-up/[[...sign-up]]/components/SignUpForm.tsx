@@ -23,6 +23,7 @@ import { GuardianType, Role } from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { StyledActionButton } from "@/components/StyledButtons";
 
 export default function SignUpForm() {
   const { isLoaded, signUp } = useSignUp();
@@ -241,9 +242,8 @@ export default function SignUpForm() {
       )}
 
       {/* "Sign up" button */}
-      <Button
+      <StyledActionButton
         type="submit"
-        className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100"
         disabled={
           firstName === "" ||
           lastName === "" ||
@@ -255,7 +255,7 @@ export default function SignUpForm() {
         }
       >
         {t("sign-up:sign-up")}
-      </Button>
+      </StyledActionButton>
     </form>
   );
 }

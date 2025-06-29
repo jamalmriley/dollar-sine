@@ -5,6 +5,7 @@ import {
   getPronunciations,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
+import { StyledActionButton } from "@/components/StyledButtons";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +16,12 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import { toast } from "@/hooks/use-toast";
-import { AdminMetadata, UserMetadata, TeacherMetadata } from "@/types/user";
+import {
+  AdminMetadata,
+  UserMetadata,
+  TeacherMetadata,
+  GuardianMetadata,
+} from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";
@@ -86,7 +92,7 @@ export default function VerifyEmailForm() {
           setActive({ session: createdSessionId })
             .then(() => {
               const userId = createdUserId as string;
-              const coreMetadata: UserMetadata = {
+              const userMetadata: UserMetadata = {
                 role,
                 pronunciation: "",
                 currPronunciationOptions: pronunciationOptions || [],
@@ -103,22 +109,8 @@ export default function VerifyEmailForm() {
                 invitations: null,
               };
 
-              let metadata: AdminMetadata | TeacherMetadata | null;
-
-              switch (role) {
-                case "admin":
-                  metadata = { ...coreMetadata };
-                  break;
-                case "teacher":
-                  metadata = { ...coreMetadata };
-                  break;
-                default:
-                  metadata = null;
-                  break;
-              }
-
               fetch("/api/resend/new-user", { method: "POST" });
-              updateUserMetadata(userId, metadata);
+              updateUserMetadata(userId, userMetadata);
             })
             .catch(() => {
               toast({
@@ -239,13 +231,13 @@ export default function VerifyEmailForm() {
       )}
 
       {/* "Verify email" Button */}
-      <Button
+      <StyledActionButton
         type="submit"
         className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100"
         disabled={isLoadingPronunciationOptions}
       >
         {t("sign-up:verify-email")}
-      </Button>
+      </StyledActionButton>
 
       {/* "Resend code" Button */}
       <Button variant="link" onClick={resubmit} disabled={seconds !== 0}>

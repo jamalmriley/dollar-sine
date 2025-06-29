@@ -116,15 +116,15 @@ export interface UserMetadata {
 export interface AdminMetadata extends TeacherMetadata {}
 
 export interface TeacherMetadata extends GuardianMetadata {
+  jobTitle?: string | null;
+}
+
+export interface GuardianMetadata extends UserMetadata {
   displayName?: string | null;
   displayNameFormat?: string | null;
   prefix?: string | null;
   isPrefixIncluded?: boolean | null;
   isCustomPrefix?: boolean | null;
-  jobTitle?: string | null;
-}
-
-export interface GuardianMetadata extends UserMetadata {
   students?: string[] | null;
 }
 

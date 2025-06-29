@@ -25,7 +25,7 @@ export default function SignUpPage() {
   return (
     <div className="page-container flex justify-center items-center w-full md:p-0">
       {/* Left Side */}
-      <div className="hidden md:flex flex-col pl-10 w-1/2 h-full bg-gradient-to-r from-givry-50 via-givry-from-givry-50 dark:from-woodsmoke-950 dark:via-woodsmoke-950 to-transparent text-antique-brass-950 dark:text-antique-brass-100 justify-center">
+      <div className="hidden md:flex flex-col pl-10 w-1/2 h-full bg-gradient-to-r from-dodger-blue-100 via-dodger-blue-100 dark:from-woodsmoke-950 dark:via-woodsmoke-950 to-transparent text-antique-brass-950 dark:text-antique-brass-100 justify-center">
         <h1 className="h1 mb-5">
           {!pendingVerification
             ? "Get started today"

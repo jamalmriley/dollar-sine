@@ -21,21 +21,6 @@ export default function DashboardNavbar() {
           <Link href="/dashboard">
             <SquareLogo />
           </Link>
-          {/* <>
-            <CustomButton
-              text={t("platform-layout:admin")}
-              href="/admin"
-              startIcon={<MdAdminPanelSettings />}
-              className="hidden lg:flex"
-            />
-
-            <CustomButton
-              srText={t("platform-layout:admin")}
-              href="/admin"
-              startIcon={<MdAdminPanelSettings />}
-              className="lg:hidden"
-            />
-          </> */}
         </div>
 
         <Search />

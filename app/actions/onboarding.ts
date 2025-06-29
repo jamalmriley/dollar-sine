@@ -75,7 +75,7 @@ export async function getPronunciations(
   return pronunciation;
 }
 
-// Get user
+// Read user
 export async function getUser(userId: string | undefined): Promise<Response> {
   const invalidRes: Response = {
     status: 422,

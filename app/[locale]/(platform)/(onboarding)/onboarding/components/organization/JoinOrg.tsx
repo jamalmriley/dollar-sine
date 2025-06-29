@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
@@ -29,7 +28,10 @@ import { FaTrashCan } from "react-icons/fa6";
 import { Loader2Icon } from "lucide-react";
 import { IoIosSend } from "react-icons/io";
 import { OrgSearch } from "./OrgSearch";
-import { StyledActionButton } from "@/components/StyledButtons";
+import {
+  StyledActionButton,
+  StyledIconDestructiveButton,
+} from "@/components/StyledButtons";
 
 export default function JoinOrg() {
   const { userMetadata } = useOnboardingContext();
@@ -277,17 +279,14 @@ function ViewOrEditRequestToJoin() {
                   </span>
                 </TableCell>
                 <TableCell className="text-center">
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="rounded-full"
+                  <StyledIconDestructiveButton
                     onClick={() => {
                       handleCancelRequestToJoin(item.invitation.organizationId);
                     }}
                     disabled={isLoading}
                   >
                     <FaTrashCan />
-                  </Button>
+                  </StyledIconDestructiveButton>
                 </TableCell>
               </TableRow>
             ))}
