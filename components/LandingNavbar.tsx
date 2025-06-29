@@ -45,11 +45,9 @@ export default function LandingNavbar() {
         {/* Logo and Text Links */}
         <div className="flex gap-7 items-center">
           {/* Logo */}
-          <div className="h-10 flex">
-            <Link href="/">
-              <SquareLogo />
-            </Link>
-          </div>
+          <Link href="/" className="size-10">
+            <SquareLogo />
+          </Link>
 
           {/* Desktop Links */}
           <div className="hidden md:flex gap-7 items-center">

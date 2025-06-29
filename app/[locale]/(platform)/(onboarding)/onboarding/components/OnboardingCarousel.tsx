@@ -106,7 +106,12 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
     api?.scrollNext();
   }, [api]);
 
-  const id = organizationId || user?.organizationMemberships[0].organization.id;
+  const id =
+    organizationId !== undefined
+      ? organizationId
+      : user && user.organizationMemberships.length > 0
+        ? user.organizationMemberships[0].organization.id
+        : undefined;
   useUserData(lastUpdated, isInitRender);
   useOrganizationData("id", id, lastUpdated);
   if (!user || !isLoaded || !userMetadata) return;

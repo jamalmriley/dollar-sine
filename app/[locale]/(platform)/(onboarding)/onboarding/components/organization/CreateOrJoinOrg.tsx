@@ -12,8 +12,8 @@ import { MdClose } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import CreateOrg from "./CreateOrg";
-import JoinOrg from "./JoinOrg";
 import { parseAsBoolean, useQueryState } from "nuqs";
+import { JoinOrg } from "./JoinOrg";
 
 export default function CreateOrJoinOrg() {
   const {

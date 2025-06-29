@@ -1,13 +1,9 @@
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useUser } from "@clerk/nextjs";
+import FinishProfile from "./FinishProfile";
+import ProfileAlreadyCreated from "./ProfileAlreadyCreated";
 
-export default function Profile({
-  component1,
-  component2,
-}: {
-  component1: JSX.Element | undefined;
-  component2: JSX.Element | undefined;
-}) {
+export default function Profile() {
   const { user, isLoaded } = useUser();
   const { currOnboardingStep, userMetadata } = useOnboardingContext();
   const { step, isEditing } = currOnboardingStep;
@@ -18,6 +14,12 @@ export default function Profile({
   const isCompleted = userMetadata.lastOnboardingStepCompleted >= currStep;
 
   return (
-    <>{!isCompleted || (step === 1 && isEditing) ? component1 : component2}</>
+    <>
+      {!isCompleted || (step === 1 && isEditing) ? (
+        <FinishProfile />
+      ) : (
+        <ProfileAlreadyCreated />
+      )}
+    </>
   );
 }

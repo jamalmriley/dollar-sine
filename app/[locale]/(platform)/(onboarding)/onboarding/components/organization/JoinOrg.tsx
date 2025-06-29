@@ -13,6 +13,7 @@ import {
   getOrganizationBySlug,
   getUser,
   sendRequestToOrganization,
+  updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { Organization, User } from "@clerk/nextjs/server";
 import { formatRelative } from "date-fns";
@@ -32,13 +33,22 @@ import {
   StyledActionButton,
   StyledIconDestructiveButton,
 } from "@/components/StyledButtons";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-export default function JoinOrg() {
+export function JoinOrg() {
   const { userMetadata } = useOnboardingContext();
   const { user, isLoaded } = useUser();
-  const hasInvitations = userMetadata
-    ? userMetadata.invitations !== null && userMetadata.invitations.length > 0
-    : false;
+  const hasInvitations =
+    userMetadata && userMetadata.invitations
+      ? userMetadata.invitations !== null && userMetadata.invitations.length > 0
+      : false;
 
   if (!user || !isLoaded) return;
   return (
@@ -46,9 +56,38 @@ export default function JoinOrg() {
   );
 }
 
+export function JoinOrgCard() {
+  const header = {
+    title: "Request to join an organization.",
+    description: "Search an organization to request joining it.",
+  };
+  return (
+    <div className="size-full flex justify-center">
+      <Card className="h-fit mx-10 max-w-lg">
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="h2">{header.title}</CardTitle>
+          </div>
+          <CardDescription className="subtitle">
+            {header.description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <JoinOrg />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 function RequestToJoin() {
-  const { isLoading, setHasInvitations, setIsLoading, setLastUpdated } =
-    useOnboardingContext();
+  const {
+    isLoading,
+    userMetadata,
+    setHasInvitations,
+    setIsLoading,
+    setLastUpdated,
+  } = useOnboardingContext();
   const { user } = useUser();
   const [orgSlug, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
 
@@ -78,7 +117,7 @@ function RequestToJoin() {
 
     const newUserMetadata: UserMetadata = {
       ...userMetadata,
-      lastOnboardingStepCompleted: 2,
+      lastOnboardingStepCompleted: userMetadata.role === "guardian" ? 1 : 2,
       invitations: userMetadata.invitations
         ? [...userMetadata.invitations, userInvitation]
         : [userInvitation],
@@ -109,6 +148,26 @@ function RequestToJoin() {
       });
   }
 
+  async function handleSkipRequestToJoin() {
+    if (!user || !userMetadata) return;
+
+    const newUserMetadata: UserMetadata = {
+      ...userMetadata,
+      lastOnboardingStepCompleted: userMetadata.role === "guardian" ? 1 : 2,
+    };
+
+    await setIsLoading(true);
+    await updateUserMetadata(user.id, newUserMetadata)
+      .then(() => {
+        setLastUpdated(new Date().toString());
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }
+
+  if (!userMetadata) return;
   return (
     <div className="flex flex-col">
       <div className="flex justify-between gap-5">
@@ -124,7 +183,16 @@ function RequestToJoin() {
         </StyledActionButton>
       </div>
 
-      {/* TODO: Possibly add a "Skip this step" button with a "link" variant */}
+      {userMetadata.role === "guardian" && (
+        <Button
+          variant="link"
+          className="text-muted-foreground mt-4"
+          onClick={handleSkipRequestToJoin}
+          disabled={isLoading}
+        >
+          Skip this step
+        </Button>
+      )}
     </div>
   );
 }
@@ -178,7 +246,7 @@ function ViewOrEditRequestToJoin() {
 
     const newUserMetadata: UserMetadata = {
       ...userMetadata,
-      lastOnboardingStepCompleted: 1,
+      lastOnboardingStepCompleted: userMetadata.role === "guardian" ? 0 : 1,
       invitations: updatedUserInvitations,
     };
 

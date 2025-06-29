@@ -18,7 +18,7 @@ export default function DashboardNavbar() {
         {/* Left: Logo and Admin Button */}
         {/* <div className="h-10 w-1/6 min-w-[92px] flex gap-3"> */}
         <div className="h-10 w-1/6 min-w-10 flex gap-3">
-          <Link href="/dashboard">
+          <Link href="/dashboard" className="size-10">
             <SquareLogo />
           </Link>
         </div>
