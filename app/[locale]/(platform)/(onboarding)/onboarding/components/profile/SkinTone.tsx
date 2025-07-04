@@ -58,19 +58,20 @@ export default function SkinTone() {
               : skinTones[0].icon}
           </StyledDropdownIconButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          {skinTones.map((obj, i) => (
-            <span key={obj.label}>
-              {i !== 0 && <DropdownMenuSeparator />}
+        <DropdownMenuContent className="w-48">
+          <div className="w-full flex flex-wrap">
+            {skinTones.map((obj) => (
               <DropdownMenuItem
+                key={obj.label}
+                className="w-[calc(33.333333%-8px)] justify-center font-semibold m-1 py-1 px-0 border border-default-color"
                 onClick={() => {
                   setEmojiSkinTone(obj.label);
                 }}
               >
                 <span className="w-full text-center">{obj.icon}</span>
               </DropdownMenuItem>
-            </span>
-          ))}
+            ))}
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

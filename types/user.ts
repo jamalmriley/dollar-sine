@@ -1,5 +1,7 @@
 import { EmojiSkinTone } from "../utils/emoji";
 import { SelectedCourse } from "./course";
+import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 
 export const ROLES = ["admin", "teacher", "guardian", "student", null] as const;
 export type Role = (typeof ROLES)[number];
@@ -31,9 +33,7 @@ export const EN_PRONOUNS = [
   "them",
   "theirs",
 ] as const;
-
 export type EnglishPronoun = (typeof EN_PRONOUNS)[number];
-
 export const ES_PRONOUNS = [
   "ella",
   "ellas",
@@ -42,39 +42,28 @@ export const ES_PRONOUNS = [
   "el",
   "ellos",
 ] as const;
-
 export type SpanishPronoun = (typeof ES_PRONOUNS)[number];
-
 export const PRONOUNS = [...EN_PRONOUNS, ...ES_PRONOUNS] as const;
-
 export type Pronoun = EnglishPronoun | SpanishPronoun;
 
-// TODO
-type Pronouns =
-  | "he/him/his"
-  | "he/she"
-  | "he/they"
-  | "she/her/hers"
-  | "she/they"
-  | "they/them/theirs"
-  | "I prefer not to say";
-
-export type GuardianType =
-  | "Parent"
-  | "Stepparent"
-  | "Grandparent"
-  | "Aunt"
-  | "Uncle"
-  | "Older sibling"
-  | "Foster parent"
-  | "Adoptive parent"
-  | "Family member"
-  | "Guardian"
-  | "Caregiver";
+export const GUARDIAN_TYPES = [
+  "Parent",
+  "Stepparent",
+  "Grandparent",
+  "Aunt",
+  "Uncle",
+  "Older sibling",
+  "Foster parent",
+  "Adoptive parent",
+  "Family member",
+  "Guardian",
+  "Caregiver",
+] as const;
+export type GuardianType = (typeof GUARDIAN_TYPES)[number];
 
 export type Status = "Rejected" | "Pending" | "Accepted";
 
-export interface UserInvitation {
+export interface OrganizationInvitation {
   createdAt: Date;
   status: Status;
   organizationId: string;
@@ -95,6 +84,20 @@ interface TestScores {
   domain4Score: [domainName: string, domainScore: number];
 }
 
+export const STUDENT_BASIC_DETAILS_SCHEMA = z
+  .object({
+    firstName: z.string(),
+    lastName: z.string(),
+    emailAddress: z.string(),
+    gradeLevel: z.string(),
+  })
+  .transform((data) => ({
+    ...data,
+    id: uuidv4(),
+  }));
+
+export type StudentBasicDetails = z.infer<typeof STUDENT_BASIC_DETAILS_SCHEMA>;
+
 // Metadata //
 export interface UserMetadata {
   role: Role;
@@ -110,15 +113,12 @@ export interface UserMetadata {
   organizations: OrganizationId[];
   courses: SelectedCourse[];
   classes: Class[] | null;
-  invitations: UserInvitation[] | null;
+  invitations: OrganizationInvitation[] | null;
 }
-
 export interface AdminMetadata extends TeacherMetadata {}
-
 export interface TeacherMetadata extends GuardianMetadata {
   jobTitle?: string | null;
 }
-
 export interface GuardianMetadata extends UserMetadata {
   displayName?: string | null;
   displayNameFormat?: string | null;
@@ -126,10 +126,11 @@ export interface GuardianMetadata extends UserMetadata {
   isPrefixIncluded?: boolean | null;
   isCustomPrefix?: boolean | null;
   students?: string[] | null;
+  studentInvitations?: StudentBasicDetails[] | null;
 }
-
 export interface StudentMetadata extends UserMetadata {
-  gradeLevel?: string | null;
+  gradeLevel: string;
+  guardians?: any[] | null;
   track?: "Above grade level" | "At grade level" | "Below grade level" | null;
   tools?: string[] | null;
   testScores?: TestScores[] | null;
@@ -144,13 +145,11 @@ export interface StudentMetadata extends UserMetadata {
 
 // Purchased courses go to org metadata, enrolled courses go to user metadata
 type OrganizationId = string;
-
-export interface OrganizationInvitation {
+export interface UserInvitation {
   createdAt: Date;
   status: Status;
   userId: string;
 }
-
 export interface OrganizationMetadata {
   name: string;
   slug: string;
@@ -158,7 +157,7 @@ export interface OrganizationMetadata {
   category: string;
   isTeacherPurchasingEnabled: boolean;
   courses: SelectedCourse[] | null;
-  invitations: OrganizationInvitation[] | null;
+  invitations: UserInvitation[] | null;
 }
 
 // Classes //
@@ -172,7 +171,6 @@ interface HasMetdataMethods {
       | OrganizationMetadata
   ): void;
 }
-
 abstract class User implements HasMetdataMethods {
   constructor(
     protected role: Role,
@@ -200,7 +198,6 @@ abstract class User implements HasMetdataMethods {
       | StudentMetadata
   ): void;
 }
-
 class Admin extends User {
   constructor(
     role: Role,
@@ -247,7 +244,6 @@ class Admin extends User {
     });
   }
 }
-
 class Teacher extends User {
   constructor(
     role: Role,
@@ -294,7 +290,6 @@ class Teacher extends User {
     });
   }
 }
-
 class Guardian extends User {
   constructor(
     role: Role,
@@ -337,7 +332,6 @@ class Guardian extends User {
     });
   }
 }
-
 class Student extends User {
   constructor(
     role: Role,
@@ -394,7 +388,6 @@ class Student extends User {
     });
   }
 }
-
 class Orgnanization implements HasMetdataMethods {
   constructor(
     protected name: string,

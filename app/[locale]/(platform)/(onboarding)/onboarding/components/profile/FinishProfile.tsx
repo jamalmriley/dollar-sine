@@ -28,12 +28,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AdminMetadata, TeacherMetadata } from "@/types/user";
+import { AdminMetadata, GuardianMetadata, TeacherMetadata } from "@/types/user";
 import { updateUserMetadata } from "@/app/actions/onboarding";
 import { ToastAction } from "@/components/ui/toast";
 import { EMOJI_SKIN_TONES } from "@/utils/emoji";
 import Pronunciation from "./Pronunciation";
 import { StyledActionButton } from "@/components/StyledButtons";
+import Students from "./Students";
 
 export default function FinishProfile() {
   const {
@@ -81,12 +82,10 @@ export default function FinishProfile() {
   const [pronouns, setPronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
-
   const [hasCustomPronouns, setHasCustomPronouns] = useQueryState(
     "hasCustomPronouns",
     parseAsBoolean.withDefault(false)
   );
-
   const [emojiSkinTone, setEmojiSkinTone] = useQueryState(
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
@@ -97,7 +96,11 @@ export default function FinishProfile() {
 
   const metadata = user.publicMetadata as any as
     | AdminMetadata
-    | TeacherMetadata;
+    | TeacherMetadata
+    | GuardianMetadata;
+
+  const { role } = metadata;
+  const currStep = role === "guardian" ? 2 : 1;
 
   const hasProfileUpdated: boolean =
     !user || isEmptyObject(metadata)
@@ -106,13 +109,13 @@ export default function FinishProfile() {
         metadata.prefix !== prefix ||
         metadata.displayName !== displayName ||
         metadata.displayNameFormat !== displayNameFormat ||
-        metadata.jobTitle !== jobTitle ||
         metadata.pronouns.toString() !== pronouns?.toString() ||
-        metadata.emojiSkinTone !== emojiSkinTone;
+        metadata.emojiSkinTone !== emojiSkinTone ||
+        ("jobTitle" in metadata && metadata.jobTitle !== jobTitle);
 
   const isUpdating =
-    metadata.lastOnboardingStepCompleted >= 1 &&
-    currOnboardingStep.step === 1 &&
+    metadata.lastOnboardingStepCompleted >= currStep &&
+    currOnboardingStep.step === currStep &&
     currOnboardingStep.isEditing;
 
   const hasEmptyField: boolean =
@@ -141,45 +144,48 @@ export default function FinishProfile() {
 
     const userId = user.id;
 
-    // const updatedGuardianMetadata: GuardianMetadata = {}
-    const updatedTeacherMetadata: TeacherMetadata = {
-      role: metadata.role,
+    const updatedGuardianMetadata: GuardianMetadata = {
+      ...metadata,
       pronunciation,
-      currPronunciationOptions: metadata.currPronunciationOptions,
-      prevPronunciationOptions: metadata.prevPronunciationOptions,
       isOnboardingComplete: false,
       lastOnboardingStepCompleted: Math.max(
-        1,
+        currStep,
         metadata.lastOnboardingStepCompleted
       ),
       onboardingLink: "/onboarding",
       pronouns,
       hasCustomPronouns,
       emojiSkinTone,
-      organizations: metadata.organizations,
-      courses: metadata.courses,
-      classes: metadata.classes,
-      invitations: metadata.invitations,
       displayName,
       displayNameFormat,
       prefix,
       isPrefixIncluded,
       isCustomPrefix,
+    };
+    const updatedTeacherMetadata: TeacherMetadata = {
+      ...updatedGuardianMetadata,
       jobTitle,
     };
     const updatedAdminMetadata: AdminMetadata = { ...updatedTeacherMetadata };
 
-    let updatedMetadata: AdminMetadata | TeacherMetadata;
+    let updatedMetadata:
+      | AdminMetadata
+      | TeacherMetadata
+      | GuardianMetadata
+      | null;
 
-    switch (metadata.role) {
+    switch (role) {
       case "admin":
         updatedMetadata = updatedAdminMetadata;
         break;
       case "teacher":
         updatedMetadata = updatedTeacherMetadata;
         break;
+      case "guardian":
+        updatedMetadata = updatedGuardianMetadata;
+        break;
       default:
-        updatedMetadata = updatedTeacherMetadata;
+        updatedMetadata = null;
     }
 
     const formData = new FormData();
@@ -324,15 +330,32 @@ export default function FinishProfile() {
 }
 
 function FinishProfileDesktop() {
+  const { userMetadata } = useOnboardingContext();
+
+  if (!userMetadata) return;
+  const { invitations, lastOnboardingStepCompleted, organizations, role } =
+    userMetadata;
+  const canRender: boolean = Boolean(
+    role === "admin" ||
+      role === "teacher" ||
+      (role === "guardian" &&
+        lastOnboardingStepCompleted >= 1 &&
+        (organizations.length > 0 || (invitations && invitations.length > 0)))
+  );
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-1/2 flex flex-col gap-4">
           <Pronunciation />
           <Separator decorative />
-          <Prefix />
-          <Separator decorative />
-          <DisplayName />
+          {canRender && <Prefix />}
+          {canRender && <Separator decorative />}
+          {canRender && <DisplayName />}
+          {!canRender && <Pronouns />}
+          {!canRender && <Separator decorative />}
+          {!canRender && <SkinTone />}
+          {!canRender && <Separator decorative />}
+          {!canRender && <ProfileImageUpload />}
         </div>
 
         {/* Responsive Separator */}
@@ -351,13 +374,15 @@ function FinishProfileDesktop() {
         </div>
 
         <div className="w-full md:w-1/2 flex flex-col gap-4">
-          <JobTitle />
-          <Separator decorative />
-          <Pronouns />
-          <Separator decorative />
-          <SkinTone />
-          <Separator decorative />
-          <ProfileImageUpload />
+          {role !== "guardian" && <JobTitle />}
+          {role !== "guardian" && <Separator decorative />}
+          {role === "guardian" && <Students />}
+          {canRender && <Separator decorative />}
+          {canRender && <Pronouns />}
+          {canRender && <Separator decorative />}
+          {canRender && <SkinTone />}
+          {canRender && <Separator decorative />}
+          {canRender && <ProfileImageUpload />}
         </div>
       </div>
     </div>

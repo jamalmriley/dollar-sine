@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import { beginsWithVowel } from "@/utils/general";
-import { GuardianType, Role } from "@/types/user";
+import { GUARDIAN_TYPES, GuardianType, Role } from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -50,19 +50,6 @@ export default function SignUpForm() {
   const { t } = useTranslation();
 
   const roles = ["Teacher", "Administrator"];
-  const guardianTypes: GuardianType[] = [
-    "Parent",
-    "Stepparent",
-    "Grandparent",
-    "Aunt",
-    "Uncle",
-    "Older sibling",
-    "Foster parent",
-    "Adoptive parent",
-    "Family member",
-    "Guardian",
-    "Caregiver",
-  ];
 
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
@@ -180,7 +167,7 @@ export default function SignUpForm() {
                   </DropdownMenuSubTrigger>
                   <DropdownMenuPortal>
                     <DropdownMenuSubContent>
-                      {guardianTypes.map((guardianType, idx) => (
+                      {GUARDIAN_TYPES.map((guardianType, idx) => (
                         <DropdownMenuItem
                           key={idx}
                           onClick={() => {

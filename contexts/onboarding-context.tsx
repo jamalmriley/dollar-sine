@@ -35,6 +35,16 @@ type OnboardingContext = {
   setPreferNotToSay: React.Dispatch<React.SetStateAction<boolean>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
+  studentId: string;
+  setStudentId: React.Dispatch<React.SetStateAction<string>>;
+  studentFirst: string;
+  setStudentFirst: React.Dispatch<React.SetStateAction<string>>;
+  studentLast: string;
+  setStudentLast: React.Dispatch<React.SetStateAction<string>>;
+  studentEmail: string;
+  setStudentEmail: React.Dispatch<React.SetStateAction<string>>;
+  studentGradeLevel: string;
+  setStudentGradeLevel: React.Dispatch<React.SetStateAction<string>>;
   org: Organization | undefined;
   setOrg: React.Dispatch<React.SetStateAction<Organization | undefined>>;
   showOrgResults: boolean;
@@ -100,6 +110,11 @@ export default function OnboardingContextProvider({
   const [isZeSelected, setIsZeSelected] = useState<boolean>(false);
   const [preferNotToSay, setPreferNotToSay] = useState<boolean>(false);
   const [profilePic, setProfilePic] = useState<File | undefined>();
+  const [studentId, setStudentId] = useState<string>("");
+  const [studentFirst, setStudentFirst] = useState<string>("");
+  const [studentLast, setStudentLast] = useState<string>("");
+  const [studentEmail, setStudentEmail] = useState<string>("");
+  const [studentGradeLevel, setStudentGradeLevel] = useState<string>("");
 
   const [org, setOrg] = useState<Organization>();
   const [showOrgResults, setShowOrgResults] = useState<boolean>(false);
@@ -155,6 +170,16 @@ export default function OnboardingContextProvider({
         setPreferNotToSay,
         profilePic,
         setProfilePic,
+        studentId,
+        setStudentId,
+        studentFirst,
+        setStudentFirst,
+        studentLast,
+        setStudentLast,
+        studentEmail,
+        setStudentEmail,
+        studentGradeLevel,
+        setStudentGradeLevel,
         org,
         setOrg,
         showOrgResults,

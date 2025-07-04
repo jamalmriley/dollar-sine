@@ -4,6 +4,7 @@ import {
   StyledActionButton,
   StyledDropdownButton,
 } from "@/components/StyledButtons";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -324,7 +325,7 @@ export default function Pronouns() {
               </DropdownMenuPortal>
             </DropdownMenuSub>
 
-            {/* Options */}
+            {/* "Add Your Own" and "Prefer Not to Say" */}
             <DropdownMenuGroup>
               <DialogTrigger asChild>
                 <DropdownMenuItem className="flex justify-between border border-transparent">
@@ -350,12 +351,9 @@ export default function Pronouns() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
 
-            <StyledActionButton
-              className="w-full"
-              onClick={() => setOpen(false)}
-            >
+            <Button className="w-full" onClick={() => setOpen(false)}>
               Done
-            </StyledActionButton>
+            </Button>
           </DropdownMenuContent>
         </DropdownMenu>
 
