@@ -63,7 +63,7 @@ export type GuardianType = (typeof GUARDIAN_TYPES)[number];
 
 export type Status = "Rejected" | "Pending" | "Accepted";
 
-export interface OrganizationInvitation {
+export interface UserInvitation {
   createdAt: Date;
   status: Status;
   organizationId: string;
@@ -113,7 +113,7 @@ export interface UserMetadata {
   organizations: OrganizationId[];
   courses: SelectedCourse[];
   classes: Class[] | null;
-  invitations: OrganizationInvitation[] | null;
+  invitations: UserInvitation[] | null;
 }
 export interface AdminMetadata extends TeacherMetadata {}
 export interface TeacherMetadata extends GuardianMetadata {
@@ -145,7 +145,7 @@ export interface StudentMetadata extends UserMetadata {
 
 // Purchased courses go to org metadata, enrolled courses go to user metadata
 type OrganizationId = string;
-export interface UserInvitation {
+export interface OrganizationInvitation {
   createdAt: Date;
   status: Status;
   userId: string;
@@ -157,7 +157,7 @@ export interface OrganizationMetadata {
   category: string;
   isTeacherPurchasingEnabled: boolean;
   courses: SelectedCourse[] | null;
-  invitations: UserInvitation[] | null;
+  invitations: OrganizationInvitation[] | null;
 }
 
 // Classes //

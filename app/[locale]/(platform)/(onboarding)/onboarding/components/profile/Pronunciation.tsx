@@ -12,7 +12,8 @@ import { useQueryState } from "nuqs";
 import { FaArrowRotateRight } from "react-icons/fa6";
 
 export default function Pronunciation() {
-  const { isLoading, userMetadata } = useOnboardingContext();
+  const { userMetadata, isLoading, setIsLoading, setLastUpdated } =
+    useOnboardingContext();
   const { user, isLoaded } = useUser();
   const [pronunciation, setPronunciation] = useQueryState("pronunciation", {
     defaultValue: "",
@@ -21,6 +22,7 @@ export default function Pronunciation() {
   async function getMorePronunciations() {
     if (!user || !userMetadata) return;
 
+    await setIsLoading(true);
     await getPronunciations(
       String(user.fullName),
       userMetadata.currPronunciationOptions
@@ -40,10 +42,11 @@ export default function Pronunciation() {
           ...userMetadata,
           currPronunciationOptions: curr,
           prevPronunciationOptions,
-        });
+        }).then(() => setLastUpdated(new Date().toString()));
       })
       .catch((err) => {
         console.error(err);
+        setIsLoading(false);
       });
   }
 

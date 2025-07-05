@@ -45,7 +45,7 @@ import { PiStudent } from "react-icons/pi";
 import { useMediaQuery } from "usehooks-ts";
 import { v4 as uuidv4 } from "uuid";
 
-const MAX_STUDENTS: number = 3;
+const MAX_STUDENTS: number = 4;
 
 export default function Students() {
   const {
@@ -138,7 +138,10 @@ export default function Students() {
 
                         const newMetadata: GuardianMetadata = {
                           ...metadata,
-                          studentInvitations: newStudentInvitations,
+                          studentInvitations:
+                            newStudentInvitations.length > 0
+                              ? newStudentInvitations
+                              : null,
                         };
                         await setIsLoading(true);
                         await updateUserMetadata(user.id, newMetadata)

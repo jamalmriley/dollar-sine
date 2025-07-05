@@ -41,7 +41,6 @@ export default function Pronouns() {
   const [pronouns, setPronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
-
   const [hasCustomPronouns, setHasCustomPronouns] = useQueryState(
     "hasCustomPronouns",
     parseAsBoolean.withDefault(false)
@@ -154,7 +153,7 @@ export default function Pronouns() {
     };
 
     pronounHelper();
-  }, []);
+  }, [pronouns, hasCustomPronouns]);
 
   // Sets pronouns based on dropdown menu selections.
   useEffect(() => {
@@ -193,8 +192,18 @@ export default function Pronouns() {
       await setPronouns(result.join("/"));
     };
 
-    getPronouns();
-  }, [open]);
+    if (!open) getPronouns();
+  }, [
+    open,
+    isHeSelected,
+    isSheSelected,
+    isTheySelected,
+    isEySelected,
+    isXeSelected,
+    isZeSelected,
+    hasCustomPronouns,
+    preferNotToSay,
+  ]);
 
   const formatPronoun = (pronoun: string): string => {
     return pronoun.toLowerCase().replace(/[^a-z]/g, "");
@@ -236,7 +245,7 @@ export default function Pronouns() {
             <StyledDropdownButton
               className={pronouns === "" ? "text-muted-foreground" : ""}
             >
-              {pronouns !== "" ? pronouns : "Choose"}
+              {pronouns || "Choose"}
             </StyledDropdownButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

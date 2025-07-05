@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import { beginsWithVowel } from "@/utils/general";
-import { GUARDIAN_TYPES, GuardianType, Role } from "@/types/user";
+import { GUARDIAN_TYPES, Role } from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";

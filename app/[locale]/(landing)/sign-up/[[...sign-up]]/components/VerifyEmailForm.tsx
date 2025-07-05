@@ -16,12 +16,7 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import { toast } from "@/hooks/use-toast";
-import {
-  AdminMetadata,
-  UserMetadata,
-  TeacherMetadata,
-  GuardianMetadata,
-} from "@/types/user";
+import { UserMetadata } from "@/types/user";
 import { useSignUp } from "@clerk/nextjs";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";

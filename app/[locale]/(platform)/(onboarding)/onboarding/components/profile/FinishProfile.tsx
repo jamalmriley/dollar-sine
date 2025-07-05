@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { FormEventHandler } from "react";
 import { Loader2 } from "lucide-react";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { isEmptyObject } from "@/utils/general";
 import { MdClose, MdRefresh } from "react-icons/md";
 import {
   Card,
@@ -44,6 +43,7 @@ export default function FinishProfile() {
     setCurrOnboardingStep,
     profilePic,
     setProfilePic,
+    userMetadata,
     setIsHeSelected,
     setIsSheSelected,
     setIsTheySelected,
@@ -90,42 +90,46 @@ export default function FinishProfile() {
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
   );
-
   const { user, isLoaded } = useUser();
-  if (!user || !isLoaded) return;
 
-  const metadata = user.publicMetadata as any as
-    | AdminMetadata
-    | TeacherMetadata
-    | GuardianMetadata;
+  if (!userMetadata) return;
 
-  const { role } = metadata;
+  const { invitations, lastOnboardingStepCompleted, organizations, role } =
+    userMetadata;
+  const canRender: boolean = Boolean(
+    role === "admin" ||
+      role === "teacher" ||
+      (role === "guardian" &&
+        lastOnboardingStepCompleted >= 1 &&
+        (organizations.length > 0 || (invitations && invitations.length > 0)))
+  );
   const currStep = role === "guardian" ? 2 : 1;
 
   const hasProfileUpdated: boolean =
-    !user || isEmptyObject(metadata)
-      ? false
-      : metadata.pronunciation !== pronunciation ||
-        metadata.prefix !== prefix ||
-        metadata.displayName !== displayName ||
-        metadata.displayNameFormat !== displayNameFormat ||
-        metadata.pronouns.toString() !== pronouns?.toString() ||
-        metadata.emojiSkinTone !== emojiSkinTone ||
-        ("jobTitle" in metadata && metadata.jobTitle !== jobTitle);
+    userMetadata.pronunciation !== pronunciation ||
+    ("prefix" in userMetadata && userMetadata.prefix !== prefix) ||
+    ("displayName" in userMetadata &&
+      userMetadata.displayName !== displayName) ||
+    ("displayNameFormat" in userMetadata &&
+      userMetadata.displayNameFormat !== displayNameFormat) ||
+    userMetadata.pronouns !== pronouns ||
+    userMetadata.emojiSkinTone !== emojiSkinTone ||
+    ("jobTitle" in userMetadata && userMetadata.jobTitle !== jobTitle);
 
   const isUpdating =
-    metadata.lastOnboardingStepCompleted >= currStep &&
+    userMetadata.lastOnboardingStepCompleted >= currStep &&
     currOnboardingStep.step === currStep &&
     currOnboardingStep.isEditing;
 
   const hasEmptyField: boolean =
     !pronunciation ||
-    !prefix ||
-    !displayName ||
-    !displayNameFormat ||
-    !jobTitle ||
+    (canRender && !prefix) ||
+    (canRender && !displayName) ||
+    (canRender && !displayNameFormat) ||
+    (role !== "guardian" && !jobTitle) ||
     !pronouns ||
-    !emojiSkinTone;
+    !emojiSkinTone ||
+    (role === "guardian" && !Boolean("studentInvitations" in userMetadata));
 
   const header = {
     title: isUpdating
@@ -145,12 +149,12 @@ export default function FinishProfile() {
     const userId = user.id;
 
     const updatedGuardianMetadata: GuardianMetadata = {
-      ...metadata,
+      ...userMetadata,
       pronunciation,
       isOnboardingComplete: false,
       lastOnboardingStepCompleted: Math.max(
         currStep,
-        metadata.lastOnboardingStepCompleted
+        userMetadata.lastOnboardingStepCompleted
       ),
       onboardingLink: "/onboarding",
       pronouns,
@@ -375,7 +379,6 @@ function FinishProfileDesktop() {
 
         <div className="w-full md:w-1/2 flex flex-col gap-4">
           {role !== "guardian" && <JobTitle />}
-          {role !== "guardian" && <Separator decorative />}
           {role === "guardian" && <Students />}
           {canRender && <Separator decorative />}
           {canRender && <Pronouns />}
@@ -390,6 +393,7 @@ function FinishProfileDesktop() {
 }
 
 function FinishProfileMobile() {
+  const { profilePic, userMetadata } = useOnboardingContext();
   const [pronunciation] = useQueryState("pronunciation", { defaultValue: "" });
   const [prefix] = useQueryState("prefix", { defaultValue: "" });
   const [displayName] = useQueryState("displayName", { defaultValue: "" });
@@ -397,76 +401,106 @@ function FinishProfileMobile() {
   const [pronouns] = useQueryState("pronouns", { defaultValue: "" });
   const [emojiSkinTone] = useQueryState("emojiSkinTone", { defaultValue: "" });
 
+  if (!userMetadata) return;
+  const { invitations, lastOnboardingStepCompleted, organizations, role } =
+    userMetadata;
+  const canRender: boolean = Boolean(
+    role === "admin" ||
+      role === "teacher" ||
+      (role === "guardian" &&
+        lastOnboardingStepCompleted >= 1 &&
+        (organizations.length > 0 || (invitations && invitations.length > 0)))
+  );
+  const isStudentInvitationsComplete =
+    "studentInvitations" in userMetadata &&
+    Array.isArray(userMetadata.studentInvitations) &&
+    userMetadata.studentInvitations.length > 0;
+
   const accordionItems = [
     {
       trigger: "Tell us how to say your name.",
       value: "pronunciation",
       content: <Pronunciation />,
+      canRender: true,
       isCompleted: pronunciation !== "",
     },
     {
       trigger: "Select a prefix below.",
       value: "prefix",
       content: <Prefix />,
+      canRender,
       isCompleted: prefix !== "",
     },
     {
       trigger: "Choose a display name format.",
       value: "displayName",
       content: <DisplayName />,
+      canRender,
       isCompleted: displayName !== "",
     },
     {
       trigger: "Set your job title.",
       value: "jobTitle",
       content: <JobTitle />,
+      canRender: role !== "guardian",
       isCompleted: jobTitle !== "",
     },
     {
       trigger: "Add your pronouns.",
       value: "pronouns",
       content: <Pronouns />,
+      canRender: true,
       isCompleted: pronouns !== "",
     },
     {
       trigger: "Select your skin tone.",
       value: "emojiSkinTone",
       content: <SkinTone />,
+      canRender: true,
       isCompleted: emojiSkinTone !== "",
+    },
+    {
+      trigger: "Add your students.",
+      value: "students",
+      content: <Students />,
+      canRender: role === "guardian",
+      isCompleted: isStudentInvitationsComplete,
     },
   ];
 
-  const { profilePic } = useOnboardingContext();
-
   return (
     <Accordion type="single" collapsible className="w-full">
-      {accordionItems.map((item, i) => (
-        <AccordionItem key={i} value={item.value}>
-          <AccordionTrigger>
-            <span className="flex items-center gap-3">
-              {/* Check */}
-              <span className="size-4">
-                {item.isCompleted ? (
-                  <FaCheckCircle className="size-full text-emerald-400" />
-                ) : (
-                  <div className="size-full rounded-full border-2" />
-                )}
-              </span>
+      {/* Profile Items */}
+      {accordionItems
+        .filter((item) => item.canRender)
+        .map((item, i) => (
+          <AccordionItem key={i} value={item.value}>
+            <AccordionTrigger>
+              <span className="flex items-center gap-3">
+                {/* Check */}
+                <span className="size-4">
+                  {item.isCompleted ? (
+                    <FaCheckCircle className="size-full text-emerald-400" />
+                  ) : (
+                    <div className="size-full rounded-full border-2" />
+                  )}
+                </span>
 
-              {/* Label */}
-              <span
-                className={`text-sm font-semibold ${
-                  item.isCompleted ? "text-muted-foreground line-through" : ""
-                }`}
-              >
-                {item.trigger}
+                {/* Label */}
+                <span
+                  className={`text-sm font-semibold ${
+                    item.isCompleted ? "text-muted-foreground line-through" : ""
+                  }`}
+                >
+                  {item.trigger}
+                </span>
               </span>
-            </span>
-          </AccordionTrigger>
-          <AccordionContent>{item.content}</AccordionContent>
-        </AccordionItem>
-      ))}
+            </AccordionTrigger>
+            <AccordionContent>{item.content}</AccordionContent>
+          </AccordionItem>
+        ))}
 
+      {/* Profile Pic */}
       <AccordionItem key={accordionItems.length} value="profilePic">
         <AccordionTrigger>
           <span className="flex items-center gap-3">
