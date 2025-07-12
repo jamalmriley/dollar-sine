@@ -20,11 +20,7 @@ import {
   updateOrganization,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
-import {
-  AdminMetadata,
-  OrganizationMetadata,
-  UserMetadata,
-} from "@/types/user";
+import { OrganizationMetadata, UserMetadata } from "@/types/user";
 import { toast } from "@/hooks/use-toast";
 import { getPaymentIntent } from "@/app/actions/payment";
 import Stripe from "stripe";
@@ -36,17 +32,15 @@ import Iphone from "@/components/iPhone";
 import { useRouter } from "next/navigation";
 
 export default function OnboardingCompletePage() {
+  const [paymentIntent] = useQueryState("payment_intent", { defaultValue: "" });
   const { user, isLoaded } = useUser();
+
   if (!user || !isLoaded) return;
-
-  const publicMetadata = user.publicMetadata as any as UserMetadata;
-  const { role } = publicMetadata;
-
   return (
     <OnboardingContextProvider>
       <div className="page-container">
-        {role === "admin" && <AdminOnboardingComplete />}
-        {role === "teacher" && <TeacherOnboardingComplete />}
+        {paymentIntent !== "" && <OnboardingCompleteWithPayment />}
+        {paymentIntent === "" && <OnboardingCompleteWithoutPayment />}
       </div>
     </OnboardingContextProvider>
   );
@@ -168,7 +162,7 @@ function OnboardingCompleteComponent({
   );
 }
 
-function AdminOnboardingComplete() {
+function OnboardingCompleteWithPayment() {
   const {
     transactionTotal,
     setTransactionTotal,
@@ -182,9 +176,7 @@ function AdminOnboardingComplete() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
 
-  const [paymentIntent] = useQueryState("payment_intent", {
-    defaultValue: "",
-  });
+  const [paymentIntent] = useQueryState("payment_intent", { defaultValue: "" });
 
   let activeCourses: SelectedCourse[];
 
@@ -203,7 +195,7 @@ function AdminOnboardingComplete() {
     ) => {
       if (!user) return;
 
-      const publicMetadata = user.publicMetadata as any as AdminMetadata;
+      const publicMetadata = user.publicMetadata as unknown as UserMetadata;
       const { onboardingLink } = publicMetadata;
       if (!paymentIntent) router.push(onboardingLink);
 
@@ -216,7 +208,9 @@ function AdminOnboardingComplete() {
 
       if (paymentIntentDetails) {
         const metadata = paymentIntentDetails.metadata;
-        activeCourses = JSON.parse(metadata.courses) as any as SelectedCourse[];
+        activeCourses = JSON.parse(
+          metadata.courses
+        ) as unknown as SelectedCourse[];
         setTransactionTotal(paymentIntentDetails.amount);
         setTransactionDate(
           format(
@@ -230,7 +224,7 @@ function AdminOnboardingComplete() {
 
       // Update the user's onboarding status to complete.
       // TODO: Add locale functionality
-      const userMetadata: AdminMetadata = {
+      const userMetadata: UserMetadata = {
         ...publicMetadata,
         onboardingLink: "/onboarding",
         isOnboardingComplete: true,
@@ -239,32 +233,33 @@ function AdminOnboardingComplete() {
       };
 
       await updateUserMetadata(user.id, userMetadata).then(() => {
-        const orgId = user?.organizationMemberships[0].organization
-          .id as string;
+        const { role, organizations } = userMetadata;
+        if (role !== "guardian" && organizations && organizations.length > 0) {
+          const orgId = organizations[0];
+          getOrganizationById(orgId).then((res) => {
+            const organization = JSON.parse(res.data) as Organization;
+            const orgMetadata =
+              organization.publicMetadata as unknown as OrganizationMetadata;
+            const newOrgMetadata: OrganizationMetadata = {
+              ...orgMetadata,
+              courses: activeCourses,
+            };
 
-        getOrganizationById(orgId).then((res) => {
-          const organization = JSON.parse(res.data) as Organization;
-          const orgMetadata =
-            organization.publicMetadata as any as OrganizationMetadata;
-          const newOrgMetadata: OrganizationMetadata = {
-            ...orgMetadata,
-            courses: activeCourses,
-          };
+            updateOrganization(orgId, newOrgMetadata).then((res) => {
+              setIsOnboardingComplete(res.success);
+              toast({
+                variant: res.success ? "default" : "destructive",
+                title: "Welcome to Dollar Sine! 🤓",
+                description: res.success
+                  ? "Your onboarding is now complete."
+                  : res.message?.description,
+              });
 
-          updateOrganization(orgId, newOrgMetadata).then((res) => {
-            setIsOnboardingComplete(res.success);
-            toast({
-              variant: res.success ? "default" : "destructive",
-              title: "Welcome to Dollar Sine! 🤓",
-              description: res.success
-                ? "Your onboarding is now complete."
-                : res.message?.description,
+              handleConfetti();
+              localStorage.setItem("onboardingStep", "1"); // Sets the onboarding step to 1 in case a future user signs up on the same device.
             });
-
-            handleConfetti();
-            localStorage.setItem("onboardingStep", "1"); // Sets the onboarding step to 1 in case a future user signs up on the same device.
           });
-        });
+        }
       });
     };
 
@@ -291,7 +286,7 @@ function AdminOnboardingComplete() {
   );
 }
 
-function TeacherOnboardingComplete() {
+function OnboardingCompleteWithoutPayment() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
   const { isOnboardingComplete, setIsOnboardingComplete, lastUpdated } =
@@ -302,7 +297,7 @@ function TeacherOnboardingComplete() {
   useEffect(() => {
     const checkOnboardingCompletion = () => {
       if (!user) return;
-      const publicMetadata = user.publicMetadata as any as UserMetadata;
+      const publicMetadata = user.publicMetadata as unknown as UserMetadata;
       const { isOnboardingComplete, onboardingLink } = publicMetadata;
 
       setIsOnboardingComplete(isOnboardingComplete);

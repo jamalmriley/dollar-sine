@@ -29,6 +29,7 @@ import { setTitle } from "@/utils/ui";
 import { StyledButton } from "@/components/StyledButtons";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Course } from "@/types/course";
 
 export const metadata: Metadata = setTitle("All Courses");
 const i18nNamespaces = ["platform-layout"];
@@ -103,7 +104,7 @@ export default async function AllCoursesPage({
 
         <Suspense fallback={<Loading />}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {courses.map((course: any) => (
+            {courses.map((course: Course) => (
               <CourseTile key={course.id}>
                 <Link href={`/courses/${course.id}`}>
                   <Image

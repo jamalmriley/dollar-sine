@@ -27,7 +27,9 @@ export default function Courses() {
     canPurchaseCourses,
     courses,
     isLoading,
+    org,
     purchasedCourses,
+    userMetadata,
     setLastUpdated,
     setIsOnboardingComplete,
   } = useOnboardingContext();
@@ -60,7 +62,7 @@ export default function Courses() {
   }
   async function handleNonPurchaseCompleteOnboarding() {
     if (!user) return;
-    const publicMetadata = user.publicMetadata as any as TeacherMetadata;
+    const publicMetadata = user.publicMetadata as unknown as TeacherMetadata;
     const userMetadata: TeacherMetadata = {
       ...publicMetadata,
       onboardingLink: "/onboarding",
@@ -77,9 +79,8 @@ export default function Courses() {
     });
   }
 
-  useCourseData();
-  if (!user || !isLoaded) return;
-
+  useCourseData(org, userMetadata);
+  if (!user || !isLoaded || !userMetadata) return;
   return (
     // <Card className="w-full h-fit max-w-2xl mx-10">
     <Card className="h-fit max-w-2xl mx-10">

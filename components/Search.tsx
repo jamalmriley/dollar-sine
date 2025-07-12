@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { liteClient as algoliasearch } from "algoliasearch/lite";
 import { useMediaQuery } from "usehooks-ts";
 import Link from "next/link";

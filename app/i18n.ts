@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createInstance } from "i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import resourcesToBackend from "i18next-resources-to-backend";
@@ -16,7 +17,7 @@ export default async function initTranslations(
   if (!resources) {
     i18nInstance.use(
       resourcesToBackend(
-        (language: any, namespace: any) =>
+        (language: string, namespace: string) =>
           import(`@/locales/${language}/${namespace}.json`)
       )
     );

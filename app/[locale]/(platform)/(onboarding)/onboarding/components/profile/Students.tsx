@@ -149,7 +149,7 @@ export default function Students() {
                             setLastUpdated(new Date().toString());
                           })
                           .catch((err) => {
-                            console.error("Failed to update user data:", err);
+                            console.error(err);
                             setIsLoading(false);
                           });
                       }}
@@ -418,7 +418,7 @@ function StudentButton({ action }: { action: "Add" | "Update" }) {
         setLastUpdated(new Date().toString());
       })
       .catch((err) => {
-        console.error("Failed to update user data:", err);
+        console.error(err);
         setIsLoading(false);
       });
   }

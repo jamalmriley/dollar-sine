@@ -94,14 +94,14 @@ export default function FinishProfile() {
 
   if (!userMetadata) return;
 
-  const { invitations, lastOnboardingStepCompleted, organizations, role } =
-    userMetadata;
+  const { lastOnboardingStepCompleted, organizations, role } = userMetadata;
   const canRender: boolean = Boolean(
     role === "admin" ||
       role === "teacher" ||
       (role === "guardian" &&
         lastOnboardingStepCompleted >= 1 &&
-        (organizations.length > 0 || (invitations && invitations.length > 0)))
+        organizations &&
+        organizations.length > 0) // TODO: Change organizations && organizations.length > 0 to org.id is in the organizations array.
   );
   const currStep = role === "guardian" ? 2 : 1;
 
@@ -337,14 +337,14 @@ function FinishProfileDesktop() {
   const { userMetadata } = useOnboardingContext();
 
   if (!userMetadata) return;
-  const { invitations, lastOnboardingStepCompleted, organizations, role } =
-    userMetadata;
+  const { lastOnboardingStepCompleted, organizations, role } = userMetadata;
   const canRender: boolean = Boolean(
     role === "admin" ||
       role === "teacher" ||
       (role === "guardian" &&
         lastOnboardingStepCompleted >= 1 &&
-        (organizations.length > 0 || (invitations && invitations.length > 0)))
+        organizations &&
+        organizations.length > 0) // TODO: Change organizations && organizations.length > 0 to org.id is in the organizations array.
   );
   return (
     <div className="flex flex-col gap-4">
@@ -402,14 +402,14 @@ function FinishProfileMobile() {
   const [emojiSkinTone] = useQueryState("emojiSkinTone", { defaultValue: "" });
 
   if (!userMetadata) return;
-  const { invitations, lastOnboardingStepCompleted, organizations, role } =
-    userMetadata;
+  const { lastOnboardingStepCompleted, organizations, role } = userMetadata;
   const canRender: boolean = Boolean(
     role === "admin" ||
       role === "teacher" ||
       (role === "guardian" &&
         lastOnboardingStepCompleted >= 1 &&
-        (organizations.length > 0 || (invitations && invitations.length > 0)))
+        organizations &&
+        organizations.length > 0) // TODO: Change organizations && organizations.length > 0 to org.id is in the organizations array.
   );
   const isStudentInvitationsComplete =
     "studentInvitations" in userMetadata &&

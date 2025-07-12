@@ -7,7 +7,11 @@ import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { OrgCard, OrgCardError, OrgCardSkeleton } from "./OrgCard";
 
-export default function OrgAlreadyCreated() {
+export default function OrgAlreadyCompleted({
+  tab,
+}: {
+  tab: "create" | "join";
+}) {
   const { user, isLoaded } = useUser();
   const { isLoading, org } = useOnboardingContext();
   const [toggle, setToggle] = useState<boolean>(false);
@@ -18,7 +22,7 @@ export default function OrgAlreadyCreated() {
       {isLoading ? (
         <OrgCardSkeleton toggle={toggle} />
       ) : org ? (
-        <OrgCard toggle={toggle} org={org} />
+        <OrgCard toggle={toggle} org={org} tab={tab} />
       ) : (
         <OrgCardError toggle={toggle} />
       )}

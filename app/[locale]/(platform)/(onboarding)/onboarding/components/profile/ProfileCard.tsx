@@ -58,7 +58,7 @@ export function ProfileCard({
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
   );
 
-  const metadata = userData.publicMetadata as any as
+  const metadata = userData.publicMetadata as unknown as
     | AdminMetadata
     | TeacherMetadata;
   if (!metadata) return;

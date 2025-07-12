@@ -42,7 +42,7 @@ export default async function ChapterContent({
   chapter,
   params: { locale },
 }: {
-  courseId: any;
+  courseId: string;
   course: any;
   chapter: any;
   params: { locale: string };

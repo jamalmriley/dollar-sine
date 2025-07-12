@@ -21,13 +21,8 @@ import { useUserData } from "@/hooks/use-userData";
 import { useOrganizationData } from "@/hooks/use-organizationData";
 
 export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
-  const {
-    isInitRender,
-    organizationId,
-    userMetadata,
-    lastUpdated,
-    setCurrOnboardingStep,
-  } = useOnboardingContext();
+  const { isInitRender, userMetadata, lastUpdated, setCurrOnboardingStep } =
+    useOnboardingContext();
   const pathname = usePathname();
   const { locale } = useParams();
   const searchParams = useSearchParams();
@@ -65,7 +60,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
       }
     }, 3000);
     return () => clearTimeout(timeoutId);
-  }, [searchParams]);
+  }, [locale, pathname, searchParams]);
 
   // Maintain the state of the custom carousel.
   useEffect(() => {
@@ -106,14 +101,8 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
     api?.scrollNext();
   }, [api]);
 
-  const id =
-    organizationId !== undefined
-      ? organizationId
-      : user && user.organizationMemberships.length > 0
-        ? user.organizationMemberships[0].organization.id
-        : undefined;
   useUserData(lastUpdated, isInitRender);
-  useOrganizationData("id", id, lastUpdated);
+  useOrganizationData(lastUpdated, userMetadata);
   if (!user || !isLoaded || !userMetadata) return;
   return (
     <div className="h-full flex flex-col justify-between items-center pt-10">

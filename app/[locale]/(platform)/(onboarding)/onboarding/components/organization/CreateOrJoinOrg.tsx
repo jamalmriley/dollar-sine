@@ -19,8 +19,7 @@ export default function CreateOrJoinOrg() {
   const {
     currOnboardingStep,
     setCurrOnboardingStep,
-    hasInvitations,
-    hasOrg,
+    org,
     setOrgLogo,
     userMetadata,
   } = useOnboardingContext();
@@ -52,14 +51,40 @@ export default function CreateOrJoinOrg() {
     setCurrOnboardingStep({ step: 2, isEditing: false });
   }
 
+  // Auto-set the tab based on the user's progress.
   useEffect(() => {
+    if (!org || !user?.id || !userMetadata) return;
+    const { invitations, lastOnboardingStepCompleted, organizations, role } =
+      userMetadata;
     const stored = localStorage.getItem("createOrJoin");
-    if (stored) {
-      setTab(stored);
-    } else if (userMetadata?.role) {
-      setTab(userMetadata.role === "admin" ? "create" : "join");
+
+    // If the user has completed this step, check userMetadata to determine the tab state.
+    if (lastOnboardingStepCompleted >= currStep) {
+      // First, check if there are organizations added to this user.
+      if (organizations && organizations.length > 0) {
+        // See if the "org" context variable is in the organizations array.
+        // If it is and the current user is the owner of this organization, then set the tab to "create".
+        const isOrgPresent: boolean = organizations.indexOf(org.id) !== -1;
+        const isOrgOwner: boolean = org.createdBy === user.id;
+        if (isOrgPresent && isOrgOwner) setTab("create");
+      }
+      // If there are no organizations, then check for invitations.
+      else if (invitations && invitations.length > 0) {
+        // See if the user has requested to join the organization that is the "org" context variable.
+        // If the user has, then set the tab to "join".
+        const isOrgPresent: boolean =
+          invitations.filter(
+            (invitation) => invitation.organizationId === org.id
+          ).length > 0;
+        if (isOrgPresent) setTab("join");
+      }
     }
-  }, [userMetadata]);
+    // If the user has not completed this step, check local storage to determine the tab state.
+    else {
+      if (stored) setTab(stored);
+      else setTab(role === "admin" ? "create" : "join");
+    }
+  }, [org, userMetadata, user?.id]);
 
   if (!user || !isLoaded || !userMetadata) return;
   // Variables dependent on userMetadata go below the if guard.
@@ -83,10 +108,14 @@ export default function CreateOrJoinOrg() {
   const joinHeader = {
     title: isUpdating
       ? "Update your join request."
-      : "Request to join an organization.",
+      : isCompleted
+        ? "Join request successfully sent!"
+        : "Request to join an organization.",
     description: isUpdating
       ? "Need to make a quick edit? Update your request to join an organization below."
-      : "Search an organization to request joining it.",
+      : isCompleted
+        ? "View your organization's details below."
+        : "Search an organization to request joining it.",
   };
 
   return (
@@ -129,7 +158,7 @@ export default function CreateOrJoinOrg() {
               <TabsTrigger
                 value="create"
                 className={`${tab === "create" && "border-r border-default-color"}`}
-                disabled={hasInvitations}
+                disabled={Boolean(org)}
               >
                 Create
               </TabsTrigger>
@@ -137,7 +166,7 @@ export default function CreateOrJoinOrg() {
                 value="join"
                 className={`${tab === "join" && "border-l border-default-color"}`}
                 onClick={() => handleCancelForm()}
-                disabled={hasOrg}
+                disabled={Boolean(org)}
               >
                 Join
               </TabsTrigger>

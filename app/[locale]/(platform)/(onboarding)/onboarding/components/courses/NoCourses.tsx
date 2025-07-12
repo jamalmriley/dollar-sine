@@ -28,7 +28,6 @@ export default function NoCourses() {
               <h1 className="text-lg font-extrabold text-white">500</h1>
             </div>
             <StyledIconDestructiveButton
-              className="h-7 rounded-full"
               onClick={() => {
                 setLastUpdated(new Date().toString()); // Triggers re-render.
               }}

@@ -11,12 +11,13 @@ export function useUserData(lastUpdated: string, isInitRender: boolean) {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!user) return;
       await setIsLoading(true);
       try {
-        if (!user) return;
         const res = await getUser(user.id);
         const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as UserMetadata;
+        const publicMetadata =
+          userData.publicMetadata as unknown as UserMetadata;
         await setUserData(userData);
         await setUserMetadata(publicMetadata);
         if (!isInitRender) await setIsLoading(false);

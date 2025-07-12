@@ -35,8 +35,8 @@ export default async function LessonContent({
   lesson,
   params: { locale },
 }: {
-  courseId: any;
-  lessonPrefix: any;
+  courseId: string;
+  lessonPrefix: number;
   lessons: any;
   lesson: any;
   params: { locale: string };

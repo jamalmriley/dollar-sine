@@ -2,24 +2,50 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { truncateString } from "@/utils/general";
-import { ORG_CATEGORIES, OrganizationMetadata } from "@/types/user";
-import { Organization } from "@clerk/nextjs/server";
+import {
+  ORG_CATEGORIES,
+  OrganizationMetadata,
+  Status,
+  UserMetadata,
+} from "@/types/user";
+import { Organization, User } from "@clerk/nextjs/server";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { BsBuildingExclamation } from "react-icons/bs";
+import { BsBuildingExclamation, BsThreeDotsVertical } from "react-icons/bs";
 import { IoMdLink } from "react-icons/io";
-import { MdEdit, MdError } from "react-icons/md";
+import { MdError } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa6";
 import { StyledDestructiveButton } from "@/components/StyledButtons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useUser } from "@clerk/nextjs";
+import {
+  ClerkErrorResponse,
+  deleteOrganization,
+  getUser,
+  sendRequestToOrganization,
+  updateUserMetadata,
+} from "@/app/actions/onboarding";
+import { toast } from "@/hooks/use-toast";
 
 export function OrgCard({
   toggle,
   org,
+  tab,
 }: {
   toggle: boolean;
   org: Organization;
+  tab: "create" | "join";
 }) {
+  const { userMetadata, setIsLoading, setLastUpdated, setOrg, setOrgLogo } =
+    useOnboardingContext();
+  const { user } = useUser();
   const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
   const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   const [, setOrgAddress] = useQueryState("orgAddress", { defaultValue: "" });
@@ -43,10 +69,140 @@ export function OrgCard({
     return { address1, address2 };
   }
 
-  const { setCurrOnboardingStep } = useOnboardingContext();
-  const metadata = org.publicMetadata as any as OrganizationMetadata;
+  function handleEditOrganization() {
+    // A helper function to return whether or not the category is a listed organization category.
+    const helper = (str: string): boolean => {
+      for (const category of ORG_CATEGORIES) {
+        if (str === category) return false;
+      }
+      return true;
+    };
 
-  if (!metadata) return;
+    setCurrOnboardingStep({ step: 2, isEditing: true });
+    setOrgName(org.name);
+    setOrgSlug(org.slug);
+    setOrgAddress(String(metadata.address));
+    setOrgCategory(metadata.category);
+    setIsCustomOrgCategory(helper(metadata.category));
+    setIsTeacherPurchasingEnabled(Boolean(metadata.isTeacherPurchasingEnabled));
+  }
+
+  async function handleDeleteOrganization() {
+    if (!user || !userMetadata) return;
+    const orgId = org.id;
+
+    await setIsLoading(true);
+    await deleteOrganization(orgId).then((res) => {
+      if (res.success) {
+        const userId = user.id;
+        const { organizations } = userMetadata;
+        const newMetadata: UserMetadata = {
+          ...userMetadata,
+          lastOnboardingStepCompleted: 1,
+          organizations: organizations
+            ? organizations.filter((org) => org !== orgId)
+            : null,
+        };
+
+        updateUserMetadata(userId, newMetadata)
+          .then(() => {
+            setOrg(undefined);
+            setLastUpdated(new Date().toString()); // Triggers re-render.
+            setOrgName("");
+            setOrgSlug("");
+            setOrgCategory("");
+            setIsCustomOrgCategory(false);
+            setOrgAddress("");
+            setIsTeacherPurchasingEnabled(false);
+            setOrgLogo(undefined);
+            setCurrOnboardingStep({ step: 2, isEditing: false });
+
+            toast({
+              variant: res.success ? "default" : "destructive",
+              title: res.message?.title,
+              description: res.message?.description,
+            });
+          })
+          .catch((err: ClerkErrorResponse) => {
+            const error = err.errors[0];
+
+            toast({
+              variant: "destructive",
+              title: error.message,
+              description: error.long_message,
+            });
+          });
+      } else {
+        toast({
+          variant: "destructive",
+          title: res.message?.title,
+          description: res.message?.description,
+        });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
+  async function handleCancelRequestToJoin() {
+    if (!user) return;
+    await setIsLoading(true);
+
+    const userRes = await getUser(user.id);
+    const userData = JSON.parse(userRes.data) as User;
+    const userMetadata = userData.publicMetadata as unknown as UserMetadata;
+    const orgMetadata = org.publicMetadata as unknown as OrganizationMetadata;
+
+    const updatedUserInvitations = userMetadata.invitations
+      ? userMetadata.invitations.filter(
+          (invitation) => invitation.organizationId !== org.id
+        )
+      : null;
+    const updatedOrgInvitations = orgMetadata.invitations
+      ? orgMetadata.invitations?.filter(
+          (invitation) => invitation.userId !== user.id
+        )
+      : null;
+    const newUserMetadata: UserMetadata = {
+      ...userMetadata,
+      lastOnboardingStepCompleted: userMetadata.role === "guardian" ? 0 : 1,
+      invitations: updatedUserInvitations,
+    };
+    const newOrgMetadata: OrganizationMetadata = {
+      ...orgMetadata,
+      invitations: updatedOrgInvitations,
+    };
+
+    await sendRequestToOrganization(
+      user.id,
+      newUserMetadata,
+      org.id,
+      newOrgMetadata,
+      "cancel"
+    )
+      .then(() => {
+        setOrg(undefined);
+        setLastUpdated(new Date().toString()); // Triggers re-render.
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }
+
+  const { setCurrOnboardingStep } = useOnboardingContext();
+  const metadata = org.publicMetadata as unknown as OrganizationMetadata;
+
+  const getInvitationStatus = (): Status => {
+    if (!userMetadata || !userMetadata.invitations) return "Pending";
+    for (const invitation of userMetadata.invitations) {
+      if (invitation.organizationId === org.id) return invitation.status;
+    }
+
+    return "Pending";
+  };
+
+  if (!metadata || !userMetadata) return;
   return (
     <div className="p-5 w-full">
       <div
@@ -74,33 +230,47 @@ export function OrgCard({
             <div className="w-full flex justify-between items-center">
               <span className="text-lg font-bold">{org.name}</span>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={() => {
-                  // A helper function to return whether or not the category is a listed organization category.
-                  const helper = (str: string): boolean => {
-                    for (const category of ORG_CATEGORIES) {
-                      if (str === category) return false;
-                    }
-                    return true;
-                  };
-
-                  setCurrOnboardingStep({ step: 2, isEditing: true });
-                  setOrgName(org.name);
-                  setOrgSlug(org.slug);
-                  setOrgAddress(String(metadata.address));
-                  setOrgCategory(metadata.category);
-                  setIsCustomOrgCategory(helper(metadata.category));
-                  setIsTeacherPurchasingEnabled(
-                    Boolean(metadata.isTeacherPurchasingEnabled)
-                  );
-                }}
-              >
-                <span className="sr-only">Edit organization</span>
-                <MdEdit />
-              </Button>
+              {tab === "create" ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <BsThreeDotsVertical />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem onClick={handleEditOrganization}>
+                      Edit organization
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleDeleteOrganization}>
+                      Delete organization
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <BsThreeDotsVertical />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem onClick={handleCancelRequestToJoin}>
+                      Cancel join request
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
             <span className="text-sm">
               {truncateString(
@@ -134,15 +304,23 @@ export function OrgCard({
               </span>
             </div>
 
-            {/* Creation Date */}
-            <span className="text-xs text-muted-foreground">
-              Organization created{" "}
-              {formatRelative(
-                new Date(org.createdAt),
-                new Date()
-                // , { locale: es } // TODO: Add locale functionality
-              )}
-            </span>
+            {/* Creation Date or Invite Status */}
+            {tab === "create" ? (
+              <span className="text-xs text-muted-foreground">
+                Organization created{" "}
+                {formatRelative(
+                  new Date(org.createdAt),
+                  new Date()
+                  // , { locale: es } // TODO: Add locale functionality
+                )}
+              </span>
+            ) : (
+              <span
+                className={`w-fit h-4 flex justify-center items-center px-2 rounded-full text-2xs dark:text-primary-foreground ${getInvitationStatus() === "Rejected" ? "bg-red-400" : getInvitationStatus() === "Accepted" ? "bg-emerald-400" : "bg-selective-yellow-200"}`}
+              >
+                Invite {getInvitationStatus()}
+              </span>
+            )}
           </div>
         </div>
       </div>

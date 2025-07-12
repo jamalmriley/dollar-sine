@@ -1,14 +1,16 @@
-import { getCourses, getOrganizationById } from "@/app/actions/onboarding";
+import { getCourses } from "@/app/actions/onboarding";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { Course } from "@/types/course";
+import { Course, SelectedCourse } from "@/types/course";
 import { OrganizationMetadata, UserMetadata } from "@/types/user";
 import { useUser } from "@clerk/nextjs";
 import { Organization } from "@clerk/nextjs/server";
 import { useEffect } from "react";
 
-export function useCourseData() {
+export function useCourseData(
+  organization: Organization | undefined,
+  userMetadata: UserMetadata | undefined
+) {
   const {
-    org,
     setCanPurchaseCourses,
     setCourses,
     setIsLoading,
@@ -18,41 +20,53 @@ export function useCourseData() {
 
   useEffect(() => {
     const fetchCourseData = async () => {
+      if (!user) return;
       await setIsLoading(true);
       try {
-        if (!user) return;
+        // Returns whether or not the user is in the organization.
+        const isInOrganization = (): boolean => {
+          for (const orgMembership of user.organizationMemberships) {
+            const org = orgMembership.organization;
+            if (org.id === orgId) return true;
+          }
+          return false;
+        };
+
         const courseRes = await getCourses();
         const courseData = JSON.parse(courseRes.data) as Course[];
 
+        let orgId: string;
+        let orgMetadata: OrganizationMetadata;
+        let canPurchaseCourses: boolean;
+        let purchasedCourses: SelectedCourse[] | null;
+
+        if (organization) {
+          orgId = organization.id;
+          orgMetadata =
+            organization.publicMetadata as unknown as OrganizationMetadata;
+
+          // Returns whether or not the user can purchase courses.
+          // The user is the owner of the org
+          // or the user is in the org and isTeacherPurchasingEnabled is true,
+          canPurchaseCourses =
+            orgMetadata.ownerId === user.id ||
+            (isInOrganization() && orgMetadata.isTeacherPurchasingEnabled);
+
+          purchasedCourses = orgMetadata.courses;
+        } else {
+          // Returns whether or not the user can purchase courses.
+          // The user is a guardian who chose not to join an org.
+          canPurchaseCourses =
+            userMetadata !== undefined &&
+            userMetadata.role === "guardian" &&
+            userMetadata.lastOnboardingStepCompleted >= 2;
+
+          purchasedCourses = null;
+        }
+
         await setCourses(courseData);
-
-        const userPublicMetadata = user.publicMetadata as any as UserMetadata;
-        const orgId = org
-          ? org.id
-          : userPublicMetadata.invitations &&
-              userPublicMetadata.invitations.length > 0
-            ? userPublicMetadata.invitations[0].organizationId
-            : null;
-
-        if (!orgId) return;
-        const orgRes = await getOrganizationById(orgId);
-        const organization = JSON.parse(orgRes.data) as Organization;
-        const orgMetadata =
-          organization.publicMetadata as any as OrganizationMetadata;
-
-        const isOwner: boolean = Boolean(user.organizationMemberships[0]);
-        const canPurchaseCourses: boolean =
-          isOwner ||
-          (orgMetadata.isTeacherPurchasingEnabled &&
-            orgMetadata.invitations !== null &&
-            orgMetadata.invitations.filter(
-              (invitation) =>
-                invitation.userId === user?.id &&
-                invitation.status !== "Accepted"
-            ).length === 0);
-
         await setCanPurchaseCourses(canPurchaseCourses);
-        await setPurchasedCourses(orgMetadata.courses ?? undefined);
+        await setPurchasedCourses(purchasedCourses ?? undefined);
         await setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch course data:", error);
@@ -61,5 +75,5 @@ export function useCourseData() {
     };
 
     fetchCourseData();
-  }, [org]);
+  }, [organization, userMetadata]);
 }

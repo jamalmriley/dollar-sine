@@ -1,6 +1,4 @@
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
 import {
   OrganizationInvitation,
   OrganizationMetadata,
@@ -9,30 +7,14 @@ import {
 } from "@/types/user";
 import { useUser } from "@clerk/nextjs";
 import {
-  getOrganizationById,
   getOrganizationBySlug,
-  getUser,
   sendRequestToOrganization,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
-import { Organization, User } from "@clerk/nextjs/server";
-import { formatRelative } from "date-fns";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { FaTrashCan } from "react-icons/fa6";
-import { Loader2Icon } from "lucide-react";
-import { IoIosSend } from "react-icons/io";
+import { Organization } from "@clerk/nextjs/server";
+import { Loader2 } from "lucide-react";
 import { OrgSearch } from "./OrgSearch";
-import {
-  StyledActionButton,
-  StyledIconDestructiveButton,
-} from "@/components/StyledButtons";
+import { StyledActionButton } from "@/components/StyledButtons";
 import {
   Card,
   CardContent,
@@ -41,18 +23,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import OrgAlreadyCompleted from "./OrgAlreadyCompleted";
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
 
 export function JoinOrg() {
-  const { userMetadata } = useOnboardingContext();
-  const { user, isLoaded } = useUser();
-  const hasInvitations =
-    userMetadata && userMetadata.invitations
-      ? userMetadata.invitations !== null && userMetadata.invitations.length > 0
-      : false;
-
-  if (!user || !isLoaded) return;
+  const { currOnboardingStep, org } = useOnboardingContext();
+  const { step, isEditing } = currOnboardingStep;
+  const currStep = 2;
   return (
-    <>{hasInvitations ? <ViewOrEditRequestToJoin /> : <RequestToJoin />}</>
+    <>
+      {!org || (step === currStep && isEditing) ? (
+        <RequestToJoin />
+      ) : (
+        <OrgAlreadyCompleted tab="join" />
+      )}
+    </>
   );
 }
 
@@ -84,22 +72,25 @@ function RequestToJoin() {
   const {
     isLoading,
     userMetadata,
-    setHasInvitations,
     setIsLoading,
     setLastUpdated,
+    setOrg,
+    orgSearch,
+    setOrgSearch,
   } = useOnboardingContext();
   const { user } = useUser();
-  const [orgSlug, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
+  const [joinCode, setJoinCode] = useState<string>("");
+  const joinCodeLength: number = 6;
+  const exampleJoinCode: string = "s3P5jH";
 
-  async function handleRequestToJoin(orgSlug: string) {
-    if (!user) return;
+  async function handleRequestToJoin() {
+    if (!user || !userMetadata) return;
+    const { role } = userMetadata;
+    if (!role) return;
+
     await setIsLoading(true);
 
-    const userRes = await getUser(user?.id);
-    const userData = JSON.parse(userRes.data) as User;
-    const userMetadata = userData.publicMetadata as any as UserMetadata;
-
-    const orgRes = await getOrganizationBySlug(orgSlug);
+    const orgRes = await getOrganizationBySlug(orgSearch);
     const org = JSON.parse(orgRes.data) as Organization;
     const orgMetadata = org.publicMetadata as any as OrganizationMetadata;
 
@@ -130,22 +121,32 @@ function RequestToJoin() {
         : [orgInvitation],
     };
 
-    await sendRequestToOrganization(
-      user.id,
-      newUserMetadata,
-      org.id,
-      newOrgMetadata,
-      "join"
-    )
-      .then(() => {
-        setOrgSlug("");
-        setHasInvitations(true);
-        setLastUpdated(new Date().toString()); // Triggers re-render and a useEffect which will later change isLoading to false.
-      })
-      .catch((err) => {
-        console.error(err);
-        setIsLoading(false);
+    if (orgMetadata.joinCode === joinCode) {
+      await sendRequestToOrganization(
+        user.id,
+        newUserMetadata,
+        org.id,
+        newOrgMetadata,
+        "join"
+      )
+        .then(() => {
+          setOrg(org);
+          setOrgSearch("");
+          setLastUpdated(new Date().toString()); // Triggers re-render and a useEffect which will later change isLoading to false.
+        })
+        .catch((err) => {
+          console.error(err);
+          setIsLoading(false);
+        });
+    } else {
+      await setIsLoading(false);
+      toast({
+        variant: "destructive",
+        title: "Invalid join code",
+        description:
+          "The join code you entered is incorrect. Please try again.",
       });
+    }
   }
 
   async function handleSkipRequestToJoin() {
@@ -169,19 +170,43 @@ function RequestToJoin() {
 
   if (!userMetadata) return;
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-between gap-5">
-        <span className="w-64">
+    <div className="flex flex-col gap-5">
+      {/* Org Search and Join Code */}
+      <div className="form-row items-end">
+        {/* Search */}
+        <span className="w-64 flex flex-col gap-2">
+          <Label htmlFor="joinCode">Organization</Label>
           <OrgSearch />
         </span>
-        <StyledActionButton
-          onClick={() => handleRequestToJoin(orgSlug)}
-          disabled={orgSlug === "" || isLoading}
-        >
-          {isLoading ? <Loader2Icon className="animate-spin" /> : <IoIosSend />}
-          Request to join
-        </StyledActionButton>
+
+        {/* Join Code */}
+        <div className="form-item flex grow">
+          <Label htmlFor="joinCode">Join Code</Label>
+          <Input
+            value={joinCode}
+            onChange={(e) => setJoinCode(e.target.value)}
+            id="joinCode"
+            name="joinCode"
+            placeholder={`e.g. ${exampleJoinCode}`}
+            type="text"
+            autoCapitalize="off"
+            required
+          />
+        </div>
       </div>
+
+      <StyledActionButton
+        onClick={handleRequestToJoin}
+        disabled={
+          isLoading ||
+          orgSearch === "" ||
+          joinCode === "" ||
+          joinCode.length !== joinCodeLength
+        }
+      >
+        {isLoading && <Loader2 className="animate-spin" />}
+        Request to join organization
+      </StyledActionButton>
 
       {userMetadata.role === "guardian" && (
         <Button
@@ -192,176 +217,6 @@ function RequestToJoin() {
         >
           Skip this step
         </Button>
-      )}
-    </div>
-  );
-}
-
-function ViewOrEditRequestToJoin() {
-  type InvitationListItem = {
-    organization: Organization;
-    invitation: UserInvitation;
-  };
-
-  const {
-    setHasInvitations,
-    isLoading,
-    setIsLoading,
-    lastUpdated,
-    setLastUpdated,
-    setOrgSearch,
-  } = useOnboardingContext();
-  const { user, isLoaded } = useUser();
-  const [invitationItems, setInvitationItems] =
-    useState<InvitationListItem[]>();
-
-  function findOrg(orgId: string) {
-    if (!invitationItems) return undefined;
-    for (const item of invitationItems) {
-      if (item.organization.id === orgId) return item.organization;
-    }
-    return undefined;
-  }
-
-  async function handleCancelRequestToJoin(targetOrgId: string) {
-    if (!user) return;
-
-    const userRes = await getUser(user?.id);
-    const userData = JSON.parse(userRes.data) as User;
-    const userMetadata = userData.publicMetadata as any as UserMetadata;
-    const orgMetadata = findOrg(targetOrgId)
-      ?.publicMetadata as any as OrganizationMetadata;
-
-    const updatedUserInvitations = userMetadata.invitations
-      ? userMetadata.invitations.filter(
-          (invitation) => invitation.organizationId !== targetOrgId
-        )
-      : null;
-
-    const updatedOrgInvitations = orgMetadata.invitations
-      ? orgMetadata.invitations?.filter(
-          (invitation) => invitation.userId !== user.id
-        )
-      : null;
-
-    const newUserMetadata: UserMetadata = {
-      ...userMetadata,
-      lastOnboardingStepCompleted: userMetadata.role === "guardian" ? 0 : 1,
-      invitations: updatedUserInvitations,
-    };
-
-    const newOrgMetadata: OrganizationMetadata = {
-      ...orgMetadata,
-      invitations: updatedOrgInvitations,
-    };
-
-    setIsLoading(true);
-
-    await sendRequestToOrganization(
-      user.id,
-      newUserMetadata,
-      targetOrgId,
-      newOrgMetadata,
-      "cancel"
-    )
-      .then(() => {
-        setOrgSearch("");
-        setHasInvitations(
-          updatedOrgInvitations ? updatedOrgInvitations.length > 0 : false
-        );
-        setLastUpdated(new Date().toString()); // Triggers re-render.
-      })
-      .catch((err) => {
-        console.error(err);
-        setIsLoading(false);
-      });
-  }
-
-  // Fetch organization info for invitations
-  useEffect(() => {
-    const fetchAndSetOrgs = async () => {
-      const result: InvitationListItem[] = [];
-      setIsLoading(true);
-
-      try {
-        const res = await getUser(user?.id);
-        const userData = JSON.parse(res.data) as User;
-        const publicMetadata = userData.publicMetadata as any as UserMetadata;
-        const invitations = publicMetadata.invitations;
-
-        if (invitations) {
-          for (const invitation of invitations) {
-            const res = await getOrganizationById(invitation.organizationId);
-            const organization = JSON.parse(res.data) as Organization;
-            result.push({ organization, invitation });
-          }
-        }
-
-        setInvitationItems(result);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchAndSetOrgs();
-  }, [lastUpdated]);
-
-  if (!user || !isLoaded) return;
-  return (
-    <div className="flex flex-col">
-      {/* TODO: Add a loading UI for table  */}
-      {isLoading ? (
-        <>Loading invitations...</>
-      ) : invitationItems ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-center">Organization</TableHead>
-              <TableHead className="text-center">Request sent</TableHead>
-              <TableHead className="text-center">Status</TableHead>
-              <TableHead className="text-center">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invitationItems?.map((item, i) => (
-              <TableRow key={i}>
-                <TableCell className="text-center font-medium">
-                  {findOrg(item.invitation.organizationId)?.name}
-                </TableCell>
-                <TableCell>
-                  {formatRelative(
-                    new Date(item.invitation.createdAt),
-                    new Date()
-                    // , { locale: es } // TODO: Add locale functionality
-                  )}
-                </TableCell>
-                <TableCell className="text-center">
-                  <span
-                    className={
-                      item.invitation.status === "Pending" ? "pending" : ""
-                    }
-                  >
-                    {item.invitation.status}
-                  </span>
-                </TableCell>
-                <TableCell className="text-center">
-                  <StyledIconDestructiveButton
-                    onClick={() => {
-                      handleCancelRequestToJoin(item.invitation.organizationId);
-                    }}
-                    disabled={isLoading}
-                  >
-                    <FaTrashCan />
-                  </StyledIconDestructiveButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <>Error loading invitations</>
       )}
     </div>
   );

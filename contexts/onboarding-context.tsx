@@ -51,18 +51,8 @@ type OnboardingContext = {
   setShowOrgResults: React.Dispatch<React.SetStateAction<boolean>>;
   orgLogo: File | undefined;
   setOrgLogo: React.Dispatch<React.SetStateAction<File | undefined>>;
-  isUpdatingProfile: boolean;
-  setIsUpdatingProfile: React.Dispatch<React.SetStateAction<boolean>>;
-  isUpdatingOrg: boolean;
-  setIsUpdatingOrg: React.Dispatch<React.SetStateAction<boolean>>;
-  organizationId: string | undefined;
-  setOrganizationId: React.Dispatch<React.SetStateAction<string | undefined>>;
   orgSearch: string;
   setOrgSearch: React.Dispatch<React.SetStateAction<string>>;
-  hasOrg: boolean;
-  setHasOrg: React.Dispatch<React.SetStateAction<boolean>>;
-  hasInvitations: boolean;
-  setHasInvitations: React.Dispatch<React.SetStateAction<boolean>>;
   courses: Course[];
   setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
   purchasedCourses: SelectedCourse[] | undefined;
@@ -119,12 +109,7 @@ export default function OnboardingContextProvider({
   const [org, setOrg] = useState<Organization>();
   const [showOrgResults, setShowOrgResults] = useState<boolean>(false);
   const [orgLogo, setOrgLogo] = useState<File | undefined>();
-  const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
-  const [isUpdatingOrg, setIsUpdatingOrg] = useState<boolean>(false);
-  const [organizationId, setOrganizationId] = useState<string | undefined>();
   const [orgSearch, setOrgSearch] = useState<string>("");
-  const [hasOrg, setHasOrg] = useState<boolean>(false);
-  const [hasInvitations, setHasInvitations] = useState<boolean>(false);
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [purchasedCourses, setPurchasedCourses] = useState<
@@ -186,18 +171,8 @@ export default function OnboardingContextProvider({
         setShowOrgResults,
         orgLogo,
         setOrgLogo,
-        isUpdatingProfile,
-        setIsUpdatingProfile,
-        isUpdatingOrg,
-        setIsUpdatingOrg,
-        organizationId,
-        setOrganizationId,
         orgSearch,
         setOrgSearch,
-        hasOrg,
-        setHasOrg,
-        hasInvitations,
-        setHasInvitations,
         courses,
         setCourses,
         purchasedCourses,

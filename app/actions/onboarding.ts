@@ -29,13 +29,13 @@ interface ClerkError {
   message: string;
   long_message: string;
   code: string;
-  meta: any;
+  meta: unknown;
   clerk_trace_id: string;
 }
 
 export interface ClerkErrorResponse {
   errors: ClerkError[];
-  meta: any;
+  meta: unknown;
   clerk_trace_id: string;
 }
 
@@ -138,7 +138,7 @@ export async function updateUserMetadata(
   if (!metadata) return invalidRes;
 
   const client = await clerkClient();
-  const publicMetadata = metadata as any as UserPublicMetadata;
+  const publicMetadata = metadata as unknown as UserPublicMetadata;
 
   const update: Response = await client.users
     .updateUserMetadata(userId, {
@@ -184,7 +184,7 @@ export async function createOrganization(
 ): Promise<Response> {
   const client = await clerkClient();
   const { name, slug } = metadata;
-  const publicMetadata = metadata as any as OrganizationPublicMetadata;
+  const publicMetadata = metadata as unknown as OrganizationPublicMetadata;
 
   const create: Response = await client.organizations
     .createOrganization({
@@ -216,7 +216,7 @@ export async function createOrganization(
         status: 200,
         success: true,
         message: { title, description },
-        data: org.id,
+        data: JSON.stringify(org),
       };
     })
     .catch((err: ClerkErrorResponse) => {
@@ -327,7 +327,7 @@ export async function updateOrganization(
 ): Promise<Response> {
   const client = await clerkClient();
   const { name, slug } = metadata;
-  const publicMetadata = metadata as any as OrganizationPublicMetadata;
+  const publicMetadata = metadata as unknown as OrganizationPublicMetadata;
 
   const update: Response = await client.organizations
     .updateOrganization(organizationId, { name, slug, publicMetadata })
@@ -353,6 +353,7 @@ export async function updateOrganization(
         status: 200,
         success: true,
         message: { title, description },
+        data: JSON.stringify(org),
       };
     })
     .catch((err: ClerkErrorResponse) => {

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { algoliasearch } from "algoliasearch";
-import { useQueryState } from "nuqs";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { MdClose } from "react-icons/md";
 import {
@@ -60,7 +61,6 @@ function ControlledSearchBox({
 }) {
   const { orgSearch, setOrgSearch, setShowOrgResults } = useOnboardingContext();
   const { query, refine } = useSearchBox();
-  const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Keep Algolia's internal state in sync with `value` prop
@@ -80,7 +80,7 @@ function ControlledSearchBox({
         onFocus={() => setShowOrgResults(true)}
         onBlur={() => setShowOrgResults(false)}
         placeholder="Search for an organization..."
-        className={`border p-2 rounded-lg text-xs ${orgSearch !== "" && "focus:rounded-b-none"}`}
+        className={`border p-2 rounded-md text-xs ${orgSearch !== "" && "focus:rounded-b-none"}`}
       />
 
       {orgSearch !== "" && (
@@ -90,7 +90,6 @@ function ControlledSearchBox({
           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
           onClick={(e) => {
             e.preventDefault();
-            setOrgSlug("");
             setOrgSearch("");
             inputRef.current?.focus();
           }}
@@ -105,13 +104,11 @@ function ControlledSearchBox({
 
 function Hit({ hit }: { hit: any }) {
   const { setOrgSearch, setShowOrgResults } = useOnboardingContext();
-  const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   return (
     <Button
       variant="ghost"
       className="size-full flex flex-col items-start gap-1 rounded-none"
       onMouseDown={() => {
-        setOrgSlug(hit.publicMetadata.slug);
         setOrgSearch(hit.publicMetadata.slug);
         setShowOrgResults(false);
       }}

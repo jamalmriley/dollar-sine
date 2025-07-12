@@ -9,7 +9,6 @@ import { inter } from "../fonts";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import initTranslations from "../i18n";
 import OnboardingBanner from "@/components/OnboardingBanner";
-import VerifyEmailBanner from "@/components/VerifyEmailBanner";
 import { Toaster } from "@/components/ui/toaster";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import ActiveUserContextProvider from "@/contexts/active-user-context";
@@ -80,7 +79,6 @@ export default async function RootLayout({
                 <NuqsAdapter>
                   <div className="page-content flex-col">
                     <OnboardingBanner />
-                    <VerifyEmailBanner />
                     {/* <Banner
                   header={header}
                   text={text}

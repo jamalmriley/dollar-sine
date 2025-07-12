@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import { SELECTED_COURSE_SCHEMA } from "@/types/course";
+import { Course, SELECTED_COURSE_SCHEMA, SelectedCourse } from "@/types/course";
 import { createPaymentIntent } from "@/app/actions/payment";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { MdError } from "react-icons/md";
@@ -43,7 +43,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 // Returns the price of the selected plan.
 function getPlanPrice(
-  courses: any,
+  courses: Course[],
   courseId: string,
   planName: string
 ): number {
@@ -61,7 +61,10 @@ function getPlanPrice(
   return result;
 }
 
-const getTotalAmount = (selectedCourses: any, courses: any): number => {
+const getTotalAmount = (
+  selectedCourses: SelectedCourse[] | null,
+  courses: Course[]
+): number => {
   let result = 0;
   if (!selectedCourses) return result;
 

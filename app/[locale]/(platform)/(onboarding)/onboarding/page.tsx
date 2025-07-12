@@ -23,7 +23,7 @@ export default async function OnboardingPage({
   const user = await currentUser();
   if (!user) redirect(`/sign-in?redirect_url=/${locale}/onboarding`);
 
-  const publicMetadata = user.publicMetadata as any as UserMetadata;
+  const publicMetadata = user.publicMetadata as unknown as UserMetadata;
   const { role } = publicMetadata;
 
   if (typeof role !== "string") {

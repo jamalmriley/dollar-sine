@@ -98,7 +98,7 @@ export const STUDENT_BASIC_DETAILS_SCHEMA = z
 
 export type StudentBasicDetails = z.infer<typeof STUDENT_BASIC_DETAILS_SCHEMA>;
 
-// Metadata //
+// Users
 export interface UserMetadata {
   role: Role;
   pronunciation: string | null;
@@ -110,7 +110,7 @@ export interface UserMetadata {
   pronouns: string;
   hasCustomPronouns: boolean;
   emojiSkinTone: EmojiSkinTone;
-  organizations: OrganizationId[];
+  organizations: string[] | null;
   courses: SelectedCourse[];
   classes: Class[] | null;
   invitations: UserInvitation[] | null;
@@ -143,8 +143,7 @@ export interface StudentMetadata extends UserMetadata {
   summary?: string | null;
 }
 
-// Purchased courses go to org metadata, enrolled courses go to user metadata
-type OrganizationId = string;
+// Organizations
 export interface OrganizationInvitation {
   createdAt: Date;
   status: Status;
@@ -158,250 +157,6 @@ export interface OrganizationMetadata {
   isTeacherPurchasingEnabled: boolean;
   courses: SelectedCourse[] | null;
   invitations: OrganizationInvitation[] | null;
-}
-
-// Classes //
-interface HasMetdataMethods {
-  update(
-    valuesToUpdate:
-      | AdminMetadata
-      | TeacherMetadata
-      | GuardianMetadata
-      | StudentMetadata
-      | OrganizationMetadata
-  ): void;
-}
-abstract class User implements HasMetdataMethods {
-  constructor(
-    protected role: Role,
-    protected pronunciation: string | null,
-    protected currPronunciationOptions: string[],
-    protected prevPronunciationOptions: string[],
-    protected isOnboardingComplete: boolean,
-    protected lastOnboardingStepCompleted: number,
-    protected onboardingLink: string,
-    protected pronouns: string,
-    protected hasCustomPronouns: boolean,
-    protected emojiSkinTone: EmojiSkinTone,
-    protected organizations: OrganizationId[],
-    protected courses: SelectedCourse[],
-    protected classes: Class[] | null
-  ) {}
-  get isAdmin(): boolean {
-    return this.role === "admin";
-  }
-  abstract update(
-    valuesToUpdate:
-      | AdminMetadata
-      | TeacherMetadata
-      | GuardianMetadata
-      | StudentMetadata
-  ): void;
-}
-class Admin extends User {
-  constructor(
-    role: Role,
-    pronunciation: string | null,
-    currPronunciationOptions: string[],
-    prevPronunciationOptions: string[],
-    isOnboardingComplete: boolean,
-    lastOnboardingStepCompleted: number,
-    onboardingLink: string,
-    pronouns: string,
-    hasCustomPronouns: boolean,
-    emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationId[],
-    courses: SelectedCourse[],
-    classes: Class[] | null,
-    private students: string[] | null,
-    private displayName: string | null,
-    private displayNameFormat: string | null,
-    private prefix: string | null,
-    private jobTitle: string | null
-  ) {
-    super(
-      role,
-      pronunciation,
-      currPronunciationOptions,
-      prevPronunciationOptions,
-      isOnboardingComplete,
-      lastOnboardingStepCompleted,
-      onboardingLink,
-      pronouns,
-      hasCustomPronouns,
-      emojiSkinTone,
-      organizations,
-      courses,
-      classes
-    );
-  }
-
-  update(valuesToUpdate: AdminMetadata): void {
-    Object.keys(valuesToUpdate).forEach((key) => {
-      if (key in this) {
-        (this as any)[key] = valuesToUpdate[key as keyof AdminMetadata];
-      }
-    });
-  }
-}
-class Teacher extends User {
-  constructor(
-    role: Role,
-    pronunciation: string | null,
-    currPronunciationOptions: string[],
-    prevPronunciationOptions: string[],
-    isOnboardingComplete: boolean,
-    lastOnboardingStepCompleted: number,
-    onboardingLink: string,
-    pronouns: string,
-    hasCustomPronouns: boolean,
-    emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationId[],
-    courses: SelectedCourse[],
-    classes: Class[] | null,
-    private students: string[] | null,
-    private displayName: string | null,
-    private displayNameFormat: string | null,
-    private prefix: string | null,
-    private jobTitle: string | null
-  ) {
-    super(
-      role,
-      pronunciation,
-      currPronunciationOptions,
-      prevPronunciationOptions,
-      isOnboardingComplete,
-      lastOnboardingStepCompleted,
-      onboardingLink,
-      pronouns,
-      hasCustomPronouns,
-      emojiSkinTone,
-      organizations,
-      courses,
-      classes
-    );
-  }
-
-  update(valuesToUpdate: TeacherMetadata): void {
-    Object.keys(valuesToUpdate).forEach((key) => {
-      if (key in this) {
-        (this as any)[key] = valuesToUpdate[key as keyof TeacherMetadata];
-      }
-    });
-  }
-}
-class Guardian extends User {
-  constructor(
-    role: Role,
-    pronunciation: string | null,
-    currPronunciationOptions: string[],
-    prevPronunciationOptions: string[],
-    isOnboardingComplete: boolean,
-    lastOnboardingStepCompleted: number,
-    onboardingLink: string,
-    pronouns: string,
-    hasCustomPronouns: boolean,
-    emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationId[],
-    courses: SelectedCourse[],
-    classes: Class[] | null,
-    private students: string[] | null
-  ) {
-    super(
-      role,
-      pronunciation,
-      currPronunciationOptions,
-      prevPronunciationOptions,
-      isOnboardingComplete,
-      lastOnboardingStepCompleted,
-      onboardingLink,
-      pronouns,
-      hasCustomPronouns,
-      emojiSkinTone,
-      organizations,
-      courses,
-      classes
-    );
-  }
-
-  update(valuesToUpdate: GuardianMetadata): void {
-    Object.keys(valuesToUpdate).forEach((key) => {
-      if (key in this) {
-        (this as any)[key] = valuesToUpdate[key as keyof GuardianMetadata];
-      }
-    });
-  }
-}
-class Student extends User {
-  constructor(
-    role: Role,
-    pronunciation: string,
-    currPronunciationOptions: string[],
-    prevPronunciationOptions: string[],
-    isOnboardingComplete: boolean,
-    lastOnboardingStepCompleted: number,
-    onboardingLink: string,
-    pronouns: string,
-    hasCustomPronouns: boolean,
-    emojiSkinTone: EmojiSkinTone,
-    organizations: OrganizationId[],
-    courses: SelectedCourse[],
-    classes: Class[] | null,
-    private gradeLevel: string | null,
-    private track:
-      | "Above grade level"
-      | "At grade level"
-      | "Below grade level"
-      | null,
-    private tools: string[] | null,
-    private testScores: TestScores[] | null,
-    private livesWith: GuardianType[] | null,
-    private pets: string[] | null,
-    private methodOfTransportation: string | null,
-    private interests: string[] | null,
-    private spendingCategories: string[] | null,
-    private savingsGoals: string[] | null,
-    private summary: string | null
-  ) {
-    super(
-      role,
-      pronunciation,
-      currPronunciationOptions,
-      prevPronunciationOptions,
-      isOnboardingComplete,
-      lastOnboardingStepCompleted,
-      onboardingLink,
-      pronouns,
-      hasCustomPronouns,
-      emojiSkinTone,
-      organizations,
-      courses,
-      classes
-    );
-  }
-
-  update(valuesToUpdate: StudentMetadata): void {
-    Object.keys(valuesToUpdate).forEach((key) => {
-      if (key in this) {
-        (this as any)[key] = valuesToUpdate[key as keyof StudentMetadata];
-      }
-    });
-  }
-}
-class Orgnanization implements HasMetdataMethods {
-  constructor(
-    protected name: string,
-    protected slug: string,
-    protected address: string,
-    protected isTeacherPurchasingEnabled: boolean,
-    protected courses: SelectedCourse[] | null
-  ) {}
-
-  update(valuesToUpdate: OrganizationMetadata): void {
-    Object.keys(valuesToUpdate).forEach((key) => {
-      if (key in this) {
-        (this as any)[key] = valuesToUpdate[key as keyof OrganizationMetadata];
-      }
-    });
-  }
+  joinCode: string;
+  ownerId: string;
 }

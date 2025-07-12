@@ -64,15 +64,20 @@ export default function VerifyEmailForm() {
         setIsLoadingPronunciationOptions(false);
       });
     })();
-  }, []);
+  }, [signUp?.firstName, signUp?.lastName]);
 
   // Timer
   useEffect(() => {
     const interval = setInterval(() => {
-      if (seconds > 0) setSeconds((seconds) => seconds - 1);
+      setSeconds((prevSeconds) => {
+        if (prevSeconds > 0) return prevSeconds - 1;
+        clearInterval(interval);
+        return 0;
+      });
     }, 1000);
+
     return () => clearInterval(interval);
-  }, [seconds]);
+  }, []);
 
   async function handleVerifyEmail(e: React.FormEvent) {
     e.preventDefault();
@@ -98,7 +103,7 @@ export default function VerifyEmailForm() {
                 pronouns: "",
                 hasCustomPronouns: false,
                 emojiSkinTone: "default",
-                organizations: [],
+                organizations: null,
                 courses: [],
                 classes: null,
                 invitations: null,

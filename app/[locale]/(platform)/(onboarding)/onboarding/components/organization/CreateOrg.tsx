@@ -18,7 +18,7 @@ import { toast } from "@/hooks/use-toast";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
-import { isEmptyObject } from "@/utils/general";
+import { generateRandString, isEmptyObject } from "@/utils/general";
 import {
   ORG_CATEGORIES,
   OrganizationMetadata,
@@ -27,16 +27,13 @@ import {
 import {
   ClerkErrorResponse,
   createOrganization,
-  deleteOrganization,
   updateOrganization,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { Response } from "@/types/general";
-import OrgAlreadyCreated from "./OrgAlreadyCreated";
-import {
-  StyledActionButton,
-  StyledDestructiveButton,
-} from "@/components/StyledButtons";
+import { StyledActionButton } from "@/components/StyledButtons";
+import { Organization } from "@clerk/nextjs/server";
+import OrgAlreadyCompleted from "./OrgAlreadyCompleted";
 
 export default function CreateOrg() {
   const { user, isLoaded } = useUser();
@@ -52,7 +49,7 @@ export default function CreateOrg() {
       {!isCompleted || (step === currStep && isEditing) ? (
         <CreateOrgForm />
       ) : (
-        <OrgAlreadyCreated />
+        <OrgAlreadyCompleted tab="create" />
       )}
     </>
   );
@@ -67,9 +64,7 @@ function CreateOrgForm() {
     isLoading,
     setIsLoading,
     setLastUpdated,
-    setHasOrg,
     setOrg,
-    setOrganizationId,
     userMetadata,
   } = useOnboardingContext();
   const { user, isLoaded } = useUser();
@@ -158,6 +153,8 @@ function CreateOrgForm() {
       isTeacherPurchasingEnabled,
       courses: null,
       invitations: null,
+      joinCode: generateRandString(6),
+      ownerId: user.id,
     };
 
     async function handleResponse(res: Response) {
@@ -165,15 +162,19 @@ function CreateOrgForm() {
       if (res.success) {
         const userId = user.id;
         const { lastOnboardingStepCompleted } = userMetadata;
+        const org = JSON.parse(res.data) as Organization;
         const newMetadata: UserMetadata = {
           ...userMetadata,
           lastOnboardingStepCompleted: Math.max(lastOnboardingStepCompleted, 2),
-          organizations: res.data ? [...orgIds, res.data] : orgIds,
+          organizations: userMetadata.organizations
+            ? [...userMetadata.organizations, org.id]
+            : [org.id],
         };
 
         updateUserMetadata(userId, newMetadata)
           .then(() => {
-            if (res.data) setOrganizationId(String(res.data));
+            const org = JSON.parse(res.data) as Organization;
+            if (res.data) setOrg(org);
             setLastUpdated(new Date().toString()); // Triggers re-render.
             setOrgName("");
             setOrgSlug("");
@@ -226,63 +227,6 @@ function CreateOrgForm() {
     }
   };
 
-  const handleDeleteOrganization = async () => {
-    if (!user || !userMetadata) return;
-    const orgIds = getOrganizationIds();
-    const orgId = orgIds[0];
-
-    await setIsLoading(true);
-    await deleteOrganization(orgId).then((res) => {
-      if (res.success) {
-        const userId = user.id;
-        const { organizations } = userMetadata;
-        const newMetadata: UserMetadata = {
-          ...userMetadata,
-          lastOnboardingStepCompleted: 1,
-          organizations: organizations.filter((org) => org !== orgId),
-        };
-
-        updateUserMetadata(userId, newMetadata)
-          .then(() => {
-            setHasOrg(false);
-            setOrg(undefined);
-            setLastUpdated(new Date().toString()); // Triggers re-render.
-            setOrgName("");
-            setOrgSlug("");
-            setOrgCategory("");
-            setIsCustomOrgCategory(false);
-            setOrgAddress("");
-            setIsTeacherPurchasingEnabled(false);
-            setOrgLogo(undefined);
-            setCurrOnboardingStep({ step: 2, isEditing: false });
-
-            toast({
-              variant: res.success ? "default" : "destructive",
-              title: res.message?.title,
-              description: res.message?.description,
-            });
-          })
-          .catch((err: ClerkErrorResponse) => {
-            const error = err.errors[0];
-
-            toast({
-              variant: "destructive",
-              title: error.message,
-              description: error.long_message,
-            });
-          });
-      } else {
-        toast({
-          variant: "destructive",
-          title: res.message?.title,
-          description: res.message?.description,
-        });
-      }
-
-      setIsLoading(false);
-    });
-  };
-
   useEffect(() => {
     const fetchPredictions = async () => {
       const predictions = await autocomplete(orgAddress);
@@ -294,7 +238,7 @@ function CreateOrgForm() {
 
   useEffect(() => {
     if (isUpdating) setHasCustomOrgSlug(true);
-  });
+  }, []);
 
   if (!user || !isLoaded || !userMetadata) return;
   // Variables dependent on userMetadata go below the if guard.
@@ -342,13 +286,6 @@ function CreateOrgForm() {
             }}
             className="w-full"
           />
-          {
-            // error && (
-            // <p className="text-red-700 text-sm" >
-            // {/* {error} */}
-            // </p>
-            // )
-          }
         </div>
       </div>
 
@@ -516,18 +453,6 @@ function CreateOrgForm() {
               ? "Creating organization..."
               : "Create organization"}
         </StyledActionButton>
-        {isUpdating && (
-          <StyledDestructiveButton
-            className="w-full"
-            onClick={(e) => {
-              e.preventDefault();
-              handleDeleteOrganization();
-            }}
-            disabled={isLoading}
-          >
-            Delete organization
-          </StyledDestructiveButton>
-        )}
       </div>
     </form>
   );

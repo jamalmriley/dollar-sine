@@ -1,33 +1,39 @@
-import {
-  getOrganizationById,
-  getOrganizationBySlug,
-} from "@/app/actions/onboarding";
+import { getOrganizationById } from "@/app/actions/onboarding";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { UserMetadata } from "@/types/user";
 import { useUser } from "@clerk/nextjs";
 import { Organization } from "@clerk/nextjs/server";
 import { useEffect } from "react";
 
 export function useOrganizationData(
-  orgIdentifierType: "id" | "slug",
-  orgIdentifier: string | undefined,
-  lastUpdated: string
+  lastUpdated: string,
+  userMetadata: UserMetadata | undefined
 ) {
-  const { setIsInitRender, setIsLoading, setOrg, setHasOrg } =
-    useOnboardingContext();
+  const { setIsInitRender, setIsLoading, setOrg } = useOnboardingContext();
   const { user } = useUser();
 
   useEffect(() => {
     const fetchOrganizationData = async () => {
+      if (!user) return;
       await setIsLoading(true);
       try {
-        if (!user) return;
-        const res =
-          orgIdentifierType === "id"
-            ? await getOrganizationById(orgIdentifier)
-            : await getOrganizationBySlug(orgIdentifier);
+
+        const orgId = userMetadata
+          ? userMetadata.organizations
+            ? userMetadata.organizations[0]
+            : userMetadata.invitations
+              ? userMetadata.invitations[0].organizationId
+              : undefined
+          : undefined;
+
+        if (!orgId) {
+          await setIsLoading(false);
+          return;
+        }
+
+        const res = await getOrganizationById(orgId);
         const org = JSON.parse(res.data) as Organization;
         await setOrg(org);
-        await setHasOrg(true);
         await setIsInitRender(false);
         await setIsLoading(false);
         return { org };
@@ -39,5 +45,5 @@ export function useOrganizationData(
     };
 
     fetchOrganizationData();
-  }, [lastUpdated, setOrg]);
+  }, [lastUpdated, userMetadata]);
 }

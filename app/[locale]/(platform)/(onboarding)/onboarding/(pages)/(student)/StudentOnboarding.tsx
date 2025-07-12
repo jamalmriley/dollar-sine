@@ -110,7 +110,7 @@ export default function StudentOnboarding() {
           >
             <FaArrowLeft />
           </Button>
-          {prompts.map((prompt: any, i: number) => (
+          {prompts.map((_, i) => (
             <div
               key={i}
               onClick={() => setCurrPrompt(i)}

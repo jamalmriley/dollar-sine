@@ -20,7 +20,6 @@ export default function Banner({
   publishDate,
   buttonText,
   buttonHref,
-  buttonAction,
   renderExclusionList,
 }: {
   requiresSignIn: boolean;
@@ -32,7 +31,6 @@ export default function Banner({
   publishDate: Date;
   buttonText?: string;
   buttonHref?: string;
-  buttonAction?: any;
   renderExclusionList?: string[];
 }) {
   const { t } = useTranslation();
@@ -138,16 +136,6 @@ export default function Banner({
                 <Link href={buttonHref}>
                   <StyledButton>{t(buttonText)}</StyledButton>
                 </Link>
-              )}
-              {buttonAction !== undefined && (
-                <StyledButton
-                  onClick={async () => {
-                    await buttonAction();
-                  }}
-                  // className={`border ${bgTailwindProps} ${text2TailwindProps} ${borderTailwindProps} text-xs md:text-sm`}
-                >
-                  {t(buttonText)}
-                </StyledButton>
               )}
             </>
           ) : (
