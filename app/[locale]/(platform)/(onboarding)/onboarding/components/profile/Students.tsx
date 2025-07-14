@@ -47,22 +47,9 @@ import { v4 as uuidv4 } from "uuid";
 
 const MAX_STUDENTS: number = 4;
 
-export default function Students() {
-  const {
-    userMetadata,
-    setStudentId,
-    setStudentFirst,
-    setStudentLast,
-    setStudentEmail,
-    setStudentGradeLevel,
-    setIsLoading,
-    setLastUpdated,
-  } = useOnboardingContext();
+export default function Students({ canRender }: { canRender: boolean }) {
+  const { userMetadata } = useOnboardingContext();
   const { user, isLoaded } = useUser();
-
-  const titleText: string = "Edit student";
-  const descText: string =
-    "Update this student's basic details below. You'll be able to add more later.";
 
   if (!user || !isLoaded || !userMetadata) return;
   const guardianMetadata = userMetadata as GuardianMetadata;
@@ -83,100 +70,196 @@ export default function Students() {
         </span>
       </div>
 
-      {/* Responsive Dialog */}
-      <AddStudentResponsiveDialog />
+      {/* Responsive Dialogs */}
+      <div className="w-full flex gap-5">
+        <AddStudentResponsiveDialog />
+        {canRender && studentInvitations && <ViewStudentResponsiveDialog />}
+      </div>
 
-      <span className="size-full flex flex-col gap-4 mt-4">
-        {studentInvitations ? (
-          studentInvitations.map((student, i) => (
-            <div key={i} className="flex justify-between p-2 border rounded-lg">
-              <div className="flex flex-col">
-                <span className="text-sm">
-                  <span className="font-semibold">
-                    {student.firstName} {student.lastName[0]}.
-                  </span>{" "}
-                  • {student.gradeLevel} grade
-                </span>
-                <span className="text-xs text-muted-foreground italic">
-                  {student.emailAddress}
-                </span>
-              </div>
+      {!canRender && (
+        <span className="mt-4">
+          <AddedStudents />
+        </span>
+      )}
+    </div>
+  );
+}
 
-              <Dialog>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <BsThreeDotsVertical />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    <DialogTrigger asChild>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setStudentId(student.id);
-                          setStudentFirst(student.firstName);
-                          setStudentLast(student.lastName);
-                          setStudentEmail(student.emailAddress);
-                          setStudentGradeLevel(student.gradeLevel);
-                        }}
-                      >
-                        Edit student
-                      </DropdownMenuItem>
-                    </DialogTrigger>
-                    <DropdownMenuSeparator />
+function ViewStudentResponsiveDialog() {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { userMetadata } = useOnboardingContext();
+  const { user, isLoaded } = useUser();
+  const [open, setOpen] = useState(false);
+
+  const buttonText: string = "View students";
+  const titleText: string = "View students";
+  const descText: string = "View your added students below.";
+
+  if (!user || !isLoaded || !userMetadata) return;
+  const guardianMetadata = userMetadata as GuardianMetadata;
+  const { studentInvitations } = guardianMetadata;
+
+  if (isDesktop) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <StyledButton
+            className="w-full"
+            disabled={studentInvitations?.length === MAX_STUDENTS}
+          >
+            {buttonText}
+          </StyledButton>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{titleText}</DialogTitle>
+            <DialogDescription>{descText}</DialogDescription>
+          </DialogHeader>
+          <AddedStudents />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+  return (
+    <Drawer open={open} onOpenChange={setOpen} direction="bottom">
+      <DrawerTrigger asChild>
+        <StyledButton
+          className="w-full"
+          disabled={studentInvitations?.length === MAX_STUDENTS}
+        >
+          {buttonText}
+        </StyledButton>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>{titleText}</DrawerTitle>
+          <DrawerDescription>{descText}</DrawerDescription>
+        </DrawerHeader>
+        <div className="px-4 pb-1">
+          <AddedStudents />
+        </div>
+        <DrawerFooter className="pt-2">
+          <DrawerClose asChild>
+            <StyledDestructiveButton>Close</StyledDestructiveButton>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+function AddedStudents() {
+  const {
+    userMetadata,
+    setStudentId,
+    setStudentFirst,
+    setStudentLast,
+    setStudentEmail,
+    setStudentGradeLevel,
+    setIsLoading,
+    setLastUpdated,
+  } = useOnboardingContext();
+  const { user, isLoaded } = useUser();
+  const titleText: string = "Edit student";
+  const descText: string =
+    "Update this student's basic details below. You'll be able to add more later.";
+
+  if (!user || !isLoaded || !userMetadata) return;
+  const guardianMetadata = userMetadata as GuardianMetadata;
+  const { studentInvitations } = guardianMetadata;
+
+  return (
+    <span className="size-full flex flex-col gap-4">
+      {studentInvitations ? (
+        studentInvitations.map((student, i) => (
+          <div key={i} className="flex justify-between p-2 border rounded-lg">
+            <div className="flex flex-col">
+              <span className="text-sm">
+                <span className="font-semibold">
+                  {student.firstName} {student.lastName[0]}.
+                </span>{" "}
+                • {student.gradeLevel} grade
+              </span>
+              <span className="text-xs text-muted-foreground italic">
+                {student.emailAddress}
+              </span>
+            </div>
+
+            {/* 3 dots */}
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <BsThreeDotsVertical />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DialogTrigger asChild>
                     <DropdownMenuItem
-                      onClick={async () => {
-                        const metadata = userMetadata as GuardianMetadata;
-                        const newStudentInvitations = studentInvitations.filter(
-                          (stdnt) => stdnt.id !== student.id
-                        );
-
-                        const newMetadata: GuardianMetadata = {
-                          ...metadata,
-                          studentInvitations:
-                            newStudentInvitations.length > 0
-                              ? newStudentInvitations
-                              : null,
-                        };
-                        await setIsLoading(true);
-                        await updateUserMetadata(user.id, newMetadata)
-                          .then(() => {
-                            setLastUpdated(new Date().toString());
-                          })
-                          .catch((err) => {
-                            console.error(err);
-                            setIsLoading(false);
-                          });
+                      onClick={() => {
+                        setStudentId(student.id);
+                        setStudentFirst(student.firstName);
+                        setStudentLast(student.lastName);
+                        setStudentEmail(student.emailAddress);
+                        setStudentGradeLevel(student.gradeLevel);
                       }}
                     >
-                      Delete student
+                      Edit student
                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>{titleText}</DialogTitle>
-                    <DialogDescription>{descText}</DialogDescription>
-                  </DialogHeader>
-                  <AddStudentForm />
-                  <StudentButton action="Update" />
-                </DialogContent>
-              </Dialog>
-            </div>
-          ))
-        ) : (
-          <div className="size-full flex flex-col justify-center items-center bg-woodsmoke-50 text-muted-foreground select-none border rounded-lg">
-            <PiStudent className="size-24" />
-            <span className="font-semibold">No students added yet</span>
+                  </DialogTrigger>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      const metadata = userMetadata as GuardianMetadata;
+                      const newStudentInvitations = studentInvitations.filter(
+                        (stdnt) => stdnt.id !== student.id
+                      );
+
+                      const newMetadata: GuardianMetadata = {
+                        ...metadata,
+                        studentInvitations:
+                          newStudentInvitations.length > 0
+                            ? newStudentInvitations
+                            : null,
+                      };
+                      await setIsLoading(true);
+                      await updateUserMetadata(user.id, newMetadata)
+                        .then(() => {
+                          setLastUpdated(new Date().toString());
+                        })
+                        .catch((err) => {
+                          console.error(err);
+                          setIsLoading(false);
+                        });
+                    }}
+                  >
+                    Delete student
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>{titleText}</DialogTitle>
+                  <DialogDescription>{descText}</DialogDescription>
+                </DialogHeader>
+                <AddStudentForm />
+                <StudentButton action="Update" />
+              </DialogContent>
+            </Dialog>
           </div>
-        )}
-      </span>
-    </div>
+        ))
+      ) : (
+        <div className="size-full flex flex-col justify-center items-center bg-woodsmoke-50 text-muted-foreground select-none border rounded-lg">
+          <PiStudent className="size-24" />
+          <span className="font-semibold">No students added yet</span>
+        </div>
+      )}
+    </span>
   );
 }
 
@@ -199,7 +282,10 @@ function AddStudentResponsiveDialog() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <StyledButton disabled={studentInvitations?.length === MAX_STUDENTS}>
+          <StyledButton
+            className="w-full"
+            disabled={studentInvitations?.length === MAX_STUDENTS}
+          >
             {buttonText}
           </StyledButton>
         </DialogTrigger>
@@ -217,7 +303,10 @@ function AddStudentResponsiveDialog() {
   return (
     <Drawer open={open} onOpenChange={setOpen} direction="bottom">
       <DrawerTrigger asChild>
-        <StyledButton disabled={studentInvitations?.length === MAX_STUDENTS}>
+        <StyledButton
+          className="w-full"
+          disabled={studentInvitations?.length === MAX_STUDENTS}
+        >
           {buttonText}
         </StyledButton>
       </DrawerTrigger>

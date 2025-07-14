@@ -30,6 +30,7 @@ import handleConfetti from "@/components/ui/confetti";
 import OnboardingContextProvider from "@/contexts/onboarding-context";
 import Iphone from "@/components/iPhone";
 import { useRouter } from "next/navigation";
+import { Response } from "@/types/general";
 
 export default function OnboardingCompletePage() {
   const [paymentIntent] = useQueryState("payment_intent", { defaultValue: "" });
@@ -190,7 +191,21 @@ function OnboardingCompleteWithPayment() {
       return `C-${first6Chars}`;
     };
 
-    const completeAdminOnboarding = async (
+    const handleFinalOnboardingStep = (res: Response): void => {
+      setIsOnboardingComplete(res.success);
+      toast({
+        variant: res.success ? "default" : "destructive",
+        title: "Welcome to Dollar Sine! 🤓",
+        description: res.success
+          ? "Your onboarding is now complete."
+          : res.message?.description,
+      });
+
+      handleConfetti();
+      localStorage.setItem("onboardingStep", "1"); // Sets the onboarding step to 1 in case a future user signs up on the same device.
+    };
+
+    const completeOnboardingWithPayment = async (
       paymentIntent: string | undefined
     ) => {
       if (!user) return;
@@ -232,7 +247,7 @@ function OnboardingCompleteWithPayment() {
         courses: activeCourses,
       };
 
-      await updateUserMetadata(user.id, userMetadata).then(() => {
+      await updateUserMetadata(user.id, userMetadata).then((res) => {
         const { role, organizations } = userMetadata;
         if (role !== "guardian" && organizations && organizations.length > 0) {
           const orgId = organizations[0];
@@ -246,29 +261,22 @@ function OnboardingCompleteWithPayment() {
             };
 
             updateOrganization(orgId, newOrgMetadata).then((res) => {
-              setIsOnboardingComplete(res.success);
-              toast({
-                variant: res.success ? "default" : "destructive",
-                title: "Welcome to Dollar Sine! 🤓",
-                description: res.success
-                  ? "Your onboarding is now complete."
-                  : res.message?.description,
-              });
-
-              handleConfetti();
-              localStorage.setItem("onboardingStep", "1"); // Sets the onboarding step to 1 in case a future user signs up on the same device.
+              handleFinalOnboardingStep(res);
             });
           });
+        } else {
+          handleFinalOnboardingStep(res);
         }
       });
     };
 
-    completeAdminOnboarding(paymentIntent);
+    completeOnboardingWithPayment(paymentIntent);
   }, [isLoaded]);
 
   // TODO: Send digital receipt via Resend
   // TODO: Create downloadable PDF receipt
   // TODO: Add shortened and full confirmation codes to selectedCourse
+  // TODO: Any students that guardians added need to be sent emails
 
   if (!user || !isLoaded || !isOnboardingComplete) return;
   return (

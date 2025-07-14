@@ -31,13 +31,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { useOnboardingContext } from "@/contexts/onboarding-context";
+import {
+  PRONOUN_KEYS,
+  PronounKey,
+  useOnboardingContext,
+} from "@/contexts/onboarding-context";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { MdDoNotDisturb } from "react-icons/md";
 
 export default function Pronouns() {
+  const { selectedPronouns, setSelectedPronouns } = useOnboardingContext();
   const [pronouns, setPronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
@@ -51,30 +56,10 @@ export default function Pronouns() {
   const [objectivePronoun, setObjectivePronoun] = useState<string>("");
   const [possessivePronoun, setPossessivePronoun] = useState<string>("");
 
-  const {
-    isHeSelected,
-    setIsHeSelected,
-    isSheSelected,
-    setIsSheSelected,
-    isTheySelected,
-    setIsTheySelected,
-    isEySelected,
-    setIsEySelected,
-    isXeSelected,
-    setIsXeSelected,
-    isZeSelected,
-    setIsZeSelected,
-    preferNotToSay,
-    setPreferNotToSay,
-  } = useOnboardingContext();
-
   type PronounObj = {
-    checked: boolean;
-    onCheckedChange: Dispatch<SetStateAction<boolean>>;
-    subjective: string;
+    subjective: PronounKey;
     objective: string;
     possessive: string;
-    ze?: number;
   };
 
   // TODO: Support Spanish pronouns
@@ -84,51 +69,38 @@ export default function Pronouns() {
 
   const basePronounsArr: PronounObj[] = [
     {
-      checked: isHeSelected,
-      onCheckedChange: setIsHeSelected,
       subjective: "he",
       objective: "him",
       possessive: "his",
       // reflexive: "himself",
     },
     {
-      checked: isSheSelected,
-      onCheckedChange: setIsSheSelected,
       subjective: "she",
       objective: "her",
       possessive: "hers",
       // reflexive: "herself",
     },
     {
-      checked: isTheySelected,
-      onCheckedChange: setIsTheySelected,
       subjective: "they",
       objective: "them",
       possessive: "theirs",
       // reflexive: "themself",
     },
   ];
-
   const morePronounsArr: PronounObj[] = [
     {
-      checked: isEySelected,
-      onCheckedChange: setIsEySelected,
       subjective: "ey",
       objective: "em",
       possessive: "eirs",
       // reflexive: "emself",
     },
     {
-      checked: isXeSelected,
-      onCheckedChange: setIsXeSelected,
       subjective: "xe",
       objective: "xem",
       possessive: "xyrs",
       // reflexive: "xemself",
     },
     {
-      checked: isZeSelected,
-      onCheckedChange: setIsZeSelected,
       subjective: "ze",
       objective: "hir",
       possessive: "hirs",
@@ -136,90 +108,71 @@ export default function Pronouns() {
     },
   ];
 
-  // Renders properly checked pronouns upon initial load.
-  useEffect(() => {
-    const pronounHelper = () => {
-      const splitPronouns = pronouns.split("/");
-      for (const pronoun of splitPronouns) {
-        if (!hasCustomPronouns) {
-          if (pronoun === "he") setIsHeSelected(true);
-          if (pronoun === "she") setIsSheSelected(true);
-          if (pronoun === "they") setIsTheySelected(true);
-          if (pronoun === "ey") setIsEySelected(true);
-          if (pronoun === "xe") setIsXeSelected(true);
-          if (pronoun === "ze") setIsZeSelected(true);
-        }
-      }
-    };
+  function formatPronoun(pronoun: string): string {
+    return pronoun.toLowerCase().replace(/[^a-z]/g, "");
+  }
 
-    pronounHelper();
+  // Renders pronouns properly upon load/refresh.
+  useEffect(() => {
+    if (!pronouns || hasCustomPronouns) return;
+    if (pronouns === "Prefer not to say") {
+      setSelectedPronouns(["PNTS"]);
+      return;
+    }
+
+    const splitPronouns = pronouns.split("/");
+
+    // Try to reverse-match a full triad (e.g., "they/them/theirs")
+    const allPronouns = [...basePronounsArr, ...morePronounsArr];
+    const triadMatch = allPronouns.find(
+      (p) =>
+        splitPronouns[0] === p.subjective &&
+        splitPronouns[1] === p.objective &&
+        splitPronouns[2] === p.possessive
+    );
+
+    if (triadMatch) {
+      setSelectedPronouns([triadMatch.subjective]);
+      return;
+    }
+
+    // Fall back to valid subjective-only keys
+    const validPronounKeys = splitPronouns.filter((p) =>
+      PRONOUN_KEYS.includes(p as PronounKey)
+    );
+    if (validPronounKeys.length > 0) {
+      setSelectedPronouns(validPronounKeys as PronounKey[]);
+    }
   }, [pronouns, hasCustomPronouns]);
 
   // Sets pronouns based on dropdown menu selections.
   useEffect(() => {
-    const getPronouns = async () => {
-      if (preferNotToSay) {
-        setPronouns("Prefer not to say");
-        return;
-      }
+    if (open || hasCustomPronouns) return; // Only run the following code if the dropdown is closed or if it is not set to "Prefer not to say".
+    if (selectedPronouns.length === 0) {
+      setPronouns("");
+      return;
+    }
+    if (selectedPronouns.length === 1 && selectedPronouns[0] === "PNTS") {
+      setPronouns("Prefer not to say");
+      return;
+    }
 
-      const result: string[] = [];
-      const arr = [...basePronounsArr, ...morePronounsArr];
-      const customPronounObj: PronounObj = {
-        checked: hasCustomPronouns,
-        onCheckedChange: setHasCustomPronouns,
-        subjective: pronouns.split("/")[0],
-        objective: pronouns.split("/")[1],
-        possessive: pronouns.split("/")[2],
-      };
+    const allPronouns = [...basePronounsArr, ...morePronounsArr];
+    const fullPronouns = selectedPronouns
+      .map((key) => allPronouns.find((pronoun) => pronoun.subjective === key))
+      .filter((p): p is PronounObj => p !== undefined);
 
-      if (hasCustomPronouns) arr.unshift(customPronounObj);
-      const filteredArr = arr.filter((pronoun) => pronoun.checked);
+    const result: string[] = [];
 
-      for (let i = 0; i < filteredArr.length; i++) {
-        const pronoun = filteredArr[i];
-        if (filteredArr.length === 1) {
-          result.push(
-            pronoun.subjective,
-            pronoun.objective,
-            pronoun.possessive
-          );
-        } else {
-          result.push(pronoun.subjective);
-        }
-      }
+    if (fullPronouns.length === 1) {
+      const p = fullPronouns[0];
+      result.push(p.subjective, p.objective, p.possessive);
+    } else {
+      result.push(...fullPronouns.map((p) => p.subjective));
+    }
 
-      await setPronouns(result.join("/"));
-    };
-
-    if (!open) getPronouns();
-  }, [
-    open,
-    isHeSelected,
-    isSheSelected,
-    isTheySelected,
-    isEySelected,
-    isXeSelected,
-    isZeSelected,
-    hasCustomPronouns,
-    preferNotToSay,
-  ]);
-
-  const formatPronoun = (pronoun: string): string => {
-    return pronoun.toLowerCase().replace(/[^a-z]/g, "");
-  };
-  const joinPronouns = (pronouns: string[]): string => {
-    const nonBlankPronouns = pronouns.filter((pronoun) => pronoun !== "");
-    return nonBlankPronouns.join("/");
-  };
-  const clearPronounOptions = (): void => {
-    setIsHeSelected(false);
-    setIsSheSelected(false);
-    setIsTheySelected(false);
-    setIsEySelected(false);
-    setIsXeSelected(false);
-    setIsZeSelected(false);
-  };
+    setPronouns(result.join("/"));
+  }, [open, selectedPronouns]);
 
   return (
     <div className="size-full flex justify-between items-center md:items-start">
@@ -257,7 +210,7 @@ export default function Pronouns() {
                   onCheckedChange={() => {
                     setPronouns("");
                     setHasCustomPronouns(false);
-                    setPreferNotToSay(false);
+                    setSelectedPronouns([]);
                   }}
                   onSelect={(e) => e.preventDefault()}
                   className="flex flex-col justify-center"
@@ -275,13 +228,19 @@ export default function Pronouns() {
 
             {/* Base Pronouns */}
             {basePronounsArr.map((pronoun, i) => (
-              <span key={i}>
+              <span key={pronoun.subjective}>
                 <DropdownMenuCheckboxItem
-                  checked={pronoun.checked}
-                  onCheckedChange={(e) => {
-                    pronoun.onCheckedChange(e.valueOf());
+                  checked={selectedPronouns.includes(pronoun.subjective)}
+                  onCheckedChange={(checked) => {
+                    setSelectedPronouns((prev) =>
+                      checked
+                        ? [
+                            ...prev.filter((p) => p !== "PNTS"),
+                            pronoun.subjective,
+                          ]
+                        : prev.filter((p) => p !== pronoun.subjective)
+                    );
                     setHasCustomPronouns(false);
-                    setPreferNotToSay(false);
                   }}
                   onSelect={(e) => e.preventDefault()}
                   disabled={hasCustomPronouns}
@@ -294,7 +253,7 @@ export default function Pronouns() {
                     {pronoun.objective}/{pronoun.possessive}
                   </span>
                 </DropdownMenuCheckboxItem>
-                <DropdownMenuSeparator />
+                {i !== morePronounsArr.length - 1 && <DropdownMenuSeparator />}
               </span>
             ))}
 
@@ -306,13 +265,19 @@ export default function Pronouns() {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   {morePronounsArr.map((pronoun, i) => (
-                    <span key={i}>
+                    <span key={pronoun.subjective}>
                       <DropdownMenuCheckboxItem
-                        checked={pronoun.checked}
-                        onCheckedChange={(e) => {
-                          pronoun.onCheckedChange(e.valueOf());
+                        checked={selectedPronouns.includes(pronoun.subjective)}
+                        onCheckedChange={(checked) => {
+                          setSelectedPronouns((prev) =>
+                            checked
+                              ? [
+                                  ...prev.filter((p) => p !== "PNTS"),
+                                  pronoun.subjective,
+                                ]
+                              : prev.filter((p) => p !== pronoun.subjective)
+                          );
                           setHasCustomPronouns(false);
-                          setPreferNotToSay(false);
                         }}
                         onSelect={(e) => e.preventDefault()}
                         disabled={hasCustomPronouns}
@@ -345,12 +310,13 @@ export default function Pronouns() {
 
               <DropdownMenuItem
                 className={`flex justify-between border ${
-                  preferNotToSay ? "border-default-color" : "border-transparent"
+                  selectedPronouns.includes("PNTS")
+                    ? "border-default-color"
+                    : "border-transparent"
                 }`}
                 onClick={(e) => {
                   e.preventDefault();
-                  clearPronounOptions();
-                  setPreferNotToSay(true);
+                  setSelectedPronouns(["PNTS"]);
                   setHasCustomPronouns(false);
                 }}
               >
@@ -451,15 +417,14 @@ export default function Pronouns() {
                 type="submit"
                 className="w-full"
                 onClick={() => {
-                  clearPronounOptions();
-                  const pronouns = joinPronouns([
+                  const pronouns = [
                     subjectivePronoun,
                     objectivePronoun,
                     possessivePronoun,
-                  ]);
+                  ].join("/");
                   setPronouns(pronouns);
-                  setHasCustomPronouns(pronouns !== "");
-                  setPreferNotToSay(false);
+                  setHasCustomPronouns(true);
+                  setSelectedPronouns([]);
                 }}
                 disabled={
                   [

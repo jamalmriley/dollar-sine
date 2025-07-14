@@ -33,6 +33,7 @@ import {
   updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { toast } from "@/hooks/use-toast";
+import { useResetQueryState } from "@/hooks/use-resetQueryState";
 
 export function OrgCard({
   toggle,
@@ -45,7 +46,6 @@ export function OrgCard({
 }) {
   const { userMetadata, setIsLoading, setLastUpdated, setOrg, setOrgLogo } =
     useOnboardingContext();
-  const { user } = useUser();
   const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
   const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
   const [, setOrgAddress] = useQueryState("orgAddress", { defaultValue: "" });
@@ -58,6 +58,8 @@ export function OrgCard({
     "isTeacherPurchasingEnabled",
     parseAsBoolean.withDefault(false)
   );
+  const { reset } = useResetQueryState();
+  const { user } = useUser();
 
   function splitAddress(address: string) {
     const separator = ",";
@@ -78,7 +80,7 @@ export function OrgCard({
       return true;
     };
 
-    setCurrOnboardingStep({ step: 2, isEditing: true });
+    setCurrOnboardingStep({ step: currStep, isEditing: true });
     setOrgName(org.name);
     setOrgSlug(org.slug);
     setOrgAddress(String(metadata.address));
@@ -106,16 +108,11 @@ export function OrgCard({
 
         updateUserMetadata(userId, newMetadata)
           .then(() => {
-            setOrg(undefined);
+            reset();
+            setCurrOnboardingStep({ step: currStep, isEditing: false });
             setLastUpdated(new Date().toString()); // Triggers re-render.
-            setOrgName("");
-            setOrgSlug("");
-            setOrgCategory("");
-            setIsCustomOrgCategory(false);
-            setOrgAddress("");
-            setIsTeacherPurchasingEnabled(false);
+            setOrg(undefined);
             setOrgLogo(undefined);
-            setCurrOnboardingStep({ step: 2, isEditing: false });
 
             toast({
               variant: res.success ? "default" : "destructive",
@@ -203,6 +200,9 @@ export function OrgCard({
   };
 
   if (!metadata || !userMetadata) return;
+
+  const { role } = userMetadata;
+  const currStep = role === "guardian" ? 1 : 2;
   return (
     <div className="p-5 w-full">
       <div

@@ -10,29 +10,26 @@ type OnboardingStep = {
   isEditing: boolean;
 };
 
+export const PRONOUN_KEYS = [
+  "he",
+  "she",
+  "they",
+  "ey",
+  "xe",
+  "ze",
+  "PNTS",
+] as const;
+export type PronounKey = (typeof PRONOUN_KEYS)[number];
+
 type OnboardingContext = {
-  isInitRender: boolean;
-  setIsInitRender: React.Dispatch<React.SetStateAction<boolean>>;
   userData: User | undefined;
   setUserData: React.Dispatch<React.SetStateAction<User | undefined>>;
   userMetadata: UserMetadata | undefined;
   setUserMetadata: React.Dispatch<
     React.SetStateAction<UserMetadata | undefined>
   >;
-  isHeSelected: boolean; // TODO: remove?
-  setIsHeSelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isSheSelected: boolean; // TODO: remove?
-  setIsSheSelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isTheySelected: boolean; // TODO: remove?
-  setIsTheySelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isEySelected: boolean; // TODO: remove?
-  setIsEySelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isXeSelected: boolean; // TODO: remove?
-  setIsXeSelected: React.Dispatch<React.SetStateAction<boolean>>;
-  isZeSelected: boolean; // TODO: remove?
-  setIsZeSelected: React.Dispatch<React.SetStateAction<boolean>>;
-  preferNotToSay: boolean; // TODO: remove?
-  setPreferNotToSay: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedPronouns: PronounKey[];
+  setSelectedPronouns: React.Dispatch<React.SetStateAction<PronounKey[]>>;
   profilePic: File | undefined;
   setProfilePic: React.Dispatch<React.SetStateAction<File | undefined>>;
   studentId: string;
@@ -88,17 +85,10 @@ export default function OnboardingContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [isInitRender, setIsInitRender] = useState<boolean>(true);
   const [userData, setUserData] = useState<User | undefined>();
   const [userMetadata, setUserMetadata] = useState<UserMetadata | undefined>();
 
-  const [isHeSelected, setIsHeSelected] = useState<boolean>(false);
-  const [isSheSelected, setIsSheSelected] = useState<boolean>(false);
-  const [isTheySelected, setIsTheySelected] = useState<boolean>(false);
-  const [isEySelected, setIsEySelected] = useState<boolean>(false);
-  const [isXeSelected, setIsXeSelected] = useState<boolean>(false);
-  const [isZeSelected, setIsZeSelected] = useState<boolean>(false);
-  const [preferNotToSay, setPreferNotToSay] = useState<boolean>(false);
+  const [selectedPronouns, setSelectedPronouns] = useState<PronounKey[]>([]);
   const [profilePic, setProfilePic] = useState<File | undefined>();
   const [studentId, setStudentId] = useState<string>("");
   const [studentFirst, setStudentFirst] = useState<string>("");
@@ -133,26 +123,12 @@ export default function OnboardingContextProvider({
   return (
     <OnboardingContext.Provider
       value={{
-        isInitRender,
-        setIsInitRender,
         userData,
         setUserData,
         userMetadata,
         setUserMetadata,
-        isHeSelected,
-        setIsHeSelected,
-        isSheSelected,
-        setIsSheSelected,
-        isTheySelected,
-        setIsTheySelected,
-        isEySelected,
-        setIsEySelected,
-        isXeSelected,
-        setIsXeSelected,
-        isZeSelected,
-        setIsZeSelected,
-        preferNotToSay,
-        setPreferNotToSay,
+        selectedPronouns,
+        setSelectedPronouns,
         profilePic,
         setProfilePic,
         studentId,

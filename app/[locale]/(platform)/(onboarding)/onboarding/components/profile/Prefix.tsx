@@ -1,8 +1,16 @@
 "use client";
 
+import { StyledDropdownButton } from "@/components/StyledButtons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { generateDisplayName } from "@/utils/user";
 import { useUser } from "@clerk/nextjs";
 import { parseAsBoolean, useQueryState } from "nuqs";
+import { FiPlus } from "react-icons/fi";
 
 export default function Prefix() {
   const prefixes: string[] = [
@@ -67,23 +75,108 @@ export default function Prefix() {
   }
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="size-full flex justify-between md:flex-col">
       {/* Header */}
-      <div className="hidden md:flex flex-col">
+      <div className="flex flex-col">
         <span
-          className={`text-sm font-semibold ${
+          className={`hidden md:block text-sm font-semibold ${
             prefix !== "" ? "text-muted-foreground line-through" : ""
           }`}
         >
           Select a prefix below.
         </span>
-        <span className="text-xs font-medium text-muted-foreground mb-2">
-          Don&apos;t see one that fits you? Add your own!
+        <span className="h-full flex items-center text-xs font-medium text-muted-foreground md:h-fit md:mb-2">
+          Don&apos;t see one that fits you? <br className="block md:hidden" />
+          Add your own!
         </span>
       </div>
 
       {/* Buttons */}
-      <div className="h-12 flex items-center overflow-x-scroll scrollbar-custom">
+
+      {/* Mobile */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild className="block md:hidden">
+          <StyledDropdownButton>{prefix || "Choose"}</StyledDropdownButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-60">
+          <div className="w-full flex flex-wrap">
+            {prefixes.map((prfx) => (
+              <DropdownMenuItem
+                key={prfx}
+                className="w-[calc(33.333333%-8px)] justify-center text-xs font-semibold m-1 py-1 px-0 border border-default-color"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const displayNameValue = getDisplayNameValue(
+                    displayNameFormat
+                  ) as string;
+                  const newDisplayName = generateDisplayName(
+                    prfx,
+                    displayNameValue,
+                    isPrefixIncluded
+                  );
+
+                  setIsCustomPrefix(false);
+                  setPrefix(prfx);
+                  if (displayNameFormat !== "")
+                    setDisplayNameValue(newDisplayName);
+                }}
+              >
+                {prfx}
+              </DropdownMenuItem>
+            ))}
+
+            {isCustomPrefix ? (
+              <input
+                className="w-[calc(66.666667%-8px)] border border-default-color m-1 py-1 pl-1 pr-0 rounded-sm text-xs focus-visible:outline-none focus-visible:ring-0 focus-visible:border-emerald-400"
+                value={prefix}
+                placeholder="Principal"
+                onChange={(e) => {
+                  const displayNameValue = getDisplayNameValue(
+                    displayNameFormat
+                  ) as string;
+                  const newDisplayName = generateDisplayName(
+                    e.target.value,
+                    displayNameValue,
+                    isPrefixIncluded
+                  );
+
+                  setPrefix(e.target.value);
+                  if (displayNameFormat !== "")
+                    setDisplayNameValue(newDisplayName);
+                }}
+              />
+            ) : (
+              <DropdownMenuItem
+                className="w-[calc(66.666667%-8px)] flex justify-center border border-default-color m-1 py-1 px-0"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!isCustomPrefix) {
+                    const displayNameValue = getDisplayNameValue(
+                      displayNameFormat
+                    ) as string;
+                    const newDisplayName = generateDisplayName(
+                      "",
+                      displayNameValue,
+                      isPrefixIncluded
+                    );
+
+                    setIsCustomPrefix(true);
+                    setPrefix("");
+                    if (displayNameFormat !== "")
+                      setDisplayNameValue(newDisplayName);
+                  }
+                }}
+              >
+                <span className="text-xs font-semibold">Add your own</span>
+                <FiPlus />
+              </DropdownMenuItem>
+            )}
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Desktop */}
+      <div className="h-12 hidden md:flex items-center overflow-x-scroll scrollbar-custom">
         {prefixes.map((prfx) => (
           <div key={prfx} className="whitespace-nowrap px-2">
             <button
@@ -111,37 +204,39 @@ export default function Prefix() {
             </button>
           </div>
         ))}
-        <span className={`whitespace-nowrap px-2`}>
+        <span
+          className={`whitespace-nowrap mx-2 focus-within:border-emerald-400 ${
+            isCustomPrefix ? "chip-no-animation border-default-color" : "chip"
+          }`}
+        >
           <button
-            className={
-              isCustomPrefix
-                ? "chip-no-animation border-primary rounded-r-none border-r-0 pr-2"
-                : "chip"
-            }
             onClick={(e) => {
               e.preventDefault();
-              const displayNameValue = getDisplayNameValue(
-                displayNameFormat
-              ) as string;
-              const newDisplayName = generateDisplayName(
-                "",
-                displayNameValue,
-                isPrefixIncluded
-              );
+              if (!isCustomPrefix) {
+                const displayNameValue = getDisplayNameValue(
+                  displayNameFormat
+                ) as string;
+                const newDisplayName = generateDisplayName(
+                  "",
+                  displayNameValue,
+                  isPrefixIncluded
+                );
 
-              setIsCustomPrefix(true);
-              setPrefix("");
-              if (displayNameFormat !== "") setDisplayNameValue(newDisplayName);
+                setIsCustomPrefix(true);
+                setPrefix("");
+                if (displayNameFormat !== "")
+                  setDisplayNameValue(newDisplayName);
+              }
             }}
           >
             <span>Add your own{isCustomPrefix && ":"}</span>
           </button>
           <input
-            className={
+            className={`w-fit ${
               isCustomPrefix
-                ? "border border-primary rounded-full rounded-l-none border-l-0 text-xs py-1 max-w-20"
+                ? "focus-visible:outline-none focus-visible:ring-0 pl-1 max-w-20"
                 : "hidden"
-            }
+            }`}
             value={prefix}
             placeholder="Principal"
             onChange={(e) => {

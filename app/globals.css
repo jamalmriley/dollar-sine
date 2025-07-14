@@ -229,7 +229,7 @@
   }
 
   .receipt {
-    @apply w-80 h-full flex flex-col justify-around items-center p-5 overflow-hidden;
+    @apply w-80 h-full flex flex-col justify-around items-center gap-7 p-5 overflow-hidden;
     filter: drop-shadow(0 1px rgba(0, 0, 0));
   }
 

@@ -14,45 +14,42 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { updateUserMetadata } from "@/app/actions/onboarding";
-import { toast } from "@/hooks/use-toast";
 import { UserMetadata } from "@/types/user";
 import { Prompt } from "@/types/general";
 import { useUserData } from "@/hooks/use-userData";
-import { useOrganizationData } from "@/hooks/use-organizationData";
+import { useResetQueryState } from "@/hooks/use-resetQueryState";
+import { Loader2 } from "lucide-react";
+import { BsCloudCheck } from "react-icons/bs";
 
 export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
-  const { isInitRender, userMetadata, lastUpdated, setCurrOnboardingStep } =
+  const { userMetadata, lastUpdated, setCurrOnboardingStep } =
     useOnboardingContext();
   const pathname = usePathname();
   const { locale } = useParams();
+  const { reset } = useResetQueryState();
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
+  const [isSavingProgress, setIsSavingProgress] = useState<boolean>(false);
 
   // Save the onboarding progress once the user stops typing for at least 3 seconds.
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const isOnboardingCompleted = user?.publicMetadata.isOnboardingCompleted;
-      if (user && !isOnboardingCompleted) {
+      const metadata = user?.publicMetadata as unknown as UserMetadata;
+      if (user?.id && !metadata.isOnboardingComplete) {
         const onboardingLink = `/${locale}${pathname}${
           searchParams.toString() !== "" ? "?" + searchParams.toString() : ""
         }`;
         const metadata = { onboardingLink } as UserMetadata;
 
         const saveOnboardingProgress = async () => {
-          const res = await updateUserMetadata(user.id, metadata);
-
-          toast({
-            variant: res.success ? "default" : "destructive",
-            title: res.success
-              ? "Onboarding progress saved ✅"
-              : res.message?.title,
-            description: res.success
-              ? "You can now refresh or exit the page if needed."
-              : res.message?.description,
+          await setIsSavingProgress(true);
+          await updateUserMetadata(user.id, metadata).then((res) => {
+            if (!res.success) console.error(res.message);
+            setIsSavingProgress(false);
           });
         };
 
@@ -60,7 +57,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
       }
     }, 3000);
     return () => clearTimeout(timeoutId);
-  }, [locale, pathname, searchParams]);
+  }, [locale, pathname, searchParams, user?.id]);
 
   // Maintain the state of the custom carousel.
   useEffect(() => {
@@ -90,6 +87,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
         "onboardingStep",
         String(api.selectedScrollSnap() + 1)
       );
+      reset();
     });
   }, [api]);
 
@@ -101,8 +99,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
     api?.scrollNext();
   }, [api]);
 
-  useUserData(lastUpdated, isInitRender);
-  useOrganizationData(lastUpdated, userMetadata);
+  useUserData(lastUpdated);
   if (!user || !isLoaded || !userMetadata) return;
   return (
     <div className="h-full flex flex-col justify-between items-center pt-10">
@@ -114,17 +111,14 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
       >
         <CarouselContent>
           {prompts.map((prompt) => (
-            <CarouselItem
-              key={prompt.id}
-              className={`max-h-[36rem] flex justify-center`}
-            >
+            <CarouselItem key={prompt.id} className="flex justify-center">
               {prompt.content}
             </CarouselItem>
           ))}
         </CarouselContent>
       </Carousel>
 
-      {/* Buttons and Indicators */}
+      {/* Buttons and Carousel Item Indicators */}
       <div className="flex gap-5 items-center py-5">
         <Button
           variant="ghost"
@@ -165,6 +159,21 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
         value={((current - 1) / count) * 100}
         className="h-2 rounded-none"
       />
+
+      {/* Saving Indictor */}
+      <div className="absolute bottom-5 right-5 text-xs italic text-muted-foreground select-none">
+        {isSavingProgress ? (
+          <span className="flex gap-2.5 items-center">
+            <span>Saving...</span>
+            <Loader2 className="size-5 animate-spin" />
+          </span>
+        ) : (
+          <span className="flex gap-2.5 items-center">
+            <span>Progress saved</span>
+            <BsCloudCheck className="size-5" />
+          </span>
+        )}
+      </div>
     </div>
   );
 }

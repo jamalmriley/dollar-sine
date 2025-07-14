@@ -1,10 +1,8 @@
-import { StyledButton } from "@/components/StyledButtons";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/utils/general";
 import { useUser } from "@clerk/nextjs";
 import { FaCheck } from "react-icons/fa";
-import { MdFileDownload } from "react-icons/md";
 import handleConfetti from "./ui/confetti";
 
 export default function Receipt({
@@ -66,14 +64,15 @@ export default function Receipt({
         Welcome to Dollar Sine, {user.firstName}!
       </p>
 
-      {/* CTA Button */}
-      <div className="mb-4">
+      {/* TODO: CTA Button */}
+      <div className="flex grow">
+        {/* <div className="mb-4">
         <StyledButton>
           <MdFileDownload />
           Download receipt
         </StyledButton>
+      </div> */}
       </div>
     </div>
   );
 }
-

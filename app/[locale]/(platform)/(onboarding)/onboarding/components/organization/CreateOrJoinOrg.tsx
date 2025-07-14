@@ -12,8 +12,8 @@ import { MdClose } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import CreateOrg from "./CreateOrg";
-import { parseAsBoolean, useQueryState } from "nuqs";
 import { JoinOrg } from "./JoinOrg";
+import { useResetQueryState } from "@/hooks/use-resetQueryState";
 
 export default function CreateOrJoinOrg() {
   const {
@@ -23,30 +23,14 @@ export default function CreateOrJoinOrg() {
     setOrgLogo,
     userMetadata,
   } = useOnboardingContext();
+  const { reset } = useResetQueryState();
   const { user, isLoaded } = useUser();
 
-  const [, setOrgName] = useQueryState("orgName", { defaultValue: "" });
-  const [, setOrgSlug] = useQueryState("orgSlug", { defaultValue: "" });
-  const [, setOrgCategory] = useQueryState("orgCategory", { defaultValue: "" });
-  const [, setIsCustomOrgCategory] = useQueryState(
-    "isCustomOrgCategory",
-    parseAsBoolean.withDefault(false)
-  );
-  const [, setOrgAddress] = useQueryState("orgAddress", { defaultValue: "" });
-  const [, setIsTeacherPurchasingEnabled] = useQueryState(
-    "isTeacherPurchasingEnabled",
-    parseAsBoolean.withDefault(false)
-  );
   const [tab, setTab] = useState<string>("create");
   const currStep = 2;
 
   function handleCancelForm(): void {
-    setOrgName("");
-    setOrgSlug("");
-    setOrgCategory("");
-    setIsCustomOrgCategory(false);
-    setOrgAddress("");
-    setIsTeacherPurchasingEnabled(false);
+    reset();
     setOrgLogo(undefined);
     setCurrOnboardingStep({ step: 2, isEditing: false });
   }
@@ -121,7 +105,7 @@ export default function CreateOrJoinOrg() {
   return (
     <div className="size-full flex justify-center">
       <Card
-        className={`h-fit mx-10 expandable-content ${tab === "join" ? "max-w-lg" : "max-w-3xl"}`}
+        className={`h-fit mx-10 expandable-content overflow-y-hidden ${tab === "join" ? "max-w-lg" : "max-w-3xl"}`}
       >
         <CardHeader>
           <div className="flex justify-between items-center">

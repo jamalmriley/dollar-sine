@@ -25,14 +25,14 @@ export default function SignUpPage() {
   return (
     <div className="page-container flex justify-center items-center w-full md:p-0">
       {/* Left Side */}
-      <div className="hidden md:flex flex-col pl-10 w-1/2 h-full bg-gradient-to-r from-dodger-blue-100 via-dodger-blue-100 dark:from-woodsmoke-950 dark:via-woodsmoke-950 to-transparent text-antique-brass-950 dark:text-antique-brass-100 justify-center">
+      <div className="hidden md:flex flex-col pl-10 w-1/2 h-full text-woodsmoke-950 dark:text-woodsmoke-100 justify-center">
         <h1 className="h1 mb-5">
           {!pendingVerification
             ? "Get started today"
             : `Check your email, ${firstName}!`}
         </h1>
         <div className="flex items-center gap-3">
-          <h2 className="subtitle text-antique-brass-800 dark:text-antique-brass-50">
+          <h2 className="subtitle text-woodsmoke-800 dark:text-woodsmoke-50">
             {!pendingVerification
               ? "See what the hype is all about."
               : `We just sent a 6-digit code to ${emailAddress}.`}
@@ -61,7 +61,7 @@ export default function SignUpPage() {
       <div className="w-full md:w-1/2 h-full px-0 md:pr-10 flex justify-center items-center">
         <Card className="flex flex-col gap-3 w-full max-w-md dark:bg-woodsmoke-950">
           <CardHeader className="flex flex-col items-center">
-            <div className="mb-3 md:mb-0">
+            <div>
               <FullLogo />
             </div>
             <CardTitle className="text-2xl font-bold text-center md:hidden">

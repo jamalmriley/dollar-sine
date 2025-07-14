@@ -62,13 +62,13 @@ function getPlanPrice(
 }
 
 const getTotalAmount = (
-  selectedCourses: SelectedCourse[] | null,
+  coursesToBuy: SelectedCourse[] | null,
   courses: Course[]
 ): number => {
   let result = 0;
-  if (!selectedCourses) return result;
+  if (!coursesToBuy) return result;
 
-  for (const course of selectedCourses) {
+  for (const course of coursesToBuy) {
     const { id, plan } = course;
     if (plan) result += getPlanPrice(courses, id, plan);
   }
@@ -155,7 +155,7 @@ function PaymentForm({ amount }: { amount: number }) {
   const [clientSecret, setClientSecret] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [selectedCourses] = useQueryState(
+  const [coursesToBuy] = useQueryState(
     "courses",
     parseAsArrayOf(parseAsJson(SELECTED_COURSE_SCHEMA.parse))
   );
@@ -163,21 +163,21 @@ function PaymentForm({ amount }: { amount: number }) {
   const [discountAmt, discountPercent] = [0, 0];
   const taxRate = 0.1;
   const taxAmt =
-    taxRate * (getTotalAmount(selectedCourses, courses) - discountAmt);
+    taxRate * (getTotalAmount(coursesToBuy, courses) - discountAmt);
   const grandTotal =
-    getTotalAmount(selectedCourses, courses) - discountAmt + taxAmt;
+    getTotalAmount(coursesToBuy, courses) - discountAmt + taxAmt;
 
   useEffect(() => {
     (async () => {
       await createPaymentIntent(
         convertToSubcurrency(amount),
-        selectedCourses
+        coursesToBuy
       ).then((res) => {
         const clientSecret: string | null = res.data;
         if (clientSecret) setClientSecret(clientSecret);
       });
     })();
-  }, [amount]);
+  }, [amount, coursesToBuy]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -218,7 +218,7 @@ function PaymentForm({ amount }: { amount: number }) {
       )}
 
       {/* Purchase Details */}
-      {selectedCourses && (
+      {coursesToBuy && (
         <Accordion
           type="single"
           collapsible
@@ -229,15 +229,15 @@ function PaymentForm({ amount }: { amount: number }) {
               Purchase Details
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-3 text-xs">
-              {selectedCourses.map((course) => (
+              {coursesToBuy.map((course) => (
                 <div key={course.id} className="flex justify-between">
                   <span>
                     {course.title}{" "}
-                    {course.plan === "" && `- ${course.plan} Package`}
+                    {course.plan !== "" && `- ${course.plan} Package`}
                   </span>
 
                   <span>
-                    {course.plan === "" &&
+                    {course.plan &&
                       formatCurrency(
                         getPlanPrice(courses, course.id, course.plan)
                       )}
@@ -249,7 +249,7 @@ function PaymentForm({ amount }: { amount: number }) {
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span>
-                  {formatCurrency(getTotalAmount(selectedCourses, courses))}
+                  {formatCurrency(getTotalAmount(coursesToBuy, courses))}
                 </span>
               </div>
               {/* Discount */}

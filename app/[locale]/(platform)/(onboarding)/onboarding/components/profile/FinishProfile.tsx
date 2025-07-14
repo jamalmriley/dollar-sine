@@ -34,6 +34,7 @@ import { EMOJI_SKIN_TONES } from "@/utils/emoji";
 import Pronunciation from "./Pronunciation";
 import { StyledActionButton } from "@/components/StyledButtons";
 import Students from "./Students";
+import { useResetQueryState } from "@/hooks/use-resetQueryState";
 
 export default function FinishProfile() {
   const {
@@ -44,52 +45,36 @@ export default function FinishProfile() {
     profilePic,
     setProfilePic,
     userMetadata,
-    setIsHeSelected,
-    setIsSheSelected,
-    setIsTheySelected,
-    setIsEySelected,
-    setIsXeSelected,
-    setIsZeSelected,
+    setSelectedPronouns,
     setLastUpdated,
-    setPreferNotToSay,
   } = useOnboardingContext();
-  const [pronunciation, setPronunciation] = useQueryState("pronunciation", {
-    defaultValue: "",
-  });
-  const [prefix, setPrefix] = useQueryState("prefix", {
-    defaultValue: "",
-  });
-  const [isPrefixIncluded, setIsPrefixIncluded] = useQueryState(
+  const [pronunciation] = useQueryState("pronunciation", { defaultValue: "" });
+  const [prefix] = useQueryState("prefix", { defaultValue: "" });
+  const [isPrefixIncluded] = useQueryState(
     "isPrefixIncluded",
     parseAsBoolean.withDefault(true)
   );
-  const [isCustomPrefix, setIsCustomPrefix] = useQueryState(
+  const [isCustomPrefix] = useQueryState(
     "isCustomPrefix",
     parseAsBoolean.withDefault(false)
   );
-  const [displayName, setDisplayName] = useQueryState("displayName", {
+  const [displayName] = useQueryState("displayName", { defaultValue: "" });
+  const [displayNameFormat] = useQueryState("displayNameFormat", {
     defaultValue: "",
   });
-  const [displayNameFormat, setDisplayNameFormat] = useQueryState(
-    "displayNameFormat",
-    {
-      defaultValue: "",
-    }
-  );
-  const [jobTitle, setJobTitle] = useQueryState("jobTitle", {
+  const [jobTitle] = useQueryState("jobTitle", { defaultValue: "" });
+  const [pronouns] = useQueryState("pronouns", {
     defaultValue: "",
   });
-  const [pronouns, setPronouns] = useQueryState("pronouns", {
-    defaultValue: "",
-  });
-  const [hasCustomPronouns, setHasCustomPronouns] = useQueryState(
+  const [hasCustomPronouns] = useQueryState(
     "hasCustomPronouns",
     parseAsBoolean.withDefault(false)
   );
-  const [emojiSkinTone, setEmojiSkinTone] = useQueryState(
+  const [emojiSkinTone] = useQueryState(
     "emojiSkinTone",
     parseAsStringLiteral(EMOJI_SKIN_TONES).withDefault("default")
   );
+  const { reset } = useResetQueryState();
   const { user, isLoaded } = useUser();
 
   if (!userMetadata) return;
@@ -160,8 +145,8 @@ export default function FinishProfile() {
       pronouns,
       hasCustomPronouns,
       emojiSkinTone,
-      displayName,
-      displayNameFormat,
+      displayName: displayName || user.fullName,
+      displayNameFormat: displayNameFormat || "Full Name",
       prefix,
       isPrefixIncluded,
       isCustomPrefix,
@@ -197,16 +182,7 @@ export default function FinishProfile() {
 
     await updateUserMetadata(userId, updatedMetadata, formData)
       .then(() => {
-        setPronunciation("");
-        setPrefix("");
-        setIsPrefixIncluded(true);
-        setIsCustomPrefix(false);
-        setDisplayName("");
-        setDisplayNameFormat("");
-        setJobTitle("");
-        setPronouns("");
-        setHasCustomPronouns(false);
-        setEmojiSkinTone("default");
+        reset();
         setIsLoading(false);
         setCurrOnboardingStep({ step: 1, isEditing: false });
         setLastUpdated(new Date().toString()); // Triggers re-render.
@@ -241,7 +217,7 @@ export default function FinishProfile() {
 
   return (
     <div className="size-full flex justify-center">
-      <Card className="h-fit max-w-3xl mx-10">
+      <Card className="h-fit w-96 md:w-[48rem] mx-10 expandable-content max-h-[36rem] overflow-y-hidden">
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle className="h2">{header.title}</CardTitle>
@@ -251,24 +227,9 @@ export default function FinishProfile() {
                 size="icon"
                 className="rounded-full size-5 lg:size-6"
                 onClick={() => {
+                  reset();
                   setCurrOnboardingStep({ step: 1, isEditing: false });
-                  setPronunciation("");
-                  setPrefix("");
-                  setIsPrefixIncluded(true);
-                  setIsCustomPrefix(false);
-                  setDisplayName("");
-                  setDisplayNameFormat("");
-                  setJobTitle("");
-                  setPronouns("");
-                  setHasCustomPronouns(false);
-                  setIsHeSelected(false);
-                  setIsSheSelected(false);
-                  setIsTheySelected(false);
-                  setIsEySelected(false);
-                  setIsXeSelected(false);
-                  setIsZeSelected(false);
-                  setPreferNotToSay(false);
-                  setEmojiSkinTone("default");
+                  setSelectedPronouns([]);
                   setProfilePic(undefined);
                 }}
               >
@@ -293,7 +254,7 @@ export default function FinishProfile() {
               <FinishProfileDesktop />
             </div>
 
-            <div className="block md:hidden">
+            <div className="block md:hidden -mt-5">
               <FinishProfileMobile />
             </div>
 
@@ -334,7 +295,7 @@ export default function FinishProfile() {
 }
 
 function FinishProfileDesktop() {
-  const { userMetadata } = useOnboardingContext();
+  const { userMetadata, org } = useOnboardingContext();
 
   if (!userMetadata) return;
   const { lastOnboardingStepCompleted, organizations, role } = userMetadata;
@@ -344,49 +305,48 @@ function FinishProfileDesktop() {
       (role === "guardian" &&
         lastOnboardingStepCompleted >= 1 &&
         organizations &&
-        organizations.length > 0) // TODO: Change organizations && organizations.length > 0 to org.id is in the organizations array.
+        org &&
+        organizations.includes(org.id))
   );
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="w-full md:w-1/2 flex flex-col gap-4">
-          <Pronunciation />
-          <Separator decorative />
-          {canRender && <Prefix />}
-          {canRender && <Separator decorative />}
-          {canRender && <DisplayName />}
-          {!canRender && <Pronouns />}
-          {!canRender && <Separator decorative />}
-          {!canRender && <SkinTone />}
-          {!canRender && <Separator decorative />}
-          {!canRender && <ProfileImageUpload />}
-        </div>
+    <div className="flex flex-col md:flex-row gap-4">
+      <div className="w-full md:w-1/2 flex flex-col gap-4">
+        <Pronunciation />
+        <Separator decorative />
+        {canRender && <Prefix />}
+        {canRender && <Separator decorative />}
+        {canRender && <DisplayName />}
+        {!canRender && <Pronouns />}
+        {!canRender && <Separator decorative />}
+        {!canRender && <SkinTone />}
+        {!canRender && <Separator decorative />}
+        {!canRender && <ProfileImageUpload />}
+      </div>
 
-        {/* Responsive Separator */}
-        <div>
-          <Separator
-            decorative
-            orientation="vertical"
-            className="hidden md:block"
-          />
+      {/* Responsive Separator */}
+      <div>
+        <Separator
+          decorative
+          orientation="vertical"
+          className="hidden md:block"
+        />
 
-          <Separator
-            decorative
-            orientation="horizontal"
-            className="block md:hidden"
-          />
-        </div>
+        <Separator
+          decorative
+          orientation="horizontal"
+          className="block md:hidden"
+        />
+      </div>
 
-        <div className="w-full md:w-1/2 flex flex-col gap-4">
-          {role !== "guardian" && <JobTitle />}
-          {role === "guardian" && <Students />}
-          {canRender && <Separator decorative />}
-          {canRender && <Pronouns />}
-          {canRender && <Separator decorative />}
-          {canRender && <SkinTone />}
-          {canRender && <Separator decorative />}
-          {canRender && <ProfileImageUpload />}
-        </div>
+      <div className="w-full md:w-1/2 flex flex-col gap-4">
+        {role !== "guardian" && <JobTitle />}
+        {role === "guardian" && <Students canRender={canRender} />}
+        {canRender && <Separator decorative />}
+        {canRender && <Pronouns />}
+        {canRender && <Separator decorative />}
+        {canRender && <SkinTone />}
+        {canRender && <Separator decorative />}
+        {canRender && <ProfileImageUpload />}
       </div>
     </div>
   );
@@ -462,7 +422,7 @@ function FinishProfileMobile() {
     {
       trigger: "Add your students.",
       value: "students",
-      content: <Students />,
+      content: <Students canRender={!canRender} />,
       canRender: role === "guardian",
       isCompleted: isStudentInvitationsComplete,
     },
@@ -496,7 +456,7 @@ function FinishProfileMobile() {
                 </span>
               </span>
             </AccordionTrigger>
-            <AccordionContent>{item.content}</AccordionContent>
+            <AccordionContent className="pr-1">{item.content}</AccordionContent>
           </AccordionItem>
         ))}
 

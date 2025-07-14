@@ -233,7 +233,6 @@ export default function VerifyEmailForm() {
       {/* "Verify email" Button */}
       <StyledActionButton
         type="submit"
-        className="w-full font-semibold bg-antique-brass-950 dark:bg-antique-brass-100"
         disabled={isLoadingPronunciationOptions}
       >
         {t("sign-up:verify-email")}

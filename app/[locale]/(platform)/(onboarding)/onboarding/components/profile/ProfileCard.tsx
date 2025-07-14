@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useOnboardingContext } from "@/contexts/onboarding-context";
+import {
+  PRONOUN_KEYS,
+  PronounKey,
+  useOnboardingContext,
+} from "@/contexts/onboarding-context";
 import { EMOJI_SKIN_TONES, EMOJIS, EmojiSkinTone } from "@/utils/emoji";
-import { AdminMetadata, TeacherMetadata } from "@/types/user";
+import { AdminMetadata, GuardianMetadata, TeacherMetadata } from "@/types/user";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
@@ -20,16 +24,7 @@ export function ProfileCard({
   toggle: boolean;
   userData: User;
 }) {
-  const {
-    setIsHeSelected,
-    setIsSheSelected,
-    setIsTheySelected,
-    setIsEySelected,
-    setIsXeSelected,
-    setIsZeSelected,
-    setPreferNotToSay,
-    setCurrOnboardingStep,
-  } = useOnboardingContext();
+  const { setCurrOnboardingStep, setSelectedPronouns } = useOnboardingContext();
 
   const [, setPronunciation] = useQueryState("pronunciation", {
     defaultValue: "",
@@ -60,7 +55,8 @@ export function ProfileCard({
 
   const metadata = userData.publicMetadata as unknown as
     | AdminMetadata
-    | TeacherMetadata;
+    | TeacherMetadata
+    | GuardianMetadata;
   if (!metadata) return;
   const {
     pronunciation,
@@ -69,11 +65,22 @@ export function ProfileCard({
     isCustomPrefix,
     displayName,
     displayNameFormat,
-    jobTitle,
     pronouns,
     hasCustomPronouns,
     emojiSkinTone,
+    role,
   } = metadata;
+  const jobTitle = hasMetadataProperty("jobTitle", metadata)
+    ? metadata.jobTitle
+    : undefined;
+  const currStep = role === "guardian" ? 2 : 1;
+
+  function hasMetadataProperty(
+    property: string,
+    publicMetadata: AdminMetadata | TeacherMetadata | GuardianMetadata
+  ): publicMetadata is AdminMetadata | TeacherMetadata {
+    return property in publicMetadata;
+  }
 
   return (
     <div className="p-5 w-full">
@@ -113,22 +120,20 @@ export function ProfileCard({
                 className="rounded-full"
                 onClick={() => {
                   const pronounHelper = () => {
+                    const result: PronounKey[] = [];
                     const splitPronouns = pronouns.split("/");
-
-                    setPreferNotToSay(splitPronouns[0] === "Prefer not to say");
-
-                    for (const pronoun of splitPronouns) {
-                      if (!hasCustomPronouns) {
-                        if (pronoun === "he") setIsHeSelected(true);
-                        if (pronoun === "she") setIsSheSelected(true);
-                        if (pronoun === "they") setIsTheySelected(true);
-                        if (pronoun === "ey") setIsEySelected(true);
-                        if (pronoun === "xe") setIsXeSelected(true);
-                        if (pronoun === "ze") setIsZeSelected(true);
+                    if (!hasCustomPronouns) {
+                      for (const pronoun of splitPronouns) {
+                        const isPronounKey = PRONOUN_KEYS.includes(
+                          pronoun as PronounKey
+                        );
+                        if (isPronounKey) result.push(pronoun as PronounKey);
                       }
+
+                      setSelectedPronouns(result);
                     }
                   };
-                  setCurrOnboardingStep({ step: 1, isEditing: true });
+                  setCurrOnboardingStep({ step: currStep, isEditing: true });
                   if (pronunciation) setPronunciation(pronunciation);
                   if (prefix) setPrefix(prefix);
                   if (typeof isPrefixIncluded === "boolean")
@@ -149,7 +154,7 @@ export function ProfileCard({
                 <MdEdit />
               </Button>
             </div>
-            <span className="text-sm">{metadata.jobTitle}</span>
+            <span className="text-sm">{jobTitle || "Parent/Guardian"}</span>
             <span className="text-sm italic">{metadata.pronouns}</span>
           </div>
 

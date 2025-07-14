@@ -98,7 +98,7 @@ export default function Banner({
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [publishDate]);
 
   return (
     <BannerContainer requiresSignIn={requiresSignIn}>

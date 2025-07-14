@@ -30,9 +30,13 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 
 export function JoinOrg() {
-  const { currOnboardingStep, org } = useOnboardingContext();
+  const { currOnboardingStep, org, userMetadata } = useOnboardingContext();
   const { step, isEditing } = currOnboardingStep;
-  const currStep = 2;
+
+  if (!userMetadata) return;
+  // Variables dependent on userMetadata go below the if guard.
+  const { role } = userMetadata;
+  const currStep = role === "guardian" ? 1 : 2;
   return (
     <>
       {!org || (step === currStep && isEditing) ? (
@@ -45,10 +49,36 @@ export function JoinOrg() {
 }
 
 export function JoinOrgCard() {
+  const { currOnboardingStep, userMetadata } = useOnboardingContext();
+  const { user, isLoaded } = useUser();
+
+  if (!user || !isLoaded || !userMetadata) return;
+  // Variables dependent on userMetadata go below the if guard.
+  const { role } = userMetadata;
+  const currStep = role === "guardian" ? 1 : 2;
+  const isCompleted = userMetadata.lastOnboardingStepCompleted >= currStep;
+  const isUpdating =
+    userMetadata.lastOnboardingStepCompleted >= currStep &&
+    currOnboardingStep.step === currStep &&
+    currOnboardingStep.isEditing;
+
   const header = {
-    title: "Request to join an organization.",
-    description: "Search an organization to request joining it.",
+    title: isUpdating
+      ? "Update your join request."
+      : isCompleted
+        ? userMetadata.invitations && userMetadata.invitations.length > 0
+          ? "Join request successfully sent!"
+          : "You've skipped joining an organization."
+        : "Request to join an organization.",
+    description: isUpdating
+      ? "Need to make a quick edit? Update your request to join an organization below."
+      : isCompleted
+        ? userMetadata.invitations && userMetadata.invitations.length > 0
+          ? "View your organization's details below."
+          : "You can still request to join one or proceed to the next step."
+        : "Search an organization to request joining it.",
   };
+
   return (
     <div className="size-full flex justify-center">
       <Card className="h-fit mx-10 max-w-lg">
@@ -81,7 +111,7 @@ function RequestToJoin() {
   const { user } = useUser();
   const [joinCode, setJoinCode] = useState<string>("");
   const joinCodeLength: number = 6;
-  const exampleJoinCode: string = "s3P5jH";
+  const exampleJoinCode: string = "nY14hM";
 
   async function handleRequestToJoin() {
     if (!user || !userMetadata) return;
@@ -92,7 +122,7 @@ function RequestToJoin() {
 
     const orgRes = await getOrganizationBySlug(orgSearch);
     const org = JSON.parse(orgRes.data) as Organization;
-    const orgMetadata = org.publicMetadata as any as OrganizationMetadata;
+    const orgMetadata = org.publicMetadata as unknown as OrganizationMetadata;
 
     const userInvitation: UserInvitation = {
       createdAt: new Date(),

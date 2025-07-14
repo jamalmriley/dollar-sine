@@ -34,6 +34,7 @@ import { Response } from "@/types/general";
 import { StyledActionButton } from "@/components/StyledButtons";
 import { Organization } from "@clerk/nextjs/server";
 import OrgAlreadyCompleted from "./OrgAlreadyCompleted";
+import { useResetQueryState } from "@/hooks/use-resetQueryState";
 
 export default function CreateOrg() {
   const { user, isLoaded } = useUser();
@@ -67,37 +68,38 @@ function CreateOrgForm() {
     setOrg,
     userMetadata,
   } = useOnboardingContext();
-  const { user, isLoaded } = useUser();
-  const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
-  const [showPredictions, setShowPredictions] = useState<boolean>(false);
-  const [hasCustomOrgSlug, setHasCustomOrgSlug] = useState<boolean>(false);
-
   const [orgName, setOrgName] = useQueryState("orgName", {
     defaultValue: "",
   });
-
   const [orgSlug, setOrgSlug] = useQueryState("orgSlug", {
     defaultValue: "",
   });
-
   const [orgCategory, setOrgCategory] = useQueryState("orgCategory", {
     defaultValue: "",
   });
-
   const [isCustomOrgCategory, setIsCustomOrgCategory] = useQueryState(
     "isCustomOrgCategory",
     parseAsBoolean.withDefault(false)
   );
-
   const [orgAddress, setOrgAddress] = useQueryState("orgAddress", {
     defaultValue: "",
   });
-
   const [isTeacherPurchasingEnabled, setIsTeacherPurchasingEnabled] =
     useQueryState(
       "isTeacherPurchasingEnabled",
       parseAsBoolean.withDefault(false)
     );
+  const { reset } = useResetQueryState();
+  const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
+  const [showPredictions, setShowPredictions] = useState<boolean>(false);
+  const [hasCustomOrgSlug, setHasCustomOrgSlug] = useState<boolean>(false);
+  const { user, isLoaded } = useUser();
+
+  const isUpdating =
+    userMetadata &&
+    userMetadata.lastOnboardingStepCompleted >= 2 &&
+    currOnboardingStep.step === 2 &&
+    currOnboardingStep.isEditing;
 
   const organization =
     user && user.organizationMemberships.length > 0
@@ -175,13 +177,8 @@ function CreateOrgForm() {
           .then(() => {
             const org = JSON.parse(res.data) as Organization;
             if (res.data) setOrg(org);
+            reset();
             setLastUpdated(new Date().toString()); // Triggers re-render.
-            setOrgName("");
-            setOrgSlug("");
-            setOrgCategory("");
-            setIsCustomOrgCategory(false);
-            setOrgAddress("");
-            setIsTeacherPurchasingEnabled(false);
             setOrgLogo(undefined);
             setCurrOnboardingStep({ step: 2, isEditing: false });
 
@@ -238,17 +235,11 @@ function CreateOrgForm() {
 
   useEffect(() => {
     if (isUpdating) setHasCustomOrgSlug(true);
-  }, []);
+  }, [isUpdating]);
 
   if (!user || !isLoaded || !userMetadata) return;
-  // Variables dependent on userMetadata go below the if guard.
-
-  const isUpdating =
-    userMetadata.lastOnboardingStepCompleted >= 2 &&
-    currOnboardingStep.step === 2 &&
-    currOnboardingStep.isEditing;
   return (
-    <form onSubmit={handleSubmit} className="w-full h-full flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="size-full flex flex-col gap-5">
       {/* Org Name and Org ID */}
       <div className="flex gap-5">
         {/* Org Name */}

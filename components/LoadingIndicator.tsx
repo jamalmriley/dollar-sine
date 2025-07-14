@@ -42,7 +42,7 @@ export default function LoadingIndicator() {
 
   useEffect(() => {
     setRandNumber(Math.floor(Math.random() * loadingMessages.length));
-  }, []);
+  }, [loadingMessages.length]);
 
   if (!randNumber) return;
   return (
