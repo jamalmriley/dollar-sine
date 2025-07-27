@@ -55,7 +55,6 @@ export default async function Footer() {
             <span className="sr-only">love</span>
             <FaHeart className="text-lg text-woodsmoke-950 hover:animate-hover-tada" />
           </span>
-          .
         </span>
 
         {/* Social Media Icons */}
