@@ -21,7 +21,7 @@ export function useCourseData(
   useEffect(() => {
     const fetchCourseData = async () => {
       if (!user) return;
-      await setIsLoading(true);
+      setIsLoading(true);
       try {
         // Returns whether or not the user is in the organization.
         const isInOrganization = (): boolean => {
@@ -67,10 +67,10 @@ export function useCourseData(
         await setCourses(courseData);
         await setCanPurchaseCourses(canPurchaseCourses);
         await setPurchasedCourses(purchasedCourses ?? undefined);
-        await setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch course data:", error);
-        await setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 

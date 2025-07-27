@@ -82,7 +82,7 @@
 
 @layer components {
   .site-container {
-    @apply flex flex-col h-full;
+    @apply h-full flex flex-col;
   }
 
   .page-container {
@@ -90,7 +90,7 @@
   }
 
   .page-content {
-    @apply flex grow shrink basis-auto;
+    @apply flex flex-col flex-1;
   }
 
   .scrollbar-custom {
@@ -122,11 +122,11 @@
   }
 
   .badge {
-    @apply bg-primary text-xs uppercase font-bold rounded-full absolute top-0 right-0 mt-9 mr-3 flex w-10 h-10 justify-center items-center;
+    @apply flex justify-center items-center px-2 py-1 text-xs uppercase font-bold rounded-full absolute top-3 right-3;
   }
 
   .badge-2 {
-    @apply bg-secondary text-xs uppercase font-bold rounded-full flex border border-default-color px-2 py-1 items-center;
+    @apply inline-flex bg-secondary text-xs rounded-full border border-default-color px-2 py-1 m-1;
   }
 
   .pending {

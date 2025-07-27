@@ -34,15 +34,9 @@ export default async function DashboardPage({
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <Greeting name={firstName} />
-          <div className="flex gap-5">
-            <Link href="/courses/enrolled">
-              <StyledButton>{t("platform-layout:my-courses")}</StyledButton>
-            </Link>
-
-            <Link href="/courses">
-              <StyledButton>{t("platform-layout:all-courses")}</StyledButton>
-            </Link>
-          </div>
+          <Link href="/courses">
+            <StyledButton>{t("platform-layout:courses")}</StyledButton>
+          </Link>
         </div>
 
         <div className="mt-5">

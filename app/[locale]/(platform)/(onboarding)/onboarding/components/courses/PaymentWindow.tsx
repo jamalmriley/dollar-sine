@@ -53,7 +53,7 @@ function getPlanPrice(
     if (courseId === id) {
       for (const plan of pricing) {
         if (planName === plan.name) {
-          result += plan.price;
+          result += plan.activePrice;
         }
       }
     }
@@ -232,7 +232,7 @@ function PaymentForm({ amount }: { amount: number }) {
               {coursesToBuy.map((course) => (
                 <div key={course.id} className="flex justify-between">
                   <span>
-                    {course.title}{" "}
+                    {course.name}{" "}
                     {course.plan !== "" && `- ${course.plan} Package`}
                   </span>
 

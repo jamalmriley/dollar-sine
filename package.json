@@ -6,8 +6,7 @@
     "dev": "next dev && i18nexus pull && npx next-video sync -w",
     "build": "i18nexus pull && next build",
     "start": "i18nexus pull && next start",
-    "lint": "next lint",
-    "data": "tsx ./utils/data.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/elements": "^0.19.8",
@@ -32,6 +31,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.6.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/papaparse": "^5.3.15",
     "algoliasearch": "^5.15.0",

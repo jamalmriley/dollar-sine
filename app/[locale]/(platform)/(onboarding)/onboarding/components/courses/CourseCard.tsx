@@ -115,9 +115,7 @@ export function CourseCard({
           }}
         >
           <div className="h-1/2 flex flex-col justify-start p-3 bg-gradient-to-b from-black/50 to-transparent">
-            <h1 className="text-lg font-extrabold text-white">
-              {course.title}
-            </h1>
+            <h1 className="text-lg font-extrabold text-white">{course.name}</h1>
             <p className="text-2xs text-white">{course.description}</p>
           </div>
 
@@ -129,8 +127,8 @@ export function CourseCard({
                 </p>
                 <h1 className="text-lg font-extrabold text-white">
                   {isAlreadyPurchased
-                    ? `${course.topicsCount} topic${course.topicsCount !== 1 ? "s" : ""}`
-                    : formatCurrency(course.pricing[0].price, "USD")}
+                    ? `${course.topics.length} topic${course.topics.length !== 1 ? "s" : ""}`
+                    : formatCurrency(course.pricing[0].activePrice, "USD")}
                 </h1>
               </div>
               {isAlreadyPurchased ? (
@@ -146,7 +144,7 @@ export function CourseCard({
                   onClick={() => {
                     setActiveCourse(
                       !isActiveCourse
-                        ? { id: course.id, title: course.title }
+                        ? { id: course.id, name: course.name }
                         : undefined
                     );
                   }}
@@ -198,7 +196,7 @@ export function CourseCard({
                 onClick={() => {
                   setActiveCourse({
                     id: course.id,
-                    title: course.title,
+                    name: course.name,
                     plan: plan.name,
                   });
                 }}
@@ -217,7 +215,7 @@ export function CourseCard({
                       {plan.description}
                     </p>
                   </div>
-                  <span className="text-sm md:text-lg font-bold">{`$${plan.price}`}</span>
+                  <span className="text-sm md:text-lg font-bold">{`$${plan.activePrice}`}</span>
                 </div>
               </button>
             ))}

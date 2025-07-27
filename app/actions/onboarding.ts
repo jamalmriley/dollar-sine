@@ -2,7 +2,7 @@
 
 import { clerkClient } from "@clerk/nextjs/server";
 import { GoogleGenAI } from "@google/genai";
-import { Course } from "@/types/course";
+import { Chapter, Course, Lesson } from "@/types/course";
 import { Response } from "@/types/general";
 import {
   AdminMetadata,
@@ -20,6 +20,7 @@ import {
   getDocs,
   query,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
 import dotenv from "dotenv";
@@ -475,8 +476,8 @@ export async function sendRequestToOrganization(
 // Read Courses
 export async function getCourses(): Promise<Response> {
   const q = query(
-    collection(db, "courses")
-    // where("publishDate", ">=", new Date()) // TODO
+    collection(db, "courses"),
+    where("releaseDate", "<=", new Date())
   );
 
   const result: Course[] = [];
@@ -491,6 +492,49 @@ export async function getCourses(): Promise<Response> {
   return {
     status: result.length ? 200 : 400,
     success: Boolean(result.length),
-    data: JSON.stringify(result), // Only plain objects can be passed to Client Components from Server Components, so manually conversion is required.
+    data: JSON.stringify(result),
+  };
+}
+
+export async function getChapters(courseId: string): Promise<Response> {
+  const q = query(collection(db, `courses/${courseId}/chapters`));
+
+  const result: Chapter[] = [];
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    const data = doc.data() as Chapter;
+    result.push(data);
+  });
+
+  return {
+    status: result.length ? 200 : 400,
+    success: Boolean(result.length),
+    data: JSON.stringify(result),
+  };
+}
+
+export async function getLessons(
+  courseId: string,
+  chapterId: string
+): Promise<Response> {
+  const q = query(
+    collection(db, `courses/${courseId}/chapters/${chapterId}/lessons`)
+  );
+
+  const result: Lesson[] = [];
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    const data = doc.data() as Lesson;
+    result.push(data);
+  });
+
+  return {
+    status: result.length ? 200 : 400,
+    success: Boolean(result.length),
+    data: JSON.stringify(result),
   };
 }

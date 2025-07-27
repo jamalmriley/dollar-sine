@@ -11,7 +11,6 @@ import initTranslations from "../i18n";
 import OnboardingBanner from "@/components/OnboardingBanner";
 import { Toaster } from "@/components/ui/toaster";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import ActiveUserContextProvider from "@/contexts/active-user-context";
 
 export const metadata: Metadata = {
   title: "Dollar Sine",
@@ -62,7 +61,7 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang={locale} dir={dir(locale)} suppressHydrationWarning={true}>
         <body
-          className={`bg-dodger-blue-50 dark:bg-[#121212] ${inter.className} site-container text-woodsmoke-950 dark:text-woodsmoke-50`}
+          className={`site-container bg-dodger-blue-50 dark:bg-[#121212] text-woodsmoke-950 dark:text-woodsmoke-50 ${inter.className}`}
         >
           <ThemeProvider
             attribute="class"
@@ -75,21 +74,12 @@ export default async function RootLayout({
               locale={locale}
               resources={resources}
             >
-              <ActiveUserContextProvider>
-                <NuqsAdapter>
-                  <div className="page-content flex-col">
-                    <OnboardingBanner />
-                    {/* <Banner
-                  header={header}
-                  text={text}
-                  publishDate={publishDate}
-                  buttonText={buttonText}
-                  buttonHref={buttonHref}
-                /> */}
-                    {children}
-                  </div>
-                </NuqsAdapter>
-              </ActiveUserContextProvider>
+              <NuqsAdapter>
+                <main className="page-content">
+                  <OnboardingBanner />
+                  {children}
+                </main>
+              </NuqsAdapter>
               <Toaster />
             </TranslationsProvider>
           </ThemeProvider>

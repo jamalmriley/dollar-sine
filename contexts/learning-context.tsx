@@ -1,18 +1,22 @@
 "use client";
 
+import { Course } from "@/types/course";
+import { Organization } from "@clerk/nextjs/server";
 import { createContext, useContext, useState } from "react";
 
 type LearningContext = {
-  courseId: string;
-  setCourseId: React.Dispatch<React.SetStateAction<string>>;
-  chapterId: string;
-  setChapterId: React.Dispatch<React.SetStateAction<string>>;
-  lessonId: string;
-  setLessonId: React.Dispatch<React.SetStateAction<string>>;
   activityId: string;
   setActivityId: React.Dispatch<React.SetStateAction<string>>;
-  showCanvasTools: boolean;
-  setShowCanvasTools: React.Dispatch<React.SetStateAction<boolean>>;
+  allCourses: Course[] | undefined;
+  setAllCourses: React.Dispatch<React.SetStateAction<Course[] | undefined>>;
+  enrolledCourses: Course[] | undefined;
+  setEnrolledCourses: React.Dispatch<
+    React.SetStateAction<Course[] | undefined>
+  >;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  org: Organization | undefined;
+  setOrg: React.Dispatch<React.SetStateAction<Organization | undefined>>;
 };
 
 export const LearningContext = createContext<LearningContext | null>(null);
@@ -22,24 +26,26 @@ export default function LearningContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [courseId, setCourseId] = useState("");
-  const [chapterId, setChapterId] = useState("");
-  const [lessonId, setLessonId] = useState("");
   const [activityId, setActivityId] = useState("");
-  const [showCanvasTools, setShowCanvasTools] = useState(true);
+  const [allCourses, setAllCourses] = useState<Course[] | undefined>();
+  const [enrolledCourses, setEnrolledCourses] = useState<
+    Course[] | undefined
+  >();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [org, setOrg] = useState<Organization>();
   return (
     <LearningContext.Provider
       value={{
-        courseId,
-        setCourseId,
-        chapterId,
-        setChapterId,
-        lessonId,
-        setLessonId,
         activityId,
         setActivityId,
-        showCanvasTools,
-        setShowCanvasTools,
+        allCourses,
+        setAllCourses,
+        enrolledCourses,
+        setEnrolledCourses,
+        isLoading,
+        setIsLoading,
+        org,
+        setOrg,
       }}
     >
       {children}

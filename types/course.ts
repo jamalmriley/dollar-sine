@@ -1,37 +1,91 @@
 import { z } from "zod";
 
-type PublishDate = { seconds: number; nanoseconds: number };
-
-export interface Pricing {
-  name: string;
-  price: number;
-  description: string;
-  features: string[];
-  addOns: {
-    userLimit: number | string;
-    teacherToolsLimit: number | string;
-    edTechLimit: number | string;
-  };
-}
-
-export interface Course {
-  description: string;
+interface CourseItem {
   id: string;
-  imageUrl: string;
-  publishDate: PublishDate;
-  title: string;
-  topicsCount: number;
-  pricing: Pricing[];
+  name: string;
+  description: string;
 }
 
-// const addOnSchema = z.object({
-//   name: z.string(),
-//   quantity: z.number(),
-// });
+interface PricingItem extends CourseItem {
+  fullPrice: number;
+  activePrice: number;
+  features: string[];
+  addlUserMax: number;
+  addlCurriculumMax: number;
+}
+
+export interface FirestoreDate {
+  seconds: number;
+  nanoseconds: number;
+}
+
+export interface Standard {
+  id: string;
+  name: string;
+  description: string;
+  code: string;
+  gradeLevel: number;
+}
+
+interface Topic {
+  id: string;
+  name: string;
+  subtopics: string[];
+}
+
+type Format = "Visual" | "Aural" | "Read/Write" | "Kinesthetic";
+
+interface ActivityContent {
+  id: string;
+  type: Format;
+  content: string;
+}
+
+// —————————————————————————————————————————————————— //
+
+interface Activity extends CourseItem {
+  instructions: string[]; // Each string is a separate paragraph.
+  formats: Format[];
+  content: ActivityContent[];
+}
+
+interface ContentItem extends CourseItem {
+  imageUrl: string;
+  pathname: string;
+  topics: Topic[];
+  standards: Standard[] | null;
+  gradeLevels: number[];
+  releaseDate: FirestoreDate;
+}
+
+export interface Lesson extends ContentItem {
+  courseId: string;
+  chapterId: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+  duration: number;
+  learningObjectives: string[];
+  activities: Activity[];
+  preStandards: Standard[];
+  extStandards: Standard[];
+  prevLessonId: string | null;
+  nextLessonId: string | null;
+}
+
+export interface Chapter extends ContentItem {
+  courseId: string;
+  lessons: Lesson[];
+}
+
+export interface Course extends ContentItem {
+  chapters: Chapter[];
+  pricing: PricingItem[];
+}
+
+// —————————————————————————————————————————————————— //
 
 export const SELECTED_COURSE_SCHEMA = z.object({
   id: z.string(),
-  title: z.string(),
+  name: z.string(),
   plan: z.string().optional(),
   // addOns: z.array(addOnSchema), // TODO
 });

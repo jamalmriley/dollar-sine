@@ -8,10 +8,10 @@ import GeneralErrorLogo from "@/assets/images/logos/dollar_sine/ds_logo_error_ge
 import Image from "next/image";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { redirect } from "next/navigation";
-import TeacherOnboarding from "./(pages)/TeacherOnboarding";
-import AdminOnboarding from "./(pages)/AdminOnboarding";
-import GuardianOnboarding from "./(pages)/GuardianOnboarding";
-import StudentOnboarding from "./(pages)/(student)/StudentOnboarding";
+import TeacherOnboarding from "./(roles)/TeacherOnboarding";
+import AdminOnboarding from "./(roles)/AdminOnboarding";
+import GuardianOnboarding from "./(roles)/GuardianOnboarding";
+import StudentOnboarding from "./(roles)/(student)/StudentOnboarding";
 
 export const metadata: Metadata = setTitle("Get started");
 

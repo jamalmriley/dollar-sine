@@ -16,13 +16,14 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLearningContext } from "@/contexts/learning-context";
+import { Lesson } from "@/types/course";
 
 export default function LessonCanvas({
   courseId,
   lesson,
 }: {
   courseId: string;
-  lesson: any;
+  lesson: Lesson | undefined;
 }) {
   function getActivity() {
     const result: {
@@ -30,6 +31,7 @@ export default function LessonCanvas({
       curr: Link | null;
       next: Link | null;
     } = { prev: null, curr: null, next: null };
+    if (!lesson) return result;
 
     for (let i = 0; i < sidebarLinks.length; i++) {
       const [prev, curr, next] = [
@@ -47,20 +49,19 @@ export default function LessonCanvas({
 
     if (!result.prev) {
       result.prev =
-        lesson.prevLesson && lesson.prevLesson !== ""
+        lesson.prevLessonId && lesson.prevLessonId !== ""
           ? {
-              label: t("lesson-number", { lessonId: lesson.prevLesson }),
-              href: `/courses/${courseId}/lesson-${lesson.prevLesson}`,
+              label: t("platform-layout:lesson-number", { lessonId: lesson.prevLessonId }),
+              href: `/courses/${courseId}/lesson-${lesson.prevLessonId}`,
             }
           : null;
     }
-
     if (!result.next) {
       result.next =
-        lesson.nextLesson && lesson.nextLesson !== ""
+        lesson.nextLessonId && lesson.nextLessonId !== ""
           ? {
-              label: t("lesson-number", { lessonId: lesson.nextLesson }),
-              href: `/courses/${courseId}/lesson-${lesson.nextLesson}`,
+              label: t("platform-layout:lesson-number", { lessonId: lesson.nextLessonId }),
+              href: `/courses/${courseId}/lesson-${lesson.nextLessonId}`,
             }
           : null;
     }
@@ -75,8 +76,8 @@ export default function LessonCanvas({
     }
     return -1;
   }
-  const { activityId, setActivityId, showCanvasTools, setShowCanvasTools } =
-    useLearningContext();
+  const { activityId, setActivityId } = useLearningContext();
+  const [showCanvasTools, setShowCanvasTools] = useState<boolean>(true);
   const { t } = useTranslation();
 
   const colorInputRef = useRef<HTMLInputElement>(null);
@@ -88,35 +89,35 @@ export default function LessonCanvas({
   const sidebarLinks: Link[] = [
     {
       // label: "Prereq Check",
-      label: t("intro"),
+      label: t("platform-layout:intro"),
       href: "#intro",
     },
     {
-      label: t("lecture"),
+      label: t("platform-layout:lecture"),
       href: "#lecture",
     },
     {
-      label: t("activity-1"),
+      label: t("platform-layout:activity-1"),
       href: "#activity-1",
     },
     {
-      label: t("checkpoint"),
+      label: t("platform-layout:checkpoint"),
       href: "#checkpoint",
     },
     {
-      label: t("activity-2"),
+      label: t("platform-layout:activity-2"),
       href: "#activity-2",
     },
     {
-      label: t("practice"),
+      label: t("platform-layout:practice"),
       href: "#practice",
     },
     {
-      label: t("quiz"),
+      label: t("platform-layout:quiz"),
       href: "#quiz",
     },
     {
-      label: t("wrapping-up"),
+      label: t("platform-layout:wrapping-up"),
       href: "#wrapping-up",
     },
   ];
@@ -196,7 +197,7 @@ export default function LessonCanvas({
                 }}
               >
                 <ArrowLeft />
-                {`${t("previous")}: ${prev.label}`}
+                {`${t("platform-layout:previous")}: ${prev.label}`}
               </StyledButton>
             </Link>
           )}
@@ -316,7 +317,7 @@ export default function LessonCanvas({
                   }
                 }}
               >
-                {`${t("next")}: ${next.label}`}
+                {`${t("platform-layout:next")}: ${next.label}`}
                 <ArrowRight />
               </StyledButton>
             </Link>

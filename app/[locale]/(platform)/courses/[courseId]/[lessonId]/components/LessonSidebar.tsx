@@ -23,42 +23,42 @@ export default function LessonSidebar() {
   const sidebarLinks = [
     {
       // label: "Prereq Check",
-      label: t("intro"),
+      label: t("platform-layout:intro"),
       href: "#intro",
       icon: <LuClipboardCheck className="sidebar-item" />,
     },
     {
-      label: t("lecture"),
+      label: t("platform-layout:lecture"),
       href: "#lecture",
       icon: <LuHeadphones className="sidebar-item" />,
     },
     {
-      label: t("activity-1"),
+      label: t("platform-layout:activity-1"),
       href: "#activity-1",
       icon: <LuPencilRuler className="sidebar-item" />,
     },
     {
-      label: t("checkpoint"),
+      label: t("platform-layout:checkpoint"),
       href: "#checkpoint",
       icon: <TbZoomCheck className="sidebar-item" />,
     },
     {
-      label: t("activity-2"),
+      label: t("platform-layout:activity-2"),
       href: "#activity-2",
       icon: <LuGamepad2 className="sidebar-item" />,
     },
     {
-      label: t("practice"),
+      label: t("platform-layout:practice"),
       href: "#practice",
       icon: <GiRunningShoe className="sidebar-item" />,
     },
     {
-      label: t("quiz"),
+      label: t("platform-layout:quiz"),
       href: "#quiz",
       icon: <MdOutlineQuiz className="sidebar-item" />,
     },
     {
-      label: t("wrapping-up"),
+      label: t("platform-layout:wrapping-up"),
       href: "#wrapping-up",
       icon: <PiFlagCheckeredFill className="sidebar-item" />,
     },

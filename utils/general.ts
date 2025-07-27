@@ -1,3 +1,5 @@
+import { FirestoreDate } from "@/types/course";
+
 export const beginsWithVowel = (text: string): boolean => {
   const firstLetter = text[0].toLowerCase();
   return (
@@ -182,4 +184,8 @@ export const removeElementFromArr = (
 export const isEmptyObject = (obj: any): boolean => {
   if (!obj) return true;
   return Object.keys(obj).length === 0 && obj.constructor === Object;
+};
+
+export const formatFirestoreDate = (date: FirestoreDate): Date => {
+  return new Date(1970, 0, 1, 0, 0, date.seconds, date.nanoseconds / 1000000);
 };
