@@ -45,12 +45,20 @@ export default function LandingNavbar() {
         {/* Logo and Text Links */}
         <div className="flex gap-7 items-center">
           {/* Logo */}
-          <Link href="/" className="size-10">
-            <SquareLogo />
-          </Link>
+          <div className="hidden md:block">
+            <Link href="/">
+              <FullLogo />
+            </Link>
+          </div>
+
+          <div className="block md:hidden">
+            <Link href="/" className="size-10">
+              <SquareLogo />
+            </Link>
+          </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex gap-7 items-center">
+          {/* <div className="hidden md:flex gap-7 items-center">
             {navLinks.map((link, i) => (
               <Link key={i} className="nav-link" href={link.href}>
                 <span
@@ -69,7 +77,7 @@ export default function LandingNavbar() {
                 </span>
               </Link>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Button Links */}
@@ -106,7 +114,7 @@ export default function LandingNavbar() {
                     <LanguageToggle />
                   </div>
                 </DrawerHeader>
-                {navLinks.map((link, i) => (
+                {/* {navLinks.map((link, i) => (
                   <Link key={i} className="nav-link" href={link.href}>
                     <span
                       className={`${
@@ -124,7 +132,7 @@ export default function LandingNavbar() {
                       {link.label}
                     </span>
                   </Link>
-                ))}
+                ))} */}
                 <Separator />
                 <SignedOut>
                   <Link className="nav-link" href="/sign-in">
