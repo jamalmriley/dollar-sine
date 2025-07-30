@@ -1,9 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { GoHomeFill } from "react-icons/go";
-import { FaBuilding } from "react-icons/fa6";
-import { BiSolidDonateHeart } from "react-icons/bi";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import LanguageToggle from "./LanguageToggle";
 import ModeToggle from "@/components/ModeToggle";
@@ -17,14 +14,13 @@ import {
 } from "@/components/ui/drawer";
 import { MdDashboard, MdLogin } from "react-icons/md";
 import { Separator } from "./ui/separator";
-import { usePathname } from "next/navigation";
 import { FullLogo, SquareLogo } from "@/components/Logo";
 import StyledUserButton from "./StyledUserButton";
 import { StyledButton } from "./StyledButtons";
 
 export default function LandingNavbar() {
   const { t } = useTranslation();
-  const pathname = usePathname();
+  /* const pathname = usePathname();
   const navLinks = [
     { label: t("home"), href: "/", icon: <GoHomeFill className="w-5 h-5" /> },
     {
@@ -37,7 +33,7 @@ export default function LandingNavbar() {
       href: "/support-us",
       icon: <BiSolidDonateHeart className="w-5 h-5" />,
     },
-  ];
+  ]; */
 
   return (
     <nav className="sticky top-0 z-10 w-dvw backdrop-blur-md">
