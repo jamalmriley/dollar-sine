@@ -64,7 +64,7 @@ function OnboardingCompleteComponent({
       <div className="w-full flex flex-col-reverse md:flex-row justify-center items-center gap-5 md:gap-20">
         {/* Thank You */}
         <div
-          className={`w-1/2 h-${componentHeight} relative flex items-center justify-center select-none pointer-events-none`}
+          className={`w-1/2 h-${componentHeight} relative flex items-center justify-center unselectable`}
         >
           {/* Light Mode */}
           <div className="dark:hidden absolute inset-0 flex flex-col justify-between p-0">

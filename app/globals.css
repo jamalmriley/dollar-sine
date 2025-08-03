@@ -286,6 +286,10 @@
     @apply text-sm font-bold;
   }
 
+  .unselectable {
+    @apply select-none pointer-events-none;
+  }
+
   .footer-waves {
     width: 100%;
     overflow: hidden;

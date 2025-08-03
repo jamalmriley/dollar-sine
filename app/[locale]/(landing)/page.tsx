@@ -19,6 +19,8 @@ export default async function HomePage({
     >
       <main className="w-full h-full flex flex-col">
         <Header />
+
+        
       </main>
     </TranslationsProvider>
   );

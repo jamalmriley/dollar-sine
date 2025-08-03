@@ -11,7 +11,7 @@ export function FullLogo({
   textSize?: string;
 }) {
   return (
-    <span className="flex gap-3 items-center select-none pointer-events-none">
+    <span className="flex gap-3 items-center  text-woodsmoke-950 dark:text-woodsmoke-100">
       <Image
         src={LightLogo}
         alt="Logo"
@@ -23,11 +23,8 @@ export function FullLogo({
         alt="Logo"
         className={`object-contain size-${size} hidden dark:block`}
       />
-      <h1
-        className={`text-${textSize} font-extrabold text-woodsmoke-950 dark:text-woodsmoke-100`}
-      >
-        dollar
-        <span className={`${loraItalic.className} text-foreground`}> sine</span>
+      <h1 className={`text-${textSize} font-extrabold`}>
+        dollar <span className={`${loraItalic.className}`}>sine</span>
       </h1>
     </span>
   );
@@ -35,7 +32,7 @@ export function FullLogo({
 
 export function SquareLogo({ size = 10 }: { size?: number }) {
   return (
-    <span className="select-none pointer-events-none">
+    <span className="select-none">
       <Image
         src={LightLogo}
         alt="Logo"
