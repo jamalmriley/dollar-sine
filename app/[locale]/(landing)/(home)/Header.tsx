@@ -31,7 +31,7 @@ export function Header() {
           src="https://lottie.host/d5d21f0f-2324-4c8a-a9dc-340941661f4a/VYwtweZbkr.lottie"
           loop
           autoplay
-          className="size-80"
+          className="size-60 md:size-80"
         />
       </div>
     </div>
