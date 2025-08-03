@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   FaGithub,
-  FaInstagram,
+  // FaInstagram,
   FaLinkedinIn,
-  FaTiktok,
+  // FaTiktok,
   FaHeart,
   FaCode,
 } from "react-icons/fa6";
@@ -23,16 +23,16 @@ export default async function Footer() {
       icon: <FaLinkedinIn />,
       link: "https://linkedin.com/in/jamalmriley",
     },
-    {
-      name: "Instagram",
-      icon: <FaInstagram />,
-      link: "https://instagram.com/itsmr.riley",
-    },
-    {
-      name: "TikTok",
-      icon: <FaTiktok />,
-      link: "https://tiktok.com/itsmr.riley",
-    },
+    // {
+    //   name: "Instagram",
+    //   icon: <FaInstagram />,
+    //   link: "https://instagram.com/uncletheeducator",
+    // },
+    // {
+    //   name: "TikTok",
+    //   icon: <FaTiktok />,
+    //   link: "https://tiktok.com/uncletheeducator",
+    // },
   ];
 
   const cookieStore = await cookies();
