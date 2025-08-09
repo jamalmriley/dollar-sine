@@ -18,6 +18,7 @@ import { Course } from "@/types/course";
 import { useLearningContext } from "@/contexts/learning-context";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@clerk/nextjs";
+import { CoursesBreadcrumb } from "@/components/ContentBreadcrumbs";
 
 // export const metadata: Metadata = setTitle("All Courses");
 
@@ -29,21 +30,7 @@ export default function CoursesPage() {
   if (!user) return;
   return (
     <div className="page-container">
-      <Breadcrumb className="mb-5">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">
-              {t("platform-layout:dashboard")}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard" className="text-primary">
-              {t("platform-layout:courses")}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <CoursesBreadcrumb />
 
       {/* Title and Button */}
       <div className="flex justify-between items-start">

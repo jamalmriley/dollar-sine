@@ -1,9 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { i18nConfig, supportedLangs } from "@/i18nConfig";
+import { supportedLangs } from "@/i18nConfig";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,62 +9,43 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StyledDropdownIconButtonNoText } from "./StyledButtons";
+import Cookies from "js-cookie";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LanguageToggle() {
-  const { t } = useTranslation();
-  const { i18n } = useTranslation();
-  const currentLocale = i18n.language;
-  const router = useRouter();
-  const currentPathname = usePathname();
+  // const router = useRouter();
+  const { t, i18n } = useTranslation();
+  const [currentLocale, setCurrentLocale] = useState(
+    () => Cookies.get("NEXT_LOCALE") || "en"
+  );
 
   const handleChange = (newLocale: string) => {
-    // set cookie for next-i18n-router
-    const days = 30;
-    const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    const expires = date.toUTCString();
-    document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
-
-    // redirect to the new locale path
-    if (
-      currentLocale === i18nConfig.defaultLocale &&
-      !i18nConfig.prefixDefault
-    ) {
-      router.push("/" + newLocale + currentPathname);
-    } else {
-      router.push(
-        currentPathname.replace(`/${currentLocale}`, `/${newLocale}`)
-      );
-    }
-
-    router.refresh();
+    Cookies.set("NEXT_LOCALE", newLocale, { path: "/", expires: 30 });
+    i18n.changeLanguage(newLocale);
+    // router.refresh();
+    window.location.reload();
   };
+
+  useEffect(() => {
+    const cookieLocale = Cookies.get("NEXT_LOCALE");
+    if (cookieLocale && cookieLocale !== currentLocale) {
+      setCurrentLocale(cookieLocale);
+    }
+  }, []);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <StyledDropdownIconButtonNoText>
-          {currentLocale === "en" && (
-            <Image
-              src="https://kapowaz.github.io/square-flags/flags/us.svg"
-              alt="English"
-              width="36"
-              height="36"
-              className="size-full"
-            />
-            // <SquareFlag flag={allCountryFlags["us"]} />
-          )}
-          {currentLocale === "es" && (
-            <Image
-              src="https://kapowaz.github.io/square-flags/flags/language/es.svg"
-              alt="Spanish"
-              width="36"
-              height="36"
-              className="size-full"
-            />
-            // <SquareFlag flag={allCountryFlags["es"]} className="size-full" />
-          )}
+          <Image
+            src={`https://kapowaz.github.io/square-flags/flags/${supportedLangs.find((lang) => lang.locale === currentLocale)?.flag}.svg`}
+            alt={currentLocale}
+            width="36"
+            height="36"
+            className="size-full"
+          />
           <span className="sr-only">Toggle language</span>
         </StyledDropdownIconButtonNoText>
       </DropdownMenuTrigger>

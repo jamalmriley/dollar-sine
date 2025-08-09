@@ -19,7 +19,6 @@ export function Header() {
             className="unselectable -mt-[4px] md:-mt-[5px] lg:-mt-[9px] w-full scale-110" // A negative top margin is needed due to the leading-snug class.
           />
         </span>
-        .
       </h1>
       <h3 className="h3">
         Fun, interactive consumer math and science courses for students in

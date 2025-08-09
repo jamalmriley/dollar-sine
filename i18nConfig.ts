@@ -4,7 +4,8 @@ export const i18nConfig = {
   prefixDefault: undefined,
 };
 
-export const supportedLangs: { name: string; locale: string }[] = [
-  { name: "English", locale: "en" },
-  { name: "Spanish", locale: "es" },
-];
+export const supportedLangs: { name: string; locale: string; flag: string }[] =
+  [
+    { name: "English", locale: "en", flag: "us" },
+    { name: "Spanish", locale: "es", flag: "es" },
+  ];

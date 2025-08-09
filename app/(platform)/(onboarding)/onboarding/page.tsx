@@ -15,13 +15,9 @@ import StudentOnboarding from "./(roles)/(student)/StudentOnboarding";
 
 export const metadata: Metadata = setTitle("Get started");
 
-export default async function OnboardingPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function OnboardingPage() {
   const user = await currentUser();
-  if (!user) redirect(`/sign-in?redirect_url=/${locale}/onboarding`);
+  if (!user) redirect("/sign-in?redirect_url=/onboarding");
 
   const publicMetadata = user.publicMetadata as unknown as UserMetadata;
   const { role } = publicMetadata;

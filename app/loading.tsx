@@ -1,7 +1,7 @@
 // "use client";
 
 import { cookies } from "next/headers";
-import initTranslations from "../i18n";
+import initTranslations from "./i18n";
 // import WaveLoader from "@/components/WaveLoader";
 
 // import { useEffect, useState } from "react";

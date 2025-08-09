@@ -46,6 +46,7 @@ import { Button } from "@/components/ui/button";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Progress } from "@/components/ui/progress";
 import { FaPlay } from "react-icons/fa";
+import { CourseBreadcrumb } from "@/components/ContentBreadcrumbs";
 
 export default function CoursePage() {
   type Tab = "Lessons" | "Extras" | "Details";
@@ -90,56 +91,16 @@ export default function CoursePage() {
     };
 
     fetchContent();
-  }, []);
+  }, [courseId]);
 
   if (!user) return;
   return (
     <div className="page-container">
-      <Breadcrumb className="mb-5">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard">
-              {t("platform-layout:dashboard")}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/courses">
-              {t("platform-layout:courses")}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            {course ? (
-              <BreadcrumbPage>
-                {isLoading ? (
-                  <Skeleton className="w-24 h-4" />
-                ) : (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center gap-1">
-                      {course.name}
-                      <ChevronDown className="h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      {allCourses.map((course) => (
-                        <DropdownMenuItem key={course.id}>
-                          <BreadcrumbLink href={`/courses/${course.id}`}>
-                            {course.name}
-                          </BreadcrumbLink>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </BreadcrumbPage>
-            ) : (
-              <BreadcrumbLink href="/dashboard" className="text-primary">
-                Error
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <CourseBreadcrumb
+        allCourses={allCourses}
+        course={course}
+        isLoading={isLoading}
+      />
 
       {/* Title, Subtitle, and Button */}
       <div className="flex justify-between items-center mb-5">
@@ -224,7 +185,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
       <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border border-default-color rounded-xl">
         <div className="flex justify-between items-center">
           <p className="font-bold">
-            {t("platform-layout:lesson-number", { lessonId: lesson.id })}:{" "}
+            {t("platform-layout:lesson-number", { lessonId: lesson.number })}:{" "}
             {lesson.name}
           </p>
 
@@ -276,15 +237,6 @@ function LessonCardSkeleton() {
   );
 }
 
-// TODO: Expandable Lesson Card: https://ui.aceternity.com/components/expandable-card
-/*
-<span
-className={`badge ${lesson.difficulty === "Beginner" ? "bg-emerald-200 text-emerald-700" : lesson.difficulty === "Intermediate" ? "bg-selective-yellow-200 text-selective-yellow-700" : lesson.difficulty === "Advanced" ? "bg-red-200 text-red-700" : "bg-red-700 text-red-200"}`}
->
-  {lesson.difficulty}
-</span>
-*/
-
 function LessonsComponent({
   chapters,
   lessons,
@@ -318,13 +270,15 @@ function LessonsComponent({
       {/* Chapter Text and Chapter Dropdown */}
       <div className="w-full flex justify-between items-center">
         <span className="text-xl font-bold">
-          Chapter {chapter?.id ?? chapters[0].id}:{" "}
+          Chapter {chapter?.number ?? chapters[0].number}:{" "}
           {chapter?.name ?? chapters[0].name}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <StyledDropdownButton>
-              {chapter ? `Chapter ${chapter.id}` : `Chapter ${chapters[0].id}`}
+              {chapter
+                ? `Chapter ${chapter.number}`
+                : `Chapter ${chapters[0].number}`}
             </StyledDropdownButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -333,7 +287,7 @@ function LessonsComponent({
                 key={chapter.id}
                 onClick={() => setChapter(chapter)}
               >
-                Chapter {chapter.id}
+                Chapter {chapter.number}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

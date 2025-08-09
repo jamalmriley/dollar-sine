@@ -2,15 +2,16 @@ import { Metadata } from "next";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
+import { cookies } from "next/headers";
+import { i18nConfig } from "@/i18nConfig";
 
 export const metadata: Metadata = setTitle("Support Us");
 const i18nNamespaces = ["support-us"];
 
-export default async function SupportUsPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function SupportUsPage() {
+  const cookieStore = cookies();
+  const locale =
+    cookieStore.get("NEXT_LOCALE")?.value || i18nConfig.defaultLocale || "en";
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
 
   return (

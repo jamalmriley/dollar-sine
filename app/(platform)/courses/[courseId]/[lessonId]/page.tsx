@@ -31,6 +31,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getChapters, getLessons } from "@/app/actions/onboarding";
 import { Chapter, Lesson } from "@/types/course";
+import { LessonBreadcrumb } from "@/components/ContentBreadcrumbs";
 
 export default function LessonPage() {
   const { t } = useTranslation();
@@ -86,64 +87,15 @@ export default function LessonPage() {
         <div className="flex flex-col h-full w-full justify-between grow p-10 gap-5 rounded-tl-2xl border-l border-default-color bg-[#fff] dark:bg-[#121212]">
           {/* Breadcrumb and Title */}
           <div className="flex flex-col">
-            {/* TODO: Make anything that says "Common Cents" dynamic based on selected course. */}
-            <Breadcrumb className="mb-5">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/dashboard">
-                    {t("platform-layout:dashboard")}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/courses">
-                    {t("platform-layout:courses")}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/courses/${lesson?.courseId}`}>
-                    {lesson?.courseId}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className="flex items-center gap-1">
-                        {t("platform-layout:lesson-number", {
-                          lessonId: lesson?.id,
-                        })}
-                        <ChevronDown className="h-4 w-4" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start">
-                        {lessons
-                          ?.filter(
-                            (lssn) => lssn.chapterId === lesson?.chapterId
-                          )
-                          .map((lesson) => (
-                            <DropdownMenuItem key={lesson.id}>
-                              <BreadcrumbLink
-                                href={`/courses/common-cents/lesson-${lesson.id}`}
-                              >
-                                {t("platform-layout:lesson-number", {
-                                  lessonId: lesson.id,
-                                })}
-                              </BreadcrumbLink>
-                            </DropdownMenuItem>
-                          ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <LessonBreadcrumb lesson={lesson} lessons={lessons} />
 
             {/* Title */}
             <div className="flex gap-3 items-center">
               <h1 className="lesson-h1">
-                {t("platform-layout:lesson-number", { lessonId: lesson?.id })}:{" "}
-                {lesson?.name}
+                {t("platform-layout:lesson-number", {
+                  lessonId: lesson?.number,
+                })}
+                : {lesson?.name}
               </h1>
               <Tooltip>
                 <TooltipTrigger>

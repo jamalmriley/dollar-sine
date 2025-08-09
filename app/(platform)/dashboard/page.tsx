@@ -9,18 +9,19 @@ import { setTitle } from "@/utils/ui";
 import { StyledButton } from "@/components/StyledButtons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { i18nConfig } from "@/i18nConfig";
 
 export const metadata: Metadata = setTitle("Dashboard");
 const i18nNamespaces = ["dashboard", "platform-layout"];
 
-export default async function DashboardPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function DashboardPage() {
+  const cookieStore = cookies();
+  const locale =
+    cookieStore.get("NEXT_LOCALE")?.value || i18nConfig.defaultLocale || "en";
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
   const user = await currentUser();
-  if (!user) redirect(`/sign-in?redirect_url=/${locale}/dashboard`);
+  if (!user) redirect("/sign-in?redirect_url=/dashboard");
 
   const firstName = user.firstName;
 

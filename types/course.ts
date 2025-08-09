@@ -3,6 +3,7 @@ import { z } from "zod";
 interface CourseItem {
   id: string;
   name: string;
+  number: number;
   description: string;
 }
 
@@ -60,6 +61,7 @@ interface ContentItem extends CourseItem {
 
 export interface Lesson extends ContentItem {
   courseId: string;
+  courseName: string;
   chapterId: string;
   difficulty: "Beginner" | "Intermediate" | "Advanced" | "Expert";
   duration: number;

@@ -10,6 +10,8 @@ import {
   SearchBox,
   useInstantSearch,
 } from "react-instantsearch";
+import { Lesson } from "@/types/course";
+import { sub } from "date-fns";
 // import 'instantsearch.css/themes/satellite.css';
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
@@ -20,9 +22,11 @@ const searchClient = algoliasearch(
 );
 
 function Hit({ hit }: { hit: any }) {
+  const lesson = hit as Lesson;
   return (
-    <Link href={`${hit.pathname}`} className="flex flex-col gap-1">
-      <div className="hit-name font-bold">
+    <Link href={`${lesson.pathname}`} className="flex flex-col gap-1">
+      {/* Lesson Name */}
+      <div className="font-bold text-sm">
         <Highlight
           attribute="name"
           hit={hit}
@@ -30,20 +34,43 @@ function Hit({ hit }: { hit: any }) {
         />
       </div>
 
-      <div className="hit-description text-xs">
+      {/* Lesson Number and Course Name */}
+      <div className="flex gap-1.5 text-xs text-muted-foreground">
+        {/* Lesson Number */}
+        <div>
+          <span>Lesson </span>
+          <Highlight
+            attribute="number"
+            hit={hit}
+            classNames={{ highlighted: "highlighted-hits" }}
+          />
+        </div>
+        <span>|</span>
+        {/* Course Name */}
+        <div>
+          <Highlight
+            attribute="courseName"
+            hit={hit}
+            classNames={{ highlighted: "highlighted-hits" }}
+          />
+        </div>
+      </div>
+
+      {/* Lesson Description */}
+      <div className="text-xs line-clamp-1">
         <Highlight
           attribute="description"
           hit={hit}
           classNames={{ highlighted: "highlighted-hits" }}
         />
       </div>
+
       {/* TODO: Only display for teacher/admin accounts. */}
-      {hit.standards.filter((standard: string) => standard !== "").length >
-        0 && (
+      {lesson.standards && lesson.standards.length > 0 && (
         <div className="flex gap-3 mt-3">
-          {hit.standards.map((standard: string, i: number) => (
-            <div key={i} className="badge-2">
-              {standard}
+          {lesson.standards.map((standard) => (
+            <div key={standard.id} className="badge-2">
+              {standard.id}
             </div>
           ))}
         </div>
@@ -58,7 +85,7 @@ export default function Search() {
   return (
     <InstantSearch
       searchClient={searchClient}
-      indexName="test-search-data"
+      indexName="global-lessons-search"
       future={{ preserveSharedStateOnUnmount: true }}
     >
       <Configure hitsPerPage={10} />

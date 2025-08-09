@@ -4,16 +4,19 @@ import { NAV_HEIGHT } from "@/utils/ui";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import SignUpContextProvider from "@/contexts/sign-up-content";
+import { cookies } from "next/headers";
+import { i18nConfig } from "@/i18nConfig";
 
 const i18nNamespaces = ["layout", "sign-up"];
 
 export default async function LandingLayout({
   children,
-  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
 }) {
+  const cookieStore = cookies();
+  const locale =
+    cookieStore.get("NEXT_LOCALE")?.value || i18nConfig.defaultLocale || "en";
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
