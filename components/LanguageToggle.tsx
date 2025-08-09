@@ -12,7 +12,6 @@ import { StyledDropdownIconButtonNoText } from "./StyledButtons";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function LanguageToggle() {
   // const router = useRouter();

@@ -4,20 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomH1 from "@/components/CustomH1";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
 import { StyledButton, StyledDropdownButton } from "@/components/StyledButtons";
 import { useUser } from "@clerk/nextjs";
 import { useTranslation } from "react-i18next";

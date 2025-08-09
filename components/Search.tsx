@@ -11,7 +11,6 @@ import {
   useInstantSearch,
 } from "react-instantsearch";
 import { Lesson } from "@/types/course";
-import { sub } from "date-fns";
 // import 'instantsearch.css/themes/satellite.css';
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;

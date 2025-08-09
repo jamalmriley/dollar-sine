@@ -5,13 +5,6 @@ import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import placeholder from "@/assets/images/placeholders/cc_placeholder.jpg";
 import CustomH1 from "@/components/CustomH1";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import CourseTile from "@/components/CourseTile";
 import { StyledButton } from "@/components/StyledButtons";
 import { Course } from "@/types/course";
