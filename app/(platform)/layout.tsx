@@ -2,7 +2,7 @@ import initTranslations from "@/app/i18n";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import LearningContextProvider from "@/contexts/learning-context";
-import ContentClient from "./ContentClient";
+import PlatformClient from "./PlatformClient";
 import { cookies } from "next/headers";
 import { i18nConfig } from "@/i18nConfig";
 
@@ -25,10 +25,10 @@ export default async function PlatformLayout({
       resources={resources}
     >
       <LearningContextProvider>
-        <ContentClient>
+        <PlatformClient>
           <DashboardNavbar />
           {children}
-        </ContentClient>
+        </PlatformClient>
       </LearningContextProvider>
     </TranslationsProvider>
   );

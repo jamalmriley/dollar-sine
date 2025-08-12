@@ -8,16 +8,26 @@ import { Course } from "@/types/course";
 import { OrganizationMetadata, UserMetadata } from "@/types/user";
 import { useUser } from "@clerk/nextjs";
 import { Organization, User } from "@clerk/nextjs/server";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 export function useContent() {
   const { setAllCourses, setEnrolledCourses, setIsLoading, setOrg } =
     useLearningContext();
-  const { user } = useUser();
+  const pathname = usePathname();
+  const fetchedRef = useRef(false); // Prevents multiple fetches
+  const { user, isLoaded } = useUser();
 
   useEffect(() => {
+    // Only fetch if on a courses-related page
+    if (!pathname.includes("/courses") || !pathname.includes("/dashboard"))
+      return;
+
+    // Wait until user is loaded and avoid multiple runs
+    if (!isLoaded || !user?.id || fetchedRef.current) return;
+
+    fetchedRef.current = true; // Run only once
     const fetchCourses = async (): Promise<void> => {
-      if (!user?.id) return;
       setIsLoading(true);
       try {
         // Fetch user
@@ -27,8 +37,8 @@ export function useContent() {
         let purchasedCourses: string[] | undefined;
 
         // Fetch organization
-        const orgId = userMetadata.organizations?.[0];
-        if (orgId) {
+        if (userMetadata.organizations?.[0]) {
+          const orgId = userMetadata.organizations[0];
           const res = await getOrganizationById(orgId);
           const org = JSON.parse(res.data) as Organization;
           const orgMetadata =
@@ -54,5 +64,5 @@ export function useContent() {
     };
 
     fetchCourses();
-  }, [user?.id]);
+  }, [isLoaded, user?.id]);
 }

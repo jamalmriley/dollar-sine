@@ -2,7 +2,7 @@
 
 import { useContent } from "@/hooks/use-content";
 
-export default function ContentClient({
+export default function PlatformClient({
   children,
 }: {
   children: React.ReactNode;

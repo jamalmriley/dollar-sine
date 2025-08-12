@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useLearningContext } from "@/contexts/learning-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getChapters, getLessons } from "@/app/actions/onboarding";
 import { Chapter, Course, Lesson, Standard } from "@/types/course";
 import { Separator } from "@/components/ui/separator";
@@ -38,10 +38,11 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Progress } from "@/components/ui/progress";
 import { FaPlay } from "react-icons/fa";
 import { CourseBreadcrumb } from "@/components/ContentBreadcrumbs";
+import { motion } from "framer-motion";
+
+type Tab = "Lessons" | "Extras" | "Details";
 
 export default function CoursePage() {
-  type Tab = "Lessons" | "Extras" | "Details";
-
   const { allCourses } = useLearningContext();
   const { t } = useTranslation();
   const { user } = useUser();
@@ -109,23 +110,7 @@ export default function CoursePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-col mb-5">
-        <div className="flex text-sm">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              className={`w-20 flex flex-col transform ease-out duration-500 ${tab === currTab ? "font-semibold" : "font-normal"}`}
-              onClick={() => setCurrTab(tab)}
-            >
-              <span className="w-full pb-2 text-center">{tab}</span>
-              <span
-                className={`w-full h-1.5 ${tab === currTab ? "bg-emerald-400 border border-b-0 border-default-color" : "bg-transparent border border-b-0 border-transparent"}`}
-              />
-            </button>
-          ))}
-        </div>
-        <Separator />
-      </div>
+      <CourseTabs tabs={tabs} currTab={currTab} setCurrTab={setCurrTab} />
 
       {/* Lessons */}
       {currTab === "Lessons" && (
@@ -467,5 +452,61 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
         </div>
       </div>
     </TooltipProvider>
+  );
+}
+
+function CourseTabs({
+  tabs,
+  currTab,
+  setCurrTab,
+}: {
+  tabs: Tab[];
+  currTab: Tab;
+  setCurrTab: Dispatch<SetStateAction<Tab>>;
+}) {
+  return (
+    <div className="flex flex-col gap-5 mb-5">
+      <div className="flex gap-7">
+        {tabs.map((tab) => {
+          const isSelected = tab === currTab;
+          return (
+            <Link
+              key={tab}
+              href="#"
+              className={`relative  text-sm leading-6 no-underline ${
+                isSelected ? "font-semibold text-primary" : "text-muted-foreground"
+              } transform ease-out duration-500`}
+              onClick={() => setCurrTab(tab)}
+            >
+              {tab}
+              {isSelected ? (
+                <motion.div className="absolute -bottom-[1px] left-0 right-0 h-[1px]">
+                  <svg width="37" height="8" viewBox="0 0 37 8" fill="none">
+                    <motion.path
+                      d="M1 5.39971C7.48565 -1.08593 6.44837 -0.12827 8.33643 6.47992C8.34809 6.52075 11.6019 2.72875 12.3422 2.33912C13.8991 1.5197 16.6594 2.96924 18.3734 2.96924C21.665 2.96924 23.1972 1.69759 26.745 2.78921C29.7551 3.71539 32.6954 3.7794 35.8368 3.7794"
+                      stroke="#16DB93"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      initial={{
+                        strokeDasharray: 84.20591735839844,
+                        strokeDashoffset: 84.20591735839844,
+                      }}
+                      animate={{
+                        strokeDashoffset: 0,
+                      }}
+                      transition={{
+                        duration: 1,
+                      }}
+                    />
+                  </svg>
+                </motion.div>
+              ) : null}
+            </Link>
+          );
+        })}
+      </div>
+      <Separator />
+    </div>
   );
 }

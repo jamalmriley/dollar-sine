@@ -18,9 +18,9 @@ export default async function HomePage() {
       locale={locale}
       resources={resources}
     >
-      <main className="w-full h-full flex flex-col">
+      <div className="page-container">
         <Header />
-      </main>
+      </div>
     </TranslationsProvider>
   );
 }

@@ -12,7 +12,6 @@ export default function LocaleInitializer() {
     if (cookieLocale && cookieLocale !== i18n.language) {
       i18n.changeLanguage(cookieLocale).catch(console.error);
     }
-    console.log("Locale initialized:", i18n.language);
   }, [i18n]);
 
   return null;
