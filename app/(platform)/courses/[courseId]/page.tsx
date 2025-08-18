@@ -39,6 +39,7 @@ import { Progress } from "@/components/ui/progress";
 import { FaPlay } from "react-icons/fa";
 import { CourseBreadcrumb } from "@/components/ContentBreadcrumbs";
 import { motion } from "framer-motion";
+import ClientTitle from "@/components/ClientTitle";
 
 type Tab = "Lessons" | "Extras" | "Details";
 
@@ -88,6 +89,7 @@ export default function CoursePage() {
   if (!user) return;
   return (
     <div className="page-container">
+      <ClientTitle title={course?.name || "Loading course..."} />
       <CourseBreadcrumb
         allCourses={allCourses}
         course={course}
@@ -231,7 +233,7 @@ function LessonsComponent({
           <StyledDropdownButton disabled>Loading...</StyledDropdownButton>
         </div>
 
-        {/* Lessons Carousel */}
+        {/* Lessons */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {Array(4)
             .fill(0)
@@ -280,7 +282,6 @@ function LessonsComponent({
           )
           .map((lesson) => (
             <LessonCard key={lesson.id} lesson={lesson} />
-            // <LessonCardSkeleton key={lesson.id} />
           ))}
       </div>
     </div>
@@ -474,7 +475,9 @@ function CourseTabs({
               key={tab}
               href="#"
               className={`relative  text-sm leading-6 no-underline ${
-                isSelected ? "font-semibold text-primary" : "text-muted-foreground"
+                isSelected
+                  ? "font-semibold text-primary"
+                  : "text-muted-foreground"
               } transform ease-out duration-500`}
               onClick={() => setCurrTab(tab)}
             >

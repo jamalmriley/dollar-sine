@@ -189,3 +189,26 @@ export const isEmptyObject = (obj: any): boolean => {
 export const formatFirestoreDate = (date: FirestoreDate): Date => {
   return new Date(1970, 0, 1, 0, 0, date.seconds, date.nanoseconds / 1000000);
 };
+
+export const convertArrToRange = (arr: number[]): string => {
+  if (arr.length === 0) return "";
+  if (arr.length === 1) return arr[0].toString();
+
+  const sortedArr = arr.sort((a, b) => a - b);
+  const ranges: string[] = [];
+  let start = sortedArr[0];
+  let end = start;
+
+  for (let i = 1; i < sortedArr.length; i++) {
+    if (sortedArr[i] === end + 1) {
+      end = sortedArr[i];
+    } else {
+      ranges.push(start === end ? `${start}` : `${start}-${end}`);
+      start = sortedArr[i];
+      end = start;
+    }
+  }
+
+  ranges.push(start === end ? `${start}` : `${start}-${end}`);
+  return ranges.join(", ");
+};

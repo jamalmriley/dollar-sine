@@ -79,7 +79,7 @@ export interface Chapter extends ContentItem {
 }
 
 export interface Course extends ContentItem {
-  chapters: Chapter[];
+  genres: string[];
   pricing: PricingItem[];
 }
 

@@ -124,35 +124,43 @@ export function LessonBreadcrumb({
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href={`/courses/${lesson?.courseId}`}>
-            {lesson?.courseName}
-          </BreadcrumbLink>
+          {lesson ? (
+            <BreadcrumbLink href={`/courses/${lesson.courseId}`}>
+              {lesson.courseName}
+            </BreadcrumbLink>
+          ) : (
+            <Skeleton className="w-20 h-4 my-0.5" />
+          )}
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1">
-                {t("platform-layout:lesson-number", {
-                  lessonId: lesson?.number,
-                })}
-                <ChevronDown className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {lessons
-                  ?.filter((lssn) => lssn.chapterId === lesson?.chapterId)
-                  .map((lesson) => (
-                    <DropdownMenuItem key={lesson.id}>
-                      <BreadcrumbLink href={lesson.pathname}>
-                        {t("platform-layout:lesson-number", {
-                          lessonId: lesson.number,
-                        })}
-                      </BreadcrumbLink>
-                    </DropdownMenuItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </BreadcrumbPage>
+          {lesson && lessons ? (
+            <BreadcrumbPage>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1">
+                  {t("platform-layout:lesson-number", {
+                    lessonId: lesson.number,
+                  })}
+                  <ChevronDown className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  {lessons
+                    .filter((lssn) => lssn.chapterId === lesson.chapterId)
+                    .map((lesson) => (
+                      <DropdownMenuItem key={lesson.id}>
+                        <BreadcrumbLink href={lesson.pathname}>
+                          {t("platform-layout:lesson-number", {
+                            lessonId: lesson.number,
+                          })}
+                        </BreadcrumbLink>
+                      </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </BreadcrumbPage>
+          ) : (
+            <Skeleton className="w-20 h-4 my-0.5" />
+          )}
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

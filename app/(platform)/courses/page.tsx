@@ -3,17 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
-import placeholder from "@/assets/images/placeholders/cc_placeholder.jpg";
 import CustomH1 from "@/components/CustomH1";
-import CourseTile from "@/components/CourseTile";
 import { StyledButton } from "@/components/StyledButtons";
 import { Course } from "@/types/course";
 import { useLearningContext } from "@/contexts/learning-context";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@clerk/nextjs";
 import { CoursesBreadcrumb } from "@/components/ContentBreadcrumbs";
-
-// export const metadata: Metadata = setTitle("All Courses");
+import { FaPlay } from "react-icons/fa";
+import { convertArrToRange } from "@/utils/general";
+import { Skeleton } from "@/components/ui/skeleton";
+import ClientTitle from "@/components/ClientTitle";
 
 export default function CoursesPage() {
   const { allCourses, isLoading } = useLearningContext(); // TODO:  Add enrolledCourses
@@ -23,6 +23,7 @@ export default function CoursesPage() {
   if (!user) return;
   return (
     <div className="page-container">
+      <ClientTitle title="Courses" />
       <CoursesBreadcrumb />
 
       {/* Title and Button */}
@@ -35,38 +36,77 @@ export default function CoursesPage() {
       </div>
 
       {isLoading ? (
-        <>Loading courses...</>
+        <div className="flex gap-5">
+          {Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <CourseCardSkeleton key={i} />
+            ))}
+        </div>
       ) : !allCourses || allCourses.length === 0 ? (
         <>No courses available</>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="flex gap-5">
           {allCourses.map((course: Course) => (
-            <CourseTile key={course.id}>
-              <Link href={course.pathname}>
-                <Image
-                  // src={course.imageUrl}
-                  src={placeholder}
-                  alt={course.name}
-                  className="object-cover"
-                />
-
-                {/* Course Name, Info, and Progress */}
-                <div className="absolute bottom-0 left-0 w-full">
-                  {/* Course Name and Info */}
-                  <div className="p-3 bg-gradient-to-t from-zinc-950">
-                    <h2 className="text-lg text-white font-bold mb-1">
-                      {course.name}
-                    </h2>
-                    <p className="text-xs text-white">{course.description}</p>
-                  </div>
-
-                  <Progress value={50} className="h-1.5 rounded-none" />
-                </div>
-              </Link>
-            </CourseTile>
+            <CourseCard key={course.id} course={course} />
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function CourseCard({ course }: { course: Course }) {
+  return (
+    <Link href={course.pathname}>
+      <div className="min-w-60 w-60 relative border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+        {/* Thumbnail */}
+        <Image
+          src={course.imageUrl}
+          alt={course.name}
+          className="w-full aspect-[10/16] bg-secondary"
+        />
+
+        {/* Play Icon */}
+        <div className="size-9 flex justify-center items-center bg-emerald-400 rounded-full border border-default-color absolute inset-0 m-auto hover:animate-hover-tada opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
+          <FaPlay className="text-white" />
+        </div>
+
+        {/* Label and Progress Bar */}
+        <div className="w-full absolute bottom-0 z-10">
+          <div className="w-full p-3 text-white">
+            {/* TODO: Add course.logo of type string to Course interface */}
+            {/* TODO: Replace course.name with course.logo */}
+            <p className="text-lg font-bold">{course.name}</p>
+            <p className="text-xs line-clamp-1">
+              Grades {convertArrToRange(course.gradeLevels)} •{" "}
+              {course.genres.join(", ")}
+            </p>
+          </div>
+          <Progress value={50} className="h-2 rounded-none" />
+        </div>
+
+        {/* Gradient Overlay */}
+        <div className="w-full h-1/2 absolute bottom-0 z-0 bg-gradient-to-b from-transparent to-black/70" />
+      </div>
+    </Link>
+  );
+}
+
+function CourseCardSkeleton() {
+  return (
+    <div className="min-w-60 w-60 relative border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+      {/* Thumbnail */}
+      <Skeleton className="w-full aspect-[10/16] bg-secondary" />
+
+      {/* Label and Progress Bar */}
+      <div className="w-full absolute bottom-0">
+        <div className="w-full p-3">
+          <Skeleton className="h-6 w-1/2 my-0.5" />
+          <Skeleton className="h-3 w-3/4 my-0.5" />
+        </div>
+        <Progress value={0} className="h-2 rounded-none" />
+      </div>
     </div>
   );
 }

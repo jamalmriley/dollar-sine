@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { getChapters, getLessons } from "@/app/actions/onboarding";
 import { Chapter, Lesson } from "@/types/course";
 import { LessonBreadcrumb } from "@/components/ContentBreadcrumbs";
+import { Skeleton } from "@/components/ui/skeleton";
+import ClientTitle from "@/components/ClientTitle";
 
 export default function LessonPage() {
   const { t } = useTranslation();
@@ -65,6 +67,15 @@ export default function LessonPage() {
 
   return (
     <TooltipProvider>
+      <ClientTitle
+        title={
+          lesson
+            ? `${t("platform-layout:lesson-number", {
+                lessonId: lesson.number,
+              })}: ${lesson.name}`
+            : "Loading lesson..."
+        }
+      />
       <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-dodger-blue-50 dark:bg-emerald-950 h-full">
         <LessonSidebar />
 
@@ -75,31 +86,37 @@ export default function LessonPage() {
             <LessonBreadcrumb lesson={lesson} lessons={lessons} />
 
             {/* Title */}
-            <div className="flex gap-3 items-center">
-              <h1 className="lesson-h1">
-                {t("platform-layout:lesson-number", {
-                  lessonId: lesson?.number,
-                })}
-                : {lesson?.name}
-              </h1>
-              <Tooltip>
-                <TooltipTrigger>
-                  <HiOutlineInformationCircle className="w-6 h-6 text-dodger-blue-500" />
-                </TooltipTrigger>
-                <TooltipContent className="flex flex-col max-w-80 p-3">
-                  <span className="font-bold mb-1">
-                    What&apos;s this lesson about? 🤔
-                  </span>
-                  <span className="text-xs">{lesson?.description}</span>
-                </TooltipContent>
-              </Tooltip>
-            </div>
+            {lesson ? (
+              <div className="flex gap-3 items-center">
+                <h1 className="lesson-h1">
+                  {t("platform-layout:lesson-number", {
+                    lessonId: lesson?.number,
+                  })}
+                  : {lesson?.name}
+                </h1>
+                {lesson.description !== "" && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HiOutlineInformationCircle className="w-6 h-6 text-dodger-blue-500" />
+                    </TooltipTrigger>
+                    <TooltipContent className="flex flex-col max-w-80 p-3">
+                      <span className="font-bold mb-1">
+                        What&apos;s this lesson about? 🤔
+                      </span>
+                      <span className="text-xs">{lesson.description}</span>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            ) : (
+              <Skeleton className="w-96 h-7 md:h-9" />
+            )}
           </div>
 
           {/* Workspace and Video */}
           <div className="flex flex-col-reverse md:flex-row grow gap-10">
             {/* Workspace */}
-            <LessonWorkspace>
+            <LessonWorkspace lesson={lesson}>
               <LessonCanvas courseId={courseId} lesson={lesson} />
             </LessonWorkspace>
 

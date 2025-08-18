@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import Greeting from "./components/Greeting";
 import initTranslations from "@/app/i18n";
-import CourseTile from "@/components/CourseTile";
-import { Skeleton } from "@/components/ui/skeleton";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
 import { StyledButton } from "@/components/StyledButtons";
@@ -41,11 +39,8 @@ export default async function DashboardPage() {
         </div>
 
         <div className="mt-5">
+          <h2 className="h2">My dashboard</h2>
           <h2 className="h2">{t("platform-layout:continue-learning")}</h2>
-
-          <CourseTile>
-            <Skeleton className="h-full rounded-none" />
-          </CourseTile>
         </div>
       </div>
     </TranslationsProvider>

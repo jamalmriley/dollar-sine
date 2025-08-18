@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledActionButton, StyledButton } from "@/components/StyledButtons";
 import { ChangeEvent, useRef, useState } from "react";
 import {
   FaChevronDown,
@@ -51,7 +51,9 @@ export default function LessonCanvas({
       result.prev =
         lesson.prevLessonId && lesson.prevLessonId !== ""
           ? {
-              label: t("platform-layout:lesson-number", { lessonId: lesson.prevLessonId }),
+              label: t("platform-layout:lesson-number", {
+                lessonId: lesson.prevLessonId,
+              }),
               href: `/courses/${courseId}/lesson-${lesson.prevLessonId}`,
             }
           : null;
@@ -60,7 +62,9 @@ export default function LessonCanvas({
       result.next =
         lesson.nextLessonId && lesson.nextLessonId !== ""
           ? {
-              label: t("platform-layout:lesson-number", { lessonId: lesson.nextLessonId }),
+              label: t("platform-layout:lesson-number", {
+                lessonId: lesson.nextLessonId,
+              }),
               href: `/courses/${courseId}/lesson-${lesson.nextLessonId}`,
             }
           : null;
@@ -189,7 +193,7 @@ export default function LessonCanvas({
               href={prev.href}
               className="flex justify-center items-center gap-2"
             >
-              <StyledButton
+              <StyledActionButton
                 onClick={() => {
                   if (getActivityIndex(prev.href) !== -1) {
                     setActivityId(prev.href);
@@ -198,7 +202,7 @@ export default function LessonCanvas({
               >
                 <ArrowLeft />
                 {`${t("platform-layout:previous")}: ${prev.label}`}
-              </StyledButton>
+              </StyledActionButton>
             </Link>
           )}
         </div>
@@ -310,7 +314,7 @@ export default function LessonCanvas({
               href={next.href}
               className="flex justify-center items-center gap-2"
             >
-              <StyledButton
+              <StyledActionButton
                 onClick={() => {
                   if (getActivityIndex(next.href) !== -1) {
                     setActivityId(next.href);
@@ -319,7 +323,7 @@ export default function LessonCanvas({
               >
                 {`${t("platform-layout:next")}: ${next.label}`}
                 <ArrowRight />
-              </StyledButton>
+              </StyledActionButton>
             </Link>
           )}
         </div>
