@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { Course, Lesson } from "@/types/course";
+import { Course } from "@/types/course";
 
 export function CoursesBreadcrumb() {
   const { t } = useTranslation();
@@ -100,7 +100,7 @@ export function CourseBreadcrumb({
   );
 }
 
-export function LessonBreadcrumb({
+/* export function LessonBreadcrumb({
   lesson,
   lessons,
 }: {
@@ -165,4 +165,4 @@ export function LessonBreadcrumb({
       </BreadcrumbList>
     </Breadcrumb>
   );
-}
+} */

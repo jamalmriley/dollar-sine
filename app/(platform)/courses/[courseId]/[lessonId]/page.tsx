@@ -1,24 +1,14 @@
 "use client";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { HiOutlineInformationCircle } from "react-icons/hi2";
 import LessonWorkspace from "./components/LessonWorkspace";
-import LessonCanvas from "./components/LessonCanvas";
-import LessonVideo from "./components/LessonVideo";
 import LessonSidebar from "./components/LessonSidebar";
 import { useTranslation } from "react-i18next";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getChapters, getLessons } from "@/app/actions/onboarding";
 import { Chapter, Lesson } from "@/types/course";
-import { LessonBreadcrumb } from "@/components/ContentBreadcrumbs";
-import { Skeleton } from "@/components/ui/skeleton";
 import ClientTitle from "@/components/ClientTitle";
+import Room from "@/components/Room";
 
 export default function LessonPage() {
   const { t } = useTranslation();
@@ -28,7 +18,6 @@ export default function LessonPage() {
 
   const [, setIsLoading] = useState<boolean>(false);
   const [lesson, setLesson] = useState<Lesson>();
-  const [lessons, setLessons] = useState<Lesson[]>();
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -53,7 +42,6 @@ export default function LessonPage() {
             }
           }
           setLesson(lessonsArr.filter((lesson) => lesson.id === lessonId)[0]);
-          setLessons(lessonsArr);
         }
       } catch (error) {
         console.error("Failed to fetch lesson:", error);
@@ -66,7 +54,7 @@ export default function LessonPage() {
   }, []);
 
   return (
-    <TooltipProvider>
+    <>
       <ClientTitle
         title={
           lesson
@@ -76,55 +64,17 @@ export default function LessonPage() {
             : "Loading lesson..."
         }
       />
-      <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-dodger-blue-50 dark:bg-emerald-950 h-full">
-        <LessonSidebar />
+      <Room>
+        <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-dodger-blue-50 dark:bg-emerald-950 h-full">
+          <LessonSidebar lesson={lesson} />
 
-        {/* Dashboard */}
-        <div className="flex flex-col h-full w-full justify-between grow p-10 gap-5 rounded-tl-2xl border-l border-default-color bg-[#fff] dark:bg-[#121212]">
-          {/* Breadcrumb and Title */}
-          <div className="flex flex-col">
-            <LessonBreadcrumb lesson={lesson} lessons={lessons} />
-
-            {/* Title */}
-            {lesson ? (
-              <div className="flex gap-3 items-center">
-                <h1 className="lesson-h1">
-                  {t("platform-layout:lesson-number", {
-                    lessonId: lesson?.number,
-                  })}
-                  : {lesson?.name}
-                </h1>
-                {lesson.description !== "" && (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <HiOutlineInformationCircle className="w-6 h-6 text-dodger-blue-500" />
-                    </TooltipTrigger>
-                    <TooltipContent className="flex flex-col max-w-80 p-3">
-                      <span className="font-bold mb-1">
-                        What&apos;s this lesson about? 🤔
-                      </span>
-                      <span className="text-xs">{lesson.description}</span>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </div>
-            ) : (
-              <Skeleton className="w-96 h-7 md:h-9" />
-            )}
-          </div>
-
-          {/* Workspace and Video */}
-          <div className="flex flex-col-reverse md:flex-row grow gap-10">
+          {/* Dashboard */}
+          <div className="flex flex-col h-full w-full justify-between grow gap-5 md:rounded-tl-2xl md:border-l border-default-color bg-[#fff] dark:bg-[#121212]">
             {/* Workspace */}
-            <LessonWorkspace lesson={lesson}>
-              <LessonCanvas courseId={courseId} lesson={lesson} />
-            </LessonWorkspace>
-
-            {/* Video */}
-            <LessonVideo />
+            <LessonWorkspace lesson={lesson} />
           </div>
         </div>
-      </div>
-    </TooltipProvider>
+      </Room>
+    </>
   );
 }

@@ -2,6 +2,8 @@
 
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { useLearningContext } from "@/contexts/learning-context";
+import { Lesson } from "@/types/course";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GiRunningShoe } from "react-icons/gi";
@@ -15,7 +17,11 @@ import { MdOutlineQuiz } from "react-icons/md";
 import { PiFlagCheckeredFill } from "react-icons/pi";
 import { TbZoomCheck } from "react-icons/tb";
 
-export default function LessonSidebar() {
+export default function LessonSidebar({
+  lesson,
+}: {
+  lesson: Lesson | undefined;
+}) {
   const { t } = useTranslation();
   const { activityId, setActivityId } = useLearningContext();
   const [open, setOpen] = useState<boolean>(false);
@@ -84,6 +90,15 @@ export default function LessonSidebar() {
             ))}
           </div>
         </div>
+        <span className="text-primary">
+          <SidebarLink
+            link={{
+              label: "Back to course",
+              href: `/courses${lesson ? "/" + lesson.courseId : ""}`,
+              icon: <ArrowLeft className="sidebar-item" />,
+            }}
+          />
+        </span>
       </SidebarBody>
     </Sidebar>
   );

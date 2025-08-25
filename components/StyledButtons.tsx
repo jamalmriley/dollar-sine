@@ -8,7 +8,8 @@ type StyledToggleButtonProps = StyledButtonProps & {
 };
 
 const sharedIconButtonClasses: string = "relative inline-block group border-0";
-const sharedButtonClasses: string = sharedIconButtonClasses + " px-4 py-2 disabled:pointer-events-auto";
+const sharedButtonClasses: string =
+  sharedIconButtonClasses + " px-4 py-2 disabled:pointer-events-auto";
 const sharedBackClasses: string =
   "absolute inset-0 size-full transition duration-200 ease-out transform translate-x-1 translate-y-1 group-hover:-translate-x-0 group-hover:-translate-y-0 rounded-md bg-black/75 dark:bg-white/75";
 const sharedFrontClasses: string =
@@ -93,6 +94,26 @@ export function StyledIconButton({
       />
       {/* Text */}
       <span className={`${sharedTextClasses}`}>{children}</span>
+    </Button>
+  );
+}
+
+export function StyledIconActionButton({ ...props }: StyledButtonProps) {
+  return (
+    <Button
+      {...props}
+      variant="outline"
+      size="icon"
+      className={`${sharedIconButtonClasses}`}
+    >
+      {/* Back */}
+      <span className={`${sharedBackClasses} dark:bg-selective-yellow-300`} />
+      {/* Front */}
+      <span
+        className={`${sharedFrontClasses} bg-selective-yellow-300 dark:bg-primary-foreground group-hover:bg-selective-yellow-100`}
+      />
+      {/* Text */}
+      <span className={`${sharedTextClasses}`}>{props.children}</span>
     </Button>
   );
 }
