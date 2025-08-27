@@ -47,6 +47,7 @@ import {
 import { MdOutlineQuiz } from "react-icons/md";
 import { PiFlagCheckeredFill } from "react-icons/pi";
 import { TbZoomCheck } from "react-icons/tb";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LessonWorkspace({
   lesson,
@@ -177,7 +178,7 @@ export default function LessonWorkspace({
     <div className="size-full flex flex-col gap-5 p-10">
       {/* Label */}
       <>
-        {lesson && (
+        {lesson ? (
           <div className="flex flex-col gap-1">
             <h1 className="text-xs text-muted-foreground">
               {t("platform-layout:lesson-number", {
@@ -188,6 +189,11 @@ export default function LessonWorkspace({
             <span className="h2">
               {t(`platform-layout:${activityId.substring(1)}`)}
             </span>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1">
+            <Skeleton className="w-48 h-3 my-0.5" />
+            <Skeleton className="w-24 h-6 lg:h-7 my-0.5" />
           </div>
         )}
       </>
@@ -250,8 +256,11 @@ export default function LessonWorkspace({
 
       {/* Icon Buttons */}
       <span
-        className={`w-full flex justify-between ${!prev ? "md:justify-end" : ""} gap-2`}
+        className={`w-full flex ${!prev && next ? "justify-end" : "justify-between"} gap-2`}
       >
+        {!prev && !next && <Skeleton className="w-36 h-9" />}
+        {!prev && !next && <Skeleton className="w-36 h-9" />}
+
         {prev && (
           <Link
             href={prev.href}
@@ -362,7 +371,10 @@ export default function LessonWorkspace({
                 ))}
               </div>
 
-              <DrawerFooter className="pt-2">
+              <DrawerFooter className="flex justify-between pt-2">
+                <Link href={`/courses/${lesson.courseId}`}>
+                  <StyledActionButton>Back to course</StyledActionButton>
+                </Link>
                 <DrawerClose asChild>
                   <StyledDestructiveButton>Close</StyledDestructiveButton>
                 </DrawerClose>

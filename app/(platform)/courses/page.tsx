@@ -14,9 +14,11 @@ import { FaPlay } from "react-icons/fa";
 import { convertArrToRange } from "@/utils/general";
 import { Skeleton } from "@/components/ui/skeleton";
 import ClientTitle from "@/components/ClientTitle";
+import { useMediaQuery } from "usehooks-ts";
 
 export default function CoursesPage() {
   const { allCourses, isLoading } = useLearningContext(); // TODO:  Add enrolledCourses
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { t } = useTranslation();
   const { user } = useUser();
 
@@ -27,12 +29,16 @@ export default function CoursesPage() {
       <CoursesBreadcrumb />
 
       {/* Title and Button */}
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-center">
         <CustomH1 text={t("platform-layout:courses")} isPaddingEnabled />
 
-        <Link href={`/dashboard`}>
-          <StyledButton>{t("platform-layout:back-to-dashboard")}</StyledButton>
-        </Link>
+        {isDesktop && (
+          <Link href={`/dashboard`}>
+            <StyledButton>
+              {t("platform-layout:back-to-dashboard")}
+            </StyledButton>
+          </Link>
+        )}
       </div>
 
       {isLoading ? (

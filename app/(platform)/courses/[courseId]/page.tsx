@@ -40,11 +40,13 @@ import { FaPlay } from "react-icons/fa";
 import { CourseBreadcrumb } from "@/components/ContentBreadcrumbs";
 import { motion } from "framer-motion";
 import ClientTitle from "@/components/ClientTitle";
+import { useMediaQuery } from "usehooks-ts";
 
 type Tab = "Lessons" | "Extras" | "Details";
 
 export default function CoursePage() {
   const { allCourses } = useLearningContext();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { t } = useTranslation();
   const { user } = useUser();
 
@@ -106,9 +108,11 @@ export default function CoursePage() {
             isPaddingEnabled={false}
           />
         )}
-        <StyledButton>
-          <Link href="/courses">{t("platform-layout:back-to-courses")}</Link>
-        </StyledButton>
+        {isDesktop && (
+          <StyledButton>
+            <Link href="/courses">{t("platform-layout:back-to-courses")}</Link>
+          </StyledButton>
+        )}
       </div>
 
       {/* Tabs */}
@@ -138,29 +142,28 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
     return [hr, min].filter((el) => el !== "").join(" ");
   }
   return (
-    <div className="min-w-80 w-80 flex flex-col gap-2.5">
-      {/* Thumbnail, Play Icon, and Progress Bar */}
-      <Link href={lesson.pathname}>
-        <div className="w-full relative border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
-          {/* Thumbnail */}
-          <Image
-            src={lesson.imageUrl}
-            alt={lesson.name}
-            className="w-full aspect-video bg-secondary"
-          />
+    <div className="min-w-80 w-80 h-fit border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+      {/* Thumbnail */}
+      <div className="relative">
+        <Image
+          src={lesson.imageUrl}
+          alt={lesson.name}
+          className="w-full aspect-video bg-secondary"
+        />
 
-          {/* Play Icon */}
+        {/* Play Icon */}
+        <Link href={lesson.pathname}>
           <div className="size-9 flex justify-center items-center bg-emerald-400 rounded-full border border-default-color absolute inset-0 m-auto hover:animate-hover-tada opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
             <FaPlay className="text-white" />
           </div>
+        </Link>
 
-          {/* Progress Bar */}
-          <Progress value={50} className="h-2 rounded-none absolute bottom-0" />
-        </div>
-      </Link>
+        {/* Progress Bar */}
+        <Progress value={50} className="h-2 rounded-none absolute bottom-0" />
+      </div>
 
       {/* Name, Description, Duration, and Button */}
-      <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border border-default-color rounded-xl">
+      <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border-t border-default-color">
         <div className="flex justify-between items-center">
           <p className="font-bold">
             {t("platform-layout:lesson-number", { lessonId: lesson.number })}:{" "}
@@ -197,12 +200,12 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
 
 function LessonCardSkeleton() {
   return (
-    <div className="min-w-80 w-80 flex flex-col gap-2.5">
+    <div className="min-w-80 w-80 border border-default-color rounded-xl overflow-hidden">
       {/* Thumbnail */}
-      <Skeleton className="w-full aspect-video bg-secondary border border-default-color rounded-xl" />
+      <Skeleton className="w-full aspect-video bg-secondary" />
 
       {/* Name, Description, Duration, and Button */}
-      <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border border-default-color rounded-xl">
+      <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border-t border-default-color">
         <div className="flex justify-between items-center">
           <Skeleton className="w-3/4 h-5" />
           <Skeleton className="size-7 rounded-full m-1" />
@@ -308,9 +311,9 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
           <StyledButton disabled>Report issue</StyledButton>
         </div>
         <Skeleton className="w-80 h-6 mb-5" />
-        <div className="w-full flex gap-10 text-sm">
+        <div className="w-full flex flex-col md:flex-row gap-10 text-sm">
           {/* Release Date, Grade Level(s), and Topics */}
-          <div className="w-1/2 flex flex-col gap-5">
+          <div className="w-full md:w-1/2 flex flex-col gap-5">
             {/* Release Date and Grade Level(s) */}
             <div className="flex gap-5">
               <Skeleton className="w-44 h-5" />
@@ -343,7 +346,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
           </div>
 
           {/* Standards */}
-          <div className="w-1/2 flex flex-col gap-5">
+          <div className="w-full md:w-1/2 flex flex-col gap-5">
             <Skeleton className="w-20 h-5" />
             <div className="bg-primary-foreground rounded-md px-3 border border-default-color">
               <Accordion type="single" collapsible className="w-full" disabled>
@@ -371,9 +374,9 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
           <StyledButton>Report issue</StyledButton>
         </div>
         <span className="mb-5">{course.description}</span>
-        <div className="w-full flex gap-10 text-sm">
+        <div className="w-full flex flex-col md:flex-row gap-10 text-sm">
           {/* Release Date, Grade Level(s), and Topics */}
-          <div className="w-1/2 flex flex-col gap-5">
+          <div className="w-full md:w-1/2 flex flex-col gap-5">
             {/* Release Date and Grade Level(s) */}
             <div className="flex gap-5">
               {/* Release Date */}
@@ -417,7 +420,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
           </div>
 
           {/* Standards */}
-          <div className="w-1/2 flex flex-col gap-5">
+          <div className="w-full md:w-1/2 flex flex-col gap-5">
             <span className="font-bold">Standards</span>
             <div className="bg-primary-foreground rounded-md px-3 border border-default-color">
               <Accordion type="single" collapsible className="w-full">
