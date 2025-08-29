@@ -51,26 +51,27 @@ interface Activity extends CourseItem {
 }
 
 interface ContentItem extends CourseItem {
+  gradeLevels: number[];
   imageUrl: string;
   pathname: string;
-  topics: Topic[];
-  standards: Standard[] | null;
-  gradeLevels: number[];
   releaseDate: FirestoreDate;
+  standards: Standard[] | null;
+  topics: Topic[];
 }
 
 export interface Lesson extends ContentItem {
+  activities: Activity[];
   courseId: string;
   courseName: string;
   chapterId: string;
   difficulty: "Beginner" | "Intermediate" | "Advanced" | "Expert";
   duration: number;
-  learningObjectives: string[];
-  activities: Activity[];
-  preStandards: Standard[];
   extStandards: Standard[];
-  prevLessonId: string | null;
+  learningObjectives: string[];
   nextLessonId: string | null;
+  preStandards: Standard[];
+  prevLessonId: string | null;
+  type: "Lesson" | "Lab";
 }
 
 export interface Chapter extends ContentItem {

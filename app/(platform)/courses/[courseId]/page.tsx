@@ -166,8 +166,13 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
       <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border-t border-default-color">
         <div className="flex justify-between items-center">
           <p className="font-bold">
-            {t("platform-layout:lesson-number", { lessonId: lesson.number })}:{" "}
-            {lesson.name}
+            {t(`platform-layout:${lesson.type.toLowerCase()}-number`, {
+              lessonId:
+                lesson.type === "Lesson"
+                  ? lesson.number
+                  : Math.floor(lesson.number),
+            })}
+            : {lesson.name}
           </p>
 
           <DropdownMenu>
@@ -231,7 +236,7 @@ function LessonsComponent({
     return (
       <div className="w-full flex flex-col gap-5">
         {/* Chapter Text and Chapter Dropdown */}
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex flex-col-reverse gap-5 md:flex-row md:justify-between md:items-center">
           <Skeleton className="w-56 h-7" />
           <StyledDropdownButton disabled>Loading...</StyledDropdownButton>
         </div>
@@ -249,7 +254,7 @@ function LessonsComponent({
   return (
     <div className="w-full flex flex-col gap-5">
       {/* Chapter Text and Chapter Dropdown */}
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex flex-col-reverse gap-5 md:flex-row md:justify-between md:items-center">
         <span className="text-xl font-bold">
           Chapter {chapter?.number ?? chapters[0].number}:{" "}
           {chapter?.name ?? chapters[0].name}

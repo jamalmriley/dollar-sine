@@ -135,10 +135,13 @@ export default function LessonWorkspace({
       result.prev =
         lesson.prevLessonId && lesson.prevLessonId !== ""
           ? {
-              label: t("platform-layout:lesson-number", {
-                lessonId: lesson.prevLessonId,
-              }),
-              href: `/courses/${lesson.courseId}/lesson-${lesson.prevLessonId}`,
+              label: t(
+                `platform-layout:${lesson.prevLessonId.split("-")[0]}-number`,
+                {
+                  lessonId: lesson.prevLessonId.split("-")[1],
+                }
+              ),
+              href: `/courses/${lesson.courseId}/${lesson.prevLessonId}`,
             }
           : null;
     }
@@ -146,10 +149,13 @@ export default function LessonWorkspace({
       result.next =
         lesson.nextLessonId && lesson.nextLessonId !== ""
           ? {
-              label: t("platform-layout:lesson-number", {
-                lessonId: lesson.nextLessonId,
-              }),
-              href: `/courses/${lesson.courseId}/lesson-${lesson.nextLessonId}`,
+              label: t(
+                `platform-layout:${lesson.nextLessonId.split("-")[0]}-number`,
+                {
+                  lessonId: lesson.nextLessonId.split("-")[1],
+                }
+              ),
+              href: `/courses/${lesson.courseId}/${lesson.nextLessonId}`,
             }
           : null;
     }
