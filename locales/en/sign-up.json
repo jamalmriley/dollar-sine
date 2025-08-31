@@ -1,11 +1,1 @@
-{
-  "email": "Email",
-  "first-name": "First Name",
-  "last-name": "Last Name",
-  "password": "Password",
-  "resend-code": "Resend code",
-  "resend-code-plural": "Resend code in {{ seconds }} seconds",
-  "resend-code-singular": "Resend code in {{ seconds }} second",
-  "sign-up": "Sign up",
-  "verify-email": "Verify email"
-}
+{"email":"Email","first-name":"First Name","last-name":"Last Name","password":"Password","resend-code":"Resend code","resend-code-plural":"Resend code in {{ seconds }} seconds","resend-code-singular":"Resend code in {{ seconds }} second","sign-up":"Sign up","verify-email":"Verify email"}

@@ -1,5 +1,1 @@
-{
-  "good-afternoon": "¡Buenas tardes, {{ name }}!",
-  "good-evening": "¡Buenas noches, {{ name }}!",
-  "good-morning": "¡Buenos días, {{ name }}!"
-}
+{"good-afternoon":"¡Buenas tardes, {{ name }}!","good-evening":"¡Buenas noches, {{ name }}!","good-morning":"¡Buenos días, {{ name }}!"}

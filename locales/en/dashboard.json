@@ -1,5 +1,1 @@
-{
-  "good-afternoon": "Good afternoon, {{ name }}!",
-  "good-evening": "Good evening, {{ name }}!",
-  "good-morning": "Good morning, {{ name }}!"
-}
+{"good-afternoon":"Good afternoon, {{ name }}!","good-evening":"Good evening, {{ name }}!","good-morning":"Good morning, {{ name }}!"}

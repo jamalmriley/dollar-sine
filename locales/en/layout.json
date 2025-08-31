@@ -1,16 +1,1 @@
-{
-  "about": "About",
-  "dark": "Dark",
-  "en": "English",
-  "es": "Spanish",
-  "footer_and": "and",
-  "footer_created-with": "Created with",
-  "home": "Home",
-  "light": "Light",
-  "loading": "Loading",
-  "my-dashboard": "My dashboard",
-  "sign-in": "Sign in",
-  "sign-out": "Sign out",
-  "support-us": "Support us",
-  "system": "System"
-}
+{"about":"About","dark":"Dark","en":"English","es":"Spanish","footer_and":"and","footer_created-with":"Created with","home":"Home","light":"Light","loading":"Loading","my-dashboard":"My dashboard","sign-in":"Sign in","sign-out":"Sign out","support-us":"Support us","system":"System"}
