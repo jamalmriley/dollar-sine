@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { Lesson } from "@/types/course";
 import { useUser } from "@clerk/nextjs";
 import { MdDragIndicator } from "react-icons/md";
@@ -22,13 +23,16 @@ export default function LessonWhiteboard({
         <div className="size-3 my-0.5 rounded-full bg-woodsmoke-300 dark:bg-woodsmoke-700 group-hover:bg-[#27c840]" />
         <MdDragIndicator className="ml-auto hidden group-hover:block" />
       </span>
-
-      <Tldraw
-        persistenceKey={
-          user.id + (lesson ? lesson.courseId + "-" + lesson.id : "")
-        }
-        className="rounded-b-xl border border-default-color dark:bg-grid-white/[0.1] bg-grid-black/[0.1]"
-      />
+      <div className="size-full rounded-b-xl border border-default-color overflow-hidden">
+        {lesson ? (
+          <Tldraw
+            persistenceKey={`${user.id}-${lesson.courseId}-${lesson.id}`}
+            className="dark:bg-grid-white/[0.1] bg-grid-black/[0.1]"
+          />
+        ) : (
+          <Skeleton className="size-full bg-secondary" />
+        )}
+      </div>
     </div>
   );
 }

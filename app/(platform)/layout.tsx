@@ -1,5 +1,8 @@
 import initTranslations from "@/app/i18n";
-import DashboardNavbar from "@/components/DashboardNavbar";
+import {
+  DesktopDashboardNavbar,
+  MobileDashboardNavbar,
+} from "@/components/DashboardNavbar";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import LearningContextProvider from "@/contexts/learning-context";
 import PlatformClient from "./PlatformClient";
@@ -26,8 +29,9 @@ export default async function PlatformLayout({
     >
       <LearningContextProvider>
         <PlatformClient>
-          <DashboardNavbar />
+          <DesktopDashboardNavbar />
           {children}
+          <MobileDashboardNavbar />
         </PlatformClient>
       </LearningContextProvider>
     </TranslationsProvider>

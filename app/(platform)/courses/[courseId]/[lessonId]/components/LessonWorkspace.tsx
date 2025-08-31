@@ -2,7 +2,6 @@
 
 import {
   StyledActionButton,
-  StyledDestructiveButton,
   StyledIconActionButton,
 } from "@/components/StyledButtons";
 import { useLearningContext } from "@/contexts/learning-context";
@@ -26,17 +25,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMediaQuery } from "usehooks-ts";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { FaChevronUp } from "react-icons/fa";
 import { GiRunningShoe } from "react-icons/gi";
 import {
   LuClipboardCheck,
@@ -264,8 +252,8 @@ export default function LessonWorkspace({
       <span
         className={`w-full flex ${!prev && next ? "justify-end" : "justify-between"} gap-2`}
       >
-        {!prev && !next && <Skeleton className="w-36 h-9" />}
-        {!prev && !next && <Skeleton className="w-36 h-9" />}
+        {!prev && !next && <Skeleton className="w-9 md:w-36 h-9" />}
+        {!prev && !next && <Skeleton className="w-9 md:w-36 h-9" />}
 
         {prev && (
           <Link
@@ -337,58 +325,6 @@ export default function LessonWorkspace({
           </Link>
         )}
       </span>
-
-      {/* Mobile Drawer Menu */}
-      {lesson && (
-        <div className="md:hidden">
-          <Drawer closeThreshold={0.5} direction="bottom">
-            <DrawerTrigger asChild>
-              <Button
-                variant="outline"
-                className="absolute bottom-0 left-1/2 right-1/2 border-b-0 rounded-b-none shadow-none px-4"
-              >
-                <FaChevronUp />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent className="p-5 flex flex-col gap-4">
-              <DrawerHeader className="flex justify-between items-center p-0">
-                <span className="h2 line-clamp-1">
-                  {t("platform-layout:lesson-number", {
-                    lessonId: lesson.number,
-                  })}
-                  : {lesson.name}
-                </span>
-              </DrawerHeader>
-              <Separator />
-
-              <div className="grid grid-cols-2">
-                {sidebarLinks.map((link, i) => (
-                  <DrawerClose asChild key={i}>
-                    <Link
-                      href={link.href}
-                      onClick={() => setActivityId(link.href)}
-                      className="w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold hover:bg-accent hover:text-accent-foreground"
-                    >
-                      {link.icon}
-                      {link.label}
-                    </Link>
-                  </DrawerClose>
-                ))}
-              </div>
-
-              <DrawerFooter className="flex justify-between pt-2">
-                <Link href={`/courses/${lesson.courseId}`}>
-                  <StyledActionButton>Back to course</StyledActionButton>
-                </Link>
-                <DrawerClose asChild>
-                  <StyledDestructiveButton>Close</StyledDestructiveButton>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        </div>
-      )}
     </div>
   );
 }

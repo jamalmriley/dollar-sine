@@ -142,7 +142,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
     return [hr, min].filter((el) => el !== "").join(" ");
   }
   return (
-    <div className="min-w-80 w-80 h-fit border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+    <div className="min-w-80 w-full md:w-80 h-fit border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
       {/* Thumbnail */}
       <div className="relative">
         <Image

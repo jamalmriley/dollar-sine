@@ -36,18 +36,20 @@ interface Topic {
 
 type Format = "Visual" | "Aural" | "Read/Write" | "Kinesthetic";
 
-interface ActivityContent {
-  id: string;
-  type: Format;
-  content: string;
-}
-
 // —————————————————————————————————————————————————— //
 
 interface Activity extends CourseItem {
-  instructions: string[]; // Each string is a separate paragraph.
-  formats: Format[];
-  content: ActivityContent[];
+  content: string;
+  format: Format;
+  type:
+    | "Introduction"
+    | "Lecture"
+    | "Activity"
+    | "Checkpoint"
+    | "Practice"
+    | "Quiz"
+    | "Reflection";
+  // description: string[]; // TODO: Change description in CourseItem to be of type string[] so that string is a separate paragraph when rendered.
 }
 
 interface ContentItem extends CourseItem {
