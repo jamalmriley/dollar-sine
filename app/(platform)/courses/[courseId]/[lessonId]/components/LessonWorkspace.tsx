@@ -42,6 +42,12 @@ export default function LessonWorkspace({
 }: {
   lesson: Lesson | undefined;
 }) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  if (isDesktop) return <DesktopLessonWorkspace lesson={lesson} />;
+  else return <MobileLessonWorkspace lesson={lesson} />;
+}
+
+function DesktopLessonWorkspace({ lesson }: { lesson: Lesson | undefined }) {
   const { activityId, setActivityId } = useLearningContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const pathname = usePathname();
@@ -362,6 +368,15 @@ function SortableItem({
       className={`w-${widthType} h-full cursor-move`}
     >
       {children}
+    </div>
+  );
+}
+
+function MobileLessonWorkspace({ lesson }: { lesson: Lesson | undefined }) {
+  return (
+    <div className="size-full flex flex-col">
+      <LessonVideo />
+      <LessonWhiteboard lesson={lesson} />
     </div>
   );
 }
