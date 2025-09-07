@@ -5,87 +5,32 @@ import { useLearningContext } from "@/contexts/learning-context";
 import { Lesson } from "@/types/course";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { GiRunningShoe } from "react-icons/gi";
-import {
-  LuClipboardCheck,
-  LuGamepad2,
-  LuHeadphones,
-  LuPencilRuler,
-} from "react-icons/lu";
-import { MdOutlineQuiz } from "react-icons/md";
-import { PiFlagCheckeredFill } from "react-icons/pi";
-import { TbZoomCheck } from "react-icons/tb";
+import { lessonContentLinks } from "./LessonContent";
 
 export default function LessonSidebar({
   lesson,
 }: {
   lesson: Lesson | undefined;
 }) {
-  const { t } = useTranslation();
   const { activityId, setActivityId } = useLearningContext();
   const [open, setOpen] = useState<boolean>(false);
-
-  const sidebarLinks = [
-    {
-      // label: "Prereq Check",
-      label: t("platform-layout:intro"),
-      href: "#intro",
-      icon: <LuClipboardCheck className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:lecture"),
-      href: "#lecture",
-      icon: <LuHeadphones className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:activity-1"),
-      href: "#activity-1",
-      icon: <LuPencilRuler className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:checkpoint"),
-      href: "#checkpoint",
-      icon: <TbZoomCheck className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:activity-2"),
-      href: "#activity-2",
-      icon: <LuGamepad2 className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:practice"),
-      href: "#practice",
-      icon: <GiRunningShoe className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:quiz"),
-      href: "#quiz",
-      icon: <MdOutlineQuiz className="sidebar-item" />,
-    },
-    {
-      label: t("platform-layout:wrapping-up"),
-      href: "#wrapping-up",
-      icon: <PiFlagCheckeredFill className="sidebar-item" />,
-    },
-  ];
 
   return (
     <Sidebar open={open} setOpen={setOpen}>
       <SidebarBody className="justify-between gap-10 bg-dodger-blue-50 dark:bg-emerald-950">
         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <div className="mt-8 flex flex-col gap-2">
-            {sidebarLinks.map((link, i) => (
+            {lessonContentLinks.map((link, i) => (
               <span
                 key={i}
                 className={`${
-                  link.href === activityId
+                  link.label === activityId
                     ? "text-primary"
-                    : "text-neutral-700 dark:text-emerald-100"
+                    : "text-muted-foreground dark:text-emerald-100"
                 }`}
-                onClick={() => setActivityId(link.href)}
+                onClick={() => setActivityId(link.label)}
               >
-                <SidebarLink link={link} />
+                <SidebarLink link={link} namespace="platform-layout" />
               </span>
             ))}
           </div>

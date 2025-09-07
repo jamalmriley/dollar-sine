@@ -1,6 +1,6 @@
 "use client";
 
-import { Course } from "@/types/course";
+import { Course, Lesson } from "@/types/course";
 import { Organization } from "@clerk/nextjs/server";
 import { createContext, useContext, useState } from "react";
 
@@ -15,6 +15,8 @@ type LearningContext = {
   >;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  lesson: Lesson | undefined;
+  setLesson: React.Dispatch<React.SetStateAction<Lesson | undefined>>;
   org: Organization | undefined;
   setOrg: React.Dispatch<React.SetStateAction<Organization | undefined>>;
 };
@@ -32,6 +34,7 @@ export default function LearningContextProvider({
     Course[] | undefined
   >();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [lesson, setLesson] = useState<Lesson>();
   const [org, setOrg] = useState<Organization>();
   return (
     <LearningContext.Provider
@@ -44,6 +47,8 @@ export default function LearningContextProvider({
         setEnrolledCourses,
         isLoading,
         setIsLoading,
+        lesson,
+        setLesson,
         org,
         setOrg,
       }}

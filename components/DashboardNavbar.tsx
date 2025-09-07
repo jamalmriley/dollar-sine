@@ -12,6 +12,7 @@ import { TiHomeOutline } from "react-icons/ti";
 import { UserButton } from "@clerk/nextjs";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTrigger,
@@ -19,6 +20,9 @@ import {
 import { IoMenu } from "react-icons/io5";
 import { StyledButton } from "@/components/StyledButtons";
 import { usePathname } from "next/navigation";
+import { lessonContentLinks } from "@/app/(platform)/courses/[courseId]/[lessonId]/components/LessonContent";
+import { useTranslation } from "react-i18next";
+import { useLearningContext } from "@/contexts/learning-context";
 
 type Page = {
   title: string;
@@ -62,6 +66,8 @@ const pages: Page[] = [
 ];
 
 export function DesktopDashboardNavbar() {
+  const { activityId, setActivityId } = useLearningContext();
+  const { t } = useTranslation();
   return (
     <div className="sticky top-0 z-10 w-dvw backdrop-blur-md">
       <div className="flex gap-3 border-b border-default-color justify-between px-10 py-2 items-center">
@@ -98,6 +104,25 @@ export function DesktopDashboardNavbar() {
                   <LanguageToggle />
                 </div>
               </DrawerHeader>
+
+              {lessonContentLinks.map((link) => (
+                <DrawerClose asChild key={link.label}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setActivityId(link.label)}
+                    className={`${
+                      link.label === activityId
+                        ? "text-primary"
+                        : "text-muted-foreground dark:text-emerald-100"
+                    }`}
+                  >
+                    <span className="flex items-center gap-3 text-sm">
+                      {link.icon}
+                      {t("platform-layout:" + link.label)}
+                    </span>
+                  </Link>
+                </DrawerClose>
+              ))}
             </DrawerContent>
           </Drawer>
         </div>

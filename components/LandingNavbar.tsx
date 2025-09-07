@@ -48,7 +48,7 @@ export default function LandingNavbar() {
           {/* Desktop Links */}
           {/* <div className="hidden md:flex gap-7 items-center">
             {navLinks.map((link, i) => (
-              <Link key={i} className="nav-link" href={link.href}>
+              <Link key={i} href={link.href}>
                 <span
                   className={`hidden md:block text-sm font-bold ${
                     pathname === link.href ||
@@ -105,7 +105,7 @@ export default function LandingNavbar() {
                   </div>
                 </DrawerHeader>
                 {/* {navLinks.map((link, i) => (
-                  <Link key={i} className="nav-link" href={link.href}>
+                  <Link key={i} href={link.href}>
                     <span
                       className={`${
                         pathname === link.href ||
@@ -125,7 +125,7 @@ export default function LandingNavbar() {
                 ))} */}
                 <Separator />
                 <SignedOut>
-                  <Link className="nav-link" href="/sign-in">
+                  <Link href="/sign-in">
                     <span className="flex items-center gap-3 text-sm font-bold">
                       <MdLogin className="w-5 h-5" />
                       {t("sign-in")}
@@ -133,7 +133,7 @@ export default function LandingNavbar() {
                   </Link>
                 </SignedOut>
                 <SignedIn>
-                  <Link className="nav-link" href="/dashboard">
+                  <Link href="/dashboard">
                     <span className="flex items-center gap-3 text-sm font-bold">
                       <MdDashboard className="w-5 h-5" />
                       {t("my-dashboard")}

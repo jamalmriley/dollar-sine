@@ -9,15 +9,16 @@ import { getChapters, getLessons } from "@/app/actions/onboarding";
 import { Chapter, Lesson } from "@/types/course";
 import ClientTitle from "@/components/ClientTitle";
 import Room from "@/components/Room";
+import { useLearningContext } from "@/contexts/learning-context";
 
 export default function LessonPage() {
+  const { lesson, setLesson } = useLearningContext();
   const { t } = useTranslation();
   const params = useParams();
   const courseId = params.courseId as string;
   const lessonId = params.lessonId as string;
 
   const [, setIsLoading] = useState<boolean>(false);
-  const [lesson, setLesson] = useState<Lesson>();
 
   useEffect(() => {
     const fetchContent = async () => {

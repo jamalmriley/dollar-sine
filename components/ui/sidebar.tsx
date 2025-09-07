@@ -4,8 +4,9 @@ import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoIosMenu, IoMdClose } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
-interface Links {
+export interface Links {
   label: string;
   href: string;
   icon: React.JSX.Element | React.ReactNode;
@@ -158,13 +159,16 @@ export const MobileSidebar = ({
 export const SidebarLink = ({
   link,
   className,
+  namespace,
   ...props
 }: {
   link: Links;
   className?: string;
+  namespace?: string;
   props?: LinkProps;
 }) => {
   const { open, animate } = useSidebar();
+  const { t } = useTranslation();
   return (
     <Link
       href={link.href}
@@ -183,7 +187,7 @@ export const SidebarLink = ({
         }}
         className="text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
       >
-        {link.label}
+        {t(`${namespace ? namespace + ":" : ""}${link.label}`)}
       </motion.span>
     </Link>
   );
