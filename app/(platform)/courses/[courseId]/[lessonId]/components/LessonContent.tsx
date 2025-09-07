@@ -72,23 +72,23 @@ export const lessonContentLinks: Links[] = [
 ];
 
 export function LessonIntroduction() {
-  return <div>LessonIntroduction</div>;
+  return <div>The Introduction</div>;
 }
 
 export function LessonLecture() {
-  return <div>LessonLecture</div>;
+  return <div>The Lecture</div>;
 }
 
 export function LessonActivity1() {
-  return <div>LessonActivity1</div>;
+  return <div>The First Activity</div>;
 }
 
 export function LessonCheckpoint() {
-  return <div>LessonCheckpoint</div>;
+  return <div>The Checkpoint</div>;
 }
 
 export function LessonActivity2() {
-  return <div>LessonActivity2</div>;
+  return <div>The Second Activity</div>;
 }
 
 export function LessonPractice() {
@@ -167,11 +167,11 @@ export function LessonPractice() {
 }
 
 export function LessonQuiz() {
-  return <div>LessonQuiz</div>;
+  return <div>The Quiz</div>;
 }
 
 export function LessonWrapUp() {
-  return <div>LessonWrapUp</div>;
+  return <div>The Wrap-up</div>;
 }
 
 function SortableItem({
