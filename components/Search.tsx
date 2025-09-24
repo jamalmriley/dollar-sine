@@ -98,7 +98,7 @@ export default function Search() {
             resetIcon: "search-reset-icon",
           }}
           placeholder={
-            isDesktop ? "Search for a lesson or topic..." : "Search..."
+            isDesktop ? "Search for lessons, topics, and more..." : "Search..."
           }
         />
         <EmptyQueryBoundary fallback={null}>

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/drawer";
 import { MdDashboard, MdLogin } from "react-icons/md";
 import { Separator } from "./ui/separator";
-import { FullLogo, ResponsiveLogo } from "@/components/Logo";
+import { FullLogo } from "@/components/Logo";
 import StyledUserButton from "./StyledUserButton";
 import { StyledActionButton, StyledButton } from "./StyledButtons";
 
@@ -42,7 +42,7 @@ export default function LandingNavbar() {
         <div className="flex gap-7 items-center">
           {/* Logo */}
           <Link href="/">
-            <ResponsiveLogo />
+            <FullLogo />
           </Link>
 
           {/* Desktop Links */}

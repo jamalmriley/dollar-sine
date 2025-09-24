@@ -51,10 +51,10 @@ export function SquareLogo({ size = 10 }: { size?: number }) {
 export function ResponsiveLogo() {
   return (
     <>
-      <div className="hidden md:block">
+      <div className="block md:hidden">
         <FullLogo />
       </div>
-      <div className="block md:hidden">
+      <div className="hidden md:block">
         <SquareLogo />
       </div>
     </>

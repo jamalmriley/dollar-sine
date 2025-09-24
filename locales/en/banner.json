@@ -1,1 +1,8 @@
-{"onboarding-banner-button":"Complete onboarding","onboarding-banner-header":"Welcome to Dollar Sine!","onboarding-banner-text":"We're glad you're here. Now let's get started!","verify-email-banner-button":"Send confirmation email","verify-email-banner-header":"Verify your email. 📬","verify-email-banner-text":"This is required for full access to the platform. It'll only take a minute!"}
+{
+  "onboarding-banner-button": "Complete onboarding",
+  "onboarding-banner-header": "Welcome to Dollar Sine!",
+  "onboarding-banner-text": "We're glad you're here. Now let's get started!",
+  "verify-email-banner-button": "Send confirmation email",
+  "verify-email-banner-header": "Verify your email. 📬",
+  "verify-email-banner-text": "This is required for full access to the platform. It'll only take a minute!"
+}

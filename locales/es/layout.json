@@ -1,1 +1,16 @@
-{"about":"Acerca de","dark":"Oscuro","en":"Inglés","es":"Español","footer_and":"y","footer_created-with":"Creado con","home":"Hogar","light":"Luz","loading":"Cargando","my-dashboard":"Mi tablero de instrumentos","sign-in":"Iniciar sesión","sign-out":"desconectar","support-us":"Apóyanos","system":"Sistema"}
+{
+  "about": "Acerca de",
+  "dark": "Oscuro",
+  "en": "Inglés",
+  "es": "Español",
+  "footer_and": "y",
+  "footer_created-with": "Creado con",
+  "home": "Hogar",
+  "light": "Luz",
+  "loading": "Cargando",
+  "my-dashboard": "Mi tablero de instrumentos",
+  "sign-in": "Iniciar sesión",
+  "sign-out": "desconectar",
+  "support-us": "Apóyanos",
+  "system": "Sistema"
+}

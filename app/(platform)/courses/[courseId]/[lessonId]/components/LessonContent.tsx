@@ -22,10 +22,11 @@ import { TbZoomCheck } from "react-icons/tb";
 import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import LessonWhiteboard from "./LessonWhiteboard";
-import LessonVideo from "./LessonVideo";
+import Whiteboard from "./Whiteboard";
+import Video from "./Video";
 import { CSS } from "@dnd-kit/utilities";
 import { useLearningContext } from "@/contexts/learning-context";
+import PracticeProblem from "./PracticeProblem";
 
 export const lessonContentLinks: Links[] = [
   {
@@ -94,7 +95,7 @@ export function LessonActivity2() {
 export function LessonPractice() {
   const { lesson } = useLearningContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [items, setItems] = useState(["whiteboard", "video"]);
+  const [items, setItems] = useState(["whiteboard", "practice"]);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   if (isDesktop) {
@@ -132,9 +133,9 @@ export function LessonPractice() {
                   id={id}
                 >
                   {id === "whiteboard" ? (
-                    <LessonWhiteboard lesson={lesson} />
+                    <Whiteboard lesson={lesson} />
                   ) : (
-                    <LessonVideo />
+                    <PracticeProblem />
                   )}
                 </SortableItem>
               ))}
@@ -145,11 +146,11 @@ export function LessonPractice() {
             {activeId ? (
               activeId === "whiteboard" ? (
                 <div className="w-full h-full">
-                  <LessonWhiteboard lesson={lesson} />
+                  <Whiteboard lesson={lesson} />
                 </div>
               ) : (
                 <div className={`${isDesktop ? "w-fit" : "w-full"} h-full`}>
-                  <LessonVideo />
+                  <PracticeProblem />
                 </div>
               )
             ) : null}
@@ -160,8 +161,8 @@ export function LessonPractice() {
   } else
     return (
       <div className="size-full flex flex-col">
-        <LessonVideo />
-        <LessonWhiteboard lesson={lesson} />
+        <PracticeProblem />
+        <Whiteboard lesson={lesson} />
       </div>
     );
 }

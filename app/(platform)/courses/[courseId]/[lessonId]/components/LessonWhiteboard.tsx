@@ -13,6 +13,8 @@ export default function LessonWhiteboard({
   lesson: Lesson | undefined;
 }) {
   const { isLoaded, user } = useUser();
+  const roomId: string =
+    !user || !lesson ? "" : `${user.id}-${lesson.courseId}-${lesson.id}`;
 
   if (!isLoaded || !user) return;
   return (
@@ -26,8 +28,12 @@ export default function LessonWhiteboard({
       <div className="size-full md:rounded-b-xl md:border md:border-default-color overflow-hidden">
         {lesson ? (
           <Tldraw
-            persistenceKey={`${user.id}-${lesson.courseId}-${lesson.id}`}
-            className="dark:bg-grid-white/[0.1] bg-grid-black/[0.1]"
+            persistenceKey={`${user.id}-${lesson.courseId}`}
+            components={{
+              Background: () => (
+                <div className="size-full bg-primary-foreground" />
+              ),
+            }}
           />
         ) : (
           <Skeleton className="size-full bg-secondary" />

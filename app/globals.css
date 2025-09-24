@@ -137,6 +137,30 @@
     @apply h-4 w-4;
   }
 
+  .tab {
+    @apply w-32 flex relative gap-1.5 border-x border-t border-default-color rounded-t-lg mt-1.5 overflow-hidden px-2 py-1 text-xs bg-dodger-blue-100;
+  }
+
+  .tab::before,
+  .tab::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    background: #2c1a1a;
+  }
+
+  .tab::before {
+    left: -40px;
+    border-radius: 50%;
+  }
+
+  .tab::after {
+    right: -40px;
+    border-radius: 50%;
+  }
+
   .tile-parent {
     @apply flex flex-col justify-between w-full aspect-video border rounded-lg overflow-hidden bg-[#ededed] dark:bg-[#313234] hover:shadow-lg relative transition ease-in-out duration-200;
   }
@@ -339,6 +363,10 @@
 
   .ais-Hits-item-inline {
     @apply w-full;
+  }
+
+  .content-search-list {
+    @apply w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5;
   }
 
   .ais-Hits-item-inline-disabled {

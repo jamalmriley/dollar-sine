@@ -129,7 +129,7 @@ export default function CoursePage() {
   );
 }
 
-function LessonCard({ lesson }: { lesson: Lesson }) {
+export function LessonCard({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation();
 
   function formatDuration(minutes: number): string {
@@ -142,7 +142,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
     return [hr, min].filter((el) => el !== "").join(" ");
   }
   return (
-    <div className="min-w-80 w-full md:w-80 h-fit border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+    <div className="min-w-80 w-full h-fit border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
       {/* Thumbnail */}
       <div className="relative">
         <Image
@@ -165,7 +165,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
       {/* Name, Description, Duration, and Button */}
       <div className="w-full flex flex-col text-sm px-3 py-1.5 bg-primary-foreground border-t border-default-color">
         <div className="flex justify-between items-center">
-          <p className="font-bold">
+          <p className="font-bold line-clamp-1">
             {t(`platform-layout:${lesson.type.toLowerCase()}-number`, {
               lessonId:
                 lesson.type === "Lesson"
