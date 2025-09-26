@@ -11,40 +11,36 @@ export function FullLogo({
   textSize?: string;
 }) {
   return (
-    <span className="flex gap-3 items-center  text-woodsmoke-950 dark:text-woodsmoke-100">
-      <Image
-        src={LightLogo}
-        alt="Logo"
-        className={`object-contain size-${size} block dark:hidden`}
-      />
-
-      <Image
-        src={DarkLogo}
-        alt="Logo"
-        className={`object-contain size-${size} hidden dark:block`}
-      />
+    <div
+      className={`h-${size} flex gap-3 items-center  text-woodsmoke-950 dark:text-woodsmoke-100`}
+    >
+      <SquareLogo size={size} />
       <h1 className={`text-${textSize} font-extrabold`}>
         dollar <span className={`${loraItalic.className}`}>sine</span>
       </h1>
-    </span>
+    </div>
   );
 }
 
 export function SquareLogo({ size = 10 }: { size?: number }) {
   return (
-    <span className="select-none">
+    <div className={`h-${size} flex items-center select-none`}>
       <Image
         src={LightLogo}
         alt="Logo"
-        className={`object-contain size-${size} block dark:hidden`}
+        width={size * 4}
+        height={size * 4}
+        className={`object-contain block dark:hidden`}
       />
 
       <Image
         src={DarkLogo}
         alt="Logo"
-        className={`object-contain size-${size} hidden dark:block`}
+        width={size * 4}
+        height={size * 4}
+        className={`object-contain hidden dark:block`}
       />
-    </span>
+    </div>
   );
 }
 

@@ -23,10 +23,12 @@ import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import Whiteboard from "./Whiteboard";
-// import Video from "./Video";
 import { CSS } from "@dnd-kit/utilities";
 import { useLearningContext } from "@/contexts/learning-context";
 import PracticeProblem from "./PracticeProblem";
+import Video from "./Video";
+
+const isFit = (id: string) => id === "video" || id === "practice";
 
 export const lessonContentLinks: Links[] = [
   {
@@ -77,7 +79,78 @@ export function LessonIntroduction() {
 }
 
 export function LessonLecture() {
-  return <div>The Lecture</div>;
+  const { lesson } = useLearningContext();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [items, setItems] = useState(["whiteboard", "video"]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  if (isDesktop) {
+    return (
+      <>
+        {/* Draggable Whiteboard and Video */}
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragStart={({ active }) => setActiveId(active.id as string)}
+          onDragEnd={({ active, over }) => {
+            setActiveId(null);
+            if (over && active.id !== over.id) {
+              setItems((items) => {
+                const oldIndex = items.indexOf(active.id as string);
+                const newIndex = items.indexOf(over.id as string);
+                return arrayMove(items, oldIndex, newIndex);
+              });
+            }
+          }}
+          onDragCancel={() => setActiveId(null)}
+        >
+          <SortableContext
+            items={items}
+            strategy={
+              isDesktop
+                ? horizontalListSortingStrategy
+                : verticalListSortingStrategy
+            }
+          >
+            <div className="size-full flex flex-col md:flex-row gap-5 md:gap-10">
+              {items.map((id) => (
+                <SortableItem
+                  widthType={isFit(id) && isDesktop ? "fit" : "full"}
+                  key={id}
+                  id={id}
+                >
+                  {id === "whiteboard" ? (
+                    <Whiteboard lesson={lesson} />
+                  ) : (
+                    <Video />
+                  )}
+                </SortableItem>
+              ))}
+            </div>
+          </SortableContext>
+
+          <DragOverlay adjustScale={false}>
+            {activeId ? (
+              activeId === "whiteboard" ? (
+                <div className="w-full h-full">
+                  <Whiteboard lesson={lesson} />
+                </div>
+              ) : (
+                <div className={`${isDesktop ? "w-fit" : "w-full"} h-full`}>
+                  <Video />
+                </div>
+              )
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      </>
+    );
+  } else
+    return (
+      <div className="size-full flex flex-col">
+        <Video />
+        <Whiteboard lesson={lesson} />
+      </div>
+    );
 }
 
 export function LessonActivity1() {
@@ -128,7 +201,7 @@ export function LessonPractice() {
             <div className="size-full flex flex-col md:flex-row gap-5 md:gap-10">
               {items.map((id) => (
                 <SortableItem
-                  widthType={id === "video" && isDesktop ? "fit" : "full"}
+                  widthType={isFit(id) && isDesktop ? "fit" : "full"}
                   key={id}
                   id={id}
                 >
