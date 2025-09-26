@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { LessonCard } from "@/app/(platform)/courses/[courseId]/page";
 import { Input } from "@/components/ui/input";
 import { Lesson } from "@/types/course";
 import { algoliasearch } from "algoliasearch";
@@ -15,6 +14,7 @@ import {
   useSearchBox,
 } from "react-instantsearch";
 import { useMediaQuery } from "usehooks-ts";
+import { LessonCard } from "./LessonCard";
 
 const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
 const algoliaApiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY;

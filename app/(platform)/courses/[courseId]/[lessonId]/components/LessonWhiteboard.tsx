@@ -13,8 +13,6 @@ export default function LessonWhiteboard({
   lesson: Lesson | undefined;
 }) {
   const { isLoaded, user } = useUser();
-  const roomId: string =
-    !user || !lesson ? "" : `${user.id}-${lesson.courseId}-${lesson.id}`;
 
   if (!isLoaded || !user) return;
   return (

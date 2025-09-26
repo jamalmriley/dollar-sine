@@ -6,7 +6,7 @@ declare global {
   interface Liveblocks {
     // Each user's Presence, for room.getPresence, room.subscribe("others"), etc.
     Presence: {
-      presence: any; // Used by tldraw
+      cursor: { x: number; y: number } | null; // Used by tldraw
     };
     Storage: {
       records: LiveMap<string, any>; // Used by tldraw

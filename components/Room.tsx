@@ -1,17 +1,27 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
+import { LiveMap } from "@liveblocks/client";
 import {
   LiveblocksProvider,
-  RoomProvider,
   ClientSideSuspense,
+  RoomProvider,
 } from "@liveblocks/react/suspense";
 
 export default function Room({ children }: { children: React.ReactNode }) {
+  const { user, isLoaded } = useUser();
+
+  if (!user || !isLoaded) return null;
   return (
     <LiveblocksProvider
       publicApiKey={process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY as string}
     >
-      <RoomProvider id="my-room">
+      <RoomProvider
+        id={user.id}
+        initialPresence={{ cursor: null }}
+        initialStorage={{ records: new LiveMap() }}
+        autoConnect={true}
+      >
         <ClientSideSuspense
           fallback={
             <div className="size-full flex justify-center items-center">

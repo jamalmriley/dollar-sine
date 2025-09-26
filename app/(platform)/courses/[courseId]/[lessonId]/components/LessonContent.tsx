@@ -23,7 +23,7 @@ import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import Whiteboard from "./Whiteboard";
-import Video from "./Video";
+// import Video from "./Video";
 import { CSS } from "@dnd-kit/utilities";
 import { useLearningContext } from "@/contexts/learning-context";
 import PracticeProblem from "./PracticeProblem";
