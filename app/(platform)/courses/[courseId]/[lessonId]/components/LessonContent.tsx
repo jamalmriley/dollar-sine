@@ -9,7 +9,6 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { GiRunningShoe } from "react-icons/gi";
 import {
   LuClipboardCheck,
   LuGamepad2,
@@ -17,7 +16,7 @@ import {
   LuPencilRuler,
 } from "react-icons/lu";
 import { MdOutlineQuiz } from "react-icons/md";
-import { PiFlagCheckeredFill } from "react-icons/pi";
+import { PiBarbell, PiFlagCheckeredFill } from "react-icons/pi";
 import { TbZoomCheck } from "react-icons/tb";
 import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
@@ -28,7 +27,10 @@ import { useLearningContext } from "@/contexts/learning-context";
 import PracticeProblem from "./PracticeProblem";
 import Video from "./Video";
 
-const isFit = (id: string) => id === "video" || id === "practice";
+function isFit(id: string) {
+  const ids = ["practice", "video"];
+  return ids.includes(id);
+}
 
 export const lessonContentLinks: Links[] = [
   {
@@ -59,7 +61,7 @@ export const lessonContentLinks: Links[] = [
   },
   {
     href: "#practice",
-    icon: <GiRunningShoe className="sidebar-item" />,
+    icon: <PiBarbell className="sidebar-item" />,
     label: "practice",
   },
   {
@@ -168,7 +170,7 @@ export function LessonActivity2() {
 export function LessonPractice() {
   const { lesson } = useLearningContext();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [items, setItems] = useState(["whiteboard", "practice"]);
+  const [items, setItems] = useState(["practice", "whiteboard"]);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   if (isDesktop) {

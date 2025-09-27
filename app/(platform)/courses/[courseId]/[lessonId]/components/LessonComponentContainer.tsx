@@ -16,7 +16,7 @@ export default function LessonComponentContainer({
         <MdDragIndicator className="ml-auto hidden group-hover:block" />
       </span>
       <div
-        className={`size-full border-default-color overflow-hidden rounded-t-xl ${className}`}
+        className={`size-full border-default-color overflow-hidden rounded-t-xl min-w-0 w-full max-w-full ${className}`}
       >
         {children}
       </div>
