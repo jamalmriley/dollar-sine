@@ -4,7 +4,7 @@ import {
   getPronunciations,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
-import { StyledDropdownButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -85,9 +85,9 @@ export default function Pronunciation() {
       {/* Mobile */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="block md:hidden">
-          <StyledDropdownButton>
+          <StyledButton>
             {isLoading ? "Loading..." : pronunciation || "Choose"}
-          </StyledDropdownButton>
+          </StyledButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-fit">
           {isLoading

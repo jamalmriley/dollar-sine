@@ -1,9 +1,5 @@
 import { updateUserMetadata } from "@/app/actions/onboarding";
-import {
-  StyledActionButton,
-  StyledButton,
-  StyledDestructiveButton,
-} from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -140,7 +136,7 @@ function ViewStudentResponsiveDialog() {
         </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <StyledDestructiveButton>Close</StyledDestructiveButton>
+            <StyledButton buttonType="destructive">Close</StyledButton>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -320,7 +316,7 @@ function AddStudentResponsiveDialog() {
         </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <StyledDestructiveButton>Cancel</StyledDestructiveButton>
+            <StyledButton buttonType="destructive">Cancel</StyledButton>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -516,7 +512,8 @@ function StudentButton({ action }: { action: "Add" | "Update" }) {
   return (
     <DialogFooter className="flex grow">
       <DialogClose asChild>
-        <StyledActionButton
+        <StyledButton
+          buttonType="action"
           type="submit"
           onClick={updateStudentInvitations}
           className="w-full"
@@ -528,7 +525,7 @@ function StudentButton({ action }: { action: "Add" | "Update" }) {
           }
         >
           {action} {studentFirst !== "" ? studentFirst : "student"}
-        </StyledActionButton>
+        </StyledButton>
       </DialogClose>
     </DialogFooter>
   );

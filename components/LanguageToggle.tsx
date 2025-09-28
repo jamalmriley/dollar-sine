@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { StyledDropdownIconButtonNoText } from "./StyledButtons";
+import { StyledButton } from "./StyledButton";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -37,7 +37,7 @@ export default function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <StyledDropdownIconButtonNoText>
+        <StyledButton isIconButton={true}>
           <Image
             src={`https://kapowaz.github.io/square-flags/flags/${supportedLangs.find((lang) => lang.locale === currentLocale)?.flag}.svg`}
             alt={currentLocale}
@@ -46,7 +46,7 @@ export default function LanguageToggle() {
             className="size-full"
           />
           <span className="sr-only">Toggle language</span>
-        </StyledDropdownIconButtonNoText>
+        </StyledButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {supportedLangs.map((language) => (

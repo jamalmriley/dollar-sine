@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  StyledActionButton,
-  StyledIconActionButton,
-} from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { useLearningContext } from "@/contexts/learning-context";
 import { Lesson } from "@/types/course";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -82,7 +79,9 @@ export default function LessonWorkspace({
           ? {
               href: `/courses/${lesson.courseId}/${lesson.prevLessonId}`,
               icon: <></>,
-              label: `${lesson.courseId}-${lesson.prevLessonId}`,
+              label: t(`platform-layout:${lesson.prevLessonType === "Lesson" ? "lesson" : "lab"}-number`, {
+                lessonId: lesson.prevLessonId.split("-")[1],
+              }),
             }
           : null;
     }
@@ -92,7 +91,12 @@ export default function LessonWorkspace({
           ? {
               href: `/courses/${lesson.courseId}/${lesson.nextLessonId}`,
               icon: <></>,
-              label: `${lesson.courseId}-${lesson.nextLessonId}`,
+              label: t(
+                `platform-layout:${lesson.nextLessonType === "Lesson" ? "lesson" : "lab"}-number`,
+                {
+                  lessonId: lesson.nextLessonId.split("-")[1],
+                }
+              ),
             }
           : null;
     }
@@ -150,15 +154,21 @@ export default function LessonWorkspace({
         <span
           className={`w-full flex ${!prev && next ? "justify-end" : "justify-between"} gap-2`}
         >
-          {!prev && !next && <Skeleton className="w-9 md:w-36 h-9" />}
-          {!prev && !next && <Skeleton className="w-9 md:w-36 h-9" />}
+          {!prev && !next && (
+            <Skeleton className="w-9 md:w-36 h-9 md:rounded-full" />
+          )}
+          {!prev && !next && (
+            <Skeleton className="w-9 md:w-36 h-9 md:rounded-full" />
+          )}
 
           {prev && (
             <Link
               href={prev.href}
               className="flex justify-center items-center gap-2 md:hidden"
             >
-              <StyledIconActionButton
+              <StyledButton
+                buttonType="action"
+                isIconButton={true}
                 onClick={() => {
                   if (getActivityIndex(prev.href) !== -1) {
                     setActivityId(prev.label);
@@ -166,7 +176,7 @@ export default function LessonWorkspace({
                 }}
               >
                 <ArrowLeft />
-              </StyledIconActionButton>
+              </StyledButton>
             </Link>
           )}
 
@@ -175,7 +185,8 @@ export default function LessonWorkspace({
               href={prev.href}
               className="hidden md:flex justify-center items-center gap-2"
             >
-              <StyledActionButton
+              <StyledButton
+                buttonType="action"
                 onClick={() => {
                   if (getActivityIndex(prev.href) !== -1) {
                     setActivityId(prev.label);
@@ -183,8 +194,8 @@ export default function LessonWorkspace({
                 }}
               >
                 <ArrowLeft />
-                {`${t("platform-layout:previous")}: ${t(`platform-layout:${prev.label}`)}`}
-              </StyledActionButton>
+                {`${t("platform-layout:previous")}: ${getActivityIndex(prev.href) !== -1 ? t(`platform-layout:${prev.label}`) : prev.label}`}
+              </StyledButton>
             </Link>
           )}
 
@@ -193,7 +204,9 @@ export default function LessonWorkspace({
               href={next.href}
               className="flex justify-center items-center gap-2 md:hidden"
             >
-              <StyledIconActionButton
+              <StyledButton
+                buttonType="action"
+                isIconButton={true}
                 onClick={() => {
                   if (getActivityIndex(next.href) !== -1) {
                     setActivityId(next.label);
@@ -201,7 +214,7 @@ export default function LessonWorkspace({
                 }}
               >
                 <ArrowRight />
-              </StyledIconActionButton>
+              </StyledButton>
             </Link>
           )}
 
@@ -210,16 +223,17 @@ export default function LessonWorkspace({
               href={next.href}
               className="hidden md:flex justify-center items-center gap-2"
             >
-              <StyledActionButton
+              <StyledButton
+                buttonType="action"
                 onClick={() => {
                   if (getActivityIndex(next.href) !== -1) {
                     setActivityId(next.label);
                   }
                 }}
               >
-                {`${t("platform-layout:next")}: ${t(`platform-layout:${next.label}`)}`}
+                {`${t("platform-layout:next")}: ${getActivityIndex(next.href) !== -1 ? t(`platform-layout:${next.label}`) : next.label}`}
                 <ArrowRight />
-              </StyledActionButton>
+              </StyledButton>
             </Link>
           )}
         </span>

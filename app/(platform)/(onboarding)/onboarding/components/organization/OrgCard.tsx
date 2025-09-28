@@ -16,7 +16,7 @@ import { BsBuildingExclamation, BsThreeDotsVertical } from "react-icons/bs";
 import { IoMdLink } from "react-icons/io";
 import { MdError } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa6";
-import { StyledDestructiveButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -420,13 +420,14 @@ export function OrgCardError({ toggle }: { toggle: boolean }) {
               </span>
             </div>
 
-            <StyledDestructiveButton
+            <StyledButton
+              buttonType="destructive"
               onClick={() => {
                 setLastUpdated(new Date().toString()); // Triggers re-render.
               }}
             >
               Try again
-            </StyledDestructiveButton>
+            </StyledButton>
           </div>
         </div>
       </div>

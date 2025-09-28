@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { SignedIn } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 
 export default function Banner({
   requiresSignIn,

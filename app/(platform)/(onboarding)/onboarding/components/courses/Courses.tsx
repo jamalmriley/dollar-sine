@@ -15,7 +15,7 @@ import { CourseCard, CourseCardSkeleton } from "./CourseCard";
 import NoCourses from "./NoCourses";
 import { useUser } from "@clerk/nextjs";
 import { TeacherMetadata } from "@/types/user";
-import { StyledActionButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useCourseData } from "@/hooks/use-courseData";
@@ -147,7 +147,8 @@ export default function Courses() {
       </CardContent>
       {!isLoading && !canPurchaseCourses && (
         <CardFooter className="flex grow">
-          <StyledActionButton
+          <StyledButton
+            buttonType="action"
             className={`w-full ${
               isLocalLoading && "disabled:cursor-progress hover:bg-primary"
             }`}
@@ -156,7 +157,7 @@ export default function Courses() {
           >
             {isLocalLoading && <Loader2 className="animate-spin" />}
             Done
-          </StyledActionButton>
+          </StyledButton>
         </CardFooter>
       )}
     </Card>

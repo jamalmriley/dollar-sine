@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import CustomH1 from "@/components/CustomH1";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { Course } from "@/types/course";
 import { useLearningContext } from "@/contexts/learning-context";
 import { useTranslation } from "react-i18next";

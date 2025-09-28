@@ -8,7 +8,7 @@ import ThankYouDarkOutlined from "@/assets/images/thank-you-dark-outlined.png";
 import ThankYouDarkFilled from "@/assets/images/thank-you-dark-filled.png";
 import Image from "next/image";
 import Link from "next/link";
-import { StyledActionButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { MdComputer } from "react-icons/md";
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
@@ -146,17 +146,17 @@ function OnboardingCompleteComponent({
           href={IOS_APP_LINK}
           target="_blank"
         >
-          <StyledActionButton>
+          <StyledButton buttonType="action">
             <MdSmartphone />
             Download our app
-          </StyledActionButton>
+          </StyledButton>
         </Link> */}
 
         <Link href="/dashboard">
-          <StyledActionButton>
+          <StyledButton buttonType="action">
             <MdComputer />
             Go to dashboard
-          </StyledActionButton>
+          </StyledButton>
         </Link>
       </div>
     </div>

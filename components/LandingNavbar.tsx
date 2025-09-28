@@ -16,7 +16,7 @@ import { MdDashboard, MdLogin } from "react-icons/md";
 import { Separator } from "./ui/separator";
 import { FullLogo } from "@/components/Logo";
 import StyledUserButton from "./StyledUserButton";
-import { StyledActionButton, StyledButton } from "./StyledButtons";
+import { StyledButton } from "./StyledButton";
 
 export default function LandingNavbar() {
   const { t } = useTranslation();
@@ -72,7 +72,7 @@ export default function LandingNavbar() {
         <div className="flex items-center gap-3">
           <SignedOut>
             <SignInButton>
-              <StyledActionButton>Sign in</StyledActionButton>
+              <StyledButton buttonType="action">Sign in</StyledButton>
             </SignInButton>
           </SignedOut>
           <SignedIn>

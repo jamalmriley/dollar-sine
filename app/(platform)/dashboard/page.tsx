@@ -4,7 +4,7 @@ import Greeting from "./components/Greeting";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/ui/translations-provider";
 import { setTitle } from "@/utils/ui";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";

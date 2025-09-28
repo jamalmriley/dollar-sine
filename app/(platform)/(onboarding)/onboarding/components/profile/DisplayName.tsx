@@ -1,6 +1,6 @@
 "use client";
 
-import { StyledDropdownButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -87,7 +87,7 @@ export default function DisplayName() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <StyledDropdownButton
+              <StyledButton
                 className={`max-w-40 ${
                   displayNameFormat === ""
                     ? "text-muted-foreground"
@@ -98,7 +98,7 @@ export default function DisplayName() {
                 }`}
               >
                 {displayNameFormat || "Choose"}
-              </StyledDropdownButton>
+              </StyledButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>Display Name Format</DropdownMenuLabel>

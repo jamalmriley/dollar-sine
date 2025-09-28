@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
-import { StyledDropdownIconButton } from "./StyledButtons";
+import { StyledButton } from "./StyledButton";
 
 export default function ModeToggle() {
   const { setTheme } = useTheme();
@@ -18,11 +18,11 @@ export default function ModeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <StyledDropdownIconButton>
+        <StyledButton isIconButton={true}>
           <Sun className="size-5 mx-auto rotate-0 scale-100 transition-all dark:-rotate-90 dark:hidden" />
           <Moon className="size-5 mx-auto rotate-90 hidden transition-all dark:rotate-0 dark:block" />
           <span className="sr-only">Toggle theme</span>
-        </StyledDropdownIconButton>
+        </StyledButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>

@@ -14,7 +14,7 @@ import {
 import { Organization } from "@clerk/nextjs/server";
 import { Loader2 } from "lucide-react";
 import { OrgSearch } from "./OrgSearch";
-import { StyledActionButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import {
   Card,
   CardContent,
@@ -225,7 +225,8 @@ function RequestToJoin() {
         </div>
       </div>
 
-      <StyledActionButton
+      <StyledButton
+        buttonType="action"
         onClick={handleRequestToJoin}
         disabled={
           isLoading ||
@@ -236,7 +237,7 @@ function RequestToJoin() {
       >
         {isLoading && <Loader2 className="animate-spin" />}
         Request to join organization
-      </StyledActionButton>
+      </StyledButton>
 
       {userMetadata.role === "guardian" && (
         <Button

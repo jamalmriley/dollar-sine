@@ -5,7 +5,7 @@ import {
   getPronunciations,
   updateUserMetadata,
 } from "@/app/actions/onboarding";
-import { StyledActionButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -231,12 +231,13 @@ export default function VerifyEmailForm() {
       )}
 
       {/* "Verify email" Button */}
-      <StyledActionButton
+      <StyledButton
+        buttonType="action"
         type="submit"
         disabled={isLoadingPronunciationOptions}
       >
         {t("sign-up:verify-email")}
-      </StyledActionButton>
+      </StyledButton>
 
       {/* "Resend code" Button */}
       <Button variant="link" onClick={resubmit} disabled={seconds !== 0}>

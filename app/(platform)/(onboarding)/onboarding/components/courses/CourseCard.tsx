@@ -3,11 +3,7 @@ import { formatCurrency } from "@/utils/general";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Course, SELECTED_COURSE_SCHEMA, SelectedCourse } from "@/types/course";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
-import {
-  StyledActionButton,
-  StyledDestructiveButton,
-  StyledIconButton,
-} from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { FiExternalLink, FiPlus } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
 import { useState } from "react";
@@ -133,14 +129,14 @@ export function CourseCard({
               </div>
               {isAlreadyPurchased ? (
                 <Link href={`/explore#${course.id}`} target="_blank">
-                  <StyledIconButton>
+                  <StyledButton buttonType="action" isIconButton={true}>
                     <FiExternalLink />
-                  </StyledIconButton>
+                  </StyledButton>
                 </Link>
               ) : (
-                <StyledIconButton
-                  toggle={isActiveCourse}
-                  variant={!isActiveCourse ? "default" : "destructive"}
+                <StyledButton
+                  buttonType={isActiveCourse ? "destructive" : "action"}
+                  isIconButton={true}
                   onClick={() => {
                     setActiveCourse(
                       !isActiveCourse
@@ -170,7 +166,7 @@ export function CourseCard({
                       className={`transition ease-in-out duration-200 ${isActiveCourse ? "rotate-45" : "rotate-0"}`}
                     />
                   )}
-                </StyledIconButton>
+                </StyledButton>
               )}
             </div>
           </div>
@@ -223,7 +219,8 @@ export function CourseCard({
 
           {/* Height and margin are set to align with icon button. */}
           <div className="h-11 flex items-center gap-5 w-full mb-3">
-            <StyledActionButton
+            <StyledButton
+              buttonType="action"
               className="flex-1"
               onClick={() => {
                 if (canPurchaseCourses) handleAddToCart();
@@ -231,10 +228,11 @@ export function CourseCard({
               disabled={isLoading || isButtonDisabled}
             >
               {isCourseInCart(course.id) ? "Update cart" : "Add to cart"}
-            </StyledActionButton>
+            </StyledButton>
 
             {isCourseInCart(course.id) && (
-              <StyledDestructiveButton
+              <StyledButton
+                buttonType="destructive"
                 className="flex-1"
                 onClick={() => {
                   if (coursesToBuy) {
@@ -247,7 +245,7 @@ export function CourseCard({
                 }}
               >
                 Remove from cart
-              </StyledDestructiveButton>
+              </StyledButton>
             )}
           </div>
         </div>

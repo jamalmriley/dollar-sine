@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useSignUpContext } from "@/contexts/sign-up-content";
 import SignUpForm from "./components/SignUpForm";
 import VerifyEmailForm from "./components/VerifyEmailForm";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { PiMicrosoftOutlookLogoFill } from "react-icons/pi";
 import { BiLogoGmail } from "react-icons/bi";
 

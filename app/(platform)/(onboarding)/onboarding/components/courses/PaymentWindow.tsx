@@ -34,7 +34,7 @@ import { createPaymentIntent } from "@/app/actions/payment";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { MdError } from "react-icons/md";
 import { LuShoppingBasket } from "react-icons/lu";
-import { StyledActionButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 
 // Calling `loadStripe` outside of a component’s render avoids recreating the `Stripe` object on every render.
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
@@ -276,13 +276,14 @@ function PaymentForm({ amount }: { amount: number }) {
       )}
 
       <div className="flex grow items-end mb-5">
-        <StyledActionButton
+        <StyledButton
+          buttonType="action"
           className="w-full mt-5"
           disabled={!stripe || loading}
         >
           {loading && <Loader2 className="animate-spin" />}
           {!loading ? `Pay ${formatCurrency(amount, "USD")}` : "Processing..."}
-        </StyledActionButton>
+        </StyledButton>
       </div>
     </form>
   );

@@ -32,7 +32,7 @@ import {
   updateUserMetadata,
 } from "@/app/actions/onboarding";
 import { Response } from "@/types/general";
-import { StyledActionButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { Organization } from "@clerk/nextjs/server";
 import OrgAlreadyCompleted from "./OrgAlreadyCompleted";
 import { useResetQueryState } from "@/hooks/use-resetQueryState";
@@ -417,7 +417,8 @@ function CreateOrgForm() {
       </div>
 
       <div className="flex grow items-end gap-5">
-        <StyledActionButton
+        <StyledButton
+          buttonType="action"
           type="submit"
           className={`w-full ${isLoading && "cursor-progress"}`}
           disabled={
@@ -444,7 +445,7 @@ function CreateOrgForm() {
             : isLoading
               ? "Creating organization..."
               : "Create organization"}
-        </StyledActionButton>
+        </StyledButton>
       </div>
     </form>
   );

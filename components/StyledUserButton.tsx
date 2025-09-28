@@ -1,10 +1,10 @@
 import { SignedIn, UserButton } from "@clerk/nextjs";
-import { StyledDropdownIconButtonNoText } from "./StyledButtons";
+import { StyledButton } from "./StyledButton";
 
 export default function StyledUserButton() {
   return (
     <SignedIn>
-      <StyledDropdownIconButtonNoText>
+      <StyledButton isIconButton={true}>
         <UserButton
           appearance={{
             elements: {
@@ -14,7 +14,7 @@ export default function StyledUserButton() {
             layout: { shimmer: false },
           }}
         />
-      </StyledDropdownIconButtonNoText>
+      </StyledButton>
     </SignedIn>
   );
 }

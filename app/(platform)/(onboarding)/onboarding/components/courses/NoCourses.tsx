@@ -1,4 +1,4 @@
-import { StyledIconDestructiveButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { useOnboardingContext } from "@/contexts/onboarding-context";
 import { VscDebugRestart } from "react-icons/vsc";
 
@@ -27,13 +27,15 @@ export default function NoCourses() {
               <p className="text-xs font-bold text-white">Error Code</p>
               <h1 className="text-lg font-extrabold text-white">500</h1>
             </div>
-            <StyledIconDestructiveButton
+            <StyledButton
+              buttonType="destructive"
+              isIconButton={true}
               onClick={() => {
                 setLastUpdated(new Date().toString()); // Triggers re-render.
               }}
             >
               <VscDebugRestart />
-            </StyledIconDestructiveButton>
+            </StyledButton>
           </div>
         </div>
       </div>

@@ -36,6 +36,7 @@ interface Topic {
 
 type Format = "Visual" | "Aural" | "Read/Write" | "Kinesthetic";
 
+type LessonType = "Lesson" | "Lab";
 // —————————————————————————————————————————————————— //
 
 interface Activity extends CourseItem {
@@ -71,9 +72,11 @@ export interface Lesson extends ContentItem {
   extStandards: Standard[];
   learningObjectives: string[];
   nextLessonId: string | null;
+  nextLessonType: LessonType | null;
   preStandards: Standard[];
   prevLessonId: string | null;
-  type: "Lesson" | "Lab";
+  prevLessonType: LessonType | null;
+  type: LessonType;
 }
 
 export interface Chapter extends ContentItem {

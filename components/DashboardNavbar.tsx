@@ -16,7 +16,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { IoMenu, IoSearchSharp } from "react-icons/io5";
-import { StyledButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { usePathname } from "next/navigation";
 import { lessonContentLinks } from "@/app/(platform)/courses/[courseId]/[lessonId]/components/LessonContent";
 import { useTranslation } from "react-i18next";

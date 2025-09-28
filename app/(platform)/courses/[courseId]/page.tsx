@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { StyledButton, StyledDropdownButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import { useUser } from "@clerk/nextjs";
 import { useTranslation } from "react-i18next";
 import { useLearningContext } from "@/contexts/learning-context";
@@ -160,7 +160,7 @@ function LessonsComponent({
         {/* Chapter Text and Chapter Dropdown */}
         <div className="w-full flex flex-col-reverse gap-5 md:flex-row md:justify-between md:items-center">
           <Skeleton className="w-56 h-7" />
-          <StyledDropdownButton disabled>Loading...</StyledDropdownButton>
+          <StyledButton disabled>Loading...</StyledButton>
         </div>
 
         {/* Lessons */}
@@ -183,11 +183,11 @@ function LessonsComponent({
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <StyledDropdownButton>
+            <StyledButton buttonType="action">
               {chapter
                 ? `Chapter ${chapter.number}`
                 : `Chapter ${chapters[0].number}`}
-            </StyledDropdownButton>
+            </StyledButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             {chapters.map((chapter) => (

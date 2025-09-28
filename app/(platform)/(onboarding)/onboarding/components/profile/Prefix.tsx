@@ -1,6 +1,6 @@
 "use client";
 
-import { StyledDropdownButton } from "@/components/StyledButtons";
+import { StyledButton } from "@/components/StyledButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -96,7 +96,7 @@ export default function Prefix() {
       {/* Mobile */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="block md:hidden">
-          <StyledDropdownButton>{prefix || "Choose"}</StyledDropdownButton>
+          <StyledButton>{prefix || "Choose"}</StyledButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-60">
           <div className="w-full flex flex-wrap">
