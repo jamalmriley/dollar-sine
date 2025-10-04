@@ -26,6 +26,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useLearningContext } from "@/contexts/learning-context";
 import PracticeProblem from "./PracticeProblem";
 import Video from "./Video";
+import LessonComponentContainer from "./LessonComponentContainer";
 
 function isFit(id: string) {
   const ids = ["practice", "video"];
@@ -274,15 +275,29 @@ function SortableItem({
     transition,
   };
 
+  let className: string;
+  switch (id) {
+    case "practice":
+      className = "md:border-t aspect-auto";
+      break;
+    case "video":
+      className = "md:border-t relative aspect-video md:aspect-[9/16]";
+      break;
+    case "whiteboard":
+      className = "md:border-t";
+      break;
+    default:
+      className = "";
+  }
+
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={`w-${widthType} h-full cursor-move`}
-    >
-      {children}
+    <div ref={setNodeRef} style={style} className={`w-${widthType} h-full`}>
+      <LessonComponentContainer
+        className={className}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      >
+        {children}
+      </LessonComponentContainer>
     </div>
   );
 }

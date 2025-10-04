@@ -145,7 +145,7 @@ export function DesktopDashboardNavbar() {
         <div className="md:hidden">
           <Drawer closeThreshold={0.5} direction="bottom">
             <DrawerTrigger asChild>
-              <StyledButton size="icon">
+              <StyledButton isIconButton={true}>
                 <IoMenu className="size-9" />
                 <span className="sr-only">Toggle menu</span>
               </StyledButton>

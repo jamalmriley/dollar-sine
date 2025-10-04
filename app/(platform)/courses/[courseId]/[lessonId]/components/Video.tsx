@@ -1,12 +1,7 @@
 import { FuzzyOverlay } from "@/components/FuzzyOverlay";
-import LessonComponentContainer from "./LessonComponentContainer";
 
 export default function Video() {
-  return (
-    <LessonComponentContainer className="md:border-t relative aspect-video md:aspect-[9/16]">
-      <FuzzyOverlay />
-    </LessonComponentContainer>
-  );
+  return <FuzzyOverlay />;
 }
 
 /* <Video src={TestVideo} theme={Sutro} /> */
