@@ -189,7 +189,7 @@
   }
 
   .sidebar-item {
-    @apply h-5 w-5 flex-shrink-0;
+    @apply size-5 flex-shrink-0 stroke-[1px] stroke-dodger-blue-800 fill-dodger-blue-400;
   }
 
   .form-row {

@@ -65,6 +65,7 @@ interface ContentItem extends CourseItem {
 export interface Lesson extends ContentItem {
   activities: Activity[];
   courseId: string;
+  courseImageUrl: string;
   courseName: string;
   chapterId: string;
   difficulty: "Beginner" | "Intermediate" | "Advanced" | "Expert";

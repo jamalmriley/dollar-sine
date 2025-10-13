@@ -66,7 +66,7 @@ export default function LessonPage() {
         }
       />
       <Room>
-        <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-dodger-blue-50 dark:bg-emerald-950 h-full">
+        <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-dodger-blue-50 dark:bg-primary-foreground h-full">
           <LessonSidebar lesson={lesson} />
 
           {/* Dashboard */}

@@ -90,11 +90,11 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[60px] flex-shrink-0",
+          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[70px] flex-shrink-0",
           className
         )}
         animate={{
-          width: animate ? (open ? "200px" : "60px") : "200px",
+          width: animate ? (open ? "200px" : "70px") : "200px",
         }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
@@ -122,7 +122,7 @@ export const MobileSidebar = ({
       >
         <div className="flex justify-end z-20 w-full">
           <IoIosMenu
-            className="text-neutral-800 dark:text-neutral-200"
+            className="text-neutral-800 dark:text-neutral-170"
             onClick={() => setOpen(!open)}
           />
         </div>
@@ -142,7 +142,7 @@ export const MobileSidebar = ({
               )}
             >
               <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-170"
                 onClick={() => setOpen(!open)}
               >
                 <IoMdClose />
@@ -173,7 +173,7 @@ export const SidebarLink = ({
     <Link
       href={link.href}
       className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
+        "flex items-center justify-start gap-2  group/sidebar p-2 transition-all ease-in-out duration-200",
         className
       )}
       {...props}
@@ -185,7 +185,7 @@ export const SidebarLink = ({
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
-        className="text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        className="text-sm group-hover/sidebar:translate-x-1 transition-all ease-in-out duration-200 whitespace-pre inline-block !p-0 !m-0"
       >
         {t(`${namespace ? namespace + ":" : ""}${link.label}`)}
       </motion.span>

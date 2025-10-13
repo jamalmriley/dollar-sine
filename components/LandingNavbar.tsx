@@ -69,7 +69,7 @@ export default function LandingNavbar() {
         </div>
 
         {/* Button Links */}
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <SignedOut>
             <SignInButton>
               <StyledButton buttonType="action">Sign in</StyledButton>
@@ -87,6 +87,7 @@ export default function LandingNavbar() {
             <ModeToggle />
             <LanguageToggle />
           </div>
+        </div>
           {/* Mobile Drawer Menu */}
           <div className="md:hidden">
             <Drawer closeThreshold={0.5} direction="bottom">
@@ -148,7 +149,6 @@ export default function LandingNavbar() {
               </DrawerContent>
             </Drawer>
           </div>
-        </div>
       </div>
     </nav>
   );

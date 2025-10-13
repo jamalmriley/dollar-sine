@@ -9,15 +9,14 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { LuClipboardCheck, LuPencilRuler } from "react-icons/lu";
 import {
-  LuClipboardCheck,
-  LuGamepad2,
-  LuHeadphones,
-  LuPencilRuler,
-} from "react-icons/lu";
-import { MdOutlineQuiz } from "react-icons/md";
-import { PiBarbell, PiFlagCheckeredFill } from "react-icons/pi";
-import { TbZoomCheck } from "react-icons/tb";
+  TbBarbellFilled,
+  TbDeviceGamepad3,
+  TbHeadphonesFilled,
+  TbPlayerSkipBackFilled,
+  TbZoomCheck,
+} from "react-icons/tb";
 import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
@@ -27,6 +26,7 @@ import { useLearningContext } from "@/contexts/learning-context";
 import PracticeProblem from "./PracticeProblem";
 import Video from "./Video";
 import LessonComponentContainer from "./LessonComponentContainer";
+import { RiTestTubeFill } from "react-icons/ri";
 
 function isFit(id: string) {
   const ids = ["practice", "video"];
@@ -37,12 +37,12 @@ export const lessonContentLinks: Links[] = [
   {
     // label: "prereq-check",
     href: "#intro",
-    icon: <LuClipboardCheck className="sidebar-item" />,
+    icon: <TbPlayerSkipBackFilled className="sidebar-item" />,
     label: "intro",
   },
   {
     href: "#lecture",
-    icon: <LuHeadphones className="sidebar-item" />,
+    icon: <TbHeadphonesFilled className="sidebar-item" />,
     label: "lecture",
   },
   {
@@ -57,22 +57,22 @@ export const lessonContentLinks: Links[] = [
   },
   {
     href: "#activity-2",
-    icon: <LuGamepad2 className="sidebar-item" />,
+    icon: <TbDeviceGamepad3 className="sidebar-item" />,
     label: "activity-2",
   },
   {
     href: "#practice",
-    icon: <PiBarbell className="sidebar-item" />,
+    icon: <TbBarbellFilled className="sidebar-item" />,
     label: "practice",
   },
   {
     href: "#quiz",
-    icon: <MdOutlineQuiz className="sidebar-item" />,
+    icon: <RiTestTubeFill className="sidebar-item" />,
     label: "quiz",
   },
   {
     href: "#wrapping-up",
-    icon: <PiFlagCheckeredFill className="sidebar-item" />,
+    icon: <LuClipboardCheck className="sidebar-item" />,
     label: "wrapping-up",
   },
 ];
