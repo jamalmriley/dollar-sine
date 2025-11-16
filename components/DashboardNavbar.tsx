@@ -5,7 +5,6 @@ import StyledUserButton from "@/components/StyledUserButton";
 import ModeToggle from "@/components/ModeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 import { FullLogo, ResponsiveLogo } from "@/components/Logo";
-import { BiBookReader } from "react-icons/bi";
 import { TiHomeOutline } from "react-icons/ti";
 import { UserButton } from "@clerk/nextjs";
 import {
@@ -18,12 +17,13 @@ import {
 import { IoMenu, IoSearchSharp } from "react-icons/io5";
 import { StyledButton } from "@/components/StyledButton";
 import { usePathname } from "next/navigation";
-import { lessonContentLinks } from "@/app/(platform)/courses/[courseId]/[lessonId]/components/LessonContent";
+import { lessonContentLinks } from "@/app/(platform)/classroom/[courseId]/[lessonId]/components/LessonContent";
 import { useTranslation } from "react-i18next";
 import { useLearningContext } from "@/contexts/learning-context";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { useMediaQuery } from "usehooks-ts";
+import { FiPlus } from "react-icons/fi";
 
 type Page = {
   title: string;
@@ -38,14 +38,16 @@ const pages: Page[] = [
     icon: <TiHomeOutline className="size-6" />,
   },
   {
-    title: "Classes",
-    href: "/classes",
+    title: "Classroom",
+    href: "/classroom",
     icon: <FaChalkboardUser className="size-6" />,
   },
   {
-    title: "Courses",
-    href: "/courses",
-    icon: <BiBookReader className="size-6" />,
+    title: "Action",
+    href: null,
+    icon: (
+      <FiPlus className="size-6 bg-emerald-400 text-white rounded-md border-default " />
+    ),
   },
   {
     title: "Search",
@@ -56,7 +58,7 @@ const pages: Page[] = [
     title: "You",
     href: null,
     icon: (
-      <div className="size-6 rounded-md overflow-hidden border border-default-color">
+      <div className="size-6 rounded-md overflow-hidden border-default">
         <UserButton
           appearance={{
             elements: {

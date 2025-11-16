@@ -62,7 +62,7 @@ export default function SkinTone() {
             {skinTones.map((obj) => (
               <DropdownMenuItem
                 key={obj.label}
-                className="w-[calc(33.333333%-8px)] justify-center font-semibold m-1 py-1 px-0 border border-default-color"
+                className="w-[calc(33.333333%-8px)] justify-center font-semibold m-1 py-1 px-0 border-default"
                 onClick={() => {
                   setEmojiSkinTone(obj.label);
                 }}

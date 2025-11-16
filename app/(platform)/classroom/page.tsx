@@ -9,12 +9,12 @@ import { Course } from "@/types/course";
 import { useLearningContext } from "@/contexts/learning-context";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@clerk/nextjs";
-import { CoursesBreadcrumb } from "@/components/ContentBreadcrumbs";
 import { FaPlay } from "react-icons/fa";
 import { convertArrToRange } from "@/utils/general";
 import { Skeleton } from "@/components/ui/skeleton";
 import ClientTitle from "@/components/ClientTitle";
 import { useMediaQuery } from "usehooks-ts";
+import { ClassroomBreadcrumb } from "@/components/ContentBreadcrumbs";
 
 export default function CoursesPage() {
   const { allCourses, isLoading } = useLearningContext(); // TODO:  Add enrolledCourses
@@ -25,12 +25,12 @@ export default function CoursesPage() {
   if (!user) return;
   return (
     <div className="page-container">
-      <ClientTitle title="Courses" />
-      <CoursesBreadcrumb />
+      <ClientTitle title="Classroom" />
+      <ClassroomBreadcrumb />
 
       {/* Title and Button */}
       <div className="flex justify-between items-center">
-        <CustomH1 text={t("platform-layout:courses")} isPaddingEnabled />
+        <CustomH1 text={t("platform-layout:classroom")} isPaddingEnabled />
 
         {isDesktop && (
           <Link href={`/dashboard`}>
@@ -65,7 +65,7 @@ export default function CoursesPage() {
 function CourseCard({ course }: { course: Course }) {
   return (
     <Link href={course.pathname}>
-      <div className="min-w-60 w-60 relative border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+      <div className="min-w-60 w-60 relative border-default rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
         {/* Thumbnail */}
         <Image
           src={course.imageUrl}
@@ -74,7 +74,7 @@ function CourseCard({ course }: { course: Course }) {
         />
 
         {/* Play Icon */}
-        <div className="size-9 flex justify-center items-center bg-emerald-400 rounded-full border border-default-color absolute inset-0 m-auto hover:animate-hover-tada opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
+        <div className="size-9 flex justify-center items-center bg-emerald-400 rounded-full border-default absolute inset-0 m-auto hover:animate-hover-tada opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
           <FaPlay className="text-white" />
         </div>
 
@@ -101,7 +101,7 @@ function CourseCard({ course }: { course: Course }) {
 
 function CourseCardSkeleton() {
   return (
-    <div className="min-w-60 w-60 relative border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+    <div className="min-w-60 w-60 relative border-default rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
       {/* Thumbnail */}
       <Skeleton className="w-full aspect-[10/16] bg-secondary" />
 

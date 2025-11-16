@@ -212,3 +212,5 @@ export const convertArrToRange = (arr: number[]): string => {
   ranges.push(start === end ? `${start}` : `${start}-${end}`);
   return ranges.join(", ");
 };
+
+export const alphabet: string[] = ["A", "B", "C", "D"];

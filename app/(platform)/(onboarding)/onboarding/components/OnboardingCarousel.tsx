@@ -134,7 +134,7 @@ export default function OnboardingCarousel({ prompts }: { prompts: Prompt[] }) {
             key={i}
             className={`transform ease-out duration-500 ${
               i + 1 === current
-                ? "w-5 bg-emerald-400 border border-default-color"
+                ? "w-5 bg-emerald-400 border-default"
                 : "w-2 bg-muted-foreground/30 border border-muted-foreground/30"
             } h-2 rounded-full`}
           />

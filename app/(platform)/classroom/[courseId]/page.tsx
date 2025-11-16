@@ -106,7 +106,7 @@ export default function CoursePage() {
         )}
         {isDesktop && (
           <StyledButton>
-            <Link href="/courses">{t("platform-layout:back-to-courses")}</Link>
+            <Link href="/classroom">{t("platform-layout:back-to-classroom")}</Link>
           </StyledButton>
         )}
       </div>
@@ -127,7 +127,7 @@ export default function CoursePage() {
 
 function LessonCardSkeleton() {
   return (
-    <div className="min-w-80 w-80 border border-default-color rounded-xl overflow-hidden">
+    <div className="min-w-80 w-80 border-default rounded-xl overflow-hidden">
       {/* Thumbnail */}
       <Skeleton className="w-full aspect-video bg-secondary" />
 
@@ -223,8 +223,8 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
     const result: number[] = [];
 
     for (const standard of standards) {
-      if (!result.includes(standard.gradeLevel)) {
-        result.push(standard.gradeLevel);
+      if (!result.includes(standard.grade)) {
+        result.push(standard.grade);
       }
     }
 
@@ -254,7 +254,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
                 .map((_, i) => (
                   <span
                     key={i}
-                    className="w-full flex flex-col bg-primary-foreground rounded-md p-3 border border-default-color"
+                    className="w-full flex flex-col bg-primary-foreground rounded-md p-3 border-default"
                   >
                     <Skeleton className="w-48 h-5 mb-2" />
                     <div className="-mx-1">
@@ -275,7 +275,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
           {/* Standards */}
           <div className="w-full md:w-1/2 flex flex-col gap-5">
             <Skeleton className="w-20 h-5" />
-            <div className="bg-primary-foreground rounded-md px-3 border border-default-color">
+            <div className="bg-primary-foreground rounded-md px-3 border-default">
               <Accordion type="single" collapsible className="w-full" disabled>
                 {Array(5)
                   .fill(0)
@@ -329,7 +329,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
               {course.topics.map((topic) => (
                 <span
                   key={topic.id}
-                  className="w-full flex flex-col bg-primary-foreground rounded-md p-3 border border-default-color"
+                  className="w-full flex flex-col bg-primary-foreground rounded-md p-3 border-default"
                 >
                   <span className="font-semibold mb-2">
                     {topic.name} Topics
@@ -349,7 +349,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
           {/* Standards */}
           <div className="w-full md:w-1/2 flex flex-col gap-5">
             <span className="font-bold">Standards</span>
-            <div className="bg-primary-foreground rounded-md px-3 border border-default-color">
+            <div className="bg-primary-foreground rounded-md px-3 border-default">
               <Accordion type="single" collapsible className="w-full">
                 {course.standards &&
                   getStandardsGroups(course.standards).map((gradeLevel) => (
@@ -359,7 +359,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
                         {course.standards &&
                           course.standards
                             .filter(
-                              (standard) => standard.gradeLevel === gradeLevel
+                              (standard) => standard.grade === gradeLevel
                             )
                             .map((standard) => (
                               <Tooltip key={standard.id}>
@@ -368,7 +368,7 @@ function DetailsComponent({ course }: { course: Course | undefined }) {
                                 </TooltipTrigger>
                                 <TooltipContent className="w-96">
                                   <p className="font-bold text-sm mb-1.5">
-                                    {standard.name} ({standard.code})
+                                    {standard.name} ({standard.strand})
                                   </p>
                                   <p>{standard.description}</p>
                                 </TooltipContent>

@@ -113,6 +113,10 @@
     @apply border-black dark:border-inherit;
   }
 
+  .border-default {
+    @apply border border-default-color;
+  }
+
   .chip-no-animation {
     @apply text-xs font-bold rounded-full px-3 py-1 border;
   }
@@ -126,7 +130,7 @@
   }
 
   .badge-2 {
-    @apply inline-flex bg-secondary text-xs rounded-full border border-default-color px-2 py-1 m-1;
+    @apply inline-flex bg-secondary text-xs rounded-full border-default px-2 py-1 m-1;
   }
 
   .pending {
@@ -138,7 +142,7 @@
   }
 
   .tab {
-    @apply w-32 flex relative gap-1.5 border-x border-t border-default-color rounded-t-lg mt-1.5 overflow-hidden px-2 py-1 text-xs bg-dodger-blue-100;
+    @apply w-32 flex relative gap-1.5 border-x border-t border-default-color rounded-t-lg mt-1.5 overflow-hidden px-2 py-1 text-xs bg-emerald-100;
   }
 
   .tab::before,
@@ -189,7 +193,7 @@
   }
 
   .sidebar-item {
-    @apply size-5 flex-shrink-0 stroke-[1px] stroke-dodger-blue-800 fill-dodger-blue-400;
+    @apply size-5 flex-shrink-0 stroke-[1px] stroke-emerald-800 fill-emerald-400;
   }
 
   .form-row {
@@ -262,7 +266,7 @@
     position: absolute;
     z-index: -1;
     inset: 0;
-    @apply bg-primary-foreground rounded-t-xl border border-default-color pointer-events-none;
+    @apply bg-primary-foreground rounded-t-xl border-default pointer-events-none;
     --mask: conic-gradient(
         from -45deg at bottom,
         #0000,
@@ -380,7 +384,7 @@
   }
 
   .search-box {
-    @apply w-full h-10 pl-10 pr-3 py-2 bg-white dark:bg-[#121212] border border-default-color placeholder-muted-foreground focus:outline-none focus:border-emerald-400 rounded-full text-sm;
+    @apply w-full h-10 pl-10 pr-3 py-2 bg-white dark:bg-[#121212] border-default placeholder-muted-foreground focus:outline-none focus:border-emerald-400 rounded-full text-sm;
   }
 
   .search-submit-icon {

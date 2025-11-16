@@ -415,7 +415,7 @@ function AddStudentForm() {
                     <DropdownMenuItem
                       key={i}
                       // With a margin of 1 (i.e. m-1), there is a total of 8px of margin for each div.
-                      className="w-[calc(33.333333%-8px)] justify-center font-semibold m-1 py-1 px-0 border border-default-color"
+                      className="w-[calc(33.333333%-8px)] justify-center font-semibold m-1 py-1 px-0 border-default"
                       onClick={() => setStudentGradeLevel(grade)}
                     >
                       {grade}
@@ -431,7 +431,7 @@ function AddStudentForm() {
                     <DropdownMenuItem
                       key={i}
                       // With a margin of 1 (i.e. m-1), there is a total of 8px of margin for each div.
-                      className="w-[calc(50%-8px)] justify-center font-semibold m-1 py-1 px-0 border border-default-color"
+                      className="w-[calc(50%-8px)] justify-center font-semibold m-1 py-1 px-0 border-default"
                       onClick={() => setStudentGradeLevel(grade)}
                     >
                       {grade}

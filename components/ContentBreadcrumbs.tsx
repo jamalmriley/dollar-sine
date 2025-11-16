@@ -19,7 +19,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Course } from "@/types/course";
 
-export function CoursesBreadcrumb() {
+export function ClassroomBreadcrumb() {
   const { t } = useTranslation();
   return (
     <Breadcrumb className="mb-5">
@@ -31,8 +31,8 @@ export function CoursesBreadcrumb() {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard" className="text-primary">
-            {t("platform-layout:courses")}
+          <BreadcrumbLink href="/classroom" className="text-primary">
+            {t("platform-layout:classroom")}
           </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
@@ -60,8 +60,8 @@ export function CourseBreadcrumb({
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/courses">
-            {t("platform-layout:courses")}
+          <BreadcrumbLink href="/classroom">
+            {t("platform-layout:classroom")}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
@@ -80,7 +80,7 @@ export function CourseBreadcrumb({
                     {allCourses &&
                       allCourses.map((course) => (
                         <DropdownMenuItem key={course.id}>
-                          <BreadcrumbLink href={`/courses/${course.id}`}>
+                          <BreadcrumbLink href={`/classroom/${course.id}`}>
                             {course.name}
                           </BreadcrumbLink>
                         </DropdownMenuItem>
@@ -118,14 +118,14 @@ export function CourseBreadcrumb({
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/courses">
-            {t("platform-layout:courses")}
+          <BreadcrumbLink href="/classroom">
+            {t("platform-layout:classroom")}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           {lesson ? (
-            <BreadcrumbLink href={`/courses/${lesson.courseId}`}>
+            <BreadcrumbLink href={`/classroom/${lesson.courseId}`}>
               {lesson.courseName}
             </BreadcrumbLink>
           ) : (

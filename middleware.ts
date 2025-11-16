@@ -49,12 +49,15 @@ export default clerkMiddleware(async (auth, req) => {
   const res = NextResponse.next();
   res.cookies.set("NEXT_LOCALE", locale, { path: "/" });
 
+  // Capture current pathname to use for server components
+  res.headers.set("x-current-path", req.nextUrl.pathname);
+
   return res;
 });
 
 export const config = {
   matcher: [
-    // Skip Next internals & static files, but DO run on everything else, even with dots (i.e., /courses/common-cents/lesson-1.1)
+    // Skip Next internals & static files, but DO run on everything else, even with dots (i.e., /classroom/common-cents/lesson-1.1)
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // If you also want middleware on API routes, include this line; otherwise omit it.
     "/(api|trpc)(.*)",

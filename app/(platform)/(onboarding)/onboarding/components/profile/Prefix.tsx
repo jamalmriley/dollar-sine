@@ -103,7 +103,7 @@ export default function Prefix() {
             {prefixes.map((prfx) => (
               <DropdownMenuItem
                 key={prfx}
-                className="w-[calc(33.333333%-8px)] justify-center text-xs font-semibold m-1 py-1 px-0 border border-default-color"
+                className="w-[calc(33.333333%-8px)] justify-center text-xs font-semibold m-1 py-1 px-0 border-default"
                 onClick={(e) => {
                   e.preventDefault();
                   const displayNameValue = getDisplayNameValue(
@@ -127,7 +127,7 @@ export default function Prefix() {
 
             {isCustomPrefix ? (
               <input
-                className="w-[calc(66.666667%-8px)] border border-default-color m-1 py-1 pl-1 pr-0 rounded-sm text-xs focus-visible:outline-none focus-visible:ring-0 focus-visible:border-emerald-400"
+                className="w-[calc(66.666667%-8px)] border-default m-1 py-1 pl-1 pr-0 rounded-sm text-xs focus-visible:outline-none focus-visible:ring-0 focus-visible:border-emerald-400"
                 value={prefix}
                 placeholder="Principal"
                 onChange={(e) => {
@@ -147,7 +147,7 @@ export default function Prefix() {
               />
             ) : (
               <DropdownMenuItem
-                className="w-[calc(66.666667%-8px)] flex justify-center border border-default-color m-1 py-1 px-0"
+                className="w-[calc(66.666667%-8px)] flex justify-center border-default m-1 py-1 px-0"
                 onClick={(e) => {
                   e.preventDefault();
                   if (!isCustomPrefix) {

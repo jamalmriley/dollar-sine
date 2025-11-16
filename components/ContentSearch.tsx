@@ -86,7 +86,7 @@ function ControlledSearchBox({
           isDesktop ? "Search for lessons, topics, and more..." : "Search..."
         }
         style={{ fontSize: "3rem" }}
-        className="h-20 border border-default-color py-2 pl-20 pr-3 rounded-lg font-extrabold bg-primary-foreground"
+        className="h-20 border-default py-2 pl-20 pr-3 rounded-lg font-extrabold bg-primary-foreground"
       />
 
       {value !== "" && (

@@ -104,7 +104,7 @@ export default function Pronunciation() {
             : pronunciationOptions.map((option, i) => (
                 <span key={i}>
                   <DropdownMenuItem
-                    className={`text-xs font-medium ${pronunciation === option ? "border border-default-color" : ""}`}
+                    className={`text-xs font-medium ${pronunciation === option ? "border-default" : ""}`}
                     onClick={(e) => {
                       e.preventDefault();
                       setPronunciation(option);

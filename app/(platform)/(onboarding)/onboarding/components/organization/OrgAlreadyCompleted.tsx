@@ -18,7 +18,7 @@ export default function OrgAlreadyCompleted({
 
   if (!user || !isLoaded) return;
   return (
-    <div className="w-full h-full max-w-lg flex flex-col border border-default-color rounded-lg overflow-hidden">
+    <div className="w-full h-full max-w-lg flex flex-col border-default rounded-lg overflow-hidden">
       {isLoading ? (
         <OrgCardSkeleton toggle={toggle} />
       ) : org ? (

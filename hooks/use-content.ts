@@ -20,7 +20,7 @@ export function useContent() {
 
   useEffect(() => {
     // Only fetch if on a courses-related page
-    if (!pathname.includes("/courses") && !pathname.includes("/dashboard"))
+    if (!pathname.includes("/classroom") && !pathname.includes("/dashboard"))
       return;
 
     // Wait until user is loaded and avoid multiple runs

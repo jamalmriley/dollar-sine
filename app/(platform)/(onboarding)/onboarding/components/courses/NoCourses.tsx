@@ -5,7 +5,7 @@ import { VscDebugRestart } from "react-icons/vsc";
 export default function NoCourses() {
   const { setLastUpdated } = useOnboardingContext();
   return (
-    <div className="flex border border-default-color rounded-lg overflow-hidden expandable-content">
+    <div className="flex border-default rounded-lg overflow-hidden expandable-content">
       {/* CourseTile */}
       <div
         className="w-48 min-w-48 aspect-[9/16] rounded-none bg-scroll flex flex-col justify-between"

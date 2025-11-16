@@ -93,7 +93,7 @@ export function CourseCard({
   }
 
   return (
-    <div className="flex border border-default-color bg-primary-foreground rounded-lg overflow-hidden expandable-content">
+    <div className="flex border-default bg-primary-foreground rounded-lg overflow-hidden expandable-content">
       {/* Tile */}
       <div className="w-48 min-w-48 aspect-[9/16] rounded-none relative">
         {/* Course Tile */}

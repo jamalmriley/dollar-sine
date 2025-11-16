@@ -40,7 +40,7 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang={locale} dir={dir(locale)} suppressHydrationWarning={true}>
         <body
-          className={`site-container bg-dodger-blue-50 dark:bg-[#121212] text-woodsmoke-950 dark:text-woodsmoke-50 ${inter.className}`}
+          className={`site-container bg-island-spice-50 dark:bg-[#121212] text-woodsmoke-950 dark:text-woodsmoke-50 ${inter.className}`}
         >
           <ThemeProvider
             attribute="class"

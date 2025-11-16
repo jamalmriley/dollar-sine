@@ -28,7 +28,7 @@ export function LessonCard({ lesson }: { lesson: Lesson }) {
     return [hr, min].filter((el) => el !== "").join(" ");
   }
   return (
-    <div className="min-w-80 w-full h-fit border border-default-color rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
+    <div className="min-w-80 w-full h-fit border-default rounded-xl overflow-hidden group transition ease-in-out duration-500 hover:scale-105 hover:border-2">
       {/* Thumbnail */}
       <div className="relative">
         <Image
@@ -39,7 +39,7 @@ export function LessonCard({ lesson }: { lesson: Lesson }) {
 
         {/* Play Icon */}
         <Link href={lesson.pathname}>
-          <div className="size-9 flex justify-center items-center bg-emerald-400 rounded-full border border-default-color absolute inset-0 m-auto hover:animate-hover-tada opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
+          <div className="size-9 flex justify-center items-center bg-emerald-400 rounded-full border-default absolute inset-0 m-auto hover:animate-hover-tada opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
             <FaPlay className="text-white" />
           </div>
         </Link>

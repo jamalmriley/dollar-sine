@@ -24,8 +24,8 @@ export interface Standard {
   id: string;
   name: string;
   description: string;
-  code: string;
-  gradeLevel: number;
+  strand: string;
+  grade: number;
 }
 
 interface Topic {

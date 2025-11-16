@@ -66,11 +66,11 @@ export default function LessonPage() {
         }
       />
       <Room>
-        <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-dodger-blue-50 dark:bg-primary-foreground h-full">
+        <div className="flex flex-col md:flex-row w-full flex-1 mx-auto overflow-hidden bg-island-spice-50 dark:bg-primary-foreground h-full">
           <LessonSidebar lesson={lesson} />
 
           {/* Dashboard */}
-          <div className="flex flex-col h-full w-full justify-between grow gap-5 md:rounded-tl-2xl md:border-l border-default-color bg-[#fff] dark:bg-[#121212]">
+          <div className="flex flex-col h-full w-full justify-between grow gap-5 md:rounded-tl-2xl md:border-l border-default-color bg-island-spice-50 dark:bg-[#121212]">
             {/* Workspace */}
             <LessonWorkspace lesson={lesson} />
           </div>

@@ -40,7 +40,7 @@ export default function ProfileAlreadyCreated() {
           )}
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col border border-default-color rounded-lg overflow-hidden">
+          <div className="flex flex-col border-default rounded-lg overflow-hidden">
             {isLoading ? (
               <ProfileCardSkeleton toggle={toggle} />
             ) : userData ? (

@@ -33,8 +33,8 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-center">
           <Greeting name={firstName} />
-          <Link href="/courses">
-            <StyledButton>{t("platform-layout:courses")}</StyledButton>
+          <Link href="/classroom">
+            <StyledButton>{t("platform-layout:classroom")}</StyledButton>
           </Link>
         </div>
 

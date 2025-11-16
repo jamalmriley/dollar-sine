@@ -77,7 +77,7 @@ export default function LessonWorkspace({
       result.prev =
         lesson.prevLessonId && lesson.prevLessonId !== ""
           ? {
-              href: `/courses/${lesson.courseId}/${lesson.prevLessonId}`,
+              href: `/classroom/${lesson.courseId}/${lesson.prevLessonId}`,
               icon: <></>,
               label: t(`platform-layout:${lesson.prevLessonType === "Lesson" ? "lesson" : "lab"}-number`, {
                 lessonId: lesson.prevLessonId.split("-")[1],
@@ -89,7 +89,7 @@ export default function LessonWorkspace({
       result.next =
         lesson.nextLessonId && lesson.nextLessonId !== ""
           ? {
-              href: `/courses/${lesson.courseId}/${lesson.nextLessonId}`,
+              href: `/classroom/${lesson.courseId}/${lesson.nextLessonId}`,
               icon: <></>,
               label: t(
                 `platform-layout:${lesson.nextLessonType === "Lesson" ? "lesson" : "lab"}-number`,
